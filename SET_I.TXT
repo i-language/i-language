@@ -1,0 +1,46 @@
+﻿* SET_I.TXT HARASAWA (この固定値先頭で最初に登場が必須,無いと_SETUP値が正しく設定されません)
+***( JAR 及び DLLの情報設定 )*******************************************************
+************************( 0/8 )*******************************************************
+PROGRAM=NOT
+CONTROL=PROGRAM,ERROR,SQL_DBO,HIGH
+BEGIN
+=SET{WC.HOME=_OS_DRIVE+_P+'I'};
+=SET{WC.BIN=WC.HOME+_P+'BIN'+_IV};
+=SET{WC.TMP=WC.HOME+_P+'TMP'};
+******( JAR VER,NAME )*******************************************
+*=SET{WC.JAR_D='jaybird-full-3.0.9.jar'};
+*=SET{WC.JAR_F='fjsymjdbc.jar'};
+*=SET{WC.JAR_H='pdjdbc.jar'};
+=SET{WC.JAR_I='db2jcc4.jar'};
+=SET{WC.JAR_L='mariadb-java-client-2.7.3.jar'};
+=SET{WC.JAR_M='sqljdbc42.jar'};
+=SET{WC.JAR_O='ojdbc7.jar'};		
+=SET{WC.JAR_P='postgresql-42.2.18.jar'};
+******( DLL VER )**********************************************
+*=SET{WC.DLL_VER_D1='7.1.1'};
+*=SET{WC.DLL_VER_L1='8.0.20'};
+*=SET{WC.DLL_VER_P1='3.2.6'};
+******( DOWNLOAD ディレクトリで変更)******
+*W+=IF_ERROR_DIR{..\?_IV?_DOWNLOAD}JUMP{DIR_END};
+*W+=DIR_NEXT:DIR_NEXT{WN.FILE}JUMP{DIR_END};
+*W+=IF_NOT{WN.FILE%'.TXT'}BACK{DIR_NEXT};
+*W+=IF{WN.FILE/'MySql.Data.'}SET{WC.DLL_VER_L1=WN.FILE[12;WN.FILE@LENGTH-15]}BACK{DIR_NEXT};
+*W+=IF{WN.FILE/'Npgsql.'}SET{WC.DLL_VER_P1=WN.FILE[8;WN.FILE@LENGTH-11]}BACK{DIR_NEXT};
+*W+=IF{WN.FILE/'System.Threading.Tasks.Extensions.'}SET{WC.DLL_VER_P2=WN.FILE[35;WN.FILE@LENGTH-38]}BACK{DIR_NEXT};
+*W+=BACK{DIR_NEXT};
+*W+=DIR_END:
+******( DLL NAME )**********************************************
+*=SET{W0.DLL_CNT_M=0};
+*=SET{W0.DLL_CNT_D=1,WC.DLL_D1='FirebirdSql.Data.FirebirdClient.dll'};
+*=SET{W0.DLL_CNT_F=1,WC.DLL_F1='Fujitsu.Symfoware.dll'};
+*=SET{W0.DLL_CNT_H=3,WC.DLL_H1='pdcltm32.dll',WC.DLL_H2='pddndp20x.dll',WC.DLL_H3='pddndpcore20x.dll'};
+*=SET{W0.DLL_CNT_P=2,WC.DLL_P1='Npgsql.dll',           WC.DLL1=WC.DLL_P1,WN.DLL1='PosgreSQL'};VER26.1*
+*=SET{W0.DLL_CNT_I=1,WC.DLL_I1='IBM.Data.DB2.dll',     WC.DLL2=WC.DLL_I1,WN.DLL2='IBM DB2'};
+*=SET{W0.DLL_CNT_O=0,WC.DLL_O1='Oracle.DataAccess.dll',WC.DLL3=WC.DLL_O1,WN.DLL3='Oracle'};
+*=SET{W0.DLL_CNT_L=1,WC.DLL_L1='MySql.Data.dll',       WC.DLL4=WC.DLL_L1,WN.DLL4='MySQL'};
+*=SET{W0.DLL_CNT=4};
+*****( その他 )*************************************************************************
+W+=SET{WC.JAVA_MONO=};
+W-=SET{WC.JAVA_MONO='mono'};IF{_FRAMEWORK='J'}SET{WC.JAVA_MONO='java'};
+W+=SET{WC.OS_NAME='WINDOWS',WC.EXE='.exe',WC.BAT='.BAT',WC.OS_DRIVE_PATH=_OS_DRIVE[1;1],WC.ECHO='ECHO'};
+W-=SET{WC.OS_NAME='LINUX'  ,WC.EXE=      ,WC.BAT=      ,WC.OS_DRIVE_PATH='home'        ,WC.ECHO='echo'};

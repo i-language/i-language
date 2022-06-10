@@ -1,0 +1,249 @@
+// II_CGI.SRC CGI class author nobumichi harasawa
+// CGI クラス
+#if ITIME 
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//SS using System.Data.SqlClient;
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.Drawing;
+//SS using System.IO;
+//JJ import java.awt.*;
+//JJ import java.awt.event.*;
+//JJ import java.io.*;
+//JJ import java.math.*;
+//JJ import java.util.*;
+public class ii_cgi_l
+{
+//COPY $II_DIR
+//COPY $II_READ
+//COPY $II_SQL2
+//COPY $II_URL
+//COPY *BEGIN
+ii_z_l cgi_z_p;ii_z_mt_l cgi_z_mt_p;
+//----------------------------------------------
+//JJ BufferedReader in_n;
+//JJ PrintStream out_n;
+int begin=0;bool form_b=false;
+public void console_write_v(String si)
+{
+//HP QTextStream out_nn(stdout);out_nn.setCodec("UTF-8");out_nn << si<< endl;
+////HP QTextStream out_nn(stdout);out_nn.setEncoding(QStringConverter::Utf8);out_nn << si<< endl;//VER36.1
+//SS Console.WriteLine(si);
+//JJ out_n.println(si);
+}
+public bool begin_b(String s_si)  //VER20.1
+{ 
+int i,j;
+//*****( PATH_INFO )*********************
+cgi_z_p.cgi_info_s=s_si;
+begin=cgi_z_p.last_index2c_i(s_si,'/');begin++;//最初の"/"の次位置beginにセット。
+int end=cgi_z_p.last_index2c_i(s_si,'.');//最後のピリオッド位置endにセット。
+if(0==cgi_z_p.sw_cgi)//CGI準備処理まだしてないので処理
+  {cgi_z_p.sw_cgi=1;//CGI準備処理開始。
+   cgi_z_p.person_s="CGI";
+//SS   StreamWriter StreamWriter_n=new StreamWriter(Console.OpenStandardOutput());
+//SS   StreamWriter_n.AutoFlush=true;Console.SetOut(StreamWriter_n);   //Console.WriteLineをUTF-8対応に変更
+//JJ try{out_n=new PrintStream(System.out,true,"UTF-8");
+//JJ     in_n=new BufferedReader(new InputStreamReader(System.in));
+//JJ    }
+//JJ catch(UnsupportedEncodingException e){}
+//JJ catch(Exception e){}
+   console_write_v("Content-Type: text/html;");  //HTMLの先頭に付ける。
+   console_write_v("");
+   console_write_v("<!DOCTYPE html><html lang=\""+(cgi_z_p.length(s_si)>(begin+7)?cgi_z_p.lower_s(cgi_z_p.substring3_s(s_si,begin+5,2)):"ja")+"\"><head><meta charset=\"UTF-8\">");
+   console_write_v("<style type=\"text/css\"><!--");
+   console_write_v(".bold,.BOLD{font-weight:bold}");
+   console_write_v(".black,.BLACK{color:white;background:black}");
+   console_write_v(".silver,.SILVER{color:black;background:silver}");
+   console_write_v(".gray,.GRAY{color:white;background:gray}");
+   console_write_v(".white,.WHITE{color:black;background:white}");
+   console_write_v(".maroon,.MAROON{color:white;background:maroon}");
+   console_write_v(".red,.RED{color:white;background:red}");
+   console_write_v(".purple,PURPLE{color:white;background:purple}");
+   console_write_v(".fuchsia,.FUCHSIA{color:black;background:fuchsia}");
+   console_write_v(".green,.GREEN{color:white;background:green}");
+   console_write_v(".lime,.LIME{color:black;background:lime}");
+   console_write_v(".olive,.OLIVE{color:white;background:olive}");
+   console_write_v(".yellow,.YELLOW{color:black;background:yellow}");
+   console_write_v(".navy,.NAVY{color:white;background:navy}");
+   console_write_v(".blue,.BLUE{color:white;background:blue}");
+   console_write_v(".teal,.TEAL{color:white;background:teal}");
+   console_write_v(".aqua,.AQUA{color:black;background:aqua}");
+   console_write_v("--></style>");
+  }
+String err_s="???";
+cgi_z_p.person_s=" (CGI)";
+for(;;)
+  {
+   if(-1==end)break;//ピリオッドが無い場合はエラー。
+   if((begin+18)>end){err_s="length(over 18)";break;}//beginからendまでが18文字以上はエラーとする。
+   cgi_z_p.cgi_info_begin_s=cgi_z_p.substring3_s(s_si,0,begin+8);//先頭からbegin+8までをcgi_info_begin_sとする。
+   cgi_z_p.cgi_info_job_s=cgi_z_p.upper_s(cgi_z_p.substring3_s(s_si,begin+8,10));//begin+8から１０文字分をcgi_info_job_sとする。（ジョブ名）
+   cgi_z_p.cgi_info_end_s=cgi_z_p.substring2_s(s_si,end);//endから最後までをcgi_info_end_sとする。
+   if     (cgi_z_p.e2s_b("real_",cgi_z_p.substring3_s(cgi_z_p.cgi_info_begin_s,begin,5)))cgi_z_p.test_s="REAL";//先頭が"real_"の場合は本番用とする。
+   else if(cgi_z_p.e2s_b("test_",cgi_z_p.substring3_s(cgi_z_p.cgi_info_begin_s,begin,5)))cgi_z_p.test_s="TEST";//先頭が"test_"の場合はテスト用とする。
+   else {err_s="real_/test_";break;}//先頭が"real_"でも"test_"でもない場合はエラーとする。
+   if('_'!=cgi_z_p.at_s_c(cgi_z_p.cgi_info_begin_s,begin+7)){err_s="not(_,8)";break;}//beginから７文字目が"_"出ない場合はエラーとする。
+   cgi_z_p.lang_s=cgi_z_p.upper_s(cgi_z_p.substring3_s(cgi_z_p.cgi_info_begin_s,begin+5,2));//beginから５文字先から２文字を言語と見なす。
+   if(!job_b(cgi_z_p.cgi_info_job_s)){err_s="not found job";break;}//ジョブ名判定しCGIジョブでない場合はエラーとする。
+//*****( 入力処理 )*********************
+   String w_s="";
+   String env_s=cgi_z_p.environment_s("REQUEST_METHOD");//環境変数REQEST_METHODをenv_sにセットする。
+   if( null ==env_s)env_s="";//env_sにセット出来なかった場合は空白とする。
+   if(cgi_z_p.e2s_b(env_s,"GET"))//環境変数REQEST_METHODが”GET"の場合
+     {w_s=cgi_z_p.environment_s("QUERY_STRING");//環境変数QUERY_STRINGから文字を受取りw_sにセットする。
+      if( null ==w_s)w_s="";//w_sにセット出来なかった場合は空白とする。
+     }
+   else //環境変数REQEST_METHODが”GET"以外場合
+     {String len_s=cgi_z_p.environment_s("CONTENT_LENGTH");//環境変数CONTENT_LENGTHをlen_sにセットする。
+      if( null ==len_s)len_s="";//len_sにセット出来なかった場合は空白とする。
+      //CONTENT_LENGTHの長さ文標準入力からw_sに受取る。
+      if(!cgi_z_p.e2s_b(len_s,""))
+        {
+//SJ     int len=cgi_z_p.to_int1s_i(len_s);
+         try{
+////HP         QTextStream in_nn(stdin);in_nn.setCodec("UTF-8");
+////HP         w_s=in_nn.readAll();
+////HP         w_s=QString::fromUtf8(in_ba.readAll());
+//SJ         for(i=0;i<len;i++)w_s+=""+
+//SS           (char )Console.Read();
+//JJ           (char )in_n.read();
+            }catch(Exception){}
+        }
+     }
+   if(!cgi_z_p.e2s_b(w_s,""))//w_sに受けた文字を解析する。
+     {String[] w_sx=cgi_z_p.split_sx(w_s,'&');//&で区切られているので区切ってw_sxに入れる。
+      ii_zz_l ww_name_n=new ii_zz_l();ii_zz_l ww_value_n=new ii_zz_l();
+      bool b=true;
+      for(i=0;i<cgi_z_p.count_sx_i(w_sx);i++)//w_sxに区切られた分だけ処理を繰り返す。
+        {if(!cgi_z_mt_p.name_value_b(ww_name_n,ww_value_n,w_sx[i]))//NAME=名前 VALUE=値となっているんで、名前と値を設定する。
+           {abort_v("NAME=VALUE["+w_sx[i]+"]");b=false;break;}//分割出来なかった場合はエラーとする。
+         if(!decode_b(ww_name_n,ww_name_n.s))//名前をデコード処理する。
+           {abort_v("ENCODE NAME["+w_sx[i]+"]");b=false;break;} //nameデコードエラー。
+         if(!decode_b(ww_value_n,ww_value_n.s))//値をデコード処理する。
+           {abort_v("ENCODE VALUE["+w_sx[i]+"]");b=false;break;} //valueデコードエラー。
+         if(-1==cgi_z_p.index2c_i(ww_name_n.s,'='))
+           {if(!common_set_data_n(cgi_z_p.upper_s(ww_name_n.s),ww_value_n.s)){b=false;break;}} //#付き変数として登録。（NAME内に=が無い場合）//VER35
+         else //name=内に=がある場合value=は無視しNAME=内で再設定
+           {String[] w2_sx=cgi_z_p.split_sx(ww_name_n.s,','); //カンマ区切りで複数設定可能
+            for(j=0;j<cgi_z_p.count_sx_i(w2_sx);j++)
+              {cgi_z_mt_p.name_value_b(ww_name_n,ww_value_n,w2_sx[j]);//nameとvalueに分割。
+               if(!common_set_data_n(ww_name_n.s,ww_value_n.s)){b=false;break;}//#付き変数として登録。//VER35
+              }
+           } 
+        }
+//HP  delete ww_name_n;delete ww_value_n;     
+      return b;
+     }
+   return true; 
+  }
+abort_v("PATH_INFO("+err_s+")");
+return false;
+}
+//----------------------------------------------
+bool common_set_data_n(String name_si,String value_si)//#名前でデータを記憶
+{if(cgi_z_p.e2s_b(name_si,"#_JOB")) //VER20.1
+   {value_si=cgi_z_p.upper_s(value_si);
+    if(!job_b(value_si)){abort_v("_JOB["+value_si+"]");return false;}
+    cgi_z_p.job_cgi_s=cgi_z_p.job_s=value_si; 
+   } 
+else if(cgi_z_p.e2s_b(name_si,"#_PERSON"))  cgi_z_p.person_cgi_s=value_si;
+else if(cgi_z_p.e2s_b(name_si,"#_PASSWORD"))cgi_z_p.password_cgi_s=value_si;
+else cgi_z_mt_p.common_set_data_n(name_si,value_si);//#名前でデータを記憶
+return true;
+}
+//----------------------------------------------
+public ?void? ii_cgi_l(ii_z_l z_ni,ii_z_mt_l cgi_z_mt_pi){cgi_z_p=z_ni;cgi_z_mt_p=cgi_z_mt_pi;}
+//----------------------------------------------
+public bool job_b(String s_si)//ジョブ名判定
+{int i=0;
+ if(10!=cgi_z_p.length(s_si))return false;//10文字以外エラー
+ if('V'<cgi_z_p.at_s_c(s_si,0)&&'Z'>cgi_z_p.at_s_c(s_si,0))return false;//先頭文字WXYはエラー
+ for(i=0;i<4;i++)if('A'>cgi_z_p.at_s_c(s_si,i)||'Z'<cgi_z_p.at_s_c(s_si,i))return false;//先頭４文字英字以外エラー
+ if('8'!=cgi_z_p.at_s_c(s_si,4)||'0'!=cgi_z_p.at_s_c(s_si,5))return false;//５，６文字目80以外エラー
+ for(i=6;i<10;i++)if('0'>cgi_z_p.at_s_c(s_si,i)||'9'<cgi_z_p.at_s_c(s_si,i))return false;//７から１０文字目まで数字以外エラー
+ cgi_z_p.job_cgi_s=cgi_z_p.job_s=s_si;
+ return true;
+}
+//----------------------------------------------
+bool decode_b(ii_zz_l s_ni,String s_si)//特殊文字は%付き文字で来るので本来の文字にデコードする。
+{
+//SJ int i=0,j;
+//SS System.Text.Encoding Encoding_n=System.Text.Encoding.GetEncoding("UTF-8");
+ List<byte> b_y_a=new List<byte>();
+//SJ for(i=0;i<cgi_z_p.length(s_si);)
+//SJ   {if('%'!=cgi_z_p.at_s_c(s_si,i)){cgi_z_p.add_b(b_y_a,(byte)('+'==cgi_z_p.at_s_c(s_si,i)?' ':cgi_z_p.at_s_c(s_si,i)));i++;continue;}//%以外の処理で+は空白に変換//
+//SJ    i+=3;
+//SJ    if(i<=cgi_z_p.length(s_si))cgi_z_p.add_b(b_y_a,(byte)cgi_z_p.to_int2s_i(cgi_z_p.substring3_s(s_si,i-2,2),16));//%は次２文字が16進数で表現されているので文字化する。
+//SJ    else return false;
+//SJ   }
+//***( byteをstringに変換 )*****
+/////HP s_ni.s="";(j=0;j<cgi_z_p.count_b_i(b_y_a);j++)zz_ni_s+=　
+//SS byte[] w_yx=new byte[cgi_z_p.count_b_i(b_y_a)];//Listをbyte[]に変換のため文字数文byte[]を確保。
+//SS for(j=0;j<cgi_z_p.count_b_i(b_y_a);j++)w_yx[j]=(byte)cgi_z_p.at_b(b_y_a,j);//Listからbyte[]に変換。
+//SS s_ni.s=cgi_z_p.trim_s(Encoding_n.GetString(w_yx));//byte[]をStringにデコード。
+////#######( Java 対応方法不明につき現在動作せず )#########################
+////JJ try{s_ni.s=cgi_z_p.trim_s(new String(cgi_z_p.to_string_ba_s(b_y_a).getBytes("UTF-8"),"UTF-8"));}//デコード
+////JJ catch(Exception){}
+return true;
+}
+public void test_v()
+{if(!cgi_z_p.e2s_b(cgi_z_p.test_s,"REAL"))
+   {console_write_v("<div class=\"purple\">");
+    console_write_v("*(test)*(test)*(test)*<br>");
+    console_write_v("*(test)*(test)*(test)*</div>");
+   }
+}
+//---------------------------------------------------------------------
+public void body_v()//CGI BODY処理
+{if(1==cgi_z_p.sw_cgi)//CGIでBODY出力の最初に実行。
+  {cgi_z_p.sw_cgi=2;console_write_v("</head><body>");//CGIのBODY処理実行済み。
+   test_v(); 
+  }
+}
+//---------------------------------------------------------------------
+public void end_v() //CGI最終処理。
+{body_v();
+if(2==cgi_z_p.sw_cgi){cgi_z_p.sw_cgi=3;test_v();console_write_v("</body></html>");}
+}
+//---------------------------------------------------------------------
+public void error_v(String s_si)
+{body_v();
+ console_write_v("<div class=\"red\">*ERROR* "+s_si+"</div>");
+}
+//---------------------------------------------------------------------
+public void abort_v(String s_si)
+{body_v();
+ console_write_v("<div class=\"red\">");
+ console_write_v("********************************************************************************<br>");
+ console_write_v("**********************( program error )********************************************<br>");
+ console_write_v(s_si+"<br>");
+ console_write_v("********************************************************************************<br>");
+ console_write_v("********************************************************************************</div>");
+ cgi_z_mt_p.error_log_v(s_si);
+}
+public void form_v(String s_si)
+{if(true==form_b)return; //２回以上有りは無視。
+form_b=true;//処理済
+body_v();
+ console_write_v("<form action=\""+cgi_z_p.substring2_s(cgi_z_p.cgi_info_s,begin)+"\" method=\"post\">");
+ console_write_v("<input type=\"hidden\" name=\"_job\" value=\""+cgi_z_p.lower_s(cgi_z_p.job_cgi_s)+"\">"); //ver20.1
+ console_write_v("<br>"+s_si);
+if(cgi_z_p.e4s_b(cgi_z_p.menu_security_s,"J","P","A"))//パスワード入力追加。
+ {console_write_v("<br>PERSON <input type=\"text\" name=\"_person\" size=\"8\" maxlength=\"8\"");
+  console_write_v(" value=\""+cgi_z_p.person_cgi_s+"\">");
+  console_write_v("PASSWORD <input type=\"password\" name=\"_password\" size=\"16\" maxlength=\"16\">"); 
+ }
+else console_write_v("<br><br>");
+ console_write_v("<input type=\"submit\" value=\"EXECUTION\"></form>");
+}
+//--( パスワードのチェック )-----
+public void password_v() //VER20.1 
+{if(cgi_z_p.e4s_b(cgi_z_p.menu_security_s,"J","P","A"))//パスワードチェック必要。
+  if(!cgi_z_mt_p.program_p.password_b(0)){error_v("PERSON OR PASSWORD");cgi_z_p.cgi_password_b=false;}//パスワードチェック
+}
+//COPY *END
+//COPY $II_WRITE
+}
+#endif //TIME

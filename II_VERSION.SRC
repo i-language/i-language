@@ -1,0 +1,58 @@
+// II_VERSION.SRC version class author nobumichi harasawa
+// 共有クラス(STATIC)
+//#if IMENU||ITIME||IPRINT||ICHART||ICHART2||IROOT||ISRVC||ISETUP||IPAPER //TEST
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//SS using System.Data.SqlClient;
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.Drawing;
+//SS using System.IO;
+//JJ import java.awt.*;
+//JJ import java.awt.event.*;
+//JJ import java.io.*;
+//JJ import java.math.*;
+//JJ import java.util.*;
+public class ii_version_l
+{
+//####################( IMENU,ITIMEのバージョンアップ時変更 )###############
+//###★注意：変更時オリジナルのZZZZZZ_ETC_TABLE,ZZZZZZ_@,ZZZZZZ_VERSION2を変更しインストール環境を再構築する事。###
+//#I言語のバージョン2      (I37用)(111122333) #####
+public readonly String VERSION2_S="000600005";
+//############################################################################
+public readonly int VERSION1=37; //I言語のバージョン1(I37用)
+//#########( IPRINTのバージョンアップ時変更の事 )###########################
+//###★注意：変更時オリジナルのZZZZZZ_ETC_TABLE,ZZZZZZ_@,ZZZZZZ_VERSION_PRINTを変更しインストール環境を再構築する事。###
+public readonly int VERSION_PRINT=12;  //IPRINTのバージョン      #####
+//##########################################################################
+//###★注意：変更時オリジナルのZZZZZZ_ETC_TABLE,ZZZZZZ_@,ZZZZZZ_VERSION_CHARTを変更しインストール環境を再構築する事。###
+public readonly int VERSION_CHART=2;  //ICHARTのバージョン      #####
+//##########################################################################
+ii_z_l z_p;
+public ii_version_l(ii_z_l z_ni){z_p=z_ni;}
+public bool version_b(List<String> s_arg_ai)
+{
+//#if IMENU||ITIME||IPRINT||ICHART
+//パラメータが２個でどちらも”VERSION"はtrue。
+if(2!=z_p.count_s_i(s_arg_ai))return false;
+if(!z_p.e2s_b(z_p.upper_s(z_p.at_s(s_arg_ai,0)),"VERSION")||
+   !z_p.e2s_b(z_p.upper_s(z_p.at_s(s_arg_ai,1)),"VERSION"))return false;
+//テンプフォルダー上にバージョン情報をファイルとして出力する。
+String file_s=z_p.os_drive_s+z_p.dir_s+"I"+z_p.dir_s+"TMP"+z_p.dir_s+"VERSION_"+z_p.main_program_s+".TXT";
+//String version2_s=z_p.to_i_s(VERSION2); //VER36.000600006
+//if(z_p.length(version2_s)<9)version2_s="0"+version2_s; //VER36.000600006
+//if(z_p.length(version2_s)<9)version2_s="0"+version2_s; //VER36.000600006/
+//if(z_p.length(version2_s)<9)version2_s="0"+version2_s; //VER36.000600006
+ii_write_l write_n=new ii_write_l(z_p);
+if(write_n.open_b(file_s,"OT","/"))
+  {if(z_p.e2s_b(z_p.main_program_s,"ICHART"))write_n.write_b(z_p.to_i_s(VERSION_CHART));
+   else write_n.write_b(z_p.e2s_b(z_p.main_program_s,"IPRINT")?z_p.to_i_s(VERSION_PRINT):z_p.to_i_s(VERSION1)+"\t"
+//   +z_p.to_i_s(VERSION2));//VER36.000600006
+     +VERSION2_S); //VER36.000600006
+   write_n.write_close_v();
+  }
+//#endif //MENU||TIME||PRINT||CHART
+return true;
+}
+}
+//#endif //IMENU||ITIME||IPRINT||ICHART

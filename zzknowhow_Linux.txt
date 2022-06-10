@@ -1,0 +1,36 @@
+◎インストール
+rpm -ivh ~~~.rpm
+
+◎解凍
+unzip　~~~.zip　
+tar　zxvf ~~~.tar.gz
+
+◎javaバージョン変更
+update-alternatives --config java 
+
+◎DB2　インストール
+32 ビットのライブラリー・ファイル libstdc++.so.6 および /lib/libpam.so* が見つからない。－－＞無視して良い。
+db2 list db directory (データベース一覧）
+
+◎　スワップエリア拡大（６５MB)
+dd if=/dev/zero of=/swapfile bs=1024 count=65536
+mkswap /swapfile
+swapon /swapfile
+/etc/fstabに"/swapfile swap swap defaults 0 0"を追加。
+
+◎/etc/init.d/oracle-xe configure(oracle-起動スクリプト)
+◎ポート確認 netstat -anpt (rootで）
+◎cifsでmount出来ない場合ーーーcifs-utilsをインストールする。(Ubuntu:apt-get install cifs-utis)
+◎SELinuxを一時的に無効化---setenforce 0 (有効化は1)
+◎Ubuntu
+apt-get -y install samba (sambaをインストールする） 
+apt-get -y install at (atdをインストールする） 
+apt-get -y install sysv-rc-conf(sysv-rc-confをインストールする） 
+
+=====(　WSL対応　)======================
+
+◎UBUNTUをインストールする
+◎X-WindowsはXlanchをインストール、「export DISPLAY=:0.0」を実行してから起動する。
+◎Qtは「/opt/」にインストールする。
+◎WindowsからはWSLで起動。
+◎Windowsのディレクトリは「/mnt/ドライブ名/」で可能。

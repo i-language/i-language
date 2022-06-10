@@ -1,0 +1,74 @@
+PROGRAM=NOT
+DATA=A{5}
+=COPY_FILE{A.TXT,B.TXT};
+=SET{A=#SW};
+DATA=B{1}
+
+*COMMENT_BEGIN
+PROGRAM=NOT
+CONTROL=ERROR
+=SET{WC.U1=0x0075+0x0308+0x0304};
+=SET{WC.U2='𩸽'};
+=SET{W=WC.U1+'A'+WC.U2+WC.U1+'B'+WC.U2};
+*=SET{W.1=-4,W.2=1};
+=SET{B=W};
+FORM= @
+DATA={}A{20,,!}
+FORM= @
+=SET{B=W};
+FORM= @
+DATA=B{30,,!}
+COMMENT_END
+PROGRAM=NOT
+CONTROL=ERROR
+=SET{A=_VERSION2};
+=SET{WC.U=0x0075+0x0308+0x0304};
+=SET{WC.U='𩸽'};
+=SET{W=WC.U+WC.U+WC.U};
+=SET{B=W[-1;1]};
+FORM= @
+DATA={}A{20,,!}
+REPEAT0=5
+REPEAT=5
+=SET{AA$$_##='[$$;##]'};
+=SET{BA$$_##='[-$$;##]'};
+$1+=SET{AA6_##='[0;##]'};
+$1+=SET{BA6_##='[0;##]'};
+1+=SET{AA$$_6='[$$]'};
+1+=SET{BA$$_6='[$$]'};
+=IF_ERROR_SET{AB$$_##=W[$$;##]}SET{AB$$_##@COLOR='R'};
+=IF_ERROR_SET{BB$$_##=W[-$$;##]}SET{BB$$_##@COLOR='R'};
+$1+=IF_ERROR_SET{AB6_##=W[0;##]}SET{AB6_##@COLOR='R'};
+$1+=IF_ERROR_SET{BB6_##=W[0;##]}SET{BB6_##@COLOR='R'};
+1+=IF_ERROR_SET{AB$$_6=W[$$]}SET{AB$$_6@COLOR='R'};
+1+=IF_ERROR_SET{BB$$_6=W[$$]}SET{BB$$_6@COLOR='R'};
+=SET{CA$$_##='[$$;;##]'};
+=SET{DA$$_##='[-$$;;##]'};
+$1+=SET{CA6_##='[0;;##]'};
+$1+=SET{DA6_##='[0;;##]'};
+1+=SET{CA$$_6='[$$]'};
+1+=SET{DA$$_6='[$$]'};
+=SET{CB$$_##=W[$$;;##]};
+=SET{DB$$_##=W[-$$;;##]};
+$1+=SET{CB6_##=W[0;;##]};
+$1+=SET{DB6_##=W[0;;##]};
+1+=SET{CB$$_6=W[$$]};
+1+=SET{DB$$_6=W[$$]};
+REPEAT0=
+REPEAT0=6
+REPEAT=6
+FORM= @ @ @ @ @ @ @ @
+DATA={O}AA$$_##{7}
+DATA={O}AB$$_##{12}
+DATA={O}BA$$_##{7}
+DATA={O}BB$$_##{12}
+DATA={O}CA$$_##{7}
+DATA={O}CB$$_##{12}
+DATA={O}DA$$_##{7}
+DATA={O}DB$$_##{12}
+REPEAT=
+FORM= @
+DATA=AX$$_##{1}
+REPEAT0=
+FORM= @
+DATA=B{12}

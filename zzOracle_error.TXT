@@ -1,0 +1,34 @@
+startup◎リスナーが接続を一切拒否するエラーの対応方法。
+1)SQLコマンドラインの実行を起動。
+2)conn / as sysdba
+3)shutdown
+4)startup
+「ORA-28056: Writing audit records to Windows Event Log failed」
+のエラーが出た場合はイベントビューアでイベントログを全て消去する。
+それでもエラーが出る場合はサービスを再起動してみる。
+◎./runInstallerでGUIが表示されない。
+「xhost +ホスト名」を実行。
+◎ORA-01033が発生
+sqlplus / as sysdbaで 起動
+shutdown immediate
+startup mount
+recover database
+alter database open;
+◎ORA-01033が発生(ユーザーがロックされた）
+ALTER USER ユーザー名 ACCOUNT UNLOCK;
+◎ORA-01033が発生（起動パラメータが壊れた）
+CREATE SPFILE FROM PFILE;
+◎ORA-01017が発生（passwordが違う）
+su - oracle
+. /u01/app/oracle/product/11.2.0/xe/bin/oracle_env.sh
+/u01/app/oracle/product/11.2.0/xe/bin/sqlplus -l / as sysdba 
+alter user system identified by パスワード;
+exit
+◎ORA-28002: the password will expire within X days
+alter profile default limit password_life_time unlimited;
+alter user system identified by パスワード;
+プラガブルDB名の確認。
+select name, open_mode from v$pdbs;
+プラガブルDBへの切り替え。
+alter session set container=XEPDB1;
+　

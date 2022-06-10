@@ -1,0 +1,102 @@
+// II_READ.SRC read class author nobumichi harasawa
+//ファイル 読み込み クラス
+//#if IMENU||ITIME||IPRINT||ISRVC||ISETUP||IPAPER||ICHART||ICHART2
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//SS using System.Data.SqlClient;
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.Drawing;
+//SS using System.IO;
+//JJ import java.awt.*;
+//JJ import java.awt.event.*;
+//JJ import java.io.*;
+//JJ import java.math.*;
+//JJ import java.util.*;
+public class ii_read_l
+{
+//COPY $II_DIR
+//COPY *BEGIN
+ii_z_l read_z_p;
+//HP QFile           *read_FileStream_n= null ;QTextStream      *StreamReader_n= null ;
+//SS FileStream       read_FileStream_n= null ;StreamReader      StreamReader_n= null ;
+//JJ FileInputStream  read_FileStream_n= null ;InputStreamReader StreamReader_n= null ;
+//JJ int ii=0,sw_first=0,sw_end=0;
+public String read_file_s="",read_data_s="",read_name_s="";
+public ?void? ii_read_l(ii_z_l z_ni){read_z_p=z_ni;}
+//----------------------------------------------
+//***( return 0=normal,1=At end,5=error )*******
+public int read()
+{if( null ==read_FileStream_n){read_z_p.err_s="not open read";return 5;}
+//JJ int at_end=0,sw_data=0;
+//HP if(StreamReader_n.atEnd()){read_data_s="";return 1;}// at end
+//HP read_data_s=StreamReader_n.readLine();
+//SJ try{
+//SJ   for(;;)
+//SJ      {
+//SS read_data_s=StreamReader_n.ReadLine(); 
+//SS if( null ==read_data_s){read_data_s="";return 1;}// at end
+//SS if(1==read_z_p.length(read_data_s)&&0X1A==read_z_p.at_s_c(read_data_s,0))continue; //EOFのみ読み飛ばし。
+//JJ read_data_s="";
+//JJ for(sw_data=0;0==at_end&&-1!=(ii=StreamReader_n.read());)
+//JJ        {sw_data=1;
+//JJ         if(0==sw_first)if(0xFEFF==ii){sw_first=-1;continue;}//BOM有り
+//JJ         if(0==sw_first)if(0xFFFD==ii){sw_first++;continue;}else sw_first=-1;//BOM有り
+//JJ         if(1==sw_first)if(0xFF7F==ii){sw_first=-1;continue;}//BOM有り
+//JJ         sw_first=-1; 
+//JJ         if(0x0D==ii)continue;  
+//JJ         if(0x0A==ii)break;
+//JJ         read_data_s+=(char )ii;   
+//JJ        }  
+//SJ       break;
+//SJ      }  
+//JJ if(1==at_end||0==sw_data&&-1==ii){read_data_s="";return 1;}// at end
+//JJ if(-1==ii)at_end=1;
+//SJ    }
+//SJ catch(Exception e_ni){read_z_p.err_s=read_z_p.message_s(e_ni);read_close_v();return 5;}
+return 0;
+}
+//----------------------------------------------
+public bool open_b(String file_si,String encoding_si)
+{
+if( null !=read_FileStream_n){read_z_p.err_s="already open read";return false;}
+read_file_s=file_si;
+//HP read_FileStream_n=new QFile(read_file_s);
+//HP if(!read_FileStream_n.open(QIODevice::ReadOnly|QIODevice::Text))
+//HP    {read_z_p.err_s="open read error("+read_file_s+")";read_close_v();return false;}
+//HP  StreamReader_n=new QTextStream(read_FileStream_n); 
+//HP  String s=read_z_p.encode_s(encoding_si);
+////HP  StreamReader_n.setCodec(s.toUtf8());  
+//HP    StreamReader_n.setEncoding(read_z_p.e2s_b(s,"UTF-8")?QStringConverter::Utf8:QStringConverter::System);//VER36.1
+//SJ try{
+//SS System.Text.Encoding encoding_n=read_z_p.encoding_n(encoding_si);// VER24.1"/"はデフォルト値を設定。
+//SS if( null ==encoding_n){/*read_z_p.err_s="Bad Encoding("+encoding_si+")";*/return false;}
+//SS read_FileStream_n=File.Open(read_file_s,FileMode.Open,FileAccess.Read,FileShare.ReadWrite);
+//SS   if(read_z_p.e2s_b(encoding_si,"")||read_z_p.e2s_b(encoding_si,"/")&&('W'!=read_z_p.os_c))
+//SS        StreamReader_n=new StreamReader(read_FileStream_n); 
+//SS   else StreamReader_n=new StreamReader(read_FileStream_n,encoding_n); 
+//JJ read_FileStream_n=new FileInputStream(read_file_s);
+//JJ     if(read_z_p.e2s_b(encoding_si,"/"))
+//JJ          StreamReader_n=new InputStreamReader(read_FileStream_n);
+//JJ     else StreamReader_n=new InputStreamReader(read_FileStream_n,(read_z_p.e2s_b(encoding_si,"")?"UTF-8":encoding_si));
+//SJ    }
+//SJ catch(Exception e_ni){read_z_p.err_s=read_z_p.message_s(e_ni);read_close_v();return false;}
+//JJ sw_first=0;sw_end=0;
+return true;
+}
+//----------------------------------------------
+public void read_close_v()
+{
+//SJ try{if( null !=StreamReader_n)StreamReader_n.Close();}catch(Exception){}
+try{if( null !=read_FileStream_n)read_FileStream_n.Close();}catch(Exception){}
+//HP if( null !=StreamReader_n)delete StreamReader_n;
+//HP if( null !=read_FileStream_n)  delete read_FileStream_n;
+StreamReader_n= null ;
+read_FileStream_n = null ;
+}
+//COPY *END
+//COPY $II_SQL2
+//COPY $II_URL
+//COPY $II_WRITE
+}
+//#endif

@@ -1,0 +1,122 @@
+//II_RECEIVE.SRC socket read author nobumichi.harasawa
+//## int(1=error end,0=nomal end,-1=error anser) ii_socke.read(s,filockete_s,z_n)
+#if IMENU||ITIME||ISRVC //TEST
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//SS using System.Data.SqlClient;
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.Drawing;
+//SS using System.IO;
+//JJ import java.awt.*;
+//JJ import java.awt.event.*;
+//JJ import java.io.*;
+//JJ import java.math.*;
+//JJ import java.util.*;
+//SS using System.Net.Sockets;
+//SS using System.Threading;
+//JJ import java.net.*;
+#if IMENU
+//====================================================
+//*****(  UDP受信 )***************************
+public class ii_receive_l
+//HH :public
+//HH QThread
+//JJ extends Thread
+{
+//HP Q_OBJECT
+//HP QUdpSocket *Socket_n= null ; 
+//SJ public Socket Socket_n;
+public int rc=0,ip46=0;ii_z_l z_p;ii_z_mt_l z_mt_p;int receive_port=0;
+//JJ DatagramSocket DatagramSocket_n= null ;
+//JJ DatagramPacket DatagramPacket_n= null ;
+//SS public int sw_abort=0; //VER35.1
+//--------------------------------------------------------
+public ii_receive_l(int receive_port_ii,ii_z_l z_ni,ii_z_mt_l z_mt_ni,int ip46_ii)
+{
+//SJ Socket_n= null ;
+receive_port=receive_port_ii;z_p=z_ni;z_mt_p=z_mt_ni;ip46=ip46_ii;
+}
+//--------------------------------------------------------
+//SS public void go_v()
+//JP public void run()
+{
+String w_s="";
+//SJ int get_length;
+//HP QByteArray get_yx;
+//SJ byte[] get_yx=new byte[1026];
+//SS System.Net.IPEndPoint IPEndPoint_n= null ;
+//HP Socket_n=new QUdpSocket(); 
+//HP connect(Socket_n,SIGNAL(error(QAbstractSocket::SocketError)),this,SLOT(udp_error_v()));  //エラー
+//HP connect(Socket_n,SIGNAL(readyRead()),this,SLOT(event_v())); //受信待ち準備
+try{
+//SS  IPEndPoint_n=new System.Net.IPEndPoint((4==ip46?System.Net.IPAddress.Any:System.Net.IPAddress.IPv6Any),receive_port);
+//SS  Socket_n=new Socket(IPEndPoint_n.Address.AddressFamily,SocketType.Dgram,ProtocolType.Udp);
+//JJ  DatagramSocket_n=new DatagramSocket(receive_port);
+//JJ  DatagramPacket_n=new DatagramPacket(get_yx,get_yx.length);
+   }
+catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);rc=1;close_v();return;}
+for(;;)
+  {
+//SS if(0!=sw_abort)break; //VER35.1 
+//SJ try{
+//HP     sw_event=0;Socket_n.bind(receive_port);
+//HP     for(;0==sw_event&&0==sw_error;)z_p.sleep_v(1000);//完了待ち。
+//HP     if(0!=sw_error){rc=1;break;}//エラー有り。
+//HP    w_s="";
+//HP    for(;Socket_n.hasPendingDatagrams();)
+//HP      {QNetworkDatagram nd_nn=Socket_n.receiveDatagram();
+//HP       get_yx=nd_nn.data();w_s+=z_p.to_yx_s(get_yx);
+//HP      }
+//SS     Socket_n.Bind(IPEndPoint_n);
+//JJ     DatagramSocket_n.receive(DatagramPacket_n);
+//SS     get_length=Socket_n.Receive(get_yx,1024,SocketFlags.None); //UDP受信待ち。
+//JJ     get_length=DatagramPacket_n.getLength();                   //UDP受信待ち。
+//JJ     get_yx=DatagramPacket_n.getData();
+//SJ     if(0<get_length)w_s=z_p.to_utf8_s(get_yx,0,get_length);
+//SJ     else w_s="";
+         if(!z_p.e2s_b(z_p.substring3_s(w_s,0,15),z_p.password_n.pwd15_setup_s(z_p.substring2_s(w_s,15))))continue; //パスワード判定。
+         w_s=z_p.substring2_s(w_s,15); //パスワード文字分削除
+         if(!z_p.e2s_b(z_p.test_s,z_p.substring3_s(w_s,2,4)))continue;//メッセージがテスト用か本番用かの判定。
+         z_p.receive_lang_s=z_p.substring3_s(w_s,0,2);
+         z_p.receive_system_s=z_p.substring3_s(w_s,6,8);
+         z_p.receive_job_s=z_p.substring3_s(w_s,14,10);
+         z_p.receive_person_s=z_p.trim_s(z_p.substring3_s(w_s,24,8));
+         z_p.receive_computer_name_s=z_p.trim_s(z_p.substring3_s(w_s,32,15));
+         z_p.receive_s=z_p.substring2_s(w_s,47);
+         z_p.receive_sw_s="1";
+//HP     z_mt_p.sw_receive=1; //HPは別スレッドではタイマーを起動できない為１で対応。(VER31.1)
+//SJ     z_mt_p.menu_p.timer_udp_v(); //タイマーにキーエンター実行を依頼。
+         break;
+//SJ    }catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);rc=1;break;}
+  }
+close_v();
+//HP if(1!=z_mt_p.sw_receive)z_mt_p.sw_receive=-1;//無処理終了。
+return;
+}
+//--------------------------------------------------------
+public void close_v()
+{if(2==z_p.sw_beep)z_p.sw_beep=0;
+//SJ try{
+//JJ     if( null !=DatagramSocket_n)DatagramSocket_n.close();
+         if( null !=Socket_n)
+           {
+//SS        Socket_n.Shutdown(SocketShutdown.Both);
+//SS        Socket_n.Close();
+//JJ        Socket_n.close();
+//HP        Socket_n.close();delete Socket_n;
+           } 
+//SJ    }
+//SJ  catch(Exception){}
+//JJ DatagramSocket_n= null ;
+     Socket_n= null ;
+}
+//HP int sw_error=0,sw_event=0;
+//HP String CLOSE_S="The remote host closed the connection";
+//HH private slots:
+//HP void udp_error_v(){z_p.err_s=Socket_n.errorString();sw_error=1;}
+//HH private slots:
+//HP void event_v(){sw_event=1;}
+}
+#endif //IMENU
+#endif

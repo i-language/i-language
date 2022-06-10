@@ -1,0 +1,166 @@
+// II_SERIALPORT.SRC serialport class author nobumichi harasawa
+#if IMENU||ITIME //TEST
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//SS using System.Data.SqlClient;
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.Drawing;
+//SS using System.IO;
+//JJ import java.awt.*;
+//JJ import java.awt.event.*;
+//JJ import java.io.*;
+//JJ import java.math.*;
+//JJ import java.util.*;
+//JJ import purejavacomm.*;
+//SS using System.IO.Ports;
+public class ii_serialport_l
+//JJ implements SerialPortEventListener 
+//HH :public
+//HH QObject
+{
+//HH Q_OBJECT
+ii_z_l z_p;
+//JJ String encode_s;
+int sw_SerialPort=0;
+///HP QSerialPort * SerialPort_n; //VER36.1
+//SS SerialPort SerialPort_n= null ;
+//JJ SerialPort SerialPort_n= null ;
+public String file_s="",data_s="";
+public ii_serialport_l(ii_z_l z_ni){z_p=z_ni;}
+public bool write_b(String data_si)
+{if(0==sw_SerialPort){z_p.err_s="not open serialport";return false;}
+///HP     SerialPort_n.write(data_si.toUtf8()); //VER36.1
+//SJ try{
+//SS SerialPort_n.Write(data_si);
+//JJ OutputStream out_nn=SerialPort_n.getOutputStream();
+//JJ out_nn.write(z_p.to_encode_yx(data_si,encode_s));
+//SJ    }catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);close_v();return false;}
+return true;
+}
+//----------------------------------------------
+//***( return 0=normal,5=error ,入力データはdata_sにセット)***
+//JJ int i_len=0;
+//JJ BufferedReader reader_n;
+public int read(int i_ii)
+{
+//JJ i_len=i_ii;
+if(0==sw_SerialPort){z_p.err_s="not open serialport";return 5;}
+///HP QEventLoop loop_nn; //VER36.1
+///HP connect(SerialPort_n,SIGNAL(&QSerialPort::readyRead()),&loop_nn,SLOT(quit())); //VER36.1
+///HP loop_nn.exec(); //VER36.1
+///HP data_s=QString(SerialPort_n.read(i_ii)); //VER36.1
+//SJ try{
+//SS     char[] cx=new char[i_ii];
+//SS     SerialPort_n.Read(cx,0,i_ii);
+//JJ     if(1==sw_SerialPort)
+//JJ       {sw_SerialPort=2;
+//JJ        reader_n=new BufferedReader(
+//JJ        new InputStreamReader(SerialPort_n.getInputStream()));
+//JJ        SerialPort_n.addEventListener(this);
+//JJ        SerialPort_n.notifyOnDataAvailable(true);
+//JJ        }
+//SS     data_s=z_p.to_cx_s(cx,i_ii);
+//SJ    }catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);close_v();return 5;}
+//JJ for(;2==sw_SerialPort;)try{Thread.sleep(2000);}catch(InterruptedException e){} //読み込み完了待ち。
+//JJ sw_SerialPort=2;
+return 0;
+}
+//JJ public void serialEvent(SerialPortEvent e_ni)
+//JJ {if(e_ni.getEventType()==SerialPortEvent.DATA_AVAILABLE)
+//JJ    {char[] cx=new char[i_len];int i=0;
+//JJ     try{for(;reader_n.ready();)
+//JJ          {reader_n.read(cx,i++,1);
+//JJ          if(i_len<=i){data_s="";for(i=0;i<i_len;i++)data_s+=cx[i];sw_SerialPort=3;break;}
+//JJ          }
+//JJ        }catch(IOException ex){}
+//JJ    }
+//JJ  
+//JJ }
+//----------------------------------------------
+public bool open_b(String s1_si,String s2_si)
+{if(0!=sw_SerialPort){z_p.err_s="alread open serialport";return false;}
+//JJ encode_s=s2_si;
+String[] sx=z_p.split_sx(s1_si,',');
+file_s=sx[0];
+int rate=9600;
+if(1<z_p.count_sx_i(sx)){rate=z_p.to_int_check(sx[1],'-',0,1);if(!z_p.return_b)return false;}
+//SS Parity Parity_n;
+///HP SerialPort_n= new QSerialPort(); //VER36.1 
+String s=(2<z_p.count_sx_i(sx)?z_p.upper_s(sx[2]):"NONE");
+//JJ int parity_bit;
+//SJ if     (z_p.e2s_b(s,"EVEN")) //VER26.1
+///HP                             SerialPort_n.setParity(QSerialPort::EvenParity); //VER36.1
+//SS                             Parity_n=Parity.Even;
+//JJ                             parity_bit=SerialPort.PARITY_EVEN;
+//SJ else if(z_p.e2s_b(s,"MARK")) //VER36.1
+///HP                             SerialPort_n.setParity(QSerialPort::MarkParity ); //VER36.1
+//SS                             Parity_n=Parity.Mark;
+//JJ                             parity_bit=SerialPort.PARITY_MARK;
+//SJ else if(z_p.e2s_b(s,"NONE")) //VER36.1
+///HP                             SerialPort_n.setParity(QSerialPort::UnknownParity ); //VER36.1
+//SS                             Parity_n=Parity.None;
+//JJ                             parity_bit=SerialPort.PARITY_NONE;
+//SJ else if(z_p.e2s_b(s,"ODD")) //VER36.1
+///HP                             SerialPort_n.setParity(QSerialPort::OddParity ); //VER36.1 
+//SS                             Parity_n=Parity.Odd;
+//JJ                             parity_bit=SerialPort.PARITY_ODD;
+//SJ else if(z_p.e2s_b(s,"SPACE")) //VER36.1
+///HP                             SerialPort_n.setParity(QSerialPort::SpaceParity ); //VER36.1 
+//SS                             Parity_n=Parity.Space;
+//JJ                             parity_bit=SerialPort.PARITY_SPACE;
+//SJ else {z_p.err_s="(Parity="+sx[2]+")(EVEN,MARK,NONE,ODD,SPACE) error";return false;}//VER26.1
+int data_bit=8;
+if(3<z_p.count_sx_i(sx)){data_bit=z_p.to_int_check(sx[3],'-',0,1);if(!z_p.return_b)return false;}
+//SS StopBits StopBits_n;
+s=(4<z_p.count_sx_i(sx)?z_p.upper_s(sx[4]):"ONE");
+//JJ int stop_bit;
+//SJ if     (z_p.e2s_b(s,"NONE")) //VER36.1       
+///HP                                     SerialPort_n.setStopBits(QSerialPort::UnknownStopBits); //VER36.1
+//SS                                     StopBits_n=StopBits.None;
+//JJ                                     stop_bit=0;
+//SJ else if(z_p.e2s_b(s,"ONE"))         //VER36.1
+///HP                                     SerialPort_n.setStopBits(QSerialPort::OneStop); //VER36.1
+//SS                                     StopBits_n=StopBits.One;
+//JJ                                     stop_bit=SerialPort.STOPBITS_1;
+//SJ else if(z_p.e2s_b(s,"ONEPOINTFIVE")) //VER36.1
+///HP                                     SerialPort_n.setStopBits(QSerialPort::OneAndHalfStop); //VER36.1 
+//SS                                     StopBits_n=StopBits.OnePointFive;
+//JJ                                     stop_bit=SerialPort.STOPBITS_1_5;
+//SJ else if(z_p.e2s_b(s,"TWO")) //VER36.1     
+///HP                                     SerialPort_n.setStopBits(QSerialPort::TwoStop); //VER36.1
+//SS                                     StopBits_n=StopBits.Two;
+//JJ                                     stop_bit=SerialPort.STOPBITS_2;
+//SJ else {z_p.err_s="(StopBits="+sx[4]+")(NONE,ONE,ONEPOINTFIVE,TWO) Error";return false;}//VER36.1
+///HP SerialPort_n.setBaudRate(rate); //VER36.1
+///HP SerialPort_n->setDataBits(5==data_bit?QSerialPort::Data5: //VER36.1
+///HP                          (6==data_bit?QSerialPort::Data6: //VER36.1
+///HP                          (7==data_bit?QSerialPort::Data7: //VER36.1
+///HP                          (8==data_bit?QSerialPort::Data8: //VER36.1
+///HP                           QSerialPort::UnknownDataBits)))); //VER36.1
+///HP SerialPort_n.setPortName(file_s); //VER36.1
+///HP if(!SerialPort_n.open(QIODevice::ReadWrite)){z_p.err_s="Open error"+file_s;return false;} //VER36.1
+//SJ try{
+//SS     SerialPort_n=new SerialPort(file_s,rate,Parity_n,data_bit,StopBits_n);
+//SS     if(!z_p.e2s_b(s2_si,"/"))SerialPort_n.Encoding=z_p.encoding_n(s2_si);  //VER24.1
+//SS     SerialPort_n.Open();
+//SS     SerialPort_n.DtrEnable = true;
+//SS     SerialPort_n.RtsEnable = true;
+//JJ     CommPortIdentifier id_nn=CommPortIdentifier.getPortIdentifier(file_s);
+//JJ     SerialPort_n=(SerialPort)id_nn.open(z_p.main_program_s,10000);
+//JJ     SerialPort_n.setSerialPortParams(rate,data_bit,stop_bit,parity_bit);
+//JJ     SerialPort_n.setFlowControlMode(SerialPort.FLOWCONTROL_NONE ); //フロー制御はしない
+//SJ    }catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);close_v();return false;}
+sw_SerialPort=1;
+return true;
+}
+//----------------------------------------------
+public void close_v()
+{try{
+//SJ SerialPort_n.Close(); //VER36.1
+//SS SerialPort_n.Dispose();
+    }catch(Exception){}
+sw_SerialPort=0;
+}
+}
+#endif //MENU||TIME

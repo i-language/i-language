@@ -1,0 +1,540 @@
+//===== II_DB.CS db author nobumich.harasawa
+//データベース クラス
+#if IMENU||ITIME
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//SS using System.Data.SqlClient;
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.Drawing;
+//SS using System.IO;
+#if IMENU
+////SS using System.Windows.Forms;
+#endif
+//JJ import java.awt.*;
+//JJ import java.awt.event.*;
+//JJ import java.io.*;
+//JJ import java.math.*;
+//JJ import java.util.*;
+public class ii_db_l
+{
+//COPY $II_DIR
+//COPY $II_READ
+//COPY $II_SQL2
+//COPY $II_URL
+ii_z_l db_z_p;
+public List<String> s_k_a=new List<String>();
+public List<String> s_s1_a=new List<String>();
+public List<String> s_s2_a=new List<String>();
+public List<int> i_cnt_a=new List<int>();
+public List<int> i_oracle_a=new List<int>(); 
+public String m_real1_s="",w_real1_s="",m_test1_s,w_test1_s="",m_real2_s=""
+,w_real2_s="",m_test2_s,w_test2_s="",cursor1_s="",cursor2_s="",set1_s="",set2_s=""
+,e_s="",d_s="",from_dual_s="",substr_s="",lock1_s=""
+,now_date_s="",now0_s="",now8_s="",now17_s="",c_s="",cl_s="",cr_s="",atan2x_s=""
+,lock2_s="",v_s="",ec_s="",sql_yyyymm_s="",sql_date_time_s="",sql_null_s="",end_s=""
+,sql_length_s="",len1_s="",len2_s="",lenb1_s="",lenb2_s="",link_s="",admin_s="",ix_s="",found_s="",not_found_s="",n_s=""
+,grant_add_s="",sql_nchar_s="",sql_nvarchar_s="",sql_varchar_s="",repeat_s="",user_sep_s="",db_sep_s="";
+public readonly String CHECK_TYPE_S="CHAR,NCHAR,DECIMAL,INT,FLOAT,VARCHAR,NVARCHAR,DATETIME,DATE";
+public String rd_data_s="",rd_index_s="",sql_char_set_s="",from_s=",",for_s=","
+,mod1_s="",mod2_s="",mod3_s="",ceil_s="",log_s="",log10x1_s="",log10x2_s="",radians1_s="",radians2_s="",stdevs_s="",stdevp_s="",vars_s="",varp_s
+,degrees1_s="",degrees2_s="",rand_s="",cot_s="",div1_s="",div2_s="",cast_oracle1_s="",cast_oracle2_s=""
+,rollup1_s="",rollup2_s="",cube1_s="",cube2_s="";
+public int utf8_get=1,utf8_set=1;
+public String c_begin1_s="",c_begin2_s="",c_begin3_s="",c_begin9_s=""
+,o_fd_s="",o_fs_s="",o_wd_s="",o_ws_s="",o_end_sw_s=""
+,c_cursor_s="",c_start_s="",c_fetch_s="",c_loop_s="",c_stop_s=""
+,c_end0_s="",c_end1_s="",c_end2_s="",c_end3_s=""
+,cursor_begin1_s="",cursor_begin2_s="",cursor_begin3_s="",cursor_begin9_s=""
+,cursor_cursor_s="",cursor_start_s="",cursor_start_new_s="",cursor_fetch_s="",cursor_loop_s="",cursor_stop_s=""
+,cursor_end0_s="",cursor_end1_s="",cursor_end2_s="",cursor_end3_s=""
+,func_returns_s="",func_begin_s="",func_end_s="",o_in1_s="",o_in2_s=""
+,o_set_s="",o_e_s="",o_from_s="",o_default_s="",o_data_s="",o_data_sql_s=""
+,o_l_s="",o_r_s="",o_then_s="",o_end_if_s="",o_new_s="",o_old_s=""
+,o_end_s="",o_declare_s="",o_trig1_s="",o_trig2_s="",o_trig3_s=""
+,object_begin_s="",object_end_s="",object_as_s="",object_main_s=""
+,proc_s="",proc_l_s="",proc_r_s="",o_if_s="",find1_s="",find2_s="",find3_s="",trunc1_s="TRUNC",trunc2_s=""
+,day1_s="",day2_s="",day3_s="",week1_s="",week2_s="",date1_s="",date2_s="",date3_s="",date4_s="";
+//----------------------------------------------
+public ?void? ii_db_l(ii_z_l z_ni){db_z_p=z_ni;}
+void p_v(String k_i,String s1_i,String s2_i,int cnt_i,int oracle_i)
+{db_z_p.add_s(s_k_a,k_i);db_z_p.add_s(s_s1_a,s1_i);db_z_p.add_s(s_s2_a,s2_i);db_z_p.add_i(i_cnt_a,cnt_i);db_z_p.add_i(i_oracle_a,oracle_i);}
+public String db_s(String _pmx_si,String real_test_si,String inp_out_si,String permission_si,String part_si,char db_ci)
+{return(('M'==db_z_p.at_s_c(_pmx_si,2)?(db_z_p.e2s_b(real_test_si,"REAL")?m_real1_s:m_test1_s)
+            +(db_z_p.e4c_b(db_ci,'O','H','D')?"D":('F'==db_ci?"M":""))+db_sep_s
+            +('D'==db_ci?"":('L'==db_ci?db_z_p.lower_s(permission_si):permission_si))
+            +(db_z_p.e2s_b(real_test_si,"REAL")?m_real2_s:m_test2_s)
+         :(db_z_p.e2s_b(real_test_si,"REAL")?w_real1_s:w_test1_s)
+            +(db_z_p.e4c_b(db_ci,'O','H','D')?db_z_p.substring3_s(inp_out_si,0,1):('F'==db_ci?"W":""))
+            +db_sep_s+('D'==db_ci?"":('L'==db_ci?db_z_p.lower_s(permission_si):permission_si))
+            +(db_z_p.e2s_b(real_test_si,"REAL")?w_real2_s:w_test2_s))
+         +(3<db_z_p.length(_pmx_si)&&'X'==db_z_p.at_s_c(_pmx_si,3)?""
+            :permission_si+('_'==db_z_p.at_s_c(_pmx_si,1)?('M'==db_z_p.at_s_c(_pmx_si,2)?"":"__"):part_si)
+             +('M'==db_z_p.at_s_c(_pmx_si,2)?"":db_z_p.substring3_s(inp_out_si,0,1))));
+} 
+//----------------------------------------------
+public int set_b(char db_ci,String system_si,String db_soft_si)
+{user_sep_s="_";db_sep_s="_";from_dual_s="";v_s="V_";e_s=";";d_s="D";
+ix_s="";sql_length_s="LENGTH";len1_s="LENGTH";lenb1_s="LENGTH";
+grant_add_s="";
+o_fd_s="F_";o_fs_s="F_";o_wd_s="W_";o_ws_s="W_";
+c_begin1_s="";c_begin2_s="";c_begin3_s="";c_begin9_s="";
+c_cursor_s="DECLARE O_CURSOR CURSOR FOR ";c_start_s=";";
+c_fetch_s="FETCH O_CURSOR INTO ";c_loop_s="";o_end_sw_s="O_END_SW";
+c_end0_s="";c_end1_s="";c_end2_s="";c_end3_s="";
+cursor_begin1_s="";cursor_begin2_s="";cursor_begin3_s="";cursor_begin9_s=" DECLARE ";
+cursor_cursor_s=";DECLARE C_CURSOR CURSOR FOR ";cursor_start_s=";";
+cursor_fetch_s=" FETCH C_CURSOR INTO ";cursor_loop_s="";
+cursor_end0_s="";cursor_end1_s="";cursor_end2_s="";cursor_end3_s="";
+o_declare_s="DECLARE ";
+o_in1_s=" ";o_in2_s=" ";
+func_returns_s=" RETURNS ";func_begin_s="";func_end_s="";
+o_data_s=" D_";o_data_sql_s=" D_";o_set_s="SET ";o_e_s="=";o_from_s="=";o_default_s=" DEFAULT ";
+o_l_s="";o_r_s="";o_then_s=" THEN ";o_end_if_s=" END IF;";
+o_new_s=" NEW.";o_old_s=" OLD.";
+o_if_s=" IF ";
+o_trig1_s=" AFTER UPDATE OR INSERT OR DELETE ON ";o_trig2_s="";o_trig3_s="";
+object_begin_s=" BEGIN ";object_end_s=" END;END ";
+object_as_s="";o_end_s=" END;";object_main_s=" BEGIN ";
+proc_s="CALL";proc_l_s="(";proc_r_s=")";
+mod1_s="MOD(";mod2_s=",";mod3_s=")";
+ceil_s="CEILING";log_s="LOG";log10x1_s="LOG10";
+radians1_s="RADIANS";degrees1_s="DEGREES";
+rand_s="RAND()";cot_s="COT";atan2x_s="ATAN2";
+div1_s="";div2_s="";stdevs_s="STDDEV";stdevp_s="STDDEV";vars_s="VARIANCE";varp_s="VARIANCE";
+rollup1_s="ROLLUP";rollup2_s="";cube1_s="CUBE";cube2_s="";
+//=****( M MS SQL Server )***************** 
+if     ('M'==db_ci) // MS SQL Server 
+ {d_s="@";
+  m_real1_s="I_"+system_si+"_R_M";
+  m_real2_s=".DBO.";
+  m_test1_s="I_"+system_si+"_T_M";
+  m_test2_s=".DBO.";
+  w_real1_s="I_"+system_si+"_R_W";
+  w_real2_s=".DBO.";
+  w_test1_s="I_"+system_si+"_T_W";
+  w_test2_s=".DBO.";
+  link_s=".";c_s="+";end_s="";ec_s=",";
+  cursor1_s="DECLARE";cursor2_s="CURSOR FOR";
+  set1_s="SELECT";set2_s="=";
+  now_date_s=now0_s="GETDATE()";
+  now8_s="CONVERT(CHAR(8),GETDATE(),112)";
+  now17_s="REPLACE(REPLACE(REPLACE(REPLACE(CONVERT(CHAR(23),GETDATE(),121),'-',''),':',''),'.',''),' ','')";
+  substr_s="SUBSTRING";lock1_s="(UPDLOCK)";lock2_s="";
+  sql_yyyymm_s="CONVERT(CHAR(6),GETDATE(),112)";
+  sql_date_time_s="DATETIME";sql_null_s="NULL";
+  sql_nchar_s="NCHAR";sql_nvarchar_s="NVARCHAR";sql_varchar_s="VARCHAR";
+  admin_s="SA";
+  found_s="M2714";not_found_s="M208";
+  if(!db_z_p.starts_with_b(db_soft_si,"M2000"))grant_add_s="VIEW DEFINITION,";
+  sql_length_s="DATALENGTH";
+  v_s="@";e_s="";n_s="N";
+  repeat_s="REPLICATE";
+  o_data_s=" @_";o_data_sql_s=" @_";o_fd_s="@F_";o_fs_s="@F_";o_wd_s="@W_";o_ws_s="@W_";
+  o_then_s=" ";o_end_if_s=" ";
+  o_end_sw_s="@O_END_SW";
+  c_fetch_s=" OPEN O_CURSOR; WHILE 0 = 0 BEGIN "+c_fetch_s;
+  c_loop_s="IF @@FETCH_STATUS<>0 SET @O_END_SW=1;";
+  c_stop_s="IF @O_END_SW<>0 BREAK;END; CLOSE O_CURSOR; DEALLOCATE O_CURSOR;";
+  cursor_fetch_s=" OPEN C_CURSOR; WHILE 0 = 0 BEGIN"+cursor_fetch_s;
+  cursor_loop_s=";IF @@FETCH_STATUS <> 0 BREAK;";
+  cursor_stop_s=" END; CLOSE C_CURSOR; DEALLOCATE C_CURSOR;";
+  func_begin_s=" AS BEGIN RETURN ";func_end_s=" END ";
+  mod1_s="";mod2_s="%";mod3_s="";
+  o_default_s="="; 
+  o_trig1_s=" ON ";
+  o_trig2_s=" AFTER UPDATE,INSERT,DELETE AS ";
+  o_new_s=" @_NEW_";o_old_s=" @_OLD_";
+  object_as_s=" AS ";
+  proc_s="EXEC";proc_l_s="";proc_r_s="";
+  find1_s="CHARINDEX(";find2_s=",";find3_s=")";
+  date1_s="CONVERT(DATE,";date2_s="";date3_s="";date4_s=")";
+  day1_s="CONVERT(CHAR(8),DATEADD(DAY,";day2_s=",";day3_s="),112)";
+  week1_s="DATEPART(DW,";week2_s=")";
+  trunc1_s="ROUND(";trunc2_s=",1)";stdevs_s="STDEV";stdevp_s="STDEVP";
+  vars_s="VAR";varp_s="VARP";
+  len1_s="LEN";lenb1_s="DATALENGTH(RTRIM(";lenb2_s="))";atan2x_s="ATN2";
+ }
+//=****( O Oracle )***************** 
+else if('O'==db_ci) // ORACLE
+ {m_real1_s="I_"+system_si+"_R_";
+  m_real2_s=".";
+  m_test1_s="I_"+system_si+"_T_";
+  m_test2_s=".";
+  w_real1_s="I_"+system_si+"_R_";
+  w_real2_s=".";
+  w_test1_s="I_"+system_si+"_T_";
+  w_test2_s=".";
+  link_s="..";c_s="||";end_s=";";ec_s=";";
+  cursor1_s="CURSOR";cursor2_s="IS";
+  set1_s="";set2_s=":=";
+  from_dual_s="FROM DUAL";
+  now_date_s=now0_s="SYSDATE";
+  now8_s="TO_CHAR(SYSDATE,'YYYYMMDD')";
+  now17_s="TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')||'000'";
+  substr_s="SUBSTR";lock1_s="";lock2_s=" FOR UPDATE";
+  sql_yyyymm_s="TO_CHAR(SYSDATE,'YYYYMM')";
+  sql_date_time_s="TIMESTAMP";sql_null_s="NULL";
+  sql_nchar_s="NCHAR";sql_nvarchar_s="NVARCHAR2";sql_varchar_s="VARCHAR2";
+  admin_s="SYSTEM";
+  n_s="N";
+  repeat_s="LPAD";
+  c_cursor_s=" CURSOR O_CURSOR IS ";
+  c_fetch_s=" OPEN O_CURSOR; LOOP "+c_fetch_s;
+  c_loop_s="IF (O_CURSOR%NOTFOUND) THEN O_END_SW:=1;END IF;";
+  c_stop_s="EXIT WHEN (O_END_SW<>0);END LOOP; CLOSE O_CURSOR;";
+  cursor_cursor_s="; CURSOR C_CURSOR IS ";
+  cursor_fetch_s=" OPEN C_CURSOR; LOOP "+cursor_fetch_s;
+  cursor_loop_s="; EXIT WHEN C_CURSOR%NOTFOUND;";
+  cursor_stop_s=" END LOOP; CLOSE C_CURSOR;";
+  func_returns_s=" RETURN ";
+  func_begin_s=" AS ";func_end_s=" ";
+  o_e_s=":=";o_from_s=":=";//o_default_s=":=";
+  o_declare_s="";
+  o_in2_s=" IN ";
+  o_new_s=" :NEW.";o_old_s=" :OLD.";
+  o_trig2_s=" FOR EACH ROW ";
+  object_as_s=" AS ";
+  object_end_s=" END;END;";
+  find1_s="INSTR(";find2_s=",";find3_s=")";
+  date1_s="TO_DATE(SUBSTR(";date2_s="";date3_s="";date4_s=",1,8),'YYYYMMDD')";
+  day1_s="TO_CHAR(";day2_s="+(";day3_s="),'YYYYMMDD')";
+  week1_s="TO_CHAR(";week2_s=",'D')";
+  o_fd_s="F.";o_fs_s="F.";
+  o_set_s="";
+  ceil_s="CEIL";log_s="LN";log10x1_s="LOG(10,";log10x2_s=")";
+ radians1_s="(";radians2_s=")*ATAN2(0,-1)/180";degrees1_s="(";degrees2_s=")*180/ATAN2(0,-1)";
+ rand_s="DBMS_RANDOM.VALUE";cot_s="1/TAN";
+ cast_oracle1_s="CAST(";cast_oracle2_s=" AS NUMBER(38,15))";
+ div1_s="TRUNC(";div2_s=")";stdevp_s="STDDEV_POP";varp_s="VAR_POP";
+lenb1_s="LENGTHB";
+ }
+//=****( I IBM DB2 )***************** 
+else if('I'==db_ci) // IBMDB2
+ {ix_s="ix";
+  m_real1_s="I_"+system_si+"_R_M";
+  m_real2_s=".";
+  m_test1_s="I_"+system_si+"_T_M";
+  m_test2_s=".";
+  w_real1_s="I_"+system_si+"_R_W";
+  w_real2_s=".";
+  w_test1_s="I_"+system_si+"_T_W";
+  w_test2_s=".";
+  link_s="";c_s="||";end_s=";";ec_s=";";//value_s="V_";
+  cursor1_s="CURSOR";cursor2_s="IS";
+  set1_s="";set2_s="=";
+  from_dual_s="FROM SYSIBM.SYSDUMMY1";
+  now_date_s="CURRENT DATE";
+  now0_s="CURRENT TIMESTAMP";
+   now8_s="REPLACE(CHAR(CURRENT DATE),'-','')";
+   now17_s="CAST(REPLACE(REPLACE(CHAR(CURRENT TIMESTAMP),'-',''),'.','') AS CHAR(17))";
+  substr_s="SUBSTRING";lock1_s="";lock2_s=" FOR UPDATE WITH RS"; //VER361.
+  sql_yyyymm_s="CAST("+now8_s+" AS CHAR(6))";
+  sql_date_time_s="TIMESTAMP";sql_null_s="";
+  sql_nchar_s="CHAR";sql_nvarchar_s="VARCHAR";sql_varchar_s="VARCHAR";
+  admin_s=('W'==db_z_p.os_c?"db2admin":"db2inst1");
+  n_s="";
+  repeat_s="REPEAT";
+  utf8_get=utf8_set=3;
+  c_start_s=   ";DECLARE EXIT HANDLER FOR NOT FOUND SET O_END_SW=1;";
+  c_fetch_s=" OPEN O_CURSOR;O_LOOP: LOOP "+c_fetch_s;
+  c_loop_s="";
+  c_stop_s="IF O_END_SW<>0 THEN LEAVE O_LOOP;END IF;END LOOP O_LOOP; CLOSE O_CURSOR;";
+  cursor_begin9_s=" DECLARE C_END INT DEFAULT 0; "+cursor_begin9_s;
+  cursor_start_s=   ";DECLARE EXIT HANDLER FOR NOT FOUND SET C_END=1;";
+  cursor_fetch_s=" OPEN C_CURSOR;C_LOOP: LOOP "+cursor_fetch_s;
+  cursor_loop_s=";IF C_END=1 THEN LEAVE C_LOOP; END IF;";
+  cursor_stop_s=" END LOOP C_LOOP; CLOSE C_CURSOR;";
+  func_begin_s=" LANGUAGE SQL CONTAINS SQL NO EXTERNAL ACTION DETERMINISTIC RETURN ";
+  func_end_s=" ";
+  o_trig2_s=" REFERENCING NEW ROW AS XNEW OLD ROW AS XOLD FOR EACH ROW MODE DB2SQL ";
+  o_new_s=" XNEW.";o_old_s=" XOLD.";
+  user_sep_s="";db_sep_s="_"; //VER12.0
+  find1_s="POSSTR(";find2_s=",CAST(";find3_s=" AS VARCHAR(3000)))";
+  date1_s="TIMESTAMP(CAST(";date2_s="";date3_s="";date4_s=" AS CHAR(8))||'000000')";
+  day1_s="SUBSTRING(REPLACE(CHAR(";day2_s="+(";day3_s=") DAYS),'-',''),1,8)";
+  week1_s="DAYOFWEEK(";week2_s=")";
+  stdevs_s="STDDEV_SAMP";vars_s="VARIANCE_SAMP";
+  len1_s="CHARACTER_LENGTH(RTRIM(";len2_s="),CODEUNITS32)";
+ }
+
+//=****( P PostgreSQL )***************** 
+else if('P'==db_ci)// PostgreSQL
+{m_real1_s="I_"+system_si+"_R_M";
+ m_real2_s=".";
+ m_test1_s="I_"+system_si+"_T_M";
+ m_test2_s=".";
+ w_real1_s="I_"+system_si+"_R_W";
+ w_real2_s=".";
+ w_test1_s="I_"+system_si+"_T_W";
+ w_test2_s=".";
+ link_s="...";c_s="||";end_s=";";ec_s=";";//value_s="V_";
+  cursor1_s="CURSOR";cursor2_s="IS";
+  set1_s="";set2_s="=";
+  now_date_s="CURRENT_DATE";
+  now0_s="CURRENT_TIMESTAMP";
+  now8_s="REPLACE(CAST(CURRENT_DATE AS CHAR(8)),'-','')";
+  now17_s="REPLACE(REPLACE(REPLACE(REPLACE(CAST(CURRENT_TIMESTAMP AS CHAR(23)),'-',''),':',''),'.',''),' ','')";
+  substr_s="SUBSTR";lock1_s="";lock2_s=" FOR UPDATE";
+  sql_yyyymm_s="REPLACE(CAST(CURRENT_DATE AS CHAR(7)),'-','')";
+  sql_date_time_s="TIMESTAMP";sql_null_s="";
+  sql_nchar_s="CHAR";sql_nvarchar_s="VARCHAR";sql_varchar_s="VARCHAR";
+  admin_s="postgres";n_s="";
+  repeat_s="REPEAT";
+  c_begin1_s="CREATE OR REPLACE FUNCTION ";
+  c_begin2_s="__() RETURNS INT ";
+  c_cursor_s="O_CURSOR CURSOR IS ";
+  c_fetch_s=" OPEN O_CURSOR; LOOP "+c_fetch_s;
+  c_loop_s="IF NOT FOUND THEN O_END_SW:=1;END IF;";
+  c_stop_s="IF O_END_SW<>0 THEN EXIT;END IF;END LOOP; CLOSE O_CURSOR;";
+  c_end0_s=" RETURN 0;";
+  c_end1_s=" SELECT ";
+  c_end2_s="__(); DROP FUNCTION ";
+  c_end3_s="__();";
+  cursor_begin1_s="CREATE OR REPLACE FUNCTION ";
+  cursor_begin2_s="__() RETURNS INT ";
+  cursor_cursor_s=";C_CURSOR CURSOR IS ";
+  cursor_fetch_s=" OPEN C_CURSOR; LOOP "+cursor_fetch_s;
+  cursor_loop_s="IF NOT FOUND THEN EXIT;END IF;";
+  cursor_stop_s="END LOOP; CLOSE C_CURSOR;";
+  cursor_end0_s=" RETURN 0;";
+  cursor_end1_s=" SELECT ";
+  cursor_end2_s="__(); DROP FUNCTION ";
+  cursor_end3_s="__();";
+  func_begin_s=" AS $SENTENCE__SENTENCE$ ";
+  func_end_s=" $SENTENCE__SENTENCE$ LANGUAGE SQL;";
+  o_e_s=":=";o_from_s=":=";o_default_s=":=";
+  o_declare_s="";
+  o_trig2_s=" FOR EACH ROW EXECUTE PROCEDURE ";
+  o_trig3_s="()";
+  object_as_s=" RETURNS INT ";
+  object_begin_s=" AS $SENTENCE__SENTENCE$ ";
+  object_end_s=" END; $SENTENCE__SENTENCE$ LANGUAGE 'plpgsql';";
+  proc_s="SELECT";
+  find1_s="POSITION(";find2_s=" IN ";find3_s=")";
+  date1_s="TO_DATE(CAST(";date2_s="";date3_s="";date4_s=" AS CHAR(8)),'YYYYMMDD')";
+  day1_s="TO_CHAR(";day2_s="+(";day3_s="),'YYYYMMDD')";
+  week1_s="CAST(EXTRACT(DOW FROM ";week2_s=")+1 AS INT)";
+  o_set_s="";
+  log_s="LN";log10x1_s="LOG(10,";log10x2_s=")" ;
+  rand_s="RANDOM()";
+  stdevp_s="STDDEV_POP";varp_s="VAR_POP";
+  lenb1_s="OCTET_LENGTH";
+}
+//=****( L MariaDB )***************** 
+else if('L'==db_ci) // MySQL
+{m_real1_s=db_z_p.lower_s(("I_"+system_si+"_R_M"));
+ m_real2_s=".";
+ m_test1_s=db_z_p.lower_s(("I_"+system_si+"_T_M"));
+ m_test2_s=".";
+ w_real1_s=db_z_p.lower_s(("I_"+system_si+"_R_W"));
+ w_real2_s=".";
+ w_test1_s=db_z_p.lower_s(("I_"+system_si+"_T_W"));
+ w_test2_s=".";
+ link_s="...";cl_s="CONCAT(";c_s=",";cr_s=")";end_s=";";ec_s=";";//value_s="V_";
+  cursor1_s="CURSOR";cursor2_s="IS";
+  set1_s="";set2_s="=";
+  now_date_s="CURRENT_DATE";
+  now0_s="NOW()";
+  now8_s="LEFT(REPLACE(CURRENT_DATE,'-',''),8)";
+  now17_s="LEFT(CONCAT(REPLACE(REPLACE(REPLACE(REPLACE(NOW(),'-',''),':',''),'.',''),' ',''),'000'),17)";
+  substr_s="SUBSTRING";lock1_s="";lock2_s=" FOR UPDATE";
+  sql_yyyymm_s="LEFT(REPLACE(CURRENT_DATE,'-',''),6)";
+  sql_date_time_s="DATETIME";sql_null_s="";
+  sql_nchar_s="CHAR";sql_nvarchar_s="VARCHAR";sql_varchar_s="VARCHAR";
+  admin_s="I_ROOT";n_s="";
+  repeat_s="REPEAT";
+  utf8_get=3; //VER13.1
+  c_begin1_s="DROP PROCEDURE IF EXISTS ";
+  c_begin2_s="__;CREATE PROCEDURE ";
+  c_begin3_s="__()";
+  c_start_s=   ";DECLARE CONTINUE HANDLER FOR NOT FOUND SET O_END_SW=1;";
+  c_fetch_s=" OPEN O_CURSOR;O_LOOP: LOOP "+c_fetch_s;
+  c_loop_s="";
+  c_stop_s="IF O_END_SW<>0 THEN LEAVE O_LOOP;END IF;END LOOP; CLOSE O_CURSOR;";
+  c_end1_s=";CALL ";
+  c_end2_s="__(); DROP PROCEDURE IF EXISTS ";
+  c_end3_s="__;";
+  cursor_end1_s=";CALL ";
+  cursor_end2_s="__(); DROP PROCEDURE IF EXISTS ";
+  cursor_end3_s="__;";
+  cursor_begin1_s="DROP PROCEDURE IF EXISTS ";
+  cursor_begin2_s="__;CREATE PROCEDURE ";
+  cursor_begin3_s="__()";
+  cursor_begin9_s=" DECLARE C_END INT DEFAULT 0;"+cursor_begin9_s;
+  cursor_start_s=   ";DECLARE CONTINUE HANDLER FOR SQLSTATE '02000' SET C_END=1;";
+  cursor_fetch_s=" OPEN C_CURSOR;C_LOOP: LOOP "+cursor_fetch_s;
+  cursor_loop_s=";IF C_END=1 THEN LEAVE C_LOOP; END IF;";
+  cursor_stop_s=" END LOOP; CLOSE C_CURSOR;";
+  cursor_end1_s=";CALL ";
+  cursor_end2_s="__(); DROP PROCEDURE IF EXISTS ";
+  cursor_end3_s="__;";
+  func_begin_s=" RETURN (";func_end_s=")";
+  o_trig2_s=" FOR EACH ROW ";
+  find1_s="INSTR(";find2_s=",";find3_s=")";
+  date1_s="CONCAT(SUBSTRING(";date2_s=",1,4),'-',SUBSTRING(";date3_s=",5,2),'-',SUBSTRING(";date4_s=",7,2))";
+  day1_s="LEFT(REPLACE(ADDDATE(";day2_s=",";day3_s="),'-',''),8)";
+  week1_s="DAYOFWEEK(";week2_s=")";
+  trunc1_s="TRUNCATE";
+   div1_s="TRUNCATE(";div2_s=",0)";
+   stdevs_s="STDDEV_SAMP";vars_s="VAR_SAMP";
+  len1_s="CHAR_LENGTH";
+  rollup1_s="";rollup2_s=" WITH ROLLUP";cube1_s="";cube2_s=" WITH CUBE";
+}
+//=****( D FireBird )***************** 
+else if('D'==db_ci)// FireBird
+{m_real1_s="R";
+ m_real2_s="";
+ m_test1_s="T";
+ m_test2_s="";
+ w_real1_s="R";
+ w_real2_s="";
+ w_test1_s="T";
+ w_test2_s="";
+ link_s="...";c_s="||";end_s=";";ec_s=";";//value_s="V_";
+  cursor1_s="CURSOR";cursor2_s="IS";
+  set1_s="";set2_s="=";
+  from_dual_s="FROM RDB$DATABASE";
+  now_date_s="CURRENT_DATE";
+  now0_s="CURRENT_TIMESTAMP";
+  now8_s="LEFT(REPLACE(CURRENT_DATE,'-',''),8)";
+  now17_s="LEFT(REPLACE(REPLACE(REPLACE(REPLACE(CURRENT_TIMESTAMP,'-',''),':',''),'.',''),' ',''),17)";
+  substr_s="SUBSTRING";lock1_s="";lock2_s=" FOR UPDATE";
+  sql_yyyymm_s="LEFT(REPLACE(CURRENT_DATE,'-',''),6)";
+  sql_date_time_s="TIMESTAMP";sql_null_s="";
+  sql_nchar_s="CHAR";sql_nvarchar_s="VARCHAR";sql_varchar_s="VARCHAR";
+sql_char_set_s="CHARACTER SET UTF8";//Ver13.1
+  admin_s="SYSDBA";n_s="";
+  repeat_s="REPEAT";
+  utf8_get=4;//Ver13.1
+  from_s=" FROM ";
+  for_s=" FOR ";
+  c_begin1_s="EXECUTE BLOCK AS ";
+  c_cursor_s+="(";
+  c_start_s=");";
+  c_fetch_s=" OPEN O_CURSOR; WHILE (0=0) DO  BEGIN "+c_fetch_s;
+  c_loop_s="IF (ROW_COUNT=0) THEN O_END_SW=1;";
+  c_stop_s="IF (O_END_SW<>0) THEN LEAVE;END CLOSE O_CURSOR;";
+  cursor_begin1_s="EXECUTE BLOCK AS ";
+  cursor_cursor_s=cursor_cursor_s+"(";
+  cursor_start_s=");";
+  cursor_fetch_s=" OPEN C_CURSOR; WHILE (0=0) DO  BEGIN "+cursor_fetch_s;
+  cursor_loop_s=";IF (ROW_COUNT = 0) THEN LEAVE;";
+  cursor_stop_s=" END CLOSE C_CURSOR;";
+  o_data_sql_s=" :D_";o_fd_s="F_";o_fs_s=":F_";o_wd_s="W_";o_ws_s=":W_";
+  o_end_s=" END ";
+  o_l_s="(";o_if_s=" IF (";o_r_s=")";o_then_s=") THEN ";o_end_if_s="";
+  o_trig1_s=" FOR ";
+  o_trig2_s=" AFTER UPDATE OR INSERT OR DELETE AS ";
+  object_as_s=" AS ";object_begin_s=" ";object_end_s=" END ";
+  proc_s="EXECUTE PROCEDURE";
+  db_sep_s="";
+  find1_s="POSITION(";find2_s=" IN ";find3_s=")";
+  date1_s="CAST(SUBSTRING(";date2_s=" FROM 1 FOR 4)||'-'||SUBSTRING(";date3_s=" FROM 5 FOR 2)||'-'||SUBSTRING(";date4_s=" FROM 7 FOR 2) AS DATE)";
+  day1_s="REPLACE(DATEADD(DAY,";day2_s=",";day3_s="),'-','')";
+  week1_s="1+MOD(DATEDIFF(DAY,CAST('0001-01-07' AS DATE),";week2_s="),7)";
+  o_set_s="";
+  log_s="LN";lenb1_s="CHAR_LENGTH(RTRIM(";lenb2_s="))";
+  stdevp_s="STDEVP";vars_s="VAR";varp_s="VARP";
+}
+//=****( F FACOM Symforware )***************** 
+else if('F'==db_ci) // Symforware
+ {m_real1_s="I"+system_si+"R";
+  m_real2_s=".";
+  m_test1_s="I"+system_si+"T";
+  m_test2_s=".";
+  w_real1_s="I"+system_si+"R";
+  w_real2_s=".";
+  w_test1_s="I"+system_si+"T";
+  w_test2_s=".";
+  link_s="..";c_s="||";end_s=";";ec_s=";";//value_s="V_";
+  cursor1_s="CURSOR";cursor2_s="IS";
+  set1_s="";set2_s="=";
+  from_dual_s="FROM RDBII_SYSTEM.RDBII_ASSISTTABLE";
+  now_date_s="CURRENT_DATE";
+  now0_s="CURRENT_TIMESTAMP";
+  now8_s="SUBSTRING(REPLACE(CAST(CURRENT_DATE AS CHAR(10)),'-','') FROM 1 FOR 8)";
+  now17_s="SUBSTRING(REPLACE(REPLACE(REPLACE(REPLACE(CAST(CURRENT_TIMESTAMP AS CHAR(24)),'-',''),':',''),'.',''),' ','') FROM 1 FOR 17)";
+  substr_s="SUBSTRING";lock1_s="";lock2_s=" FOR UPDATE";
+  sql_yyyymm_s="SUBSTRING(REPLACE(CAST(CURRENT_DATE AS CHAR(8)),'-','') FROM 1 FOR 6)";
+  sql_date_time_s="TIMESTAMP";sql_null_s="NULL";
+  sql_nchar_s="CHAR";sql_nvarchar_s="VARCHAR";sql_varchar_s="VARCHAR";
+  admin_s=db_z_p.environment_s("USERNAME");
+  n_s="";
+  repeat_s="LPAD";
+  user_sep_s="";db_sep_s="";
+  from_s=" FROM ";
+  for_s=" FOR ";
+ }
+//=****( H HiRDB )***************** 
+else if('H'==db_ci) // HiRDB
+ {m_real1_s="I"+system_si+"R";
+  m_real2_s=".";
+  m_test1_s="I"+system_si+"T";
+  m_test2_s=".";
+  w_real1_s="I"+system_si+"R";
+  w_real2_s=".";
+  w_test1_s="I"+system_si+"T";
+  w_test2_s=".";
+  link_s="..";c_s="||";end_s=";";ec_s=";";//value_s="V_";
+  cursor1_s="CURSOR";cursor2_s="IS";
+  set1_s="";set2_s="=";
+  from_dual_s="FROM I*DZZZZ.ZZZZZZ_DUAL_TABLE";
+  now_date_s="CURRENT_DATE";now0_s="CURRENT_TIMESTAMP";
+  now8_s="REPLACE(CAST(CURRENT_DATE AS CHAR(10)),'-','')";
+  now17_s="REPLACE(REPLACE(REPLACE(CAST(CURRENT_TIMESTAMP AS CHAR(20)),'-',''),':',''),' ','')||'000'";
+  substr_s="SUBSTR";lock1_s="";lock2_s=" FOR UPDATE";
+  sql_yyyymm_s="SUBSTR("+now8_s+",1,6)";
+  sql_date_time_s="TIMESTAMP";sql_null_s="NULL";
+  sql_nchar_s="MCHAR";sql_nvarchar_s="MVARCHAR";sql_varchar_s="VARCHAR";
+  admin_s="root";
+  n_s="";
+  repeat_s="LPAD";
+  user_sep_s="";db_sep_s="";
+  rd_data_s =" IN(RDDATA10)";
+  rd_index_s=" IN(RDINDX10)";
+  c_begin1_s="CREATE PROCEDURE ";
+  c_begin2_s="__() ";
+  c_fetch_s=" OPEN O_CURSOR;O_LOOP: WHILE 0 = 0 DO "+c_fetch_s;
+  c_loop_s="IF SQLCODE = 100 THEN LEAVE O_LOOP; END IF;";
+  c_end0_s=" END O_LOOP;CLOSE O_CURSOR;";
+  cursor_begin1_s="CREATE PROCEDURE ";
+  cursor_begin2_s="__() ";
+  cursor_fetch_s=" OPEN C_CURSOR;C_LOOP: WHILE 0 = 0 DO "+cursor_fetch_s;
+  cursor_loop_s=";IF SQLCODE = 100 THEN LEAVE C_LOOP; END IF;";
+  cursor_end0_s=" END C_LOOP;CLOSE C_CURSOR;";
+  func_begin_s="  LANGUAGE SQL BEGIN RETURN ";func_end_s=" END ";
+  o_in1_s=" IN ";
+  o_trig2_s=" REFERENCING NEW ROW AS XNEW OLD ROW AS XOLD FOR EACH ROW ";
+  o_new_s=" XNEW.";o_old_s=" XOLD.";
+ }
+p_v("ACOS","","",1,1);
+p_v("ASIN","","",1,1);
+p_v("ATAN","","",1,1);
+p_v("ATAN2",atan2x_s,"",2,1);
+p_v("AVG","","",1,1);
+p_v("CEIL",ceil_s,"",1,0);
+p_v("COS","","",1,1);
+p_v("COT",cot_s,"",1,1);
+p_v("CUBE",cube1_s,cube2_s,1,0);
+p_v("DEGREES",degrees1_s,degrees2_s,1,1);
+p_v("EXP","","",1,1);
+p_v("LEN",len1_s,len2_s,1,0);
+p_v("LENB",lenb1_s,lenb2_s,1,0);
+p_v("LOG",log_s,"",1,1);
+p_v("LOG10",log10x1_s,log10x2_s,1,1);
+p_v("RADIANS",radians1_s,radians2_s,1,1);
+p_v("ROLLUP",rollup1_s,rollup2_s,1,0);
+p_v("SIN","","",1,1);
+p_v("SQRT","","",1,1);
+p_v("STDEVS",stdevs_s,"",1,1);
+p_v("STDEVP",stdevp_s,"",1,1);
+p_v("TAN","","",1,1);
+p_v("TRUNC",trunc1_s,trunc2_s,2,0);
+p_v("VARS",vars_s,"",1,1);
+p_v("VARP",varp_s,"",1,1);
+return 0;
+}
+//COPY $II_WRITE
+}
+#endif

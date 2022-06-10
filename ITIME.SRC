@@ -1,0 +1,242 @@
+// ITIME.SRC iprogram batch author nobumichi.harasawa 
+//0=lang_system,1=Connection timeout,2=SqlTimeout,3=[REAL,TEST],4=SYSTEM,5=無,6=HH,7=MM,8=JOB,9=OPT,10=CLIENT
+// 0=1="VERSION"はバージョン判定。
+// opt=ONE,ALL,AT,TRACE ok. 
+// opt=TIME,RUN error 
+// opt=START_TIME [START TIME < NOW+2] error
+// opt=e.t.c error
+#if ITIME
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//PP #include "itime.h"
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.Drawing;
+//SS using System.IO;
+#if DOTNET
+//SS using Microsoft.Win32;
+#endif
+//JJ import java.awt.*;
+//JJ import java.awt.event.*;
+//JJ import java.io.*;
+//JJ import java.math.*;
+//JJ import java.util.*;
+//SS using System.Diagnostics;
+//SS using System.Reflection;
+//JJ import java.lang.*;
+//=================================================================
+//SJ class itime_l
+//SJ {
+static ii_z_l z_n;
+static ii_z_l z_p;
+static ii_z_mt_l z_mt_n;
+//HP static s_l* s_menu_a;
+//SJ static List<String> s_menu_a=new List<String>();
+//HP static s_l* s_time_a;
+//SJ static List<String> s_time_a=new List<String>();
+static int i,rc;
+static bool sw_menu3_b;
+static String menu0_s,menu1_s,menu2_s,menu3_s
+,jobg_s,step_s,opt_s,end_s,client_s,time_job_s,work_s,net_send_s;
+static String w_err_s;//エラー情報。
+//HP int main(int arg_i, char** arg_cci)
+//SJ public static int Main(String[] arg_sxi)//ここから開始。
+{
+//HP QApplication app_nn(arg_i,arg_cci);
+z_n=new ii_z_l("ITIME",
+//HP                  arg_i,arg_cci
+//SJ                  arg_sxi
+                                   );z_p=z_n; //共通使用インスタンスを作成。
+z_mt_n=new ii_z_mt_l(z_n);
+//HP s_menu_a=new s_l();s_time_a=new s_l();
+i=0;rc=0;sw_menu3_b=false;menu0_s="????";menu1_s="??";menu2_s="??";menu3_s="  ";jobg_s="";
+step_s="";opt_s="ALL";end_s=" ";client_s="";time_job_s="??-??";net_send_s="End";w_err_s="";
+bool sw_first_b=true; //開始設定。
+z_mt_n.jobg_begin_time_s=z_p.date_time_s(z_p.date_time_now_s(),0); //開始時間設定。
+if(z_p.version_n.version_b(z_p.s_arg_a)){fine_v();return 0;} //バージョン判定（判定OKはファイルを作成し終了）
+z_p.person_s=" (TIME)"; //バッチ処理なので使用者を"（TIME)"とする。
+z_mt_n.common_counter_v(); //_COUNTERを準備。
+//SS Assembly assembry_n=Assembly.GetEntryAssembly(); //VER20.1
+String exe_path_s=                                       //VER20.1
+//HP              "";
+//SS              assembry_n.Location;                    //VER20.1
+//JJ              System.getProperty("java.class.path"); //VER20.1
+//*************( cgi job begin)********************************
+if(3>z_p.count_s_i(z_p.s_arg_a))//パラメータ３個以下の場合はCGIプログラムと判定//VER20.1
+  {
+   z_p.job_s="CGI";
+   int system=-1; //VER20.1
+   if(z_p.length(exe_path_s)>7&&-1!=(system=z_p.index2s_i(exe_path_s,z_p.dir_s+"I."))) //VER20.1
+       {String[] sx=z_p.split_sx(z_p.substring2_s(exe_path_s,system+3),z_p.at_s_c(z_p.dir_s,0)); //VER20.1
+        if(!z_p.e2s_b(sx[0],""))z_p.system_s=sx[0];//VER20.1
+       }       //VER20.1
+   if(0<z_p.count_s_i(z_p.s_arg_a))z_p.system_s=z_p.at_s(z_p.s_arg_a,0); //先頭パラメータをシステム名にする。//VER20.1
+   if(!z_mt_n.option_b("I_"+z_p.server_name_s+"_"+z_p.system_s+".I"))//システムパラメータファイル読み込み。//VER35
+      {rc=9;err9_v();return 0;} //パラメータファイルがおかしい場合は異常終了。
+   String path_info_s=z_p.environment_s("PATH_INFO"); //PATH_INFOの環境変数を読み込む。
+   if( null ==path_info_s)path_info_s=""; //PATH_INFO環境変数が無い場合は空白を設定
+   if(z_p.e2s_b(path_info_s,""))path_info_s=z_p.environment_s("FILEPATH_INFO");//VER20.1
+   if( null ==path_info_s)path_info_s=""; //PATH_INFO環境変数が無い場合は空白を設定
+   if(z_p.e2s_b(path_info_s,""))if(1<z_p.count_s_i(z_p.s_arg_a))path_info_s=z_p.at_s(z_p.s_arg_a,1);//VER20.1
+   if(!z_p.e2s_b(path_info_s,""))//VER20.1
+     {z_mt_n.cgi_n=new ii_cgi_l(z_n,z_mt_n); //CGI環境を準備。
+      if(!z_mt_n.cgi_n.begin_b(path_info_s)){fin_v();return 0;}//CGI開始 VER20.1
+     }
+  }
+//*************( cgi job end )********************************
+z_mt_n.program_list_n=new ii_program_list_l(z_n,z_mt_n); //プログラム格納場所準備
+z_mt_n.program_c='T'; //時間起動ジョブとする。
+//**** コマンドライン解析 )***********************************
+if(0==z_p.sw_cgi)
+  if(0<z_p.count_s_i(z_p.s_arg_a))z_p.lang_s=z_p.lang_system_s=z_p.upper_s(z_p.at_s(z_p.s_arg_a,0)); //CGIで無い時ARG[0]は言語とする。
+if(1<z_p.count_s_i(z_p.s_arg_a))z_p.timeout_connect=z_p.to_int_check(z_p.at_s(z_p.s_arg_a,1),'+',30,0);//ARG[１]はコネクションタイムアウト。
+if(2<z_p.count_s_i(z_p.s_arg_a))z_p.timeout_sql=z_p.to_int_check(z_p.at_s(z_p.s_arg_a,2),'+',600,0);   //ARG[２]はSQLタイムアウト。
+if(3<z_p.count_s_i(z_p.s_arg_a))z_p.test_s=z_p.upper_s(z_p.at_s(z_p.s_arg_a,3)); //ARG[３]は”TEST"又は"REAL"。
+if(!z_p.e2s_b(z_p.test_s,"REAL"))z_p.test_s="TEST"; //"REAL”以外は”TEST"に変更。
+if(4<z_p.count_s_i(z_p.s_arg_a))z_p.system_s=z_p.upper_s(z_p.at_s(z_p.s_arg_a,4)); //ARG[４]はシステム名。
+String file_s="I_"+z_p.server_name_s+"_"+z_p.system_s+".I";//環境ファイル名組み立て。
+if(0==z_p.sw_cgi)if(!z_mt_n.option_b(file_s)){rc=9;err9_v();return 0;}//オプション設定。設定不可は異常終了。
+if(6<z_p.count_s_i(z_p.s_arg_a))z_p.hh_s=z_p.upper_s(z_p.at_s(z_p.s_arg_a,6)); //ARG[６]は時間。
+if(7<z_p.count_s_i(z_p.s_arg_a))z_p.mm_s=z_p.upper_s(z_p.at_s(z_p.s_arg_a,7)); //ARG[７]は分。
+if(8<z_p.count_s_i(z_p.s_arg_a)) //ARG[8]は起動グループ)8文字)又は起動ジョブ(10文字)または'/'(ジョブグループは時分で判定)。
+  {if(z_p.e2s_b(z_p.at_s(z_p.s_arg_a,8),"/"))//ジョブグループ決定。
+    {work_s="SELECT "+z_mt_n.db_n.cl_s+"SYSTEM_MENU0"+z_mt_n.db_n.c_s+"SYSTEM_MENU1"+z_mt_n.db_n.c_s+"SYSTEM_MENU2"+z_mt_n.db_n.cr_s+" FROM "
+           +z_mt_n.sql_n.m_real_dbo_zzzzzz_s()+"_I_TIME_TABLE WHERE SYSTEM_HH='"+z_p.hh_s+"' AND  SYSTEM_MIN='"
+           +z_p.mm_s+"' AND SYSTEM_TEST IN(' '"+(z_p.e2s_b(z_p.test_s,"TEST")?",'TEST')":")")+" AND Z_CANCEL=' '";
+     if(0!=z_mt_n.sql_n.sql_dbo_zzzz2(s_time_a,work_s)){z_p.job_s="????????";err_v();return 0;} //ジョブグループ情報読み込。
+     if(1!=z_p.db_record_cnt)//ジョブグループ情報無しはエラー。
+       {z_p.job_s="????????";z_p.err_s="TIME ("+z_p.hh_s+":"+z_p.mm_s+") Error";err_v();return 0;} 
+     z_p.set_s_v(z_p.s_arg_a,8,z_p.at_s(s_time_a,0));
+    }
+   i=z_p.length(z_p.at_s(z_p.s_arg_a,8));
+   if(3<i)menu0_s=z_p.upper_s(z_p.substring3_s(z_p.at_s(z_p.s_arg_a,8),0,4));//メニュー０決定。
+   else if(3==i)menu0_s="Z"+z_p.upper_s(z_p.at_s(z_p.s_arg_a,8));//メニュー０が３文字数は”Z"付加で補正。
+   else if(2==i)menu0_s="ZZ"+z_p.upper_s(z_p.at_s(z_p.s_arg_a,8));//メニュー０が２文字数は”ZZ"付加で補正。
+   else if(1==i)menu0_s="ZZZ"+z_p.upper_s(z_p.at_s(z_p.s_arg_a,8));//メニュー０が１文字は”ZZZ"付加で補正。
+   if(5<i)menu1_s=z_p.upper_s(z_p.substring3_s(z_p.at_s(z_p.s_arg_a,8),4,2));//メニュー１決定。
+   if(7<i)menu2_s=z_p.upper_s(z_p.substring3_s(z_p.at_s(z_p.s_arg_a,8),6,2));//メニュー２決定。
+   if(9<i){menu3_s=z_p.upper_s(z_p.substring3_s(z_p.at_s(z_p.s_arg_a,8),8,2));sw_menu3_b=true;}//メニュー３決定。
+   z_mt_n.jobg_job_s=z_p.at_s(z_p.s_arg_a,8);
+  }
+if(9<z_p.count_s_i(z_p.s_arg_a))opt_s=z_p.upper_s(z_p.at_s(z_p.s_arg_a,9)); //ARG[９]は起動オプション。
+if(10<z_p.count_s_i(z_p.s_arg_a)&&!(z_p.e3s_b(z_p.at_s(z_p.s_arg_a,10),"-","--"))) //ARG[１０]は起動クライアント。(ハイフン1個又は２個はクライアントでは無い）
+   //クライアント別にトレースファイル決定。
+  {client_s=z_p.upper_s(z_p.substring2_s(z_p.at_s(z_p.s_arg_a,10),1));z_p.trace_file_s="_TRACE_"+client_s+".TXT";}
+if(0==z_p.sw_cgi)//CGI以外処理
+ {jobg_s=z_p.job_s=menu0_s+menu1_s+menu2_s+menu3_s;
+  time_job_s=z_p.hh_s+"-"+z_p.mm_s; //TIME_JOB記憶。
+ }
+else //CGI処理
+  {menu0_s=z_p.substring3_s(z_p.job_s,0,4);
+   menu1_s=z_p.substring3_s(z_p.job_s,4,2);
+   menu2_s=z_p.substring3_s(z_p.job_s,6,2);
+   menu3_s=z_p.substring3_s(z_p.job_s,8,2);sw_menu3_b=true;
+   opt_s=(z_p.e2s_b(z_p.test_s,"TEST")?"TRACE":"ONE"); 
+  }
+if(!z_mt_n.program_p.read_etc_b()){rc=9;err9_v();return 0;} //e.t.c読み込み。
+if(z_p.e2s_b(opt_s,"TRACE")||z_p.e2s_b(z_p.test_s,"TEST")) //オプションがTRACE又はテスト中。
+  {z_p.sw_trace_s="1";z_mt_n.trace_v(0,"TIME_TRACE("+z_p.job_s+")");}//トレース開始。
+if(z_p.e3s_b(opt_s,"ALL","AT"))step_s=">"; //オプションがALL又はATはジョブグループを実行（複数ジョブ）。
+else if(z_p.e3s_b(opt_s,"ONE","TRACE"))step_s=""; //オプションがONE又はTRACEの場合１ジョブを実行。
+else
+ {if(z_p.e3s_b(opt_s,"TIME","RUN"))
+    {z_p.err_s="STATUS("+opt_s+") Error";step_s="*";}//オプションがTIME又はRUNはエラー終了。
+  else if(z_p.e2s_b(opt_s,"START_TIME"))
+          z_p.err_s="[START TIME < NOW+2]"; //オプションがSTART_TIME又は開始時間が過ぎているエラー終了。
+  else                            z_p.err_s="OPTION("+opt_s+") Error"; //オプションが上記以外はエラー終了。
+  err_v();return 0;
+ }
+if(z_p.at_s_c(menu1_s,0)<'5'){z_p.err_s="menu1<'50'";err_v();return 0;}//MENU１が50以下は時間起動ジョブではないのでエラー終了。
+//***** (メニュー読み込みSQL文組み立て )*****
+work_s="SELECT SYSTEM_MENU3,SYSTEM_MENU,SYSTEM_SECURITY FROM "+z_mt_n.sql_n.m_real_dbo_zzzzzz_s()+"_I_MENU_TABLE WHERE SYSTEM_LANG='"
+   +z_p.lang_s+"' AND SYSTEM_MENU0='"+menu0_s+"' AND  SYSTEM_MENU1='"+menu1_s  //VER20.1 _LANG_SYSTEM --> _LANG
+   +"' AND SYSTEM_MENU2='"+menu2_s+"' AND SYSTEM_MENU3"+z_p.DUMMY_S+(sw_menu3_b?step_s+"='"+menu3_s+"' ":">'00'")+z_p.DUMMY_S
+   +(z_p.e2s_b(opt_s,"TRACE")?"":" AND SYSTEM_TEST IN(' '"+z_p.DUMMY_S+(z_p.e2s_b(z_p.test_s,"TEST")?",'TEST','REAL')":")"))
+   +z_p.DUMMY_S+" AND Z_CANCEL=' '";
+if(0!=z_mt_n.sql_n.sql_dbo_zzzz2(s_menu_a,work_s)){err_v();return 0;} //メニュー情報読み込。
+if(0==z_p.db_record_cnt){z_p.err_s="JOB NOT FOUND("+z_p.job_s+")";err_v();return 0;} //メニュー情報無しはエラー。
+for(i=0;z_p.count_s_i(s_menu_a)>i;i+=3) //メニュー分繰り返す
+ {z_mt_n.begin_time_s=z_p.date_time_s(z_p.date_time_now_s(),0); //JOB開始時間設定。
+  z_mt_n.program_list_n.del_last_v(); //プログラム領域解放。
+  z_mt_n.program_list_n.add_last_v(); //プログラム領域確保。
+  z_p.real_test_s=z_p.test_s; //_REAL_TESTを初期化。
+  z_p.job_s=menu0_s+menu1_s+menu2_s+z_p.at_s(s_menu_a,i); //ジョブ名決定。
+  z_p.job_name_s=z_p.at_s(s_menu_a,i+1); //ジョブ名称設定。
+ if(1==z_p.sw_cgi)  //CGIパスワード判定。
+   {z_p.menu_security_s=z_p.at_s(s_menu_a,i+2); //CGI用にセキュリティ設定。
+    z_mt_n.cgi_n.password_v(); //CGIパスワードチェック VER20.1
+   }
+  else
+  {if(z_p.e2s_b(z_mt_n.jobg_begin_job_s,""))
+     {z_mt_n.jobg_begin_job_s=z_p.job_s;z_mt_n.jobg_begin_menu_s=z_p.job_name_s;} //開始ジョブ設定。
+   z_mt_n.update_time("RUN",""); //正常開始書き込み
+   if(sw_first_b)//BEGIN宣言。
+     {sw_first_b=false;z_mt_n.time_send_v("",z_mt_n.jobg_job_s,"BEGIN",opt_s);}//時間起動最新状態画面にSEND。
+   z_mt_n.insert_time_log("",z_p.job_s,"START",z_p.job_name_s); //STARTをログに書き込み。
+  }
+  if(!z_mt_n.read_program_b()){err_v();return 0;}  // プログラムの読み込み。
+  if(!z_mt_n.program_p.fetch_b()){err_v();return 0;} //プログラムの解析。
+  if(0!=z_mt_n.program_p.section("BEGIN",z_mt_n.program_p.BEGIN_0)){err_v();return 0;} //プログラム実行(BEGINで実行）
+   z_mt_n.use_job(1); //ジョブ使用履歴登録。
+  if(0==z_p.sw_cgi)
+    {z_mt_n.insert_time_log(z_mt_n.begin_time_s,z_p.job_s,"STOP",z_p.job_name_s); //STOPをログに書き込み。
+     if(!z_p.e3s_b(opt_s,"ALL","AT"))break; //オプションがALLまたはATは次の処理も実行以外は終了。
+    }
+  z_mt_n.read_write_all_close_v();
+ }
+if(0==z_p.sw_cgi)
+  {z_p.job_s=jobg_s;
+   z_mt_n.update_time("",""); //正常終了書き込み
+   z_mt_n.time_send_v(z_mt_n.jobg_begin_time_s,z_p.job_s,"END",opt_s); //END宣言。（時間起動最新状態画面にSEND)
+   z_p.err_s=""; //正常終了。
+  }
+else
+ if(z_p.e4s_b(z_p.menu_security_s,"J","P","A"))z_mt_n.cgi_n.form_v(""); //パスワード用FORM書き込み
+fin_v();
+//HP return 0;
+//SJ return 0; //終了処理へ。
+//*****( エラー終了 )*****
+}
+static void err_v()
+{
+z_mt_n.end_time_s=z_p.date_time_s(z_p.date_time_now_s(),0); //終了時間設定
+w_err_s=z_p.set_form_length_s(z_p.err_s+" "+z_p.err2_s+" "+z_p.err3_s,200); //エラー内容組み立て。
+z_mt_n.update_time("ERROR",w_err_s); //エラーステータスセット書き込み
+end_s="ERROR";net_send_s="ERROR";
+z_mt_n.trace_v(0,"*?(ERROR)?*"+w_err_s); //トレースファイルにエラー内容書き込み。//VER36.1
+z_mt_n.time_send_v(z_mt_n.jobg_begin_time_s,z_p.job_s,"ERROR",w_err_s); //ERROR宣言。（時間起動最新状態画面にSEND)
+fin_v();
+}
+
+static void fin_v()
+{
+if(!z_p.e2s_b(client_s,"")) //クライアントから起動されている場合メッセージを送る。
+  {if(!z_p.e2s_b(end_s,"ERROR"))z_p.err_s=z_p.err2_s=z_p.err3_s="";
+   work_s="MSG * /SERVER:"+client_s+" /TIME:0 (I) "+net_send_s+" "+z_p.server_name_s+"/"+z_p.system_s+" "
+         +time_job_s+"/"+z_p.job_s+" "+w_err_s;
+   //コマンドで意味のある特殊文字を'?'に変更する。
+   work_s=z_p.replace_c_s(z_p.replace_c_s(z_p.replace_c_s(z_p.replace_c_s(work_s,'>','?'),'<','?'),'|','?'),'&','?');
+   if(120<z_p.length(work_s))work_s=z_p.substring3_s(work_s,0,120); //120文字以下に設定。
+if('W'==z_p.os_c)z_p.command(work_s); //メッセージをMSGコマンドとして実行。
+  }
+err99_v();
+}
+static void err9_v()
+{
+w_err_s=z_p.set_form_length_s(z_p.err_s+" "+z_p.err2_s+" "+z_p.err3_s,200); //エラー内容組み立て。
+ err99_v();
+}
+static void err99_v()
+{
+if(0!=rc)  //万が一エラー画面表示できずファイルに書いて停止。
+ z_p.log_file_v(0,"ERROR("+z_p.job_s+")"+w_err_s,"ERROR_"+z_p.job_s+".TXT"); //エラー内容ファイルに書き出し。
+fine_v();
+}
+static void fine_v()
+{
+if( null !=z_mt_n.cgi_n)z_mt_n.cgi_n.end_v();
+//JJ System.exit(0);
+
+}
+//SJ }
+#endif

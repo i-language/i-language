@@ -1,0 +1,24 @@
+//= II_ZZ.SRC e.t.c class author nobumichi harasawa
+//= 共有クラス(JAVAで ref が使えないので新設) 
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//SS using System.Data.SqlClient;
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.Drawing;
+//SS using System.IO;
+//JJ import java.awt.*;
+//JJ import java.awt.event.*;
+//JJ import java.io.*;
+//JJ import java.math.*;
+//JJ import java.util.*;
+public class ii_zz_l
+{public char   c=' ';
+//SS   public decimal    d=0;
+//JAVA public BigDecimal d=BigDecimal.valueOf(i_ii);
+public double  o=0;
+public float   f=0; 
+public int     i=0;
+public String  s="";
+public ii_zz_l(){}
+}

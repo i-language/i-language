@@ -1,0 +1,121 @@
+// II_URL.SRC URLよりファイル受信
+// 0=FILE 1=URL [2=ERROR_FILE 3=PROXY(ADDRESS:PORT)]
+#if IMENU||ITIME //TEST
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//SS using System.Data.SqlClient;
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.Drawing;
+//SS using System.IO;
+//SS using System.Threading.Tasks;
+//JJ import java.awt.*;
+//JJ import java.awt.event.*;
+//JJ import java.io.*;
+//JJ import java.math.*;
+//JJ import java.util.*;
+//JJ import java.net.URI;
+//JJ import java.net.http.HttpClient;
+//JJ import java.net.http.HttpRequest;
+//JJ import java.net.http.HttpResponse;
+//JJ import java.nio.file.FileSystems;
+//JJ import java.nio.file.Path;
+public class ii_url_l
+//HH :public
+//HH QObject
+{
+//COPY $II_DIR
+//COPY $II_READ
+//COPY $II_SQL2
+//COPY *BEGIN
+ String file_s="";
+int url_rc=0;
+ii_z_l url_z_p;ii_z_mt_l url_z_mt_p;
+public ?void? ii_url_l(ii_z_l z_ni,ii_z_mt_l z_mt_ni)
+{url_z_p=z_ni;url_z_mt_p=z_mt_ni;
+}
+public int url(String file_si,String proxy_si,String url_si,String parameter_si,String get_post_si)    //VER24.1
+{if(url_z_p.e2s_b(file_si,""))//VER24.1
+   {String f_s=url_z_p.substring2_s(url_si,url_z_p.last_index2s_i(url_si,"/")+1); //VER17.1
+    file_si=(url_z_p.e2s_b(f_s,"")||-1!=url_z_p.index2c_i(f_s,'?')?"INDEX.HTML":f_s); //VER181.
+   }
+ url_z_mt_p.program_p.url_s=file_si;
+ file_s=""+url_z_p.get_tmp_path_s(url_z_p.dir_s)+file_si;  //VER18.1 
+url_rc=0;
+//HP QVector<GLbyte> bx;
+try
+   {
+//JP int proxy_port=0;
+//JP String proxy_s="";
+//HP  for(;;)
+//HP    {
+//*****( Proxy )**********************
+//HP QSslConfiguration ssl_nn; //(QSslConfiguration::defaultConfiguration());
+//HP ssl_nn.setProtocol(QSsl::TlsV1_3); //VER36.1
+//HP QNetworkRequest request_nn;
+//HP request_nn.setSslConfiguration(ssl_nn);
+//HP request_nn.setUrl(QUrl(url_si));
+//HP QNetworkAccessManager *manager_n=new QNetworkAccessManager();
+//JP if(!url_z_p.e2s_b(proxy_si,""))//プロキシー指定有り。
+//JP   {
+//HP url_z_p.err_s="Proxy("+proxy_si+")";
+//JP String[] proxy_sx=url_z_p.split_sx(proxy_si,':');
+//JP proxy_s=proxy_sx[0];
+//JP proxy_port=0;if(2==url_z_p.count_sx_i(proxy_sx))proxy_port=url_z_p.to_int1s_i(proxy_sx[1]);
+//HP QNetworkProxy proxy_nn(QNetworkProxy::HttpProxy,proxy_s,proxy_port);
+//HP manager_n.setProxy(proxy_nn);
+//JP   }
+//***************************
+//HP QFile file_nn(file_s);
+//HP if(file_nn.open(QIODevice::WriteOnly))
+//HP   {QEventLoop loop_nn;
+//HP    connect(manager_n,SIGNAL(finished(QNetworkReply*)),&loop_nn,SLOT(quit()));
+//HP    QNetworkReply *reply_n=manager_n.get(request_nn);
+//HP    loop_nn.exec();
+//HP    if(reply_n.error()==QNetworkReply::NoError)file_nn.write(reply_n.readAll());
+//HP    else  {url_z_p.err_s=reply_n.errorString();url_rc=1;}
+//HP   }
+//HP else {url_z_p.err_s="error file open("+file_s+")";url_rc=1;}
+//HP file_nn.close();
+//HP delete manager_n;
+//HP     break;
+//HP    }
+//SS System.Net.Http.HttpClient HttpClient_n;
+//SS System.Net.Http.HttpResponseMessage HttpResponseMessage_n;
+//SS if(!url_z_p.e2s_b(proxy_si,""))//プロキシー指定有り。//JJ      HttpRequest_n=HttpRequest.newBuilder()
+//SS   {System.Net.Http.HttpClientHandler HttpClientHandler_n=new System.Net.Http.HttpClientHandler();
+//SS    HttpClientHandler_n.Proxy=new System.Net.WebProxy(proxy_si);
+////SS    HttpClientHandler_n.Proxy.Credentials=new System.Net.NetworkCredential(Account,Password);
+//SS    HttpClientHandler_n.UseProxy=true;
+//SS    HttpClient_n=new System.Net.Http.HttpClient(HttpClientHandler_n); //VER36.1 
+//SS   }
+//SS else HttpClient_n=new System.Net.Http.HttpClient(); //VER36.1 
+//SS if(url_z_p.e2s_b(get_post_si,"POST"))// POST VER36.1 
+//SS      HttpResponseMessage_n=HttpClient_n.PostAsync(url_si,new System.Net.Http.StringContent(parameter_si)).Result; 
+//SS else HttpResponseMessage_n=HttpClient_n.GetAsync(url_si).Result; // GET VER36.1 
+//SS using(var file_create_n=File.Create(file_s))
+//SS   {using(var HttpStream_n=HttpResponseMessage_n.Content.ReadAsStreamAsync().Result){HttpStream_n.CopyTo(file_create_n);}}
+//JJ HttpClient HttpClient_n; 
+//JJ if(!url_z_p.e2s_b(proxy_si,"")) //プロキシー指定有り。
+//JJ        HttpClient_n=HttpClient.newBuilder().proxy(java.net.ProxySelector.of(new java.net.InetSocketAddress(proxy_s,proxy_port)))
+//JJ        .version(HttpClient.Version.HTTP_2)             // 明示的にHTTP/2を指定
+//JJ        .followRedirects(HttpClient.Redirect.NORMAL)    // リダイレクトを有効化（HTTPS→HTTPを除く）
+//JJ        .build();
+//JJ else   HttpClient_n=HttpClient.newBuilder()
+//JJ        .version(HttpClient.Version.HTTP_2)             // 明示的にHTTP/2を指定
+//JJ        .followRedirects(HttpClient.Redirect.NORMAL)    // リダイレクトを有効化（HTTPS→HTTPを除く）
+//JJ        .build();
+//JJ HttpRequest HttpRequest_n;
+//JJ if(url_z_p.e2s_b(get_post_si,"POST"))// POST VER36.1 
+//JJ    HttpRequest_n=HttpRequest.newBuilder().uri(URI.create(url_si)).POST(HttpRequest.BodyPublishers.ofString(parameter_si)).build();
+//JJ else
+//JJ    HttpRequest_n=HttpRequest.newBuilder().uri(URI.create(url_si)).GET().build();
+//JJ HttpClient_n.send(HttpRequest_n,HttpResponse.BodyHandlers.ofFile(FileSystems.getDefault().getPath(file_s))).body();
+   } 
+catch(Exception e_ni){url_z_p.err_s+=":"+url_z_p.message_s(e_ni);url_rc=1;}
+return url_rc;
+}
+//COPY *END
+//COPY $II_WRITE
+}
+#endif //MENU||TIME

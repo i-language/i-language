@@ -1,0 +1,4 @@
+OK●テーブルからのプログラム作成で、外部キー削除ロジック挿入がおかしい。
+●Ctrl+BackSpaceが動かない。
+WSL で　Qtが動かない。
+strip --remove-section=.note.ABI-tag ~/Qt6.2.4/6.2.4/gcc_64/lib/libQt6Core.so.6.2.4

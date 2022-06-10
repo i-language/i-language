@@ -1,0 +1,461 @@
+//II_SOCKET.SRC socket read author nobumichi.harasawa
+//## int(1=error end,0=nomal end,-1=error anser) ii_socke.read(s,filockete_s,z_n)
+#if IMENU||ITIME||ISRVC //TEST
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//SS using System.Data.SqlClient;
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.Drawing;
+//SS using System.IO;
+//JJ import java.awt.*;
+//JJ import java.awt.event.*;
+//JJ import java.io.*;
+//JJ import java.math.*;
+//JJ import java.util.*;
+//SS using System.Net.Sockets;
+//SS using System.Threading;
+//JJ import java.net.*;
+public class ii_socket_l
+//HP : public
+//HP QObject
+{
+//HP Q_OBJECT
+ii_z_l z_p;
+public ii_socket_l(ii_z_l z_ni)
+{z_p=z_ni;
+#if IMENU
+//SS Thread_receive4_n= null ;
+#endif
+}
+#if IMENU
+     Thread Thread_receive6_n;
+//SS Thread Thread_receive4_n;
+int  sw_receive6=0; 
+     ii_receive_l receive6_n;
+//SS ii_receive_l receive4_n;
+int receive_port=0;
+//--------------------------------------------------------
+public int receive_cancel()
+{
+if(0!=sw_receive6)
+  {receive6_n.close_v();sw_receive6=0;
+////SS Thread_receive6_n.Abort();    //VER35.1
+//SS          receive6_n.sw_abort=1; //VER35.1
+  }
+//SS if( null !=receive4_n)
+//SS   {receive4_n.close_v();
+////SS Thread_receive4_n.Abort();    //VER35.1
+//SS          receive6_n.sw_abort=1; //VER35.1
+//SS   }
+receive_port=0;
+//SJ receive6_n= null ;receive6_n= null ;
+//SS            receive4_n= null ;receive4_n= null ;
+ return 0;
+}
+//--------------------------------------------------------
+//*****( UDP受信 )*********
+public int receive(String no2_si,ii_z_mt_l z_mt_ni)
+{ii_z_mt_l z_mt_p=z_mt_ni;
+//HP z_mt_p.sw_receive=0;//レシーブ処理中
+//HP z_mt_p.menu_p.timer_udp_v();//UDPタイマーで終了判定。
+receive_cancel();
+receive_port=z_p.to_int_check("654"+no2_si,'-',0,0);
+if(!z_p.return_b){z_p.err_s="receive no ?("+no2_si+")";return 1;}
+receive6_n=new ii_receive_l(receive_port,z_p,z_mt_p,6);//レシーブ用インスタンス作成。
+sw_receive6=1;
+//SS Thread_receive6_n=new Thread(new ThreadStart(receive6_n.go_v));//レシーブ用スレッド作成。
+//HP receive6_n.start();//スレッド開始。
+//SS Thread_receive6_n.Start();//スレッド開始。
+//JJ receive6_n.start();//スレッド開始。
+//SS receive4_n=new ii_receive_l(receive_port,z_p,z_mt_p,4);//CSはIPv4も対応。（JavaはIPv4とIPv6は一緒）
+//SS Thread_receive4_n=new Thread(new ThreadStart(receive4_n.go_v));
+//SS Thread_receive4_n.Start();
+int rc=99;
+z_p.sleep_v(100);//別スレッド内でエラー発生待ち
+if(0!=receive6_n.rc)
+  {receive6_n.close_v();
+////SS Thread_receive6_n.Abort();    //VER35.1
+//SS          receive6_n.sw_abort=1; //VER35.1
+   rc=receive6_n.rc;
+  }else rc=0;
+//SS if(0!=receive4_n.rc)
+//SS   {receive4_n.close_v();
+////SS Thread_receive4_n.Abort();    //VER35.1
+//SS          receive4_n.sw_abort=1; //VER35.1
+//SS    if(0!=rc)rc=receive4_n.rc;
+//SS    }else rc=0;
+return rc;
+}
+#endif //MENU
+#if IMENU||ITIME
+//--------------------------------------------------------
+//*****( UDP送信 )*********
+public int send(String no2_si,String name_si,String message_si)
+{int cnt=0;//z_p=z_ni;
+//HP USocket_n= null ;
+//SS Socket Socket_n= null ;
+//JJ DatagramSocket DatagramSocket_n= null ;
+//String computer_name_s; 
+//HP QByteArray put_yx;
+//HP put_yx.insert(0,'0');
+//SJ byte[] put_yx=new byte[1026];
+//SJ byte zero_y=(byte)'0';put_yx[0]=zero_y;
+String put_s="";
+int rc=0;
+//HP USocket_n=new QUdpSocket();
+//HP sw_error=0;sw_event=0;
+//HP connect(USocket_n,SIGNAL(error(QAbstractSocket::SocketError)),this,SLOT(udp_error_v()));  //エラー
+//HP connect(USocket_n,SIGNAL(disconnected()),this,SLOT(event_v()));//終了待ち準備
+//HP connect(USocket_n,SIGNAL(connected()),this,SLOT(event_v()));//接続待ち準備
+//HP connect(USocket_n,SIGNAL(readyRead()),this,SLOT(event_v())); //受信待ち準備
+
+int port=0;
+String[] name_sx=z_p.split_sx(name_si,';');
+z_p.err_s="";
+int LOOP=0,FIN_1=1,FIN_NOT_CONNECT_2=2;
+//SS  System.Net.IPHostEntry IPHostEntry_n;System.Net.IPEndPoint IPEndPoint_n= null ;
+//JJ  DataOutputStream DataOutputStream_n= null ;DatagramPacket DatagramPacket_n= null ;
+
+for(int sw=0;;)
+  {if(LOOP>=sw)
+     {computer_name_s=z_p.trim_s(name_sx[cnt]);
+//HP  if(z_p.e2s_b(computer_name_s,""))computer_name_s=z_p.computer_name_s;
+//SJ  try{
+          port=z_p.to_int1s_i("654"+no2_si);
+
+//HP sw_event=0;sw_connect=0;USocket_n.connectToHost(computer_name_s,port);//接続 
+//HP  for(;0==sw_event&&0==sw_error;)z_p.sleep_v(1000);//完了待ち。
+//HP  if(0!=sw_error){sw=FIN_NOT_CONNECT_2;rc=1;continue;}//エラー有り。
+//HP  sw_connect=1; //コネクト済
+//SS      IPHostEntry_n=System.Net.Dns.GetHostEntry((z_p.e2s_b(computer_name_s,"")?System.Net.Dns.GetHostName():computer_name_s));
+//SS      for(int i=IPHostEntry_n.AddressList.Length-1;i>=0;i--)
+//SS        {IPEndPoint_n=new System.Net.IPEndPoint(IPHostEntry_n.AddressList[i],port);
+//SS         Socket Socket_temp_n=new Socket(IPEndPoint_n.AddressFamily,SocketType.Dgram,ProtocolType.Udp);
+//SS         Socket_temp_n.Connect(IPEndPoint_n);
+//SS         if(Socket_temp_n.Connected){Socket_n=Socket_temp_n;break;}
+//SS         else continue;
+//SS        }
+//JJ      DatagramSocket_n=new DatagramSocket();
+//SJ     }
+//SJ      catch(Exception e_ni){z_p.err_s+="("+computer_name_s+")"+z_p.message_s(e_ni);rc=1;sw=FIN_NOT_CONNECT_2;continue;}
+//SS  if( null ==Socket_n||!Socket_n.Connected){z_p.err_s+="("+computer_name_s+")"+"send{} Connect()";rc=1;sw=FIN_NOT_CONNECT_2;continue;} 
+      put_s=z_p.fix_form_length_s(z_p.lang_s,2)+z_p.fix_form_length_s(z_p.test_s,4)
+            +z_p.fix_form_length_s(z_p.system_s,8)+z_p.fix_form_length_s(z_p.job_s,10)
+            +z_p.fix_form_length_s(z_p.person_s,8)
+            +z_p.fix_form_length_s(z_p.upper_s(z_p.machine_name_s()),15)
+            +z_p.set_form_length_s(message_si,128);
+      put_s=z_p.password_n.pwd15_setup_s(put_s)+put_s;   
+      put_yx=z_p.to_utf8_yx(put_s);
+//HP  sw_event=0;USocket_n.write(put_yx);//送信
+//SJ      try{
+//JJ      DatagramPacket_n=new DatagramPacket(put_yx,put_yx.length,
+//JJ      InetAddress.getByName((z_p.e2s_b(computer_name_s,"")?z_p.machine_name_s():computer_name_s)),port);
+//SS       Socket_n.Send(put_yx,put_yx.Length,SocketFlags.None);
+//JJ      DatagramSocket_n.send(DatagramPacket_n);
+//SJ         }
+//SJ      catch(Exception e_ni){z_p.err_s+="("+computer_name_s+")"+z_p.message_s(e_ni);rc=1;continue;}
+     }//if(LOOP>=sw)
+   if(FIN_1>=sw)
+     {
+//SS  if( null !=Socket_n)Socket_n.Shutdown(SocketShutdown.Both);
+     }
+//HP  if(1==sw_connect)
+//HP    {sw_event=0;USocket_n.disconnectFromHost();
+//HP     for(;0==sw_event&&0==sw_error;)z_p.sleep_v(1000);//完了待ち。
+//HP     if(0!=sw_error){sw=FIN_1;rc=1;continue;}//エラー有り。
+//HP    }
+//SS if( null !=Socket_n){Socket_n.Close();Socket_n= null ;}
+
+//JJ try{if( null !=DatagramSocket_n){DatagramSocket_n.close();DatagramSocket_n= null ;}}
+//JJ catch(Exception){}
+   if(0>=FIN_1)break;
+   if(++cnt>=z_p.count_sx_i(name_sx))break;
+   sw=LOOP;
+  }//for(;;)
+//HP USocket_n.close();delete USocket_n;
+return rc;
+}
+#endif //MENU||TIME
+#if IMENU||ITIME||ISRVC
+//--------------------------------------------------------
+//*****( 読み込み )************************
+//HP public int read(Socket *Socket_ni,String file_si)
+//SS public int read(Socket Socket_ni,String file_si)
+//JJ public int read(DataInputStream  DataInputStream_ni,DataOutputStream  DataOutputStream_ni,String file_si)
+{
+//HP QFile *socket_FileStream_n= null ;
+//SS FileStream socket_FileStream_n= null ;BinaryReader BinaryReader_n= null ;
+//JJ FileInputStream FileInputStream_n= null ;
+//HP QByteArray get_yx,put_yx;
+//SJ byte[] get_yx=new byte[1026],put_yx=new byte[1026];
+//SJ byte zero_y=(byte)'0';put_yx[0]=zero_y;
+int get_length,put_length=1,rc=0;
+int sw=0;
+//HP socket_FileStream_n=new QFile(file_si);
+//HP if(!socket_FileStream_n.open(QIODevice::ReadOnly))
+//HP    {z_p.err_s="open read error("+file_si+")";rc=-1;sw=1;}
+//SJ try{
+//SS socket_FileStream_n=File.Open(file_si,FileMode.Open,FileAccess.Read,FileShare.Read);
+//SS BinaryReader_n=new BinaryReader(socket_FileStream_n);
+//JJ FileInputStream_n=new FileInputStream(file_si);
+//SJ   }
+//SJ catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);rc=-1;sw=1;}
+for(;0>=sw;)
+  {
+//HP   put_yx=socket_FileStream_n.read(1024);put_yx.insert(0,'0');//フィル読み込み、先頭に'0'を付加。	
+//HP   put_length=put_yx.size();
+//SJ try{
+//SS   put_length=BinaryReader_n.Read(   put_yx,1,1024)+1;//２バイト目からフィル読み込み
+//JJ   put_length=FileInputStream_n.read(put_yx,1,1024)+1;//２バイト目からフィル読み込み
+//JJ   if(0==put_length)put_length=1; //Javaはデータ無しで-1と成るため。
+//SJ      }
+//SJ  catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);rc=-1;break;}
+//HP  sw_event=0;Socket_ni.write(put_yx);//送信 
+//HP  for(;0==sw_event&&0==sw_error;)z_p.sleep_v(1000);//完了待ち。
+//HP  if(0!=sw_error){rc=1;break;}//エラー有り。
+//SJ   try{
+//SS   Socket_ni.Send(put_yx,put_length,SocketFlags.None);//データ送信
+//JJ   DataOutputStream_ni.write(put_yx,0,put_length);//データ送信
+//HP   get_yx=Socket_ni.read(1026);get_length=get_yx.size();//データ受信
+//HP  if(0!=sw_error){rc=1;break;}//エラー有り。
+//SS   get_length=Socket_ni.Receive(get_yx,1026,SocketFlags.None);//データ受信
+//JJ   get_length=DataInputStream_ni.read(get_yx,0,1026);//データ受信
+//SJ      }
+//SJ   catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);rc=1;break;}
+//HP   if('0'!=get_yx.at(0))
+//SJ   if(zero_y!=get_yx[0]) //先頭0以外エラー
+         {if(1<get_length)z_p.err_s=z_p.to_utf8_s(get_yx,1,get_length-1);
+          else z_p.err_s="";
+          rc=1;break;
+         }
+   if(1==put_length)break;
+  }//for(;;)
+//HP if( null !=socket_FileStream_n){socket_FileStream_n.close();delete socket_FileStream_n;}
+//SJ try{
+//SS if( null !=BinaryReader_n)BinaryReader_n.Close();
+//SS if( null !=socket_FileStream_n)socket_FileStream_n.Close();
+//JJ if( null !=FileInputStream_n)FileInputStream_n.close();
+//SJ    }catch(Exception){}
+return rc;
+}
+//--------------------------------------------------------
+//*****( 書き出し )************************
+//HP public int write(Socket *Socket_ni,String file_si)
+//SS public int write(Socket Socket_ni,String file_si)
+//JJ public int write(DataInputStream  DataInputStream_ni,DataOutputStream  DataOutputStream_ni,String file_si)
+{
+//HP QFile* socket_FileStream_n= null ;
+//SS FileStream socket_FileStream_n= null ;BinaryWriter BinaryWriter_n= null ;
+//JJ FileOutputStream FileOutputStream_n= null ;
+//HP QByteArray get_yx,put_yx;
+//HP put_yx.insert(0,'0');
+//SJ byte[] get_yx=new byte[1026],put_yx=new byte[1026];
+//SJ byte zero_y=(byte)'0';put_yx[0]=zero_y;
+int get_length,rc=0;
+//SJ int put_length=1;
+bool sw_file_create_b=false;
+for(;0==rc;)
+  {
+//HP get_yx=Socket_ni.read(1026);get_length=get_yx.size();//受信
+//SJ try{
+//SS   get_length=Socket_ni.Receive(get_yx,1026,SocketFlags.None);//受信
+//JJ   get_length=DataInputStream_ni.read(get_yx,0,1026);//受信
+//SJ      }
+//SJ   catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);rc=1;break;}
+//HP   if('0'!=get_yx.at(0))
+//SJ   if(zero_y!=get_yx[0])
+         {if(1<get_length)z_p.err_s=z_p.to_utf8_s(get_yx,1,get_length-1);
+          else z_p.err_s="";
+          rc=1;break;
+         }
+//SP   if( null ==socket_FileStream_n)
+//JJ   if( null ==FileOutputStream_n)
+         {
+//HP      socket_FileStream_n=new QFile(file_si);
+//HP      if(!socket_FileStream_n.open(QIODevice::WriteOnly))
+//HP        {z_p.err_s="open write error("+file_si+")";rc=-1;break;}
+//SJ      try{
+//SS          socket_FileStream_n=new FileStream(file_si,FileMode.Create,FileAccess.Write,FileShare.Read);
+//SS          BinaryWriter_n=new BinaryWriter(socket_FileStream_n);
+//JJ          FileOutputStream_n=new FileOutputStream(file_si);
+//SJ         }catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);rc=-1;break;}
+          sw_file_create_b=true;
+         }
+       if(1>=get_length)break;
+//HP   get_yx.remove(0,1);socket_FileStream_n.write(get_yx);//ファイル書き込み (先頭１バイト削除） 
+//SJ   try{
+//SS   BinaryWriter_n.Write(  get_yx,1,get_length-1);//ファイル書き込み(先頭１バイト削除） 
+//JJ   FileOutputStream_n.write(get_yx,1,get_length-1);//ファイル書き込み(先頭１バイト削除）
+//SJ      }
+//SJ   catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);rc=-1;break;}
+//HP  sw_event=0;Socket_ni.write(put_yx);//送信 
+//HP  for(;0==sw_event&&0==sw_error;)z_p.sleep_v(1000);//完了待ち。
+//HP  if(0!=sw_error){rc=1;break;}//エラー有り。
+//SJ   try{
+//SS   Socket_ni.Send(put_yx,put_length,SocketFlags.None);//送信
+//JJ   DataOutputStream_ni.write(put_yx,0,put_length);//送信
+//SJ    }
+//SJ   catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);rc=1;break;}
+  }//for(;;)
+//SJ try{
+//HP if( null !=socket_FileStream_n){socket_FileStream_n.close();delete socket_FileStream_n;}
+//SS if( null !=BinaryWriter_n)BinaryWriter_n.Close();
+//SS if( null !=socket_FileStream_n)socket_FileStream_n.Close();
+//JJ if( null !=FileOutputStream_n)FileOutputStream_n.close();
+     if(0!=rc&&sw_file_create_b)z_p.delete_file_b(file_si,"");//エラー終了ファイル削除
+//SJ   }catch(Exception){}
+return rc;
+}
+#endif //MENU||TIME||SRVC
+//HP QUdpSocket *USocket_n;
+//HP QTcpSocket *Socket_n; 
+#if IMENU||ITIME //TEST//
+//--------------------------------------------------------
+//***( クライアント処理 TCP )***
+public int client(String cmd_si,String path_si,String file_si,ii_z_mt_l z_mt_ni)
+{ii_z_mt_l z_mt_p=z_mt_ni;
+//HP Socket_n=new QTcpSocket();
+//SJ Socket       Socket_n= null ;
+//HP QByteArray get_yx,put_yx;
+//SJ byte[] get_yx=new byte[1026],put_yx=new byte[1026];
+//SJ byte zero_y=(byte)'0';put_yx[0]=zero_y;
+String full_file_s="",put_s="";
+int get_length,i;
+//SS System.Net.IPHostEntry hostEntry= null ;
+//JJ DataInputStream  DataInputStream_n=  null ;
+//JJ DataOutputStream DataOutputStream_n= null ;
+int sw=0,FIN_1=1,FIN_NOT_CONNECT_2=2;
+//SJ int OK=0;
+int rc=0;
+//HP sw_error=0;sw_event=0;
+//HP connect(Socket_n,SIGNAL(error(QAbstractSocket::SocketError)),this,SLOT(tcp_error_v()));  //エラー
+//HP connect(Socket_n,SIGNAL(connected()),this,SLOT(event_v()));//接続待ち準備
+//HP connect(Socket_n,SIGNAL(readyRead()),this,SLOT(event_v())); //受信待ち準備
+for(;;)
+  {
+      computer_name_s=z_p.server_name_s;
+//HP  sw_event=0;sw_connect=0;Socket_n.connectToHost(computer_name_s,z_p.SERVICE_PORT_NO);//接続 
+//HP  for(;0==sw_event&&0==sw_error;)z_p.sleep_v(1000);//完了待ち。
+//HP  if(0!=sw_error){rc=1;sw=FIN_NOT_CONNECT_2;continue;}//エラー有り。
+//HP  sw_connect=1; //コネクト済
+//SJ    try{
+//SS   hostEntry =System.Net.Dns.GetHostEntry(computer_name_s);
+//SS   for(i=hostEntry.AddressList.Length-1;i>=0;i--)
+//SS      {System.Net.IPEndPoint IPEndPoint_n=new System.Net.IPEndPoint(hostEntry.AddressList[i],z_p.SERVICE_PORT_NO);
+//SS       Socket Socket_temp_n=new Socket(IPEndPoint_n.AddressFamily,SocketType.Stream,ProtocolType.Tcp);
+//SS       try{Socket_temp_n.Connect(IPEndPoint_n);}
+//SS       catch(Exception e_ni){if(i>=0)continue;z_p.err_s=z_p.message_s(e_ni);rc=1;sw=FIN_NOT_CONNECT_2;break;}
+//SS       if(Socket_temp_n.Connected){Socket_n=Socket_temp_n;sw=OK;break;}
+//SS       else continue;
+//SS      }
+//JJ   Socket_n=new Socket(computer_name_s,z_p.SERVICE_PORT_NO);
+//JJ   DataInputStream_n =new DataInputStream (Socket_n.getInputStream());
+//JJ   DataOutputStream_n=new DataOutputStream(Socket_n.getOutputStream());
+//SJ   if(OK!=sw)break; //for内のbreak;対応
+//SS   if(0>i){z_p.err_s="Connect("+computer_name_s+")";rc=1;sw=FIN_NOT_CONNECT_2;break;}
+//SJ       }
+//SJ    catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);rc=1;sw=FIN_NOT_CONNECT_2;break;}
+//SS if( null ==Socket_n||!Socket_n.Connected){z_p.err_s="Connected("+hostEntry.AddressList[i]+")";rc=1;sw=FIN_NOT_CONNECT_2;break;} 
+      put_s="0"+cmd_si+" "+path_si+z_mt_p.bat_param_s()+file_si; //VER17
+      put_s="0"+z_p.password_n.pwd15_server_name_s(put_s+z_p.substring3_s(z_mt_p.sql_n.sql_time_s(),8,6))+put_s;//暗号文字追加
+      put_yx=z_p.to_utf8_yx(put_s);
+//HP  sw_event=0;Socket_n.write(put_yx);//送信 
+//HP  for(;0==sw_event&&0==sw_error;)z_p.sleep_v(1000);//完了待ち。
+//HP  if(0!=sw_error){rc=1;sw=FIN_1;break;}//エラー有り。
+//SJ   try{
+//SS   Socket_n.Send(put_yx,put_yx.Length,SocketFlags.None); //送信
+//JJ   DataOutputStream_n.write(put_yx,0,put_yx.length); //送信
+//SJ      }
+//SJ   catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);rc=1;sw=FIN_1;break;}
+   if(z_p.e3s_b(cmd_si,"SERVER_PUT","SERVER_BAT"))
+     {
+//HP get_yx=Socket_n.read(1026);get_length=get_yx.size();//受信 
+//HP if(0!=sw_error){rc=1;sw=FIN_1;break;}//エラー有り。
+//SJ try{
+//SS     get_length=Socket_n.Receive(get_yx,1026,SocketFlags.None);//受信
+//JJ     get_length=DataInputStream_n.read(get_yx,0,1026);//受信
+//SJ    }catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);rc=1;sw=FIN_1;break;}
+//HP    if('0'!=get_yx.at(0))
+//SJ    if(zero_y!=get_yx[0])
+           {if(1<get_length)z_p.err_s=z_p.to_utf8_s(get_yx,1,get_length-1);
+            else z_p.err_s="";
+            rc=1;sw=FIN_1;break;
+           }
+        if(z_p.e2s_b(cmd_si,"SERVER_BAT")){sw=FIN_1;break;}
+     }
+       full_file_s=z_p.get_tmp_path_s(z_p.dir_s)+file_si;
+       if(!z_p.e2s_b(cmd_si,"SERVER_PUT"))rc=write(
+//SP       Socket_n
+//JJ       DataInputStream_n,DataOutputStream_n
+                                               ,full_file_s);
+       else                                rc=read(
+//SP       Socket_n
+//JJ       DataInputStream_n,DataOutputStream_n
+                                               ,full_file_s);
+      if(-1==rc)//エラー有り
+        {put_s="9"+z_p.err_s;
+         put_yx=z_p.to_utf8_yx(put_s);
+//HP     sw_event=0;Socket_n.write(put_yx);//送信 
+//HP     for(;0==sw_event&&0==sw_error;)z_p.sleep_v(1000);//完了待ち。
+//HP     if(0!=sw_error){rc=1;sw=FIN_1;break;}//エラー有り。
+//SJ     try{
+//SS         Socket_n.Send(put_yx,put_yx.Length,SocketFlags.None);
+//JJ         DataOutputStream_n.write(put_yx,0,put_yx.length);
+//SJ        }catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);rc=1;sw=FIN_1;break;} 
+        }
+   else if(z_p.e2s_b(cmd_si,"SERVER_PUT"))
+     {
+//HP  if(0!=sw_error){if(!z_p.e2s_b(z_p.err_s,CLOSE_S))rc=1;sw=FIN_1;break;}//HPはSOCKET CLOSEがエラーとして受信される。
+//HP  get_yx=Socket_n.read(1026);get_length=get_yx.size();//受信 
+//HP  if(0!=sw_error){rc=1;sw=FIN_1;break;}//エラー有り。
+//SJ      try{
+//SS      get_length=Socket_n.Receive(get_yx,1026,SocketFlags.None);
+//JJ      get_length=DataInputStream_n.read(get_yx,0,1026);
+//SJ        }
+//SJ      catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);rc=1;sw=FIN_1;break;}
+//HP      if(0==get_length){sw=FIN_1;break;}//HPは最後受信出来ず。
+//HP      if('0'!=get_yx.at(0))
+//SJ      if(zero_y!=get_yx[0])
+            {if(1<get_length)z_p.err_s=z_p.to_utf8_s(get_yx,1,get_length-1);
+             else z_p.err_s="";
+             rc=1;sw=FIN_1;break;
+            }
+     }
+   sw=FIN_1;break;
+  }//for(;;)
+if(FIN_1>=sw)
+  {
+//SJ try{
+//SS   Socket_n.Shutdown(SocketShutdown.Both);
+//SJ      }
+//SJ   catch(Exception){}
+  }
+//SJ try{
+//HP                      Socket_n.close();delete Socket_n;
+//SS if( null !=Socket_n){Socket_n.Close();Socket_n= null ;}
+//JJ if( null !=Socket_n){Socket_n.close();Socket_n= null ;}
+//JJ if( null !=DataInputStream_n){DataInputStream_n.close();DataInputStream_n= null ;}
+//SJ    }catch(Exception){}
+return rc;
+}
+String computer_name_s="";
+#endif //MENU||TIME
+//HP int sw_error=0,sw_event=0,sw_connect=0;
+//HP String CLOSE_S="The remote host closed the connection";
+//HH private slots:
+//HP void tcp_error_v()
+//HP {if(0==sw_connect)z_p.err_s="connect error ("+computer_name_s+")";
+//HP  else z_p.err_s=Socket_n.errorString();
+//HP  sw_error=1;
+//HP }
+//HH private slots:
+//HP void udp_error_v()
+//HP {if(0==sw_connect)z_p.err_s="connect error ("+computer_name_s+")";
+//HP  else z_p.err_s=USocket_n.errorString();
+//HP  sw_error=1;
+//HP }
+//HH private slots:
+//HP void event_v(){sw_event=1;}
+}
+#endif //MENU||TIME||SRVC

@@ -1,0 +1,86 @@
+//= II_PAINT_LIST.SRC paint list class author nobumichi harasawa
+//= ペイント リスト クラス
+#if IMENU 
+//=***( クラスリスト（全行分リストで構成）作成 )*****************
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//SS using System.Data.SqlClient;
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.IO;
+//SS using System.Drawing;
+#if XAMARIN
+//SS using Xamarin.Forms;
+#else
+//SS using System.Windows.Forms;
+#endif
+//JJ import java.awt.*;
+//JJ import java.awt.event.*;
+//JJ import java.io.*;
+//JJ import java.math.*;
+//JJ import java.util.*;
+public class ii_paint_list_l
+{
+//COPY $II_DIR
+//COPY $II_READ
+//COPY $II_SQL2
+//COPY $II_URL
+ii_z_l paint_list_z_p;ii_z_mt_l paint_list_z_mt_p;
+public List<ii_paint_l> pa_paint_a=new List<ii_paint_l>(); 
+public ?void? ii_paint_list_l(ii_z_l z_ni,ii_z_mt_l z_mt_ni){paint_list_z_p=z_ni;paint_list_z_mt_p=z_mt_ni;}
+public void on_paint_v()
+{
+//SS paint_list_z_p.Graphics_n=paint_list_z_mt_p.menu_p.CreateGraphics();
+//JJ paint_list_z_p.Graphics_n=paint_list_z_mt_p.menu_p.getGraphics();
+on_paint_v(paint_list_z_p.Graphics_n,0,paint_list_z_p.lang_x_width,paint_list_z_p.lang_y_high,paint_list_z_p.Font_n,(float)0,(float)0,(float)0);
+
+}
+//=****( pa_paint_aの全行を表示する )*****
+public void on_paint_v(Graphics Graphics_ni,int printer_ii,float xx_fi,float yy_fi,Font Font_ni,float left_fi ,float top_fi,float right_fi)
+{
+//JJ paint_list_z_p.fill_rect_v(Graphics_ni,paint_list_z_p.Brush_nx[paint_list_z_p.BACKCOLOR]//背景塗りつぶし。
+//JJ   ,(float)0,(float)0,(float)paint_list_z_mt_p.x_window_size,(float)paint_list_z_mt_p.y_window_size);
+ii_zz_l ww_old_xx_f_n=new ii_zz_l();ii_zz_l ww_old_yy_f_n=new ii_zz_l();ii_zz_l ww_old_x_f_n=new ii_zz_l();
+float end_x=paint_list_z_mt_p.program_p.form_x_max*(xx_fi+1);
+for(int i=0;paint_list_z_p.count_pa_i(pa_paint_a)>i;i++)
+  {(paint_list_z_p.at_pa(pa_paint_a,i)).on_paint_v(Graphics_ni,ww_old_xx_f_n,ww_old_yy_f_n,ww_old_x_f_n,end_x,printer_ii
+                                  ,xx_fi,yy_fi,Font_ni,left_fi,top_fi,right_fi);
+  }
+for(;;)
+   if(0==printer_ii&&ww_old_yy_f_n.f<=paint_list_z_mt_p.program_p.form_y_max)
+     {paint_list_z_mt_p.fill_rect_geta_v(Graphics_ni,paint_list_z_p.Brush_nx[paint_list_z_p.BACKCOLOR],ww_old_x_f_n.f+left_fi,yy_fi*(ww_old_yy_f_n.f-1)-1+top_fi,end_x-ww_old_x_f_n.f,yy_fi);
+      ww_old_x_f_n.f=0;ww_old_yy_f_n.f++;
+      continue;
+     }
+   else break;
+//HP if(0==paint_list_z_p.sw_printer)
+        paint_list_z_mt_p.program_p.keyboard_n.caret_v();
+//HP delete ww_old_xx_f_n;delete ww_old_yy_f_n;delete ww_old_x_f_n;
+}
+//=****( pa_paint_aのy_ii行を消す )*****
+public void remove_v(int y_ii)
+{for(int i=0;paint_list_z_p.count_pa_i(pa_paint_a)>i;i++)
+ if(y_ii==(paint_list_z_p.at_pa(pa_paint_a,i)).y){paint_list_z_p.remove_pa_v(pa_paint_a,i);i--;}
+}
+//=****( pa_paint_aに追加 )*****
+public void add_v(String data_si,int y_ii,int x_ii,int length_ii,String font_si,Font Font_ni,Brush Brush_ni)
+{int i;
+data_si=paint_list_z_p.replace_rn_s(paint_list_z_p.replace_c_s(data_si,'\t','?'),'?');
+for(i=0;paint_list_z_p.count_pa_i(pa_paint_a)>i;i++)
+  {ii_paint_l paint_n=paint_list_z_p.at_pa(pa_paint_a,i);
+   if(y_ii>paint_n.y||(y_ii==paint_n.y&&x_ii>paint_n.x))continue;//y,xの小さい順の位置まで繰り返す
+   if(y_ii==paint_n.y&&x_ii==paint_n.x)//同じ位置を発見した場合は入れ替え
+     {//paint_list_z_p.console_write_v("/"+y_ii+"/"+paint_n.y+"/"+x_ii+"/"+paint_n.x+"/"+length_ii+"/"+data_si+"/");
+      paint_n.set_b(y_ii,x_ii,length_ii,data_si,font_si,Font_ni,Brush_ni);//入れ替え処理。
+     }
+   else paint_list_z_p.insert_pa_v(pa_paint_a,i,new ii_paint_l(y_ii,x_ii,length_ii,data_si,font_si,Font_ni,Brush_ni,paint_list_z_p,paint_list_z_mt_p));//同じ位置が無い場合は挿入。
+   return;
+  }
+paint_list_z_p.add_pa(pa_paint_a,new ii_paint_l(y_ii,x_ii,length_ii,data_si,font_si,Font_ni,Brush_ni,paint_list_z_p,paint_list_z_mt_p));//最後は次へ追加
+}
+//----------------------------------------------
+//=****( pa_paint_aを全て削除 )*****
+public void clear_v(){paint_list_z_p.clear_pa_v(pa_paint_a);}
+//COPY $II_WRITE
+}
+#endif

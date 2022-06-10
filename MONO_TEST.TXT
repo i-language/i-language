@@ -1,0 +1,13 @@
+◎VirtualPCについて。
+(1)HDDの容量を最大値に設定する。（通常は使用分しか確保しないので最大で問題なし）
+(2)ネットワークをローカル用としてMicrosoft Loopback Adapterをアダプター２に追加する。
+(3)最初メモリー１GBでOSをインストールし、後で７６８MBに変更する。
+
+◎LINX インストール手順
+(1)OpenSUSELinux最新をKDE及びGNOMEの２種類でVurtualPCへインストールする。
+(11.3の場合MONOが古い為、System.Data.OracleClient無しで立ち上がらない）
+(2)ネットワークをDHCP設定ではなく、固定値で設定する。（Yast2)
+(3)MONO最新をインターネットからインストールする。
+◎LINUX マウントコマンド
+
+mount -t cifs -o username=ユーザーネーム,password=パスワード //コンピュータ名/共有名

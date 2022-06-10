@@ -1,0 +1,64 @@
+//= II_PROGRAM_LIST.CS program list main class author nobumichi harasawa
+#if IMENU||ITIME //ITEST
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//SS using System.Data.SqlClient;
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.Drawing;
+//SS using System.IO;
+#if IMENU
+////SS using System.Windows.Forms;
+#endif
+//JJ import java.awt.*;
+//JJ import java.awt.event.*;
+//JJ import java.io.*;
+//JJ import java.math.*;
+//JJ import java.util.*;
+public class ii_program_list_l
+{
+//COPY $II_DIR
+//COPY $II_READ
+//COPY $II_SQL2
+//COPY $II_URL
+ii_z_l z_p;ii_z_mt_l z_mt_p;
+public List<ii_program_l> pr_a=new List<ii_program_l>();
+//----------------------------------------------
+public ii_program_list_l(ii_z_l z_ni,ii_z_mt_l z_mt_ni)
+{z_p=z_ni;z_mt_p=z_mt_ni;
+add_last_v();
+} 
+//----------------------------------------------
+public void del_last_v()//最後のLISTを削除。
+{
+if(0<z_p.count_pr_i(pr_a))
+  {for(int i=0;2>i;i++)
+    {z_mt_p.program_p.read_nx[i].read_close_v();        //read1,2 クローズ
+     z_mt_p.program_p.write_nx[i].write_close_v();      //write1,2 クローズ
+//SS if( null !=z_mt_p.program_p.serialport_nx[i])        //serialport1,2 クローズ
+//SS          z_mt_p.program_p.serialport_nx[i].close_v();
+//SS          z_mt_p.program_p.serialport_nx[i]= null ;
+    }
+   z_p.remove_pr_v(pr_a,z_p.count_pr_i(pr_a)-1);//最後のリストを削除
+#if IMENU
+   z_mt_p.mouse_paint_p= null ;//表示データクリア
+//SS   z_mt_p.socket_n.receive_cancel();//reciveをキャンセル。
+#endif //IMENU
+  }
+z_mt_p.program_p=(0<z_p.count_pr_i(pr_a)?(ii_program_l )z_p.at_pr(pr_a,z_p.count_pr_i(pr_a)-1):(ii_program_l ) null );//z_mt_p.program_nに現在値を設定。
+
+}
+//----------------------------------------------
+public void add_last_v()
+//新しいプログラム領域確保
+{z_mt_p.program_p=
+ z_p.add_pr(pr_a,new ii_program_l(z_p,z_mt_p,0<z_p.count_pr_i(pr_a)?(ii_program_l )z_p.at_pr(pr_a,z_p.count_pr_i(pr_a)-1):(ii_program_l ) null ));
+  //リストの最後に追加。
+#if IMENU
+z_mt_p.mouse_paint_p= null ;//表示データクリア
+//SS z_mt_p.socket_n.receive_cancel();//reciveをキャンセル。
+#endif //IMENU
+}
+//COPY $II_WRITE
+}
+#endif //IMENU||ITIME

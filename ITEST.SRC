@@ -1,0 +1,122 @@
+using CommunityToolkit.Maui;
+public class itest_l{
+public static MauiApp CreateMauiApp()
+{
+    var builder = MauiApp.CreateBuilder();
+
+	builder.UseMauiApp<App>().UseMauiCommunityToolkit();
+
+}
+}
+//using Comet.WPF;
+//using System;
+//using System.Collections.Generic;
+//using System.Drawing;
+//using System.IO;
+//using System.Linq;
+//using Comet.Graphics;
+//using Comet.Samples.Models;
+//using Microsoft.Maui;
+//using Microsoft.Maui.Controls;
+//using Microsoft.Maui.Graphics;
+//using Microsoft.Maui.Hosting;
+//using Windows.UI.Xaml.Controls;
+
+//using System;
+//using System.Windows;
+//using System.UI.Xaml.Controls;
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+////SJ class itest_l{
+//public static String add_s(List<Object> s_ai,Object n_i)  
+////HP   { s_ai->n.push_back(n_i);return  s_ai->n.back();}
+////SS   {s_ai.Add(n_i);return(s_ai[s_ai.Count-1]);} 
+//public static void Main(String[] arg_sx)
+//{
+//List<String> s_a=new List<String>(); 
+//add_s((Object)s_a,"ABC");
+//}
+////SJ }
+//
+//public class MainWindow : Window/
+//{
+//  public MainWindow()
+//  {
+//    this.Content =
+//      new Grid
+//      {DEF
+//        Children = {
+//          new StackPanel {
+//            Children = {
+//              new Menu { Items =
+//                { new MenuItem { Header = "メニュー" } } },
+//              new Button { Content = "ボタン" },
+//              new CheckBox { Content = "チェックボックス" },
+//              new ComboBox { Items =
+//                { "コンボボックス" }, SelectedIndex = 0 },
+//              new RadioButton { Content = "ラジオボタン" },
+//              new Slider(),
+//              new ListBox { Items = {
+//                  "リストボックス項目1",
+//                  "リストボックス項目2",
+//                }}}}}};
+//  }
+//
+//  [STAThread]
+//  static void Main(string[] args)
+//  {
+//    var app = new Application();
+//    app.Run(new MainWindow
+//      { Title = "サンプル", Width = 300, Height = 300, });
+//  }
+//}
+//}
+//public static void Main(String[] arg_sx)
+//{
+//Window Window_n=new Window();
+//Canvas Canvas_n=new Canvas();
+//}
+//}
+//using Comet;
+//using System.Activities.Statements;
+//public partial class MainWindow : Window
+//{
+//    public MainWindow()
+//    {
+//        InitializeComponent();
+//        MainFrame.NavigationService.Navigate(new CometPage(MainFrame, new MainPage()));
+//    }
+//}
+//public partial class itest_l
+//{
+//	public class MyApp : CometApp
+//	{
+//		[Body]
+//		View view() => new MainPage();
+//
+//		public static MauiApp CreateMauiApp()
+//		{
+//			var builder = MauiApp.CreateBuilder();
+//			builder.UseCometApp<MyApp>()
+//				.ConfigureFonts(fonts => {
+//					fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+//				});
+//#if DEBUG
+//			builder.EnableHotReload();
+//#endif
+//
+//			return builder.Build();
+//		}
+//	}
+//[State]
+//readonly CometRide comet = new();
+//[Body]
+//View body() => new VStack
+//{
+//    new Label("Welcome to .NET MAUI!"),
+//    new Button(
+//        () => $"You clicked {count} times.",
+//        () => count.Value ++)
+//    
+//};
+//}

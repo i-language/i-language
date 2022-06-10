@@ -1,0 +1,156 @@
+#!/bin/sh
+#(ZZZZZZETC) ZZZZZZETC
+umask 0000
+if test "$5" = "";then exit 0;fi
+i_exit=/home/I/I.$4/TMP_$3/$5.EXIT
+echo START ZZZZZZETC > $i_exit
+# 1=iv (shift)
+i_ver=$1
+shift
+# shift1 / 1=sys_lang 2={REAL,TEST} 3=system 4=work
+# 5=AT  6=out_file 
+# 5=COPY_DB_LOG_M 6=out_file 7=i_drive 8=in_path 9=in_file   
+# 5=DIR 6=out_file 7="dir" 
+# 5=rm 6=erase_file 
+# 5=ERASE_LOG 6=erase_file 
+# 5=ERASE_TIME 6=hh.mm 7=pid 
+# 5=ERASE_MESSAGE 6=message_file 
+# 5=EXIT_MESSAGE 6=out_file 7=exist_file 
+# 5=NOP 
+# 5=PERMISSION 
+# 5=TYPE_ERROR_TIME 6=out_file 
+# 5=WRITE_MESSAGE 6=message_file 7=color 8="message" 9=HALT  
+# 5=SETUP_CLIENT 6=DB 7=server_name 8=system 9=lang 10=timeout_connect/timeout_sql 11=menu 12=title 13=framework 14=jdbc
+# 5=ERASE_CLIENT 6=DB 7=server_name 8=system 9=lang 10=timeout_connect/timeout_sql 11=menu 12=title 13=framework 14=jdbc 
+# 5=TASKLIST 6=out_file 
+tmp=/home/I/I.$3/TMP_$2
+if test "$5" = "";then exit 0;fi
+#==( AT 6=out_file )==
+if test "$5" = "AT";then atq > $tmp/$6;fi
+#==( COPY_DB_LOG_M 6=out_file 7=i_drive: 8=in_path 9=in_file)==
+if test "$5" = "COPY_DB_LOG_M";then 
+   cp "$7/Program Files/Microsoft SQL Server/$8/$9" $tmp/$6;
+#   exit 0
+fi
+#==( DIR 6=out_file,7=dir )==
+if test "$5" = "DIR";then
+   if test ! "$7" = "";then ls -l $7 > $tmp/$6;fi
+#   exit 0
+fi
+#==( DIR_LOG 6=out_file,7=dir )==
+if test "$5" = "DIR_LOG";then 
+   if test ! "$7" = "";then ls -l "/home/I/I.$3/$2/LOG/$7" > $tmp/$6;fi
+#   exit 0
+fi
+#==( rm 6=erase_file )==
+if test "$5" = "ERASE";then
+   if test -f $tmp/$6;then rm $tmp/$6;fi
+#   exit 0
+fi
+#==( ERASE_LOG 6=erase_log )==
+if test "$5" = "ERASE_LOG";then
+    if test -f /home/I/I.$3/$2/LOG/$6;then rm /home/I/I.$3/$2/LOG/$6;fi
+#    exit 0
+fi
+#==( ERASE_TIME 6=time,7=pid )==
+if test "$5" = "ERASE_TIME";then
+   if test -f /home/I/SHARE/MESSAGE/$1.$2.$3.$6*.TIME;then
+           rm /home/I/SHARE/MESSAGE/$1.$2.$3.$6*.TIME;fi
+   if test ! "$7" = "";then atrm $7;fi
+#   exit 0
+fi
+#==( ERASE_MESSAGE 6=message_file )==
+if test "$5" = "ERASE_MESSAGE";then
+  if test -f /home/I/SHARE/MESSAGE/$2.$6;then
+          rm /home/I/SHARE/MESSAGE/$2.$6;fi
+#  exit 0
+fi
+#==( EXIT_MESSAGE 6=out_file,7=message_file )==
+if test "$5" = "EXIT_MESSAGE";then
+   if test "$7" = "";then exit 0;fi
+   if test -f /home/I/SHARE/MESSAGE/$2.$7;then
+       echo !!! FOUND > $tmp/$6
+   else
+       echo NOT FOUND > $tmp/$6;fi
+#   exit 0
+fi
+#==( NOP )==
+if test "$5" = "NOP";then
+   echo NOP
+#   exit 0
+fi
+#==( PERMISSION )==
+if test "$5" = "PERMISSION";then
+   do
+   cp $tmp/Z_PERMISSION.CFG /home/I/I.$3/BAT/
+   rm $tmp/Z_PERMISSION.CFG 
+   done
+#   exit 0
+fi
+#==( TYPE_ERROR_TIME 6=out_file )==
+if test "$5" = "TYPE_ERROR_TIME";then
+   if test ! -f /home/I/SHARE/MESSAGE/*ERR.TIME;then
+        echo ERROR TIME NOT FOUND > $tmp/$6
+   else
+        cat /home/I/SHARE/MESSAGE/*ERR.TIME | SORT /+20 > $tmp/$6;fi
+#   exit 0
+fi
+#==( WRITE_MESSAGE 6=message_file 7=color 8=message 9=HALT )==
+if test "$5" = "WRITE_MESSAGE";then
+   if test "$8" = "";then exit 0;fi
+   echo $7 $8 $3 > /home/I/SHARE/MESSAGE/$2.$6
+   if test ! "$9" = "HALT";then exit 0;fi
+   if test -f              /home/I/BIN$i_ver/${i_ver}MENUUC
+      then  cpp_mono_java="/home/I/BIN$i_ver/${i_ver}MENUUC"        
+   elif test -f                    /home/I/BIN$i_ver/purejavacomm.jar
+      then cpp_mono_java="java -cp /home/I/BIN$i_ver/purejavacomm.jar:/home/I/BIN$i_ver/jna.jar:/home/I/BIN$i_ver/IJAVA.jar imenu_l" 
+   else
+      cpp_mono_java="mono /home/I/BIN$i_ver/${i_ver}MENUU4.EXE" 
+   fi 
+   $cpp_mono_java $1 /home/I/BIN$i_ver/${i_ver}_HALT.TXT ZZ_ARG_FILE=/home/I/SHARE/MESSAGE/$2.$6
+#   exit 0
+fi
+#==(5=SETUP_CLIENT)===
+if test "$5" = "SETUP_CLIENT";then
+   if test ! "$2" = "REAL";then exit 0;fi
+   shift;shift;shift;shift;shift
+   #1=DB 2=server_name 3=system 4=lang 5=timeout_connect/timeout_sql 6=menu 7=title 8=framework 9=jdbc  
+   if   test "$8" = "C" 
+      then cpp_mono_java="/home/I/BIN$i_ver/${i_ver}MENUUC" 
+   elif test "$8" = "J" 
+      then cpp_mono_java="java -cp /home/I/BIN$i_ver/purejavacomm.jar:/home/I/BIN$i_ver/jna.jar:/home/I/BIN$i_ver/IJAVA.jar:/home/I/BIN$i_ver/$9 imenu_l" 
+   else
+      cpp_mono_java="mono /home/I/BIN$i_ver/${i_ver}MENUU4.EXE" 
+   fi
+  for i in 4 J C
+  do 
+    if test "$i" = "4" ;then ux="_MONO";wx=""     ;fi  
+    if test "$i" = "J" ;then ux="_JAVA";wx="_JAVA";fi  
+    if test "$i" = "C" ;then ux="_CPP" ;wx="_CPP" ;fi  
+    fl=/home/I/SHARE/WINDOWS/CLIENT/SETUP_$3_$4_$6${wx}.UTF-8
+    out=/home/I/SHARE/WINDOWS/SETUP_$3_$4_$6${wx}.BAT
+    echo @ECHO OFF > $fl
+    echo IF NOT EXIST CLIENT\\${i_ver}CLIENT.BAT GOTO ERR >> $fl
+    echo CLIENT\\${i_ver}CLIENT.BAT \\$2\I_SHARE\WINDOWS $i_ver $1 $4 $5 I_$2_$3.I $6 $7 $i $9>> $fl 
+    echo GOTO FIN >> $fl 
+    echo :ERR >> $fl 
+    echo ECHO CLIENT\\${i_ver}CLIENT.BAT NOT FOUND ERROR >> $fl 
+    echo PAUSE >> $fl 
+    echo :FIN >> $fl
+    $cpp_mono_java /home/I/SHARE/WINDOWS/CLIENT/CONVERT.TXT ZZZZZZ_ABORT=NO IN=$fl OUT=$out OUT_ENCODE=SHIFT_JIS,W 
+    echo /bin/sh ./CLIENT/${i_ver}CLIENT.SH $i_ver $1 $4 $5 I_$2_$3.I $6 $7 $i $9 > /home/I/SHARE/LINUX/SETUP_$3_$4_$6$ux 
+    chmod 777 /home/I/SHARE/LINUX/SETUP_$3_$4_$6$ux 
+   #echo /bin/sh ./CLIENT/${i_ver}CLIENT.SH $i_ver CLIENT $1 $4 $5 I_$2_$3.I $6 $7> /home/I/SHARE/LINUX/SETUP_$3_$4_$6_MONO 
+   #chmod 777 /home/I/SHARE/LINUX/SETUP_$3_$4_$6_MONO 
+   #echo /bin/sh ./CLIENT/${i_ver}CLIENT.SH $i_ver CLIENT $1 $4 $5 I_$2_$3.I $6 $7 $9> /home/I/SHARE/LINUX/SETUP_$3_$4_$6_JAVA 
+   #chmod 777 /home/I/SHARE/LINUX/SETUP_$3_$4_$6_JAVA 
+  done 
+fi
+if test "$5" = "TASKLIST";then
+   if test -f /home/I/BIN$i_ver/purejavacomm.jar
+      then ps x -o command | grep "java -cp /home/I/BIN$i_ver/purejavacomm.jar:/home/I/BIN$i_ver/jna.jar:/home/I/I.$3/BIN/${i_ver}JAVA.jar">$tmp/$6 
+      else ps x -o command | grep "mono /home/I/I.$3/BIN/${i_ver}TIMEU4.EXE"  >$tmp/$6 
+   fi
+#   exit 0
+fi
+echo !!! > $i_exit

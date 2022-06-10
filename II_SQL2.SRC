@@ -1,0 +1,685 @@
+// II_SQL2.SRC Firebird class author nobumichi harasawa// RDB(D)
+#if IMENU||ITIME //TEST
+#if D
+//SS //D using FirebirdSql.Data.FirebirdClient;
+#endif
+#if F
+//SS //F using Fujitsu.Symfoware.Client;
+#endif
+#if H
+//SS //H using Hitachi.HiRDB;
+#endif
+#if I
+#if DOTNET
+//SS //I using IBM.Data.DB2.Core; //VER35
+#else
+//SS //I using IBM.Data.DB2; //VER35
+#endif
+#endif
+#if L
+#if DOTNET
+//SS //L using MySqlConnector;
+#else
+//SS //L using MySql.Data.MySqlClient;
+#endif
+#endif
+//SS //M using System.Data.SqlClient;
+#if O
+#if ODP
+#if DOTNET
+//SS //O using Oracle.ManagedDataAccess.Client;  //ODP.NET //VER35
+//SS //O using Oracle.ManagedDataAccess.Types;  //ODP.NET //VER35
+#else
+//SS //O using Oracle.DataAccess.Client;  //ODP.NET //VER35
+#endif
+#else
+//SS //O using System.Data.Odbc;
+//SS //O using System.Data.OracleClient; //Oracle.DataAccess.Clientが//
+#endif
+#endif
+#if P
+//SS //P using Npgsql;
+#endif
+//SS //X using System.Data.Odbc;
+//SS //D #if D
+//SS //F #if F
+//SS //H #if H
+//SS //I #if I
+//SS //L #if L
+//SS //O #if O
+//SS //P #if P
+//=======================================================
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.Drawing;
+//SS using System.IO;
+#if IMENU
+//SS using System.Windows.Forms;
+#endif
+//JJ import java.awt.*;
+//JJ import java.awt.event.*;
+//JJ import java.io.*;
+//JJ import java.math.*;
+//JJ import java.util.*;
+public class
+//SS //D ii_sql2d_l
+//SS //F ii_sql2f_l
+//SS //H ii_sql2h_l
+//SS //I ii_sql2i_l
+//SS //L ii_sql2l_l
+//SS //M ii_sql2m_l
+//SS //O ii_sql2o_l
+//SS //P ii_sql2p_l
+//SS //X ii_sql2x_l
+//JP      ii_sql2_l
+{
+//COPY $II_DIR
+//COPY $II_READ
+//COPY *BEGIN
+ii_z_l sql2_z_p;ii_z_mt_l sql2_z_mt_p;
+int sql2_sw_sql=0,sql2_sw_transaction=0,sql2_column=0,sql2_sw_file=0;
+int SQL2_OFF_0=0,SQL2_ON_1=1;
+String sql2_user_id_s="",sql2_out_s,sql2_restore_db_s="";
+String sql2_connection1_s="",sql2_connection2_s="";
+//HP QSqlDatabase db_nn;
+#if O_ODBC
+//SS //O System.Data.IDbConnection Connection_n;
+//SS //O System.Data.IDbCommand Command_n;
+//SS //O System.Data.IDbTransaction Transaction_n;
+#else
+#if ODP
+//SS //O OracleConnection Connection_n;
+//SS //O OracleCommand Command_n;
+//SS //O OracleTransaction Transaction_n;
+#else
+//SS //O System.Data.IDbConnection Connection_n;
+//SS //O System.Data.IDbCommand Command_n;
+//SS //O System.Data.IDbTransaction Transaction_n;
+#endif
+#endif
+//SS //D System.Data.IDbConnection Connection_n;
+//SS //F System.Data.IDbConnection Connection_n;
+//SS //H System.Data.IDbConnection Connection_n;
+//SS //I System.Data.IDbConnection Connection_n;
+//SS //L System.Data.IDbConnection Connection_n;
+//SS //M System.Data.IDbConnection Connection_n;
+//SS //P System.Data.IDbConnection Connection_n;
+//SS //X System.Data.IDbConnection Connection_n;
+//SS //D System.Data.IDbCommand Command_n;
+//SS //F System.Data.IDbCommand Command_n;
+//SS //H System.Data.IDbCommand Command_n;
+//SS //I System.Data.IDbCommand Command_n;
+//SS //L System.Data.IDbCommand Command_n;
+//SS //M System.Data.IDbCommand Command_n;
+//SS //P System.Data.IDbCommand Command_n;
+//SS //X System.Data.IDbCommand Command_n;
+//SS //D System.Data.IDbTransaction Transaction_n;
+//SS //F System.Data.IDbTransaction Transaction_n;
+//SS //H System.Data.IDbTransaction Transaction_n;
+//SS //I System.Data.IDbTransaction Transaction_n;
+//SS //L System.Data.IDbTransaction Transaction_n;
+//SS //M System.Data.IDbTransaction Transaction_n;
+//SS //P System.Data.IDbTransaction Transaction_n;
+//SS //X System.Data.IDbTransaction Transaction_n;
+//SS System.Data.IDataReader DataReader_n;
+ii_write_l sql2_write_n;
+//String[] dbtype_sx?=?{"date","datetime","smalldatetime","timestamp","timestamp with time zone","timestamptz" //VER36.1
+//,"DATE","DATETIME","TIMESTAMP","TIME"                                                        //VER36.1 
+//,"DBTYPE_DATE","DBTYPE_DBDATE","DBTYPE_DBTIME","DBTYPE_DBTIMESTAMP","DBTYPE_FILETIME"
+//                   };
+int sql2_rc=0;
+//--------------------------------------------------------
+//JJ java.sql.Driver Driver_n= null ;java.sql.Connection Connection_n= null ;String class_for_name_s=""; 
+//JJ java.sql.ResultSet ResultSet_n= null ;java.sql.ResultSetMetaData ResultSetMetaData_n= null ;
+//JJ java.sql.Statement Statement_n= null ;bool result_set_b;
+//JJ int sw_Class_forName=0;
+//JP     public ?void? ii_sql2_l(ii_z_l z_ni,ii_z_mt_l z_mt_ni)
+//SS //D public ?void? ii_sql2d_l
+//SS //F public ?void? ii_sql2f_l
+//SS //H public ?void? ii_sql2h_l
+//SS //I public ?void? ii_sql2i_l
+//SS //L public ?void? ii_sql2l_l
+//SS //M public ?void? ii_sql2m_l
+//SS //O public ?void? ii_sql2o_l
+//SS //P public ?void? ii_sql2p_l
+//SS //X public ?void? ii_sql2x_l
+//SS (ii_z_l z_ni,ii_z_mt_l z_mt_ni)
+{sql2_z_p=z_ni;sql2_z_mt_p=z_mt_ni;sql2_write_n=new ii_write_l(sql2_z_p);
+////HP String db_s="QODBC3"; //VER36.1
+//HP String db_s="QODBC"; //VER36.1
+////HP if     ('P'==sql2_z_p.db_c)db_s="QPSQL";
+////HP else if('O'==sql2_z_p.db_c)db_s="QOCI";
+////HP else if('L'==sql2_z_p.db_c)db_s="QMYSQL";
+//HP db_nn=QSqlDatabase::addDatabase(db_s);
+//SS Connection_n=new
+//SS //D FbConnection();
+//SS //F SymfowareConnection();
+//SS //H HiRDBConnection();
+//SS //I DB2Connection();
+//SS //L MySqlConnection();
+//SS //M SqlConnection();
+#if O_ODBC
+//SS //O OdbcConnection();
+#else
+//SS //O OracleConnection();
+#endif
+//SS //P NpgsqlConnection();
+//SS //X OdbcConnection();
+if(SQL2_OFF_0!=sql2_sw_sql)close_v(sql2_z_p.COMMIT);
+//SS sql2_connection1_s="Server="+sql2_z_p.server_name_s+";";
+//JP if('D'==sql2_z_p.db_c)
+//JP   {
+//HP     sql2_connection1_s="";
+//JJ_D   String dir_s="\\";
+//JJ_D   if(sql2_z_p.e2s_b(sql2_z_p.substring3_s(sql2_z_p.instance_s,0,1),"/"))dir_s="/";
+//SS //D sql2_connection1_s+="Database="
+//JJ     sql2_connection1_s="jdbc:firebirdsql:"+sql2_z_p.server_name_s+"/3050:"
+//JJ_D   +sql2_z_p.instance_s+dir_s+"I"+dir_s+"DATABASE_DAT_D"+dir_s+"I_"+sql2_z_p.system_s;
+//JJ_D  sql2_connection2_s=".FDB"    //VER 16.1
+//SS //D +";connect timeout="+sql2_z_p.timeout_connect+";Charset=UTF8;";//VER13.0
+//JJ     +"?connect timeout="+sql2_z_p.timeout_connect+"&encoding=UTF8";//UTF8(UNICODE_FSSも）でCHARの文字数が少ないバグ発生中。VER13.0
+//JP   }else if('F'==sql2_z_p.db_c)
+//JP   {
+//HP     sql2_connection1_s="";
+//SS //F sql2_connection1_s+="Database="+"I_"+sql2_z_p.system_s;
+//SS //F sql2_connection2_s=";connect timeout="+sql2_z_p.timeout_connect+";Port=26551;";
+//JP   }else if('H'==sql2_z_p.db_c)
+//JP   {
+//SS //H sql2_connection1_s="PDHOST="+sql2_z_p.server_name_s+";";
+//JJ     sql2_connection1_s="jdbc:hitachi:hirdb://DBID=22200,DBHOST="+sql2_z_p.server_name_s;
+//JP   }else if('I'==sql2_z_p.db_c)
+//JP   {
+//HP     sql2_connection1_s="Driver={IBM DB2 ODBC DRIVER};Servername="+sql2_z_p.server_name_s+";Port="
+//HP     +sql2_z_p.DUMMY_S+(sql2_z_p.e2s_b(sql2_z_p.instance_s,"")?"50000":sql2_z_p.instance_s)
+//HP     +sql2_z_p.DUMMY_S+";Database=I_"+sql2_z_p.system_s+";";  
+//SS //I sql2_connection1_s="Server="
+//JJ     sql2_connection1_s="jdbc:db2://"
+//JJ_I   +sql2_z_p.server_name_s+":"
+//JJ_I   +(sql2_z_p.e2s_b(sql2_z_p.instance_s,"")?"50000":sql2_z_p.instance_s)   //VER16.2
+//JJ     +"/" 
+//SS //I +";Database=" 
+//JJ_I   +"I_"+sql2_z_p.system_s;
+//SS //I sql2_connection2_s=";Connect Timeout="+sql2_z_p.timeout_connect+";";
+//JP   }else if('L'==sql2_z_p.db_c)
+//JP   {
+//HP     sql2_connection1_s="Driver={MariaDB ODBC 3.1 Driver};Server="+sql2_z_p.server_name_s+";";
+//SS //L sql2_connection1_s="Server="
+//JJ     sql2_connection1_s="jdbc:mysql://"
+//JJ_L   +sql2_z_p.lower_s(sql2_z_p.server_name_s)
+//SS //L +";Database=mysql;Connect Timeout="+sql2_z_p.timeout_connect+";Charset=utf8mb4;SslMode=none;"
+#if DOTNET
+//SS //L +"Allow User Variables=True;" //VER27.1 //VER35
+#endif
+//SS //L ;
+//JJ              +"/mysql?Connect Timeout="+sql2_z_p.timeout_connect+"&Charset=utf8mb4&SslMode=none&Allow User Variables=True";  //VER27.1 //VER35
+//JP   }else if('M'==sql2_z_p.db_c)
+//JP   {
+////HP     sql2_connection1_s="Driver={ODBC Driver 13 for SQL Server};Server="
+/////HP     sql2_connection1_s="Driver={SQL Server Native Client 11.0};Server="
+//HP     sql2_connection1_s="Driver={SQL Server};Server="
+//HP                       +sql2_z_p.server_name_s+(sql2_z_p.e2s_b(sql2_z_p.instance_s,"")?"":"\\")+sql2_z_p.instance_s+";";
+//SS //M sql2_connection1_s="Data Source="
+//JJ     sql2_connection1_s="jdbc:sqlserver://"
+//JJ_M   +sql2_z_p.server_name_s+(sql2_z_p.e2s_b(sql2_z_p.instance_s,"")?"":"\\"+sql2_z_p.instance_s)
+//JJ_M   +";Connect Timeout="+sql2_z_p.timeout_connect+";";
+//JP   }else if('O'==sql2_z_p.db_c)
+//JP   {
+//HP    String odbc_s="OraDB18Home1";
+//HP    if(sql2_z_p.e3s_b(sql2_z_p.db_soft_s,"O21EX","O21"))odbc_s="OraDB21Home1"; //VER36.3
+//HP    if(sql2_z_p.e2s_b(sql2_z_p.db_soft_s,"O112EX"))odbc_s="XE";
+//HP     sql2_connection1_s="Driver={Oracle in "+odbc_s+"};DBQ=(DESCRIPTION = (ADDRESS_LIST = (ADDRESS = (PROTOCOL = TCP)(HOST = "
+//HP                       +sql2_z_p.server_name_s+")(PORT = 1521))) (CONNECT_DATA = (SERVER = DEDICATED) (SERVICE_NAME = "
+//HP                       +sql2_z_p.instance_s+")));";
+//SS //O sql2_connection1_s="Data Source=(DESCRIPTION = (ADDRESS_LIST = (ADDRESS = (PROTOCOL = TCP)(HOST = "
+//JJ     sql2_connection1_s="jdbc:oracle:thin:@"
+//JJ_O   +sql2_z_p.server_name_s
+//SS //O +")(PORT = "
+//JJ     +":"
+//JJ_O   +"1521"
+//SS //O +"))) (CONNECT_DATA = (SERVER = DEDICATED) (SERVICE_NAME = "
+//JJ     +"/"
+//JJ_O   +sql2_z_p.lower_s(sql2_z_p.instance_s)
+#if ODP
+//SS //O +")));Connect Timeout="+sql2_z_p.timeout_connect+";";//ODP.NET用//
+#else
+//SS //O +")));Unicode=true;";  //System.Data.OracleClient用//
+#endif
+//JJ    ;
+//JP   }else if('P'==sql2_z_p.db_c)
+//JP   {
+//HP      sql2_connection1_s="Driver={PostgreSQL ODBC Driver(UNICODE)};Server="+sql2_z_p.server_name_s+";Database=i_"+sql2_z_p.lower_s(sql2_z_p.system_s)+";";
+//SS //P  sql2_connection1_s="Server="
+//JJ      sql2_connection1_s="jdbc:postgresql://"
+//JJ_P    +sql2_z_p.server_name_s
+//JJ      +"/"
+//SS //P  +";Database="
+//JJ_P    +"i_"+sql2_z_p.lower_s(sql2_z_p.system_s);
+//SS //P  sql2_connection2_s=";Timeout="+sql2_z_p.timeout_connect+";";   
+//JJ      sql2_connection2_s="?Timeout="+sql2_z_p.timeout_connect;   
+//JP   }else
+//JP   {
+//SS //X sql2_connection1_s+="Database="+sql2_z_p.system_s;
+//SS //X sql2_connection2_s+=";";
+//JP   }      
+sql2_sw_sql=SQL2_OFF_0;
+}
+String exception_s="",sql_trace_s="";
+//--------------------------------------------------------
+public int sql(List<String> s_data_ai,String command_si,String user_id_si,String passwd_si,String sql_si,String file_si,String add_si,String encode_si,String login_si)
+{sql2_rc=0;bool bl;
+sql2_z_p.db_cancel=-1;sql2_z_p.db_error_s="";sql2_z_p.db_i_error_s="";
+//SJ try
+{
+if(sql2_z_p.e2s_b(command_si,"SQL"))sql2_z_p.clear_s_v(s_data_ai);
+if(SQL2_OFF_0!=sql2_sw_sql&&(!sql2_z_p.e2s_b(user_id_si,sql2_user_id_s)||(sql2_z_p.e3c_b(sql2_z_p.db_c,'I','D')&&!sql2_z_p.e2s_b(sql2_z_mt_p.restore_db_s,sql2_restore_db_s))))//VER18.1
+  { 
+   close_v(sql2_z_p.COMMIT,"(CHANGE USER)");//VER12.0
+  }
+sql_trace_s=sql_si+(sql2_z_p.e2s_b(login_si,"")?"":"???"+add_si);
+sql2_user_id_s=user_id_si;
+if(sql2_z_p.e3c_b(sql2_z_p.db_c,'I','D')){sql2_restore_db_s=sql2_z_mt_p.restore_db_s;sql2_z_mt_p.restore_db_s="";}//RESTORE＿DBは１回のみ有効。//VER18.1
+sql2_z_mt_p.trace_v(0,":sql("+(sql2_z_p.e2s_b(sql2_restore_db_s,"")?"":"[RESTORE_DB="+sql2_restore_db_s+"]")+sql2_user_id_s+")"+sql_trace_s);//VER12.0//VER18.1
+if(!sql2_z_p.e2s_b(login_si,"")&&sql2_z_p.e2c_b(sql2_z_p.db_c,'I')) //ZZ_ADDLOGIN で　DB2 はコマンド実行。
+  if('W'==sql2_z_p.os_c)return(sql2_z_p.command(sql_si+sql2_z_mt_p.password_s(login_si)+add_si));// DB2はコマンド実行し終了。
+   else {sql2_z_p.command(sql_si);return(sql2_z_p.command2(add_si,sql2_z_mt_p.password_s(login_si)));}
+String connection_s=sql2_connection1_s+sql2_restore_db_s+sql2_connection2_s;  //VER18.1
+//HP QSqlQuery query_nn;
+if(SQL2_OFF_0==sql2_sw_sql)
+ {sql2_sw_sql=SQL2_ON_1;
+////##//HP if('P'==sql2_z_p.db_c||'O'==sql2_z_p.db_c||'L'==sql2_z_p.db_c)
+////##//HP if('P'==sql2_z_p.db_c)
+////##//HP   {
+////##//HP    if('O'==sql2_z_p.db_c)db_nn.setHostName("(DESCRIPTION = (ADDRESS_LIST = (ADDRESS = (PROTOCOL = TCP)(HOST = "
+////##//HP                       +sql2_z_p.server_name_s+")(PORT = 1521))) (CONNECT_DATA = (SERVER = DEDICATED) (SERVICE_NAME = "
+////##//HP                       +sql2_z_p.instance_s+")))");
+////##//HP     else db_nn.setHostName(sql2_z_p.server_name_s);
+////##//HP    if('P'==sql2_z_p.db_c)db_nn.setDatabaseName("i_"+sql2_z_p.lower_s(sql2_z_p.system_s));
+////##//HP    db_nn.setUserName(sql2_user_id_s);
+////##////HP  if('O'==sql2_z_p.db_c)db_nn.setPassword(sql2_z_mt_p.sql_char_s(passwd_si));
+////##////HP  else  db_nn.setPassword(passwd_si);
+////##//HP    db_nn.setPassword(passwd_si);
+////##//HP   }
+//HP connection_s+="Uid="+(sql2_z_p.e2s_b(sql2_user_id_s,"SA")?"sa":sql2_user_id_s)+";Pwd="+passwd_si+";"; //AutoTranslate=no;
+//SS connection_s+= //VER18.1
+//SS //D "User ID="+sql2_user_id_s+";Password="+passwd_si+";";
+//SS //F "User ID="+sql2_user_id_s+";Password="+passwd_si+";";
+//SS //H "userid=\""+sql2_user_id_s+"\";password=\""+passwd_si+"\";";
+//SS //I "User ID="+sql2_user_id_s+";Password="+sql2_z_mt_p.sql_char_s(passwd_si)+";";//VER12.0    
+//SS //L "User ID="+sql2_user_id_s+";Password="+passwd_si+";"; 
+//SS //M "User ID="+sql2_user_id_s+";Password="+sql2_z_mt_p.sql_char_s(passwd_si)+";";
+//SS //O "User ID="+sql2_user_id_s+";Password="+
+#if ODP
+//SS //O   passwd_si+";";  //ODP.NET用//
+#else
+//SS //O   sql2_z_mt_p.sql_char_s(passwd_si)+";";
+#endif
+//SS //P "User ID="+sql2_user_id_s+";Password="+passwd_si+";";  
+//SS //X "User ID="+sql2_user_id_s+";Password="+sql2_z_mt_p.sql_char_s(passwd_si)+";";    
+//sql2_z_p.console_write_v("connection_s="+connection_s);//
+//##//HP if('L'!=sql2_z_p.db_c&&'O'!=sql2_z_p.db_c&&'P'!=sql2_z_p.db_c)
+//HP          db_nn.setDatabaseName(connection_s);
+//HP       if(!db_nn.open()){sql_error(db_nn.lastError());return sql2_rc;}
+//HP       query_nn.setForwardOnly(true);
+//SS       exception_s="ConnectionString";Connection_n.ConnectionString=connection_s;
+//SS       exception_s="Open()";Connection_n.Open();
+//SS       exception_s="CreateComand()";Command_n=Connection_n.CreateCommand();
+//SS       Command_n.CommandTimeout=sql2_z_p.timeout_sql;
+#if ODP
+//SS //O   Command_n.InitialLONGFetchSize=4000;
+#endif
+//JJ       java.sql.DriverManager.setLoginTimeout(sql2_z_p.timeout_connect);
+//JJ       exception_s="getConnection(...)";
+//JJ       Connection_n=java.sql.DriverManager.getConnection(connection_s,sql2_user_id_s,passwd_si);//VER12.0
+//JJ       exception_s="setAutoCommit(...)";
+//JJ       Connection_n.setAutoCommit(0==sql2_sw_transaction?true:false);
+//JJ       exception_s="createStatement()";Statement_n=Connection_n.createStatement();
+//JJ       exception_s="setsetQueryTimeout(...)";Statement_n.setQueryTimeout(sql2_z_p.timeout_sql); 
+ }
+if(sql2_z_p.starts_with_b(command_si,"FILE")) //ファイルへ出力
+ {sql2_sw_file=SQL2_ON_1;
+  if(!sql2_write_n.open_b(file_si,add_si,encode_si))
+     return error(sql_si);
+ }
+else sql2_sw_file=SQL2_OFF_0;
+String s=sql2_z_p.upper_s(sql_si);
+if(sql2_z_p.starts_with_b(s,"BEGIN "))
+ {int i;
+  for(i=6;sql2_z_p.length(sql_si)>i;i++)if(' '!=sql2_z_p.at_s_c(sql_si,i))break;
+  if(sql2_z_p.starts_with_b(sql2_z_p.substring2_s(s,i),"TRAN"))
+   {if(0==sql2_sw_transaction)
+              {sql2_z_mt_p.trace_v(0,":#####(BEGIN TRANSACTION)#####:");
+//HP           db_nn.transaction();
+//SS           exception_s="BeginTransaction()";Transaction_n=Connection_n.BeginTransaction();
+//#if ODP
+//#endif
+//SS Command_n.Transaction=Transaction_n;
+//JJ           exception_s="setAutoCommit(false)";Connection_n.setAutoCommit(false);
+               sql2_sw_transaction=1;
+              }
+    return fin();
+   }
+ }
+if(sql2_z_p.starts_with_b(s,"COMMIT "))
+  {if(0!=transaction(sql2_z_p.COMMIT,""))return error(sql_si);
+   return fin();
+  }
+if(sql2_z_p.starts_with_b(s,"ROLLBACK "))
+  {if(0!=transaction(sql2_z_p.ROLLBACK,""))return error(sql_si);
+   return fin();
+  }
+sql2_z_p.sql_old_s=sql2_z_p.sql_s;sql2_z_p.sql_s=sql_si;
+//HP if(!query_nn.exec(
+//SS Command_n.CommandText= //SQL実行。
+//JJ exception_s="execute(SQL)";result_set_b=Statement_n.execute( //SQL実行。
+     sql_si+(sql2_z_p.e2s_b(login_si,"")?"":sql2_z_mt_p.password_s(login_si)+add_si)
+//HP )){sql_error(query_nn.lastError());return sql2_rc;}
+//SS ; 
+//JJ );
+//SS Command_n.Connection=Connection_n;
+//SS exception_s="ExecuteReader()";DataReader_n=Command_n.ExecuteReader();
+sql2_z_p.db_record_cnt=sql2_z_p.db_column_cnt=sql2_z_p.db_affected_cnt=0;
+sql2_z_p.db_error_s="";sql2_z_p.db_i_error_s="";
+int sw=0,START=0,LOOP=1,LOOP_COLUMN=2;
+sql2_z_p.db_column_cnt=0;
+int column_cnt=0;
+//HP sql2_z_p.db_affected_cnt=query_nn.numRowsAffected();
+//JJ sql2_z_p.db_affected_cnt=Statement_n.getUpdateCount();
+//JJ int long_column=-2;//未設定は-2。
+//JJ String long_column_s="";
+//HP  QSqlRecord record_nn;
+//SP for(;;)
+//JJ for(;result_set_b;)
+  {if(START>=sw)
+     {
+//HP  record_nn=query_nn.record();
+//JJ  exception_s="getResultSet()";ResultSet_n=Statement_n.getResultSet();
+//JJ  exception_s="getMetaData()";ResultSetMetaData_n=ResultSet_n.getMetaData();
+//JJ  exception_s="getColumnCount()";
+//HP  sql2_z_p.db_column_cnt=record_nn.count();
+//JJ  sql2_z_p.db_column_cnt=ResultSetMetaData_n.getColumnCount();
+//SS  sql2_z_p.db_column_cnt=DataReader_n.FieldCount;
+      if(0==column_cnt)column_cnt=sql2_z_p.db_column_cnt;
+      else if(column_cnt!=sql2_z_p.db_column_cnt)//カラム数不一致はエラーとする。
+            {sql2_z_p.err_s="column count error ("+sql2_z_p.to_i_s(column_cnt)+"!="+sql2_z_p.to_i_s(sql2_z_p.db_column_cnt)+")";
+             return(error(sql_si));
+            } 
+//SS  exception_s="getGetName(...)";
+//JJ  exception_s="getColumnName(...)";
+      int i;
+      for(sql2_z_p.db_cancel=-1,i=0;i<sql2_z_p.db_column_cnt;i++)
+          if(sql2_z_p.e2s_b(sql2_z_p.upper_s(
+//HP       record_nn.fieldName(i)
+//SS       DataReader_n.GetName(i)
+//JJ       ResultSetMetaData_n.getColumnName(i+1)
+           ),"Z_CANCEL"))sql2_z_p.db_cancel=i; //VER23.1
+//SS      sql2_z_p.db_affected_cnt+=(0>DataReader_n.RecordsAffected?0:DataReader_n.RecordsAffected);
+     }//if(START>=sw)
+//***********************************************
+//SS  exception_s="Read()";
+//JJ  exception_s="next()";
+   if(LOOP>=sw)
+     {if(0!=sql2_z_p.sql_limit&&sql2_z_p.sql_limit<=sql2_z_p.db_record_cnt)return fin();
+//HP    bl=query_nn.next();
+//SS    bl=DataReader_n.Read();
+//JJ    bl=ResultSet_n.next(); 
+//JJ    long_column=-2;//未設定。
+      if(!bl)
+        {
+//SS     exception_s="NextResult()";
+//JJ     exception_s="getMoreResults()";
+
+//SJ     if(
+//SS        DataReader_n.NextResult()
+//JJ        Statement_n.getMoreResults()
+//SJ       ){sw=START;continue;}
+         return fin();
+        }
+      sql2_z_p.db_record_cnt++;
+      sql2_column=0;sql2_out_s="";
+     }//if(LOOP>=sw)
+   if(sql2_column>=sql2_z_p.db_column_cnt){sw=LOOP;continue;}
+//HP   if(query_nn.isNull(sql2_column))s="";
+//HP   else s=sql2_z_p.trim_end_s(query_nn.value(sql2_column) .toString()); 
+////HP   if(QVariant::Date==record_nn.field(sql2_column) .type()
+////HP    ||QVariant::DateTime==record_nn.field(sql2_column) .type())
+////HP    s=s .replace("T"," ") .replace("/","-");
+///SS   sql2_z_mt_p.trace_v(1,"DataReader_n.GetDateTime(sql2_column)="+DataReader_n.GetDataTypeName(sql2_column));
+//SS   if(DataReader_n.IsDBNull(sql2_column))s="";
+////SS    else if(-1!=sql2_z_p.index2sx_i(dbtype_sx,DataReader_n.GetDataTypeName(sql2_column)))  //VER36.1
+////SS           {s=sql2_z_p.date_time_s(DataReader_n.GetDateTime(sql2_column),0);  //VER36.1
+////SS            sql2_z_mt_p.trace_v(1,"s1="+s);
+////SS            if(sql2_z_p.e3s_b(DataReader_n.GetDataTypeName(sql2_column),"DATE","date"))s=sql2_z_p.substring3_s(s,0,8); //VER36.1
+////SS           }  
+//SS   else
+//SS     {s=sql2_z_p.trim_end_s(DataReader_n.GetValue(sql2_column).ToString());
+////SS      sql2_z_mt_p.trace_v(1,"s2="+s);
+//SS      if(sql2_z_p.e2s_b(s,"System.Byte[]"))
+//SS       {s="";byte[] w_yx=(byte[])DataReader_n.GetValue(sql2_column);
+//SS        for(int iz=0;iz<sql2_z_p.length(w_yx);iz++){s+=sql2_z_p.to1_i_s(w_yx[iz]);}
+//SS       }
+//SS     }
+//JJ  if('O'==sql2_z_p.db_c&&-2==long_column)//Oracle はlongを最初に読まないとエラーに成るのでここで対応。
+//JJ     for(int i=0;i<sql2_z_p.db_column_cnt;i++)
+//JJ         if(sql2_z_p.e2s_b(ResultSetMetaData_n.getColumnTypeName(i+1),"LONG"))//longデータ判定。
+//JJ            {long_column=i+1;long_column_s=ResultSet_n.getString(i+1);//longデータ事前設定
+//JJ             if( null ==long_column_s)long_column_s="";//nullは空白化。
+//JJ             else sql2_z_p.trim_end_s(long_column_s);break;//右空白削除。
+//JJ            }
+//JJ         else long_column=-1;//long無しは-1。
+//JJ   if('O'==sql2_z_p.db_c&&long_column==(sql2_column+1))s=long_column_s;//Oracleのlongは事前取り込みデータをセット。 
+//JJ   else if( null ==ResultSet_n.getString(sql2_column+1))s="";//nullは空白化。
+//JJ        else {s=sql2_z_p.trim_end_s(ResultSet_n.getString(sql2_column+1));
+////JJ              if(sql2_z_p.starts_with_b(ResultSetMetaData_n.getColumnTypeName(sql2_column+1),"date")||  //日付時間対応//VER36.1
+////JJ                 sql2_z_p.starts_with_b(ResultSetMetaData_n.getColumnTypeName(sql2_column+1),"time"))
+////JJ                 {String ss=s;s="";
+////JJ                  for(int iz=0;iz<sql2_z_p.length(ss);iz++)if(0<=sql2_z_p.at_s_c(ss,iz)&&9>=sql2_z_p.at_s_c(ss,iz))s=s+sql2_z_p.at_s_c(ss,iz);
+////JJ                  if(15==sql2_z_p.length(s))s=sql2_z_p.substring3_s(s,0,14)+"00"+sql2_z_p.substring3_s(s,0,15);
+////JJ                  if(16==sql2_z_p.length(s))s=sql2_z_p.substring3_s(s,0,14)+"0" +sql2_z_p.substring3_s(s,0,15);
+////JJ                 } 
+//JJ             } 
+   sql2_column++;
+   if(SQL2_OFF_0==sql2_sw_file){sql2_z_p.add_s(s_data_ai,s);sw=LOOP_COLUMN;continue;}
+   ii_zz_l ww_sep_s_n=new ii_zz_l();
+   sql2_out_s+=sql2_z_p.csv_out_s(ww_sep_s_n,s,file_si);String ss=ww_sep_s_n.s;
+//HP delete ww_sep_s_n;    
+   if(sql2_column!=sql2_z_p.db_column_cnt)sql2_out_s+=ss;
+   else {if(!sql2_write_n.write_b(sql2_out_s))return error(sql_si);}
+   sw=LOOP_COLUMN;
+  }//for(;;)
+//HP record_nn.clear();query_nn.clear();
+//JJ return sql2_rc;
+}//try
+//***********************************************
+//SS //D catch(FbException e_ni)
+//SS //F catch(SymfowareException e_ni)
+//SS //H catch(HiRDBException e_ni)
+//SS //I catch(DB2Exception e_ni)
+//SS //L catch(MySqlException e_ni)
+//SS //M catch(SqlException e_ni)
+#if O_ODBC
+//SS //O catch(OdbcException e_ni)
+#else
+//SS //O catch(OracleException e_ni)
+#endif
+//SS //P catch(NpgsqlException e_ni)
+//SS //X catch(OdbcException e_ni)
+//JJ     catch(java.sql.SQLException e_ni)
+//SJ       {sql_error(e_ni);return error(sql_trace_s);}
+//SJ catch(Exception e_ni){sql2_z_p.err_s=exception_s+":"+sql2_z_p.message_s(e_ni);return error(sql_trace_s);}
+}
+int error_set(String sql_si)
+{sql2_z_p.db_error_s=sql2_z_p.to_c_s(sql2_z_p.db_c)+"?";sql2_z_p.db_i_error_s="ERROR";
+return error(sql_si);
+}
+int error(String sql_si)
+{sql2_rc=sql2_z_p.SW_ERROR_5;
+if(0==sql2_z_p.sw_cgi)sql2_z_p.err3_s=sql_si;else sql2_z_p.err3_s=""; 
+return fin();
+}
+int fin()
+{sql2_write_n.write_close_v();
+sql2_z_p.sql_limit=0;
+//SS try{DataReader_n.Close();}catch(Exception){}
+return sql2_rc;
+}
+//--------------------------------------------------------
+//HP     void sql_error(QSqlError e_nni)
+//SS //D void sql_error(FbException e_ni)
+//SS //F void sql_error(SymfowareException e_ni)
+//SS //H void sql_error(HiRDBException e_ni)
+//SS //I void sql_error(DB2Exception e_ni)
+//SS //L void sql_error(MySqlException e_ni)
+//SS //M void sql_error(SqlException e_ni)
+#if O_ODBC
+//SS //O void sql_error(OdbcException e_ni)
+#else
+//SS //O void sql_error(OracleException e_ni)
+#endif
+//SS //P void sql_error(NpgsqlException e_ni)
+//SS //X void sql_error(OdbcException e_ni)
+//JJ     void sql_error(java.sql.SQLException e_ni)
+{sql2_z_p.err_s="";sql2_z_p.db_i_error_s="ERROR";
+//HP sql2_rc=sql2_z_p.SW_ERROR_5; 
+//HP sql2_z_p.db_error_s=sql2_z_p.to_c_s(sql2_z_p.db_c)+e_nni.nativeErrorCode();
+//HP sql2_z_p.err_s=e_nni.text();
+//JJ sql2_z_p.db_error_s=""+sql2_z_p.db_c+e_ni.getErrorCode();
+//JJ sql2_z_p.err_s=e_ni.getMessage();
+//JP if('D'==sql2_z_p.db_c){
+//SS //D sql2_z_p.db_error_s="D-?";
+//SS //D     sql2_z_p.err_s=e_ni.Message;
+//JP_D   sql2_z_p.err_s=sql2_z_p.replace_s_s(sql2_z_p.replace_s_s(sql2_z_p.err_s,"\r\n"," "),"\n"," ");//復帰改行を空白化。
+//JP   if(sql2_z_p.starts_with_b(sql2_z_p.err_s,"GDS Exception. "))sql2_z_p.err_s=sql2_z_p.substring2_s(sql2_z_p.err_s,26);//この文字は不要。 
+//JP_D int i;
+//JP_D if(-1!=(i=sql2_z_p.index2s_i(sql2_z_p.err_s,"Dynamic SQL Error ")))sql2_z_p.err_s=sql2_z_p.substring2_s(sql2_z_p.err_s,i+18);//この文字以前は不要。 
+//JP_D if(-1!=sql2_z_p.index2s_i(sql2_z_p.err_s,"SQL error code = "))
+//JJ_D   {String[] sx=sql2_z_p.split_sx(sql2_z_p.err_s,' ');sql2_z_p.db_error_s="D"+sx[4];}
+////JJ_D if(sql2_z_p.e2s_b(sql2_z_p.db_error_s,"D-?")) {//VER13.0削除  
+//JP_D if     (-1!=sql2_z_p.index2s_i(sql2_z_p.err_s," already exists"))sql2_z_p.db_i_error_s="EXIST";
+//JP_D else if(-1!=sql2_z_p.index2s_i(sql2_z_p.err_s," does not exist")||-1!=sql2_z_p.index2s_i(sql2_z_p.err_s," not found"))sql2_z_p.db_i_error_s="NOT_EXIST";
+//JP_D else if(-1!=sql2_z_p.index2s_i(sql2_z_p.err_s,"violation of PRIMARY or UNIQUE KEY constrain"))sql2_z_p.db_i_error_s="DUPLICATE_KEY";
+//JP_D if(sql2_z_p.e3s_b(sql2_z_p.db_error_s,"D-204","D-607"))sql2_z_p.db_i_error_s="NOT_EXIST";
+//JP                return;}
+//JP if('F'==sql2_z_p.db_c){
+//SS //F int i=0;
+//SS //F for(;i<e_ni.Errors.Count;i++)sql2_z_p.err_s+=e_ni.Errors[i].Message;
+//SS //F sql2_z_p.db_error_s=""+sql2_z_p.db_c+e_ni.Errors[i-1].Number.ToString();
+//JP_F if     (sql2_z_p.e6s_b(sql2_z_p.db_error_s,"F-3003","F-3100","F-3505","F-4061","F-4675"))sql2_z_p.db_i_error_s="EXIST";
+//JP_F else if(sql2_z_p.e3s_b(sql2_z_p.db_error_s,"F-3101","F-3600"))sql2_z_p.db_i_error_s="NOT_EXIST";
+//JP_F else if(sql2_z_p.e2s_b(sql2_z_p.db_error_s,"F-???"))sql2_z_p.db_i_error_s="DUPLICATE_KEY";
+//JP                return;}
+//JP if('H'==sql2_z_p.db_c){
+//SS //H sql2_z_p.err_s=e_ni.Message;
+//SS //H sql2_z_p.db_error_s=""+sql2_z_p.db_c+e_ni.ErrorCode;
+//JP_H if     (sql2_z_p.e3s_b(sql2_z_p.db_error_s,"H-601","H-664"))sql2_z_p.db_i_error_s="EXIST";
+//JP_H else if(sql2_z_p.e4s_b(sql2_z_p.db_error_s,"H-204","H-529","H-656"))sql2_z_p.db_i_error_s="NOT_EXIST";
+//JP_H else if(sql2_z_p.e2s_b(sql2_z_p.db_error_s,"H-803"))        sql2_z_p.db_i_error_s="DUPLICATE_KEY";
+//JP                return;}
+//JP if('I'==sql2_z_p.db_c){
+//SS //I sql2_z_p.err_s=e_ni.Message;
+//SS //I if(0<e_ni.Errors.Count)sql2_z_p.db_error_s=""+sql2_z_p.db_c+e_ni.Errors[0].NativeError.ToString();
+//JP_I if     (sql2_z_p.e3s_b(sql2_z_p.db_error_s,"I-454","I-601"))sql2_z_p.db_i_error_s="EXIST";
+//JP_I else if(sql2_z_p.e2s_b(sql2_z_p.db_error_s,"I-204"))sql2_z_p.db_i_error_s="NOT_EXIST";
+//JP_I else if(sql2_z_p.e2s_b(sql2_z_p.db_error_s,"I-803"))sql2_z_p.db_i_error_s="DUPLICATE_KEY";
+//JP                return;}
+//JP if('L'==sql2_z_p.db_c){
+//SS //L sql2_z_p.err_s=e_ni.Message;
+//SS //L sql2_z_p.db_error_s=""+sql2_z_p.db_c+e_ni.Number;
+//JP_L if     (sql2_z_p.e2s_b(sql2_z_p.db_error_s,"L1050")
+//JP_L          ||(sql2_z_p.e2s_b(sql2_z_p.db_error_s,"L1396")
+//JP_L          &&-1!=sql2_z_p.index2s_i(sql2_z_p.err_s,"Operation CREATE ")))sql2_z_p.db_i_error_s="EXIST";
+//JP_L else if(sql2_z_p.e7s_b(sql2_z_p.db_error_s,"L1008","L1051","L1091","L1146","L1305","L1360") 
+//JP_L          ||(sql2_z_p.e2s_b(sql2_z_p.db_error_s,"L1396")&&-1!=sql2_z_p.index2s_i(sql2_z_p.err_s,"Operation DROP "))
+//JP_L          ||sql2_z_p.e2s_b(sql2_z_p.db_error_s,"L4092"))sql2_z_p.db_i_error_s="NOT_EXIST";//VER27.1
+//JP_L else if(sql2_z_p.e2s_b(sql2_z_p.db_error_s,"L1062"))sql2_z_p.db_i_error_s="DUPLICATE_KEY";
+//JP                return;}
+//JP if('M'==sql2_z_p.db_c){
+//SS //M int i=0;
+//SS //M for(;i<e_ni.Errors.Count;i++)sql2_z_p.err_s+="("+e_ni.Errors[i].LineNumber+")"+e_ni.Errors[i].Message;
+//SS //M sql2_z_p.db_error_s=""+sql2_z_p.db_c+e_ni.Errors[i-1].Number.ToString();
+//JP_M  if     (sql2_z_p.e7s_b(sql2_z_p.db_error_s,"M2714","M1801","M15023","M15025","M15026","M15061"))sql2_z_p.db_i_error_s="EXIST";
+//JP_M  else if(sql2_z_p.e4s_b(sql2_z_p.db_error_s,"M208","M3701","M3727")
+//JP_M        ||sql2_z_p.e8s_b(sql2_z_p.db_error_s,"M15001","M15007","M15008","M15009","M15010","M15012","M15015"))sql2_z_p.db_i_error_s="NOT_EXIST";
+//JP_M  else if(sql2_z_p.e3s_b(sql2_z_p.db_error_s,"M2627","M3621"))sql2_z_p.db_i_error_s="DUPLICATE_KEY";
+//JP                return;}
+//JP if('O'==sql2_z_p.db_c){
+//SS //O int ss,ee;
+//SS //O  sql2_z_p.err_s=e_ni.Message;
+//SS //O  sql2_z_p.db_error_s=""+sql2_z_p.db_c+"0";
+//SS //O  if     (sql2_z_p.starts_with_b(e_ni.Message,"ORA-"))ss=4;
+//SS //O  else return;
+//SS //O  for(;;ss++)if(e_ni.Message.Length<=ss)return;else if('0'!=e_ni.Message[ss])break;
+//SS //O  for(ee=ss;;ee++)if(e_ni.Message.Length<=ee)return;
+//SS //O                  else if('0'>e_ni.Message[ee]||'9'<e_ni.Message[ee])break;
+//SS //O  sql2_z_p.db_error_s=""+sql2_z_p.db_c+sql2_z_p.substring3_s(e_ni.Message,ss,ee-ss);
+//JP_O if     (sql2_z_p.e4s_b(sql2_z_p.db_error_s,"O955","O1543","O1920"))sql2_z_p.db_i_error_s="EXIST";
+//JP_O else if(sql2_z_p.e8s_b(sql2_z_p.db_error_s,"O942","O959","O1418","O1918","O2443","O4043","O4080"))sql2_z_p.db_i_error_s="NOT_EXIST";
+//JP_O else if(sql2_z_p.e2s_b(sql2_z_p.db_error_s,"O1"))          sql2_z_p.db_i_error_s="DUPLICATE_KEY";
+//JP                return;}
+//JP if('P'==sql2_z_p.db_c){
+//SS //P sql2_z_p.err_s=sql2_z_p.substring2_s(e_ni.Message,7); //VER26.1
+//JJ     sql2_z_p.err_s=sql2_z_p.substring2_s(e_ni.getMessage(),7); //VER26.1
+//SS //P sql2_z_p.db_error_s=""+sql2_z_p.db_c+sql2_z_p.substring3_s(e_ni.Message,0,5); //VER26.1
+//JJ     sql2_z_p.db_error_s=""+sql2_z_p.db_c+e_ni.getSQLState();
+//JP_P if     (sql2_z_p.e4s_b(sql2_z_p.db_error_s,"P42710","P42P06","P42P07"))sql2_z_p.db_i_error_s="EXIST";
+//JP_P else if(sql2_z_p.e5s_b(sql2_z_p.db_error_s,"P3F000","P42704","P42883","P42P01"))sql2_z_p.db_i_error_s="NOT_EXIST";
+//JP_P else if(sql2_z_p.e2s_b(sql2_z_p.db_error_s,"P23505"))sql2_z_p.db_i_error_s="DUPLICATE_KEY";
+//JP                return;}
+//SS //X int start,stop;
+//SS //X sql2_z_p.err_s=e_ni.Message;
+//SS //X if(0<e_ni.Errors.Count)sql2_z_p.db_error_s=""+sql2_z_p.db_c+e_ni.Errors[0].NativeError.ToString();
+//SS //X if(!sql2_z_p.e2s_b(""+sql2_z_p.db_c+"0",sql2_z_p.db_error_s)||!sql2_z_p.starts_with_b(e_ni.Message,"ORA-"))return;
+//SS //X for(start=4;;start++)if(e_ni.Message.Length<=start)return;else if('0'!=e_ni.Message[start])break;
+//SS //X if(-1==(stop=sql2_z_p.index3c_i(e_ni.Message,':',start)))return;
+//SS //X sql2_z_p.db_error_s=""+sql2_z_p.db_c+sql2_z_p.substring3_s(e_ni.Message,start,stop-start);
+}
+//--------------------------------------------------------
+public int transaction(int commit_ii,String s_i)
+{int sql2_rc=0;
+if(sql2_z_p.NOT_TRANSACTION==commit_ii)return 0;//TRANSACTION処理しない
+if(1==sql2_sw_transaction)
+  {
+//SJ try{
+     if(sql2_z_p.COMMIT==commit_ii)
+         {sql2_z_mt_p.trace_v(0,":#####(COMMIT TRANSACTION)"+s_i+"#####:");
+//HP      db_nn.commit();
+//SS      Transaction_n.Commit();
+//JJ      Connection_n.commit();
+         }
+       else
+         {sql2_z_mt_p.trace_v(0,":#####(ROLLBACK TRANSACTION)"+s_i+"#####:");
+//HP      db_nn.rollback();
+//SS      Transaction_n.Rollback();
+//JJ      Connection_n.rollback();
+         }
+//JJ   exception_s="setAutoCommit(true)";Connection_n.setAutoCommit(true);
+//SJ      }//try
+//SJ catch(Exception){}//(VER10.1)//
+sql2_sw_transaction=0;
+  }
+return sql2_rc;
+}
+//--------------------------------------------------------
+public void close_v(int commit_ii){close_v(commit_ii,"");}
+public void close_v(int commit_ii,String s_i)
+{transaction(commit_ii,s_i);
+//SJ if(SQL2_OFF_0!=sql2_sw_sql)
+//SJ  {try{Connection_n.Close();}catch(Exception){}
+//SJ  }
+sql2_sw_sql=SQL2_OFF_0;
+}
+//COPY *END
+//COPY $II_URL
+//COPY $II_ZIP
+//COPY $II_CGI
+//COPY $II_WRITE
+}
+#endif //MENU||TIME
+//SS //D #endif
+//SS //F #endif
+//SS //H #endif
+//SS //I #endif
+//SS //L #endif
+//SS //O #endif
+//SS //P #endif

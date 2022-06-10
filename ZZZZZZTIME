@@ -1,0 +1,26 @@
+#!/bin/sh
+#(ZZZZZZTIME)
+umask 0000
+if test "$5" = "";then exit 0;fi
+i_exit=/home/I/I.$4/TMP_$3/$5.EXIT
+echo START ZZZZZZETC > $i_exit
+# 1=i_ver 2=i_lang (shift;shift)
+i_ver=$1
+i_lang=$2
+shift;shift
+#shift2/ 1={REAL,TEST} 2=system 3=work 4=hh 5=mm 6=TODAY 7=/      8=(unix_queue) 9=jdbc
+#shift2/ 1={REAL,TEST} 2=system 3=work 4=hh 5=mm 6=NEXT  7=mmddyy 8=(unix_queue) 9=jdbc
+#shift2/ 1={REAL,TEST} 2=system 3=work 4=hh 5=mm 6=job   7=option 8=client       9=jdbc
+if test "$9" = "";then exit 1;fi
+TIMEOUT_CONNECT=30;TIMEOUT_SQL=600
+if test "$6" = "NEXT";then NEXT=$7;HH=99;MM=99;
+else                       NEXT="";HH=$4;MM=$5;fi
+if test -f /home/I/BIN${i_ver}/IJAVA.jar
+  then mono_java="java -cp /home/I/BIN${i_ver}/IJAVA.jar:/home/I/BIN${i_ver}/$9 itime_l"
+  else mono_java="mono /home/I/I.$2/BIN/ITIMEU4.EXE"
+fi 
+if test "$6" = "TODAY" -o  "$6" = "NEXT"
+  then echo $mono_java $i_lang $TIMEOUT_CONNECT $TIMEOUT_SQL $1 $2 $3 $HH $MM / AT|at -q $8 $4:$5 $NEXT 
+  else      $mono_java $i_lang $TIMEOUT_CONNECT $TIMEOUT_SQL $1 $2 $3 $4 $5 $6 $7 -$8 &
+fi
+echo !!! > $i_exit

@@ -1,0 +1,1333 @@
+// II_SQL.SRC sql share class author nobumichi harasawa
+#if IMENU||ITIME //TEST
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//SS using System.Data.SqlClient;
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.Drawing;
+//SS using System.IO;
+//JJ import java.awt.*;
+//JJ import java.awt.event.*;
+//JJ import java.io.*;
+//JJ import java.math.*;
+//JJ import java.util.*;
+//SS delegate int sql(List<String> s_data_ai,String command_si,String user_id_si,String passwd_si
+//SS      ,String sql_si,String file_si,String add_si,String encode_si,String login_si);
+//SS delegate void transaction_v(int commit_ii);
+//SS delegate void close_v(int commit_ii);
+//======================================================
+
+public class ii_sql_l
+{
+//SS sql sql_g= null ; close_v close_g= null ;
+//SS ii_sql2m_l sql2m_n;
+#if P
+//SS ii_sql2p_l sql2p_n;
+#endif
+#if O
+//SS ii_sql2o_l sql2o_n;
+#endif
+#if I
+//SS ii_sql2i_l sql2i_n;
+#endif
+#if L
+//SS ii_sql2l_l sql2l_n;
+#endif
+//SS ii_sql2x_l sql2x_n;
+#if F
+//SS ii_sql2f_l sql2f_n;
+#endif
+#if H
+//SS ii_sql2h_l sql2h_n;
+#endif
+#if D
+//SS ii_sql2d_l sql2d_n;
+#endif
+//JP  ii_sql2_l sql2_n;
+int sw_sql=0;
+public readonly int DATA_NAME=0,DEFAULT_TYPE=1,DEFAULT_LENGTH1=2,DEFAULT_LENGTH2=3
+,DEFAULT=4,NULL_NULL=5,NO=6,TYPE1=7,TYPE2=8,LENGTH1=9,LENGTH2=10
+,TITLE=11,MESSAGE=12,CHECK_X=13,CHECK61=14,CHECK62=15,CHECK63=16
+,CHECK64=17,CHECK65=18,CHECK66=19,DICTIONARY_TYPE=20,DICTIONARY_LENGTH1=21
+,DICTIONARY_LENGTH2=22;
+String define_table_top_s="",define_table_top2_s="",define_table_top_sys_s="",
+define_table_use_s="",define_table_real_test_s="REAL"
+,define_table_mast_work_s="",define_table_name_s="",define_table_user_s="",define_table_permission_s="",
+define_table_name_user_s="",usr_s=""
+,user_s="",grant_revoke_s="",grant_s="",err_s="",db_error_s="",object_kind_s="",login_id_s=""
+,real_s="";
+String[] char_decimal_sx?=?{"CHAR","DECIMAL","VARCHAR","VARCHAR2","NCHAR","NVARCHAR","NVARCHAR2","MCHAR","MVARCHAR"};
+ii_z_l z_p;ii_z_mt_l z_mt_p;
+readonly String[] Z_NAME_SX?=?{"Z_CANCEL","Z_CANCEL_PERSON","Z_CHANGE","Z_CHANGE_PERSON","Z_ADD"
+                               ,"Z_ADD_PERSON","Z_LAST_COMPUTER","Z_LAST_JOB"
+                              };
+public String[] z_value_sx?=?{"0","0","0","0","0","0","0","0"};
+public List<String> s_table_a=new List<String>();
+public List<String> s_index_a=new List<String>();
+public List<String> s_sql_a=new List<String>();
+public List<String> s_types_a=new List<String>();
+//--------------------------------------------------------
+public ii_sql_l(ii_z_l z_ni,ii_z_mt_l z_mt_ni){z_p=z_ni;z_mt_p=z_mt_ni;}
+//--------------------------------------------------------
+public int sql_dbo_zzzz1(String sql_si) //ツール用SQL
+{return sql(s_sql_a,"SQL","REAL","DBO","ZZZZ",sql_si,"","","","");}
+//--------------------------------------------------------
+public int sql_dbo_zzzz2(List<String> s_ai,String sql_si) //ツール用SQL
+{return sql(s_ai,"SQL","REAL","DBO","ZZZZ",sql_si,"","","","");}
+//--------------------------------------------------------
+public int sql_dbo_zzzz_real_test(String sql_si) //ツール用SQL
+{return sql(s_sql_a,"SQL",z_p.test_s,"DBO","ZZZZ",sql_si,"","","","");}
+//--------------------------------------------------------
+public int sql_usr2(String sql_si,String usr_si)//プログラム用usr or dbo SQL(s_sql_a)
+{return sql_usr3(s_sql_a,sql_si,usr_si);}
+//--------------------------------------------------------
+public int sql_usr3(List<String> s_ai,String sql_si,String usr_si)//プログラム用usr or dbo SQL(a_ai)
+{return sql(s_ai,"SQL",z_p.real_test_s,usr_si,"",sql_si,"","","","");}
+//--------------------------------------------------------
+//--------------------------------------------------------
+public int sql_sel(List<String> s_ai,String usr_si,String test_si,String sql_si)//SQL=用SQL
+{return sql(s_ai,"SQL",(z_p.e2s_b(test_si,"")?z_p.real_test_s:test_si),
+           usr_si,z_mt_p.program_p.sql_permission_s,sql_si,"","","","");
+}
+//--------------------------------------------------------////
+//--------------------------------------------------------
+//***( SQL MAIN )***
+public int sql(List<String> s_ai,String option_si,String real_si,String usr_si,String permission_si,String sql_si,String file_si,String add_si,String encording_si,String login_si)
+{
+if(z_p.e4s_b(usr_si,"DBO","INP","OUT"))
+  {login_id_s=get_login_id_s(real_si,usr_si,(z_p.e2s_b(permission_si,"")?z_mt_p.sql_permission_s():permission_si));
+   real_s=real_si;
+  }
+else
+ {login_id_s=(z_p.e2s_b(usr_si,"LOGIN")?(!z_p.e2s_b(z_mt_p.program_p.login_id_s,"")?z_mt_p.program_p.login_id_s:z_mt_p.db_n.admin_s):usr_si);
+  real_s="";
+ } 
+String s=z_p.upper_s(option_si);
+if(z_p.e2s_b(sql_si,"")&&z_p.starts_with_b(s,"SQL")){z_p.err_s="sql is null";return 9;}
+//ii_zz_l sql_s_n=new ii_zz_l();sql_s_n.s=sql_si;
+try{
+    if(0==sw_sql)
+      {if(' '!=z_p.db_c)sw_sql=1;
+//SS   if     ('M'==z_p.db_c)sql_mssql();
+#if O
+//SS   else if('O'==z_p.db_c)sql_oracle();
+#endif
+#if I
+//SS   else if('I'==z_p.db_c)sql_ibmdb2();
+#endif
+#if P
+//SS   else if('P'==z_p.db_c)sql_postgresql();
+#endif
+#if L
+//SS   else if('L'==z_p.db_c)sql_mysql();
+#endif
+#if F
+//SS   else if('F'==z_p.db_c)sql_symfoware();
+#endif
+#if H
+//SS   else if('H'==z_p.db_c)sql_hirdb();
+#endif
+#if D
+//SS   else if('D'==z_p.db_c)sql_firebird();
+#endif
+//SS   else sql_odbc();
+//JP   sql2_n=new ii_sql2_l(z_p,z_mt_p);
+      }
+   }
+catch(Exception e_ni){z_p.err_s="rdbms("+z_p.to_c_s(z_p.db_c)+")"+z_p.message_s(e_ni);return 5;}
+if(0==sw_sql){z_p.err_s="not ready (rdbms)";return 5;}
+int rc=0;
+
+try{
+//SS rc=sql_g
+//JP rc=sql2_n.sql
+     (s_ai,option_si,login_id_s
+    ,(z_p.e2s_b(real_s,"")?z_mt_p.program_p.login_password_s:z_mt_p.password_s(real_s))
+     ,sql_si,file_si,add_si,encording_si,login_si);
+   }
+catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);rc=z_p.SW_ERROR_5;}
+return rc;
+}
+//SS void      sql_mssql(){sql2m_n=new ii_sql2m_l(z_p,z_mt_p);sql_g=new sql(sql2m_n.sql);close_g=new close_v(sql2m_n.close_v);}
+#if O
+//SS void     sql_oracle(){sql2o_n=new ii_sql2o_l(z_p,z_mt_p);sql_g=new sql(sql2o_n.sql);close_g=new close_v(sql2o_n.close_v);} 
+#endif
+#if I
+//SS void     sql_ibmdb2(){sql2i_n=new ii_sql2i_l(z_p,z_mt_p);sql_g=new sql(sql2i_n.sql);close_g=new close_v(sql2i_n.close_v);} 
+#endif
+#if P
+//SS void sql_postgresql(){sql2p_n=new ii_sql2p_l(z_p,z_mt_p);sql_g=new sql(sql2p_n.sql);close_g=new close_v(sql2p_n.close_v);}
+#endif
+#if L
+//SS void      sql_mysql(){sql2l_n=new ii_sql2l_l(z_p,z_mt_p);sql_g=new sql(sql2l_n.sql);close_g=new close_v(sql2l_n.close_v);}
+#endif
+//SS void       sql_odbc(){sql2x_n=new ii_sql2x_l(z_p,z_mt_p);sql_g=new sql(sql2x_n.sql);close_g=new close_v(sql2x_n.close_v);}
+#if F
+//SS void       sql_symfoware(){sql2f_n=new ii_sql2f_l(z_p,z_mt_p);sql_g=new sql(sql2f_n.sql);close_g=new close_v(sql2f_n.close_v);}
+#endif
+#if H
+//SS void       sql_hirdb(){sql2h_n=new ii_sql2h_l(z_p,z_mt_p);sql_g=new sql(sql2h_n.sql);close_g=new close_v(sql2h_n.close_v);}
+#endif
+#if D
+//SS void       sql_firebird(){sql2d_n=new ii_sql2d_l(z_p,z_mt_p);sql_g=new sql(sql2d_n.sql);close_g=new close_v(sql2d_n.close_v);}
+#endif
+//--------------------------------------------------------
+public String sql_date_s(){return z_p.substring3_s(sql_time_s(),0,8);}
+//--------------------------------------------------------
+public String sql_time_s()
+{if(0==sw_sql)return z_p.date_time_s(z_p.date_time_now_s(),0); 
+if(0==sql_usr2("SELECT "+z_mt_p.db_n.now17_s+" "+z_p.replace_s_s(z_mt_p.db_n.from_dual_s,"*",z_p.system_s+z_p.substring3_s(z_p.real_test_s,0,1)),z_p.inp_out_s))
+   {if(0<z_p.count_s_i(s_sql_a)&&8<=z_p.length(z_p.at_s(s_sql_a,0)))return (z_p.at_s(s_sql_a,0));
+   }
+return "????????????????";
+}
+//--------------------------------------------------------
+public int create_table(String table_si,String key_si,String data_si,String public_si,String usr_si,String cmd2_s)
+{int rc=0;ii_zz_l ww_keys_s_n=new ii_zz_l();ii_zz_l ww_sql_s_n=new ii_zz_l();ii_zz_l ww_sep_s_n=new ii_zz_l();
+if(!define_table_b(table_si,usr_si))return 9;
+ww_sql_s_n.s="CREATE TABLE "+table_si+"(";
+if(z_p.e2s_b(cmd2_s,"CREATE_TABLE2")){ww_sep_s_n.s="";}
+else{ww_sql_s_n.s+=z_mt_p.z_create_s();ww_sep_s_n.s=",";}
+if(!z_p.e2s_b(key_si,""))if(0!=(rc=create_table(ww_sql_s_n,ww_keys_s_n,z_p.split_sx(key_si,','),"K",usr_si,ww_sep_s_n,0,cmd2_s)))return rc;  
+if(!z_p.e2s_b(data_si,""))if(0!=(rc=create_table(ww_sql_s_n,ww_keys_s_n,z_p.split_sx(data_si,','),"",usr_si,ww_sep_s_n,0,cmd2_s)))return rc;  
+ww_sql_s_n.s+=") "+z_mt_p.db_n.rd_data_s;
+if(0!=(rc=sql_usr2(ww_sql_s_n.s,usr_si)))return rc;//テーブル作成。
+if('F'==z_p.db_c)if(0!=(rc=f_table_dso_dsi(table_si,usr_si)))return rc;///"F"はDSO 及びDSI設定
+if(!z_p.e2s_b(ww_keys_s_n.s,""))return create_index(table_si,"0",ww_keys_s_n.s,"UNIQUE",usr_si,0);//インデックス作成。
+//HP delete ww_keys_s_n;delete ww_sql_s_n;delete ww_sep_s_n;
+return rc;
+}
+//----------------------------
+int f_table_dso_dsi(String table_si,String usr_si)
+{String sql_s;int rc=0;
+sql_s="CREATE DSO "+define_table_name_s+"DSO FROM "+table_si+" TYPE SEQUENTIAL(PAGESIZE(16),ORDER(1))";
+if(0!=(rc=sql_usr2(sql_s,usr_si)))return rc;//DSO作成。
+sql_s="CREATE DSI "+define_table_name_s+"DSI DSO "+define_table_name_s+"DSO ALLOCATE DATA ON "
+      +define_table_top2_s+" SIZE 400K,FORMAT";
+if(0!=(rc=sql_usr2(sql_s,usr_si)))return rc;//DSI作成。
+return 0;
+}
+//--------------( sw_ii(0=create table用,1=declare用)  ------------------------------------------
+public int create_table(ii_zz_l sql_s_ni,ii_zz_l keys_s_ni,String[] s_sxi,String k_si,String usr_si,ii_zz_l sep_s_ni,int sw_ii,String cmd2_si)  
+{String declare_s="";
+if(1==sw_ii)declare_s=keys_s_ni.s; 
+int i,cnt=0,rc=0;String type_long_s="";
+List<String> s_ww_a=new List<String>();
+for(i=0;i<z_p.count_sx_i(s_sxi);i+=cnt)
+  {String length_s="",length2_s="";
+   if(0==sw_ii)if(!z_p.e2s_b(k_si,""))keys_s_ni.s+=(z_p.e2s_b(keys_s_ni.s,"")?"":",")+z_p.dot_string_s(s_sxi[i]);//列名設定
+   type_long_s=((i+1)<z_p.count_sx_i(s_sxi)?get_type_long_s(z_p.trim_s(s_sxi[i+1])):"");//型設定
+   if(z_p.e2s_b(type_long_s,"DECIMAL"))cnt=4;
+   else if(z_p.e9s_b(type_long_s,"CHAR","VARCHAR","VARCHAR2","NCHAR","NVARCHAR","NVARCHAR2","MCHAR","MVARCHAR"))cnt=3;
+   else
+     {cnt=2;
+      if(z_p.e2s_b(type_long_s,"*"))//データ辞書より属性設定。
+        {String sql_s;
+         sql_s="SELECT SYSTEM_DEFAULT_TYPE,SYSTEM_DEFAULT_LENGTH1,SYSTEM_DEFAULT_LENGTH2 FROM "
+         +m_real_dbo_zzzzzz_s()+"_I_DICTIONARY_TABLE WHERE SYSTEM_DATA_NAME="
+         +z_mt_p.db_n.n_s+"'"+z_p.trim_s(s_sxi[i])
+         +"' AND SYSTEM_LANG='"+z_p.lang_system_s+"' AND Z_CANCEL=' '";
+         /* +" AND SYSTEM_PERMISSION='"+define_table_permission_s+"'"; */ // VER22.1 VER36.6.0.3
+         rc=sql(s_ww_a,"SQL","REAL",usr_si,"",sql_s,"","","","");//"REAL"で実行する。
+         if(0!=rc||3!=z_p.count_s_i(s_ww_a)){z_p.err_s="not found dictionary ("+s_sxi[i]+")";return 5;}
+         type_long_s=z_p.at_s(s_ww_a,0);length_s=z_p.at_s(s_ww_a,1);length2_s=z_p.at_s(s_ww_a,2);
+         sql_s_ni.s+=sep_s_ni.s+define_s(z_p.dot_string_s(s_sxi[i]),type_long_s,length_s,length2_s,"*","*",declare_s);//設定結果追加。
+         if(0==sw_ii)sep_s_ni.s=",";
+         continue;
+        }
+      z_p.to_int_check(type_long_s,'0',0,0);//名前の次が即数値の場合はNCHAR
+      if(z_p.return_b)
+        {type_long_s="NCHAR";length_s=((i+1)<z_p.count_sx_i(s_sxi)?z_p.trim_s(s_sxi[i+1]):"0");
+        }
+     } 
+  if((i+cnt)>z_p.count_sx_i(s_sxi)){z_p.err_s=" define count miss table("+define_table_name_s+")";return 5;}
+  if(z_p.e2s_b(z_p.trim_s(s_sxi[i]),""))
+    {z_p.err_s="define_s("+define_table_name_s+")["+z_p.to_i_s(i)+"]data name is null";return 5;}
+  if(!z_p.e2s_b(cmd2_si,"CREATE_TABLE0")) //VER22.1 予約語判定
+    {String sql_s;
+     sql_s="SELECT 0 FROM "+m_real_dbo_zzzzzz_s()+"_ETC_TABLE WHERE SYSTEM_KEY1='ZZZZZZ_RESERVED' AND SYSTEM_KEY2="
+       +z_mt_p.db_n.n_s+"'"+z_p.trim_s(s_sxi[i])+"'  AND Z_CANCEL=' '";
+         rc=sql(s_ww_a,"SQL","REAL",usr_si,"",sql_s,"","","","");//"REAL"で実行する。
+       if(0!=rc||0!=z_p.count_s_i(s_ww_a)){z_p.err_s="SQL reserved word ("+s_sxi[i]+")";return 5;}
+    }
+  if(2<cnt)
+    {z_p.to_int_check(z_p.trim_s(s_sxi[i+2]),'0',0,0);
+     if(!z_p.return_b)
+       {z_p.err_s="define_s("+define_table_name_s+")["+z_p.to_i_s(i)+"]not digit or zero("+z_p.trim_s(s_sxi[i+2])+")";
+        return 5;
+       }
+     else length_s=z_p.trim_s(s_sxi[i+2]);
+    }
+  if(3<cnt)
+    {z_p.to_int_check(z_p.trim_s(s_sxi[i+3]),'+',0,0);
+     if(!z_p.return_b)
+       {z_p.err_s="define_s("+define_table_name_s+")["+z_p.to_i_s(i)+"]not digit("+z_p.trim_s(s_sxi[i+3])+")";
+        return 5;
+       }
+     else length2_s=z_p.trim_s(s_sxi[i+3]);
+    }
+   sql_s_ni.s+=sep_s_ni.s+define_s(z_p.dot_string_s(s_sxi[i]),type_long_s,length_s,length2_s,"*","*",declare_s);//設定結果追加。
+   if(0==sw_ii)sep_s_ni.s=",";
+  }
+//HP z_p.clear_s_v(s_ww_a);
+return 0;
+}
+//--------------------------------------------------------
+//***( s_table_a,s_index_a より tableを作成 )***
+public int create_table(String table_si,String public_si,String usr_si)
+{int i,rc=0;String index_s="",unique_s="",keys_s="";
+if(!define_table_b(table_si,usr_si))return 9;
+String sep_s="",sql_s="CREATE TABLE "+table_si+"(";
+z_p.clear_s_v(s_types_a);
+for(i=0;i<z_p.count_s_i(s_table_a);i+=7)
+ {if(!z_p.e2s_b(z_p.at_s(s_table_a,i+6),""))keys_s+=(z_p.e2s_b(keys_s,"")?"":",")+z_p.at_s(s_table_a,i);
+  sql_s+=sep_s+define_s(z_p.at_s(s_table_a,i),z_p.at_s(s_table_a,i+1),z_p.at_s(s_table_a,i+2)
+  ,z_p.at_s(s_table_a,i+3),z_p.at_s(s_table_a,i+4),z_p.at_s(s_table_a,i+5),"");sep_s=",";
+ }
+sql_s+=")";
+if(0!=(rc=sql_usr2(sql_s,usr_si)))return rc;
+if('F'==z_p.db_c)if(0!=(rc=f_table_dso_dsi(table_si,usr_si)))return rc;///"F"はDSO 及びDSI設定
+keys_s="";
+for(i=0;;i+=3)
+ {if(i>=z_p.count_s_i(s_index_a)||(i<z_p.count_s_i(s_index_a)&&!z_p.e2s_b(index_s,z_p.at_s(s_index_a,i))))
+   {if(!z_p.e2s_b(keys_s,""))if(0!=create_index(table_si,index_s,keys_s,unique_s,usr_si,0))return 5;
+    if(i>=z_p.count_s_i(s_index_a))break;
+    index_s=z_p.at_s(s_index_a,i);
+    unique_s=(z_p.e2s_b(z_p.at_s(s_index_a,i+1),"0")?"UNIQUE":"");
+    keys_s=z_p.at_s(s_index_a,i+2);
+   }
+  else keys_s+=","+z_p.at_s(s_index_a,i+2); 
+ }
+return rc;
+}
+//--------------------------------------------------------
+//***( s_index_a（IX,NO,NAME) にインデックス情報が設定される )*** 
+int get_index(String usr_si)
+{String sql_s;
+if('F'!=z_p.db_c)
+   sql_s=link_set_b("SELECT SYSTEM_IX,SYSTEM_NO,SYSTEM_DATA_NAME FROM"
+   ,('L'==z_p.db_c?z_p.lower_s(define_table_top_sys_s):define_table_top_sys_s)
+    +"ZZZZZZ_"+z_p.substring3_s(define_table_mast_work_s,0,1)+"_"
+    +define_table_permission_s+"_INDEX_VIEW"
+   ,"XX","WHERE SYSTEM_NAME='"+define_table_name_s+"'")//リンクサーバー対応でz_mt_p.db_n.n_sを取る。
+   +(!z_p.e2s_b(define_table_user_s,"")?" AND SYSTEM_USER_X='"+define_table_user_s+"'":"")
+   +" ORDER BY SYSTEM_IX,SYSTEM_NO";
+else sql_s="SELECT SUBSTRING(REVERSE(TRIM(I.INDEX_DSO_NAME)) FROM 1 FOR 1),U.ORDINAL_POSITION,C.COLUMN_NAME"
+   +f_column_view_s()+f_index_view_s()
+   +" WHERE T.TABLE_NAME="+"'"+define_table_name_s+"'"//リンクサーバー対応でz_mt_p.db_n.n_sを取る。
+   +f_where_db_schema_s()+" AND U.ORDINAL_POSITION IS NOT NULL ORDER BY 1,2";
+if(z_p.e3c_b(z_p.db_c,'O','H')&&(!z_p.e2s_b(z_p.real_test_s,"REAL")||
+      !z_p.e2s_b(define_table_real_test_s,"REAL")))
+     return sql_dbo_zzzz2(s_index_a,sql_s);//REAL_DBO_ZZZZで実行。
+else return sql(s_index_a,"SQL","REAL",usr_si,"",sql_s,"","","","");//"REAL"で実行する。
+}
+//--------------------------------------------------------
+public String link_set_b(String s2_si,String s3_si,String s4_si,String s5_si)
+{String[] w_sx;w_sx=z_p.split_sx(s3_si,'.');
+ if('M'==z_p.db_c&&4==z_p.count_sx_i(w_sx))return "SELECT * FROM OPENQUERY("+w_sx[0]+",'"
+   +z_p.replace_s_s(s2_si+" "+w_sx[1]+(z_p.e2s_b(w_sx[1],"")?"":".")+w_sx[2]+(z_p.e2s_b(w_sx[2],"")?"":".")+w_sx[3]+" "+s4_si+" "
+   +s5_si,"'","''")+"') "+(z_p.e2s_b(s4_si,"")?"":"AS ")+s4_si;
+  else return s2_si+" "+s3_si+" "+s4_si+" "+s5_si; 
+}
+//--------------------------------------------------------
+//***( s_table_a,s_index_a にテーブル情報、インデックス情報が設定される )***
+public int get_table(String table_si,int sw_ii,String usr_si)
+{int rc=0;
+define_table_b(table_si,usr_si);
+if(0!=(rc=get_table(sw_ii,usr_si)))return rc;
+if(0!=sw_ii)rc=get_index(usr_si);
+return rc;
+}
+//--------------------------------------------------------
+//***( s_table_a にディクショナリ情報が設定される )*** 
+int get_dictionary(String data_name_si,String usr_si,String permission_si)
+{int rc;List<String> s_ww_a=new List<String>();  
+String sql_s;
+if(-1!=z_p.index2sx_i(Z_NAME_SX,data_name_si))
+   {z_p.add_s(s_ww_a,data_name_si);z_p.add_s(s_ww_a,"CHAR");
+    z_p.add_s(s_ww_a,(z_p.e4s_b(data_name_si,"Z_ADD","Z_CHANGE","Z_CANCEL")?"17":
+                (z_p.ends_with_b(data_name_si,"_PERSON")?"8":
+                (z_p.e2s_b(data_name_si,"Z_LAST_COMPUTER")?"15":"10"))));
+    z_p.add_s(s_ww_a,"0");z_p.add_s(s_ww_a," ");
+    z_p.add_s(s_ww_a,"0");z_p.add_s(s_ww_a," ");
+    z_p.add_s(s_ww_a,(z_p.e4s_b(data_name_si,"Z_ADD","Z_CHANGE","Z_CANCEL")?"T":" "));
+    z_p.add_s(s_ww_a," ");
+    z_p.add_s(s_ww_a,"0");z_p.add_s(s_ww_a,"0");z_p.add_s(s_ww_a,data_name_si);z_p.add_s(s_ww_a," ");z_p.add_s(s_ww_a," ");z_p.add_s(s_ww_a," ");
+    z_p.add_s(s_ww_a," ");z_p.add_s(s_ww_a," ");z_p.add_s(s_ww_a," ");z_p.add_s(s_ww_a," ");z_p.add_s(s_ww_a," ");z_p.add_s(s_ww_a,"CHAR");
+    z_p.add_s(s_ww_a,(z_p.e4s_b(data_name_si,"Z_ADD","Z_CHANGE","Z_CANCEL")?"17":
+                (z_p.ends_with_b(data_name_si,"_PERSON")?"8":
+                (z_p.e2s_b(data_name_si,"Z_LAST_COMPUTER")?"15":"10"))));
+    z_p.add_s(s_ww_a,"0");
+   }
+else
+{sql_s="SELECT T.SYSTEM_DATA_NAME,T.SYSTEM_DEFAULT_TYPE,T.SYSTEM_DEFAULT_LENGTH1,T.SYSTEM_DEFAULT_LENGTH2"
+    +z_p.DUMMY_S+",CASE WHEN T.SYSTEM_DEFAULT_TYPE IN('INT','DECIMAL','FLOAT') THEN '(0)'"
+    +z_p.DUMMY_S+" WHEN T.SYSTEM_DEFAULT_TYPE IN('DATETIME','TIMESTAMP') THEN '"+z_mt_p.db_n.now0_s+"'"
+    +z_p.DUMMY_S+" WHEN T.SYSTEM_DEFAULT_TYPE IN('DATE') THEN '"+z_mt_p.db_n.now_date_s+"' ELSE ''' ''' END"
+    +z_p.DUMMY_S+",'0',' '"+",T.SYSTEM_TYPE1,T.SYSTEM_TYPE2,T.SYSTEM_LENGTH1,T.SYSTEM_LENGTH2,T"
+    +z_p.DUMMY_S+(!z_p.e2s_b(z_p.lang_s,z_p.lang_system_s)?"1":"")+z_p.DUMMY_S+".SYSTEM_TITLE,T"
+    +z_p.DUMMY_S+(!z_p.e2s_b(z_p.lang_s,z_p.lang_system_s)?"1":"")+z_p.DUMMY_S+".SYSTEM_MESSAGE"
+   +z_p.DUMMY_S+",T.SYSTEM_CHECK,T.SYSTEM_CHECK61,T.SYSTEM_CHECK62,T.SYSTEM_CHECK63,T.SYSTEM_CHECK64,T.SYSTEM_CHECK65,T.SYSTEM_CHECK66"
+   +z_p.DUMMY_S+",T.SYSTEM_DEFAULT_TYPE,T.SYSTEM_DEFAULT_LENGTH1,T.SYSTEM_DEFAULT_LENGTH2"
+   +z_p.DUMMY_S+" FROM  "+m_real_dbo_zzzzzz_s()+"_I_DICTIONARY_TABLE T"
+    +(!z_p.e2s_b(z_p.lang_s,z_p.lang_system_s)?
+     " LEFT JOIN "+m_real_dbo_zzzzzz_s()+"_I_DICTIONARY_TABLE T1 ON T1.SYSTEM_LANG='"+z_p.lang_s
+    +"' AND T1.SYSTEM_DATA_NAME=T.SYSTEM_DATA_NAME " /*AND T1.SYSTEM_PERMISSION=T.SYSTEM_PERMISSION "*/ //VER22.1 VER36.6.0.3
+    +z_p.DUMMY_S+" AND T1.Z_CANCEL=' '":"")
+    +z_p.DUMMY_S+" WHERE T.SYSTEM_LANG='"+z_p.lang_system_s+"' AND T.SYSTEM_DATA_NAME="+z_mt_p.db_n.n_s+"'"+data_name_si
+    +"' AND T.Z_CANCEL=' '"
+    +z_p.DUMMY_S+"  AND T.SYSTEM_PERMISSION='"+permission_si+"'"; //VER22.1
+   if(0!=(rc=sql(s_ww_a,"SQL","REAL",usr_si,"",sql_s,"","","","")))return rc;//"REAL"で実行する。
+   if(0==z_p.db_record_cnt)//REAL_DBO_ZZZZで実行。
+     {z_p.db_error_s=z_mt_p.db_n.not_found_s;z_p.err_s="not found dictionary ("+data_name_si+")";return 1;}
+}
+//HP z_p.to_sa_v(s_table_a,s_ww_a);
+//SJ s_table_a=z_p.to_sa_sa(s_ww_a);
+//HP delete s_ww_a;
+return 0;
+}
+//--------------------------------------------------------
+//***( s_table_a,sw_ii=0(DATA,TYPE) 1=(DATA,TYPE,LEN,LEN2,NO) 2=1+dictionary にテーブル情報が設定される ) 
+int get_table(int sw_ii,String usr_si)
+{int rc;
+List<String> s_ww_a=new List<String>();bool sw_link_b=false;  
+String[] w_sx;String top_sys_s=define_table_top_sys_s;
+String sql_s;
+w_sx=z_p.split_sx(top_sys_s,'.');
+if('M'==z_p.db_c&&4==z_p.count_sx_i(w_sx))
+ {sw_link_b=true;top_sys_s=w_sx[1]+(z_p.e2s_b(w_sx[1],"")?"":".")+w_sx[2]+".";}
+if('F'!=z_p.db_c)
+  {sql_s="SELECT C.SYSTEM_DATA_NAME,C.SYSTEM_DEFAULT_TYPE"+
+   (0==sw_ii?"":('P'!=z_p.db_c?",C.SYSTEM_DEFAULT_LENGTH1,C.SYSTEM_DEFAULT_LENGTH2"
+   :",CASE WHEN C.SYSTEM_DEFAULT_LENGTH1>0 THEN C.SYSTEM_DEFAULT_LENGTH1" // PostgreSQL VIEW 対応 LENGTH1<0
+   +z_p.DUMMY_S+" ELSE COALESCE(T.SYSTEM_DEFAULT_LENGTH1,0) END"
+   +z_p.DUMMY_S+",CASE WHEN C.SYSTEM_DEFAULT_LENGTH1>0 THEN C.SYSTEM_DEFAULT_LENGTH2" // PostgreSQL VIEW 対応 LENGTH1<0
+   +z_p.DUMMY_S+" ELSE COALESCE(T.SYSTEM_DEFAULT_LENGTH2,0) END")
+   +z_p.DUMMY_S+",C.SYSTEM_DEFAULT,C.SYSTEM_NULL,I.SYSTEM_NO")
+   +z_p.DUMMY_S+(2!=sw_ii?"":",T.SYSTEM_TYPE1,T.SYSTEM_TYPE2,T.SYSTEM_LENGTH1,T.SYSTEM_LENGTH2,T"
+   +z_p.DUMMY_S+(!z_p.e2s_b(z_p.lang_s,z_p.lang_system_s)?"1":"")+z_p.DUMMY_S+".SYSTEM_TITLE,T"
+   +z_p.DUMMY_S+(!z_p.e2s_b(z_p.lang_s,z_p.lang_system_s)?"1":"")+z_p.DUMMY_S+".SYSTEM_MESSAGE"
+   +z_p.DUMMY_S+",T.SYSTEM_CHECK,T.SYSTEM_CHECK61,T.SYSTEM_CHECK62,T.SYSTEM_CHECK63,T.SYSTEM_CHECK64,T.SYSTEM_CHECK65,T.SYSTEM_CHECK66"
+   +z_p.DUMMY_S+",T.SYSTEM_DEFAULT_TYPE,T.SYSTEM_DEFAULT_LENGTH1,T.SYSTEM_DEFAULT_LENGTH2")
+   +z_p.DUMMY_S+" FROM "+('L'==z_p.db_c?z_p.lower_s(top_sys_s):top_sys_s)
+   +"ZZZZZZ_"+z_p.substring3_s(define_table_mast_work_s,0,1)+"_"+define_table_permission_s+"_COLUMN_VIEW  C"
+   +z_p.DUMMY_S+(0==sw_ii?"":" LEFT JOIN "+('L'==z_p.db_c?z_p.lower_s(top_sys_s):top_sys_s)
+   +"ZZZZZZ_"+z_p.substring3_s(define_table_mast_work_s,0,1)
+   +"_"+define_table_permission_s
+   +"_INDEX_VIEW I ON C.SYSTEM_NAME=I.SYSTEM_NAME AND C.SYSTEM_USER_X=I.SYSTEM_USER_X"
+   +z_p.DUMMY_S+" AND I.SYSTEM_IX='0'" 
+   +z_p.DUMMY_S+" AND C.SYSTEM_DATA_NAME=I.SYSTEM_DATA_NAME")
+   +z_p.DUMMY_S+(2!=sw_ii&&'P'!=z_p.db_c?""
+   :" LEFT JOIN "+m_real_dbo_zzzzzz_s()+"_I_DICTIONARY_TABLE T ON T.SYSTEM_LANG='"
+   +z_p.lang_system_s+"' AND T.SYSTEM_DATA_NAME=C.SYSTEM_DATA_NAME"
+   /*+z_p.DUMMY_S+" AND T.SYSTEM_PERMISSION='"+define_table_permission_s+"'"*/ //VER22.1 VER36.6.0.3 
+   +z_p.DUMMY_S+" AND T.Z_CANCEL=' '"
+   +z_p.DUMMY_S+(!z_p.e2s_b(z_p.lang_s,z_p.lang_system_s)?
+   " LEFT JOIN "+m_real_dbo_zzzzzz_s()+"_I_DICTIONARY_TABLE T1 ON T1.SYSTEM_LANG='"
+   +z_p.lang_s+"' AND T1.SYSTEM_DATA_NAME=C.SYSTEM_DATA_NAME"
+   /*+z_p.DUMMY_S+" AND T1.SYSTEM_PERMISSION='"+define_table_permission_s+"'" *///VER22.1 VER36.6.0.3 
+   +z_p.DUMMY_S+" AND T1.Z_CANCEL=' '":""))
+   +z_p.DUMMY_S+" WHERE C.SYSTEM_NAME="+"'"+define_table_name_s+"'"  //リンクサーバー対応でz_mt_p.db_n.n_sを取る。
+   +z_p.DUMMY_S+(!z_p.e2s_b(define_table_user_s,"")?" AND C.SYSTEM_USER_X='"+define_table_user_s+"'":"")
+   +z_p.DUMMY_S+" ORDER BY C.SYSTEM_SEQ";
+   if(sw_link_b)sql_s="SELECT * FROM OPENQUERY("+w_sx[0]+",'"+z_p.replace_s_s(sql_s,"'","''")+"')";
+  } 
+else sql_s="SELECT C.SYSTEM_COLUMN_NAME,CASE C.SYSTEM_DATA_TYPE WHEN 'CH' THEN 'CHAR' WHEN 'CV' THEN 'VARCHAR'"
+    +z_p.DUMMY_S+" WHEN 'DE' THEN 'DECIMAL' WHEN 'IN' THEN 'INT' WHEN 'FL' THEN 'FLOAT'"
+    +z_p.DUMMY_S+" WHEN 'DT' THEN 'DATE' WHEN 'TM' THEN 'TIMESTAMP' ELSE C.DATA_TYPE END"
+    +z_p.DUMMY_S+(0==sw_ii?"":",CASE C.SYSTEM_DATA_TYPE WHEN 'DE' THEN C.SYSTEM_NUMERIC_PRECISION"
+    +z_p.DUMMY_S+" WHEN 'DT' THEN 8 WHEN 'TM' THEN 17 ELSE CASE WHEN C.DATA_TYPE IN('IN','FL') THEN 9" 
+    +z_p.DUMMY_S+" ELSE C.SYSTEM_CHAR_MAX_LENGTH END END"
+    +z_p.DUMMY_S+",CASE C.SYSTEM_DATA_TYPE WHEN 'DE' THEN C.SYSTEM_NUMERIC_SCALE ELSE 0 END"
+    +z_p.DUMMY_S+",C.SYSTEM_DEFAULT_VALUE,CASE C.SYSTEM_NULLABLE WHEN 'YES' THEN '1' ELSE '0' END,U.SYSTEM_ORDINAL_POSITION")
+    +z_p.DUMMY_S+(2!=sw_ii?"":",T.SYSTEM_TYPE1,T.SYSTEM_TYPE2,T.SYSTEM_LENGTH1,T.SYSTEM_LENGTH2,T"
+    +z_p.DUMMY_S+(!z_p.e2s_b(z_p.lang_s,z_p.lang_system_s)?"1":"")+z_p.DUMMY_S+".SYSTEM_TITLE,T"
+    +z_p.DUMMY_S+(!z_p.e2s_b(z_p.lang_s,z_p.lang_system_s)?"1":"")+z_p.DUMMY_S+".SYSTEM_MESSAGE"
+    +z_p.DUMMY_S+",T.SYSTEM_CHECK,T.SYSTEM_CHECK61,T.SYSTEM_CHECK62,T.SYSTEM_CHECK63,T.SYSTEM_CHECK64"
+    +z_p.DUMMY_S+",T.SYSTEM_CHECK65,T.SYSTEM_CHECK66"
+    +z_p.DUMMY_S+",T.SYSTEM_DEFAULT_TYPE,T.SYSTEM_DEFAULT_LENGTH1,T.SYSTEM_DEFAULT_LENGTH2")
+    +f_column_view_s()+(0==sw_ii?"":f_index_view_s())
+    +z_p.DUMMY_S+(2!=sw_ii&&'P'!=z_p.db_c?""
+    :" LEFT JOIN "+m_real_dbo_zzzzzz_s()+"_I_DICTIONARY_TABLE T ON T.SYSTEM_LANG='"
+    +z_p.lang_system_s+"' AND T.SYSTEM_DATA_NAME=C.SYSTEM_COLUMN_NAME AND T.Z_CANCEL=' '"
+    /*+z_p.DUMMY_S+" AND T.SYSTEM_PERMISSION='"+define_table_permission_s+"'" */ //VER22.1 //VER36.6.0.3
+    +z_p.DUMMY_S+(!z_p.e2s_b(z_p.lang_s,z_p.lang_system_s)?
+     " LEFT JOIN "+m_real_dbo_zzzzzz_s()+"_I_DICTIONARY_TABLE T1 ON T1.SYSTEM_LANG='"
+    +z_p.lang_s+"' AND T1.SYSTEM_DATA_NAME=C.SYSTEM_COLUMN_NAME"
+    /*+z_p.DUMMY_S+" AND T1.SYSTEM_PERMISSION='"+define_table_permission_s+"'"*/ //VER22.1 //VER36.6.0.3 
+    +z_p.DUMMY_S+" AND T1.Z_CANCEL=' '":""))
+    +z_p.DUMMY_S+" WHERE T.SYSTEM_TABLE_NAME='"+define_table_name_s+"'"  //リンクサーバー対応でz_mt_p.db_n.n_sを取る。
+    +f_where_db_schema_s()+(0==sw_ii?"":" AND(SUBSTRING(REVERSE(TRIM(I.INDEX_DSO_NAME)) FROM 1 FOR 1)='0' OR I.INDEX_DSO_NAME IS NULL)")
+    +z_p.DUMMY_S+" ORDER BY C.ORDINAL_POSITION";
+if(z_p.e3c_b(z_p.db_c,'O','H')&&(!z_p.e2s_b(z_p.real_test_s,"REAL")||
+   !z_p.e2s_b(define_table_real_test_s,"REAL")))
+     rc=sql_dbo_zzzz2(s_ww_a,sql_s);//REAL_DBO_ZZZZで実行。 //VER 17.1
+else rc=sql(s_ww_a,"SQL","REAL",usr_si,"",sql_s,"","","","");//"REAL"で実行する。
+if(0==z_p.db_record_cnt&&0==rc)
+ {z_p.db_error_s=z_mt_p.db_n.not_found_s;z_p.err_s="not found table ("+define_table_name_s+")";rc=1;/*return 1;*/}
+//HP z_p.to_sa_v(s_table_a,s_ww_a);
+//SJ s_table_a=z_p.to_sa_sa(s_ww_a);
+//HP z_p.clear_s_v(s_ww_a);
+return rc;
+}
+public String f_column_view_s()
+{return " FROM RDBII_SYSTEM.RDBII_DATABASE D LEFT JOIN RDBII_SYSTEM.RDBII_SCHEMA S"
+    +z_p.DUMMY_S+" ON S.DB_CODE=D.DB_CODE"+f_where_db_schema_s()
+    +z_p.DUMMY_S+" LEFT JOIN RDBII_SYSTEM.RDBII_COLUMN C ON C.DB_CODE=D.DB_CODE AND C.SCHEMA_CODE=S.SCHEMA_CODE" 
+    +z_p.DUMMY_S+" LEFT JOIN RDBII_SYSTEM.RDBII_TABLE T ON T.DB_CODE=C.DB_CODE AND T.SCHEMA_CODE=C.SCHEMA_CODE AND T.TABLE_CODE=C.TABLE_CODE";  
+}
+public String f_index_view_s()
+{return " LEFT JOIN RDBII_SYSTEM.RDBII_COLUMN_USAGE U ON U.DB_CODE=C.DB_CODE AND U.SCHEMA_CODE=C.SCHEMA_CODE AND U.TABLE_CODE=C.TABLE_CODE"
+    +z_p.DUMMY_S+" AND U.COLUMN_CODE=C.COLUMN_CODE LEFT JOIN RDBII_SYSTEM.RDBII_INDEX I" 
+    +z_p.DUMMY_S+" ON I.DB_CODE=C.DB_CODE AND I.SCHEMA_CODE=C.SCHEMA_CODE AND I.TABLE_CODE=C.TABLE_CODE"
+    +z_p.DUMMY_S+" AND I.INDEX_DSO_CODE=U.OBJECT_CODE";
+}
+public String f_where_db_schema_s()
+{return " AND D.DB_NAME='I_"+z_p.system_s+"' AND S.SCHEMA_NAME='"+define_table_top2_s+"'";
+}
+//--------------------------------------------------------
+int get_permission(String usr_si)
+{int rc;List<String> s_ww_a=new List<String>();  
+String sql_s;
+sql_s="SELECT "
+     +z_p.DUMMY_S+('D'==z_p.db_c?" CAST(":"")//VER13.0 JDBCバグ対応
+     +z_p.DUMMY_S+"SYSTEM_PERMISSION"
+     +z_p.DUMMY_S+('D'==z_p.db_c?" AS VARCHAR(4))":"")//VER13.0 JDBCバグ対応
+     +z_p.DUMMY_S+",SYSTEM_USER_X FROM "+m_real_dbo_zzzzzz_s()
+ +"_I_PERMISSION_TABLE WHERE SYSTEM_NAME="+z_mt_p.db_n.n_s+"'"
+ +define_table_name_s+"' AND Z_CANCEL=' ' ORDER BY 1";
+if(0!=(rc=sql(s_ww_a,"SQL","REAL",usr_si,"",sql_s,"","","","")))return rc;//"REAL"で実行する。
+//HP z_p.to_sa_v(s_table_a,s_ww_a);
+//SJ s_table_a=z_p.to_sa_sa(s_ww_a);
+//HP z_p.clear_s_v(s_ww_a);
+return 0;
+}
+//--------------------------------------------------------
+//***( テーブル情報をa_aiに追加 )*** 
+void set_table_add_da_v(List<ii_data_l> da_ai,String name_si,String data_si,String type1_si)
+{int i=0;
+for(i=0;z_p.count_da_i(da_ai)>i;i++)
+ if(z_p.e2s_b(name_si,(z_p.at_da(da_ai,i)).name_s))
+  {(z_p.at_da(da_ai,i)).data_s=data_si;
+   (z_p.at_da(da_ai,i)).type1_s=(z_p.e2s_b(type1_si,"")?" ":type1_si);
+   return;
+  }
+z_p.add_da(da_ai,new ii_data_l(name_si,data_si,type1_si,z_p));
+}
+//--------------------------------------------------------
+public int set_dictionary2_da_i(List<ii_data_l> da_ai,int i,String name_si,String usr_s)
+{
+int k,length1=0,default_length1=0,length2=0,default_length2=0;String create_s="";
+String[] k_sx?=?{"NANE","TABLE_TYPE","TABLE_LENGTH1","TABLE_LENGTH2","DEFAULT","NULL","NO","TYPE1"
+  ,"TYPE2","LENGTH1","LENGTH2","TITLE","MESSAGE","CHECK","CHECK61","CHECK62","CHECK63","CHECK64"
+  ,"CHECK65","CHECK66","DICTIONARY_TYPE","DICTIONARY_LENGTH1","DICTIONARY_LENGTH2"
+                };
+String def_s,check0_s="",check_s="",check2_s="",section_s="",where_s="";
+if(z_p.e5s_b(z_p.at_s(s_table_a,i+CHECK_X),"CHECK","CHECK1","CHECK2","SECTION"))
+ {check0_s=z_p.at_s(s_table_a,i+CHECK61)+z_p.at_s(s_table_a,i+CHECK62)+z_p.at_s(s_table_a,i+CHECK63)
+         +z_p.at_s(s_table_a,i+CHECK64)+z_p.at_s(s_table_a,i+CHECK65)+z_p.at_s(s_table_a,i+CHECK66);
+ }
+else
+  {
+     String check_table_s=(z_p.starts_with_b(z_mt_p.program_p.table_s,"?_MM?")? //VER19.1
+        "?_MP_"+z_mt_p.program_p.job_permission_s+"?"+z_p.part_s+z_p.substring2_s(z_mt_p.program_p.table_s,5): //VER19.1
+       (z_p.starts_with_b(z_mt_p.program_p.table_s,"?_M?")? //VER19.1
+        "?_MP_"+z_mt_p.program_p.job_permission_s+"?"+z_p.substring2_s(z_mt_p.program_p.table_s,4): //VER19.1
+          z_mt_p.program_p.table_s));   //VER19.1
+   String check61_s=z_p.at_s(s_table_a,i+CHECK61); //VER19.1
+   if(!(z_p.e2s_b(check61_s,check_table_s)&&0==z_mt_p.program_p.CONTROL_IX[z_mt_p.program_p.C_SAME_13]||z_p.e2s_b(check61_s,""))) //テーブル名一致はスキップする//VER22.1
+     {section_s="";
+      where_s=z_mt_p.check_and_s(z_p.at_s(s_table_a,i+CHECK_X),z_p.at_s(s_table_a,i+CHECK63)
+      ,z_p.at_s(s_table_a,i+CHECK64),z_p.at_s(s_table_a,i+CHECK65),z_p.at_s(s_table_a,i+CHECK66));
+      if(z_p.starts_with_b((z_p.at_s(s_table_a,i+CHECK_X)),"SELECT")  //VER19.1
+       ||z_p.starts_with_b((z_p.at_s(s_table_a,i+CHECK_X)),"LISTBOX"))
+        {check0_s="SELECT DISTINCT ?_X?."+z_p.at_s(s_table_a,i+CHECK62)
+         +(z_p.starts_with_b((z_p.at_s(s_table_a,i+CHECK_X)),"SELECT1")
+         ||z_p.starts_with_b((z_p.at_s(s_table_a,i+CHECK_X)),"LISTBOX1")
+           ?"":",?_X?."+z_p.at_s(s_table_a,i+CHECK63))
+         +" FROM "+check61_s+" ?_X?"+z_p.new_line_s()+" WHERE ?_X?.Z_CANCEL=' ' "+z_p.new_line_s()+where_s
+         +" ORDER BY "+(z_p.starts_with_b((z_p.at_s(s_table_a,i+CHECK_X)),"SELECT22")
+                      ||z_p.starts_with_b((z_p.at_s(s_table_a,i+CHECK_X)),"LISTBOX22")?"2":"1")//順番決定
+         +(z_p.ends_with_b((z_p.at_s(s_table_a,i+CHECK_X)),"D")?" DESC":"");//降順判定
+        }
+      if(z_p.e3s_b(z_p.at_s(s_table_a,i+CHECK_X),"SECTION1","SECTION2"))
+         section_s="IF_ERROR_SQL_SET{"+(z_p.e2s_b(z_p.at_s(s_table_a,i+CHECK_X),"SECTION1")?"":"?_SET??_X?."
+         +z_p.at_s(s_table_a,i+CHECK63))+"}{SELECT DISTINCT "
+         +(z_p.e2s_b(z_p.at_s(s_table_a,i+CHECK_X),"SECTION1")?"' '":"?_X?."+z_p.at_s(s_table_a,i+CHECK63))
+         +" FROM "+check61_s+" ?_X?"+z_p.new_line_s()+" WHERE ?_X?."+z_p.at_s(s_table_a,i+CHECK62)
+         +"='?_DATA?'"+z_p.new_line_s()+where_s+" AND ?_X?.Z_CANCEL=' '}ERROR{};";
+      if(z_p.starts_with_b((z_p.at_s(s_table_a,i+CHECK_X)),"SELECT2") //VER19.1
+       ||z_p.starts_with_b((z_p.at_s(s_table_a,i+CHECK_X)),"LISTBOX2"))
+      section_s="SET{?_SET??_X?."+z_p.at_s(s_table_a,i+CHECK63)+"=_CHECK2};"; //VER23.1
+     }
+  }
+if(z_p.e2s_b(z_p.at_s(s_table_a,i+CHECK_X),"SECTION"))section_s=z_p.trim_s(check0_s);
+length1=z_p.to_int_check(z_p.at_s(s_table_a,i+LENGTH1),'+',0,0);
+default_length1=z_p.to_int_check(z_p.at_s(s_table_a,i+DEFAULT_LENGTH1),'+',0,0);
+if(z_p.e2s_b(z_p.at_s(s_table_a,i+DEFAULT_TYPE),"FLOAT"))
+    {if(0==length1)length1=default_length1;}
+else if(length1>default_length1||0==length1)length1=default_length1;
+//***(テーブルの型より型１と長さ１を再設定する）****
+String s=z_p.at_s(s_table_a,i+DEFAULT_TYPE);
+if     (z_p.e4s_b(s,"DATETIME","DATE","TIMESTAMP")){z_p.set_s_v(s_table_a,i+TYPE1,"E");} 
+else if(z_p.e3s_b(s,"BIGINT","INT"))
+   {if(!z_p.e2s_b(z_p.at_s(s_table_a,i+TYPE1),"+")){z_p.set_s_v(s_table_a,i+TYPE1,"-");}
+    z_p.set_s_v(s_table_a,i+LENGTH2,"0");
+   }
+else if(z_p.e2s_b(s, "DECIMAL"))
+  {if(!z_p.e2s_b(z_p.at_s(s_table_a,i+TYPE1),"+")){z_p.set_s_v(s_table_a,i+TYPE1,"-");}
+   default_length2=z_p.to_int_check(z_p.at_s(s_table_a,i+DEFAULT_LENGTH2),'+',0,0);
+   length2=z_p.to_int_check(z_p.at_s(s_table_a,i+LENGTH2),'+',0,0);
+   if(length2>default_length2||0==length2){length2=default_length2;z_p.set_s_v(s_table_a,i+LENGTH2,z_p.to_i_s(length2));}
+  }
+else if(z_p.e2s_b(s,"FLOAT")){z_p.set_s_v(s_table_a,i+TYPE1,"F");z_p.set_s_v(s_table_a,i+LENGTH2,"0");}
+else
+  {//(CHAR,VARCHAR,VARCHAR2,NCHAR,NVARCHAR,NVARCHAR2)の場合の再設定
+   s=z_p.at_s(s_table_a,i+TYPE1);
+   if     (z_p.e4s_b(s,"+","-","F")){z_p.set_s_v(s_table_a,i+TYPE1,"9");}
+   else if(z_p.e2s_b(s,"E"))        {z_p.set_s_v(s_table_a,i+TYPE1,"T");}
+  }
+z_p.set_s_v(s_table_a,i+LENGTH1,z_p.to_i_s(length1)); 
+for(k=0;23>k;k++)
+  {if(z_p.e2s_b(z_p.at_s(s_table_a,i+k)," "))z_p.set_s_v(s_table_a,i+k,"");
+   set_table_add_da_v(da_ai,name_si+k_sx[k]+"&"+z_p.at_s(s_table_a,i),z_p.at_s(s_table_a,i+k),"");
+  }
+char type1_c=(0==z_p.length(z_p.at_s(s_table_a,i+TYPE1))?' ':z_p.at_s_c(z_p.at_s(s_table_a,i+TYPE1),0));
+char default_type_c=(0==z_p.length(z_p.at_s(s_table_a,i+DEFAULT_TYPE))?' ':z_p.at_s_c(z_p.at_s(s_table_a,i+DEFAULT_TYPE),0));//
+create_s=get_create_s(i,type_set_b(i));
+set_table_add_da_v(da_ai,name_si+"C&"+z_p.at_s(s_table_a,i+DATA_NAME),z_p.at_s(s_table_a,i+DATA_NAME)+","+z_p.substring2_s(create_s,1),"");
+set_table_add_da_v(da_ai,name_si+"C2&"+z_p.at_s(s_table_a,i+DATA_NAME),z_p.substring2_s(create_s,1),"");
+set_table_add_da_v(da_ai,name_si+"C3&"+z_p.at_s(s_table_a,i+DATA_NAME),z_p.at_s(s_table_a,i+DEFAULT_TYPE)
+     +(z_p.e5c_b(default_type_c,'C','N','V','D')?"("+z_p.at_s(s_table_a,i+DEFAULT_LENGTH1)
+     +('D'==z_p.at_s_c(z_p.at_s(s_table_a,i+DEFAULT_LENGTH1),0)?
+       ","+z_p.at_s(s_table_a,i+DEFAULT_LENGTH2):"")
+     +")":""),"");
+if(z_p.e3s_b(z_p.at_s(s_table_a,i+CHECK_X),"CHECK","CHECK1"))check_s=z_p.trim_s(check0_s);
+if(z_p.e2s_b(z_p.at_s(s_table_a,i+CHECK_X),"CHECK2")
+   ||z_p.starts_with_b((z_p.at_s(s_table_a,i+CHECK_X)),"SELECT") //VER19.1
+   ||z_p.starts_with_b((z_p.at_s(s_table_a,i+CHECK_X)),"LISTBOX1")
+   ||z_p.starts_with_b((z_p.at_s(s_table_a,i+CHECK_X)),"LISTBOX2"))check2_s=z_p.trim_s(check0_s);
+set_table_add_da_v(da_ai,name_si+"CHECK1&"+z_p.at_s(s_table_a,i+DATA_NAME),check_s,""); 
+set_table_add_da_v(da_ai,name_si+"CHECK2&"+z_p.at_s(s_table_a,i+DATA_NAME),
+  (z_p.e2s_b(z_p.at_s(s_table_a,i+CHECK_X),"CHECK2")?check2_s:""),"");
+set_table_add_da_v(da_ai,name_si+"SECTION&"+z_p.at_s(s_table_a,i+DATA_NAME)
+,(z_p.e2s_b(z_p.at_s(s_table_a,i+CHECK_X),"SECTION")?section_s:""),"");
+def_s=z_p.at_s(s_table_a,i+LENGTH1)+","+z_p.at_s(s_table_a,i+LENGTH2)+","
+     +z_p.at_s(s_table_a,i+TYPE1)+","+z_p.at_s(s_table_a,i+TYPE2); 
+String ww_left_s=(
+       (z_p.starts_with_b((z_p.at_s(s_table_a,i+CHECK_X)),"SELECT2")//VER19.1
+      ||z_p.starts_with_b((z_p.at_s(s_table_a,i+CHECK_X)),"LISTBOX2")
+      ||z_p.starts_with_b((z_p.at_s(s_table_a,i+CHECK_X)),"SECTION2"))
+       ?z_p.at_s(s_table_a,i+CHECK62)+z_p.new_line_s()
+      +z_mt_p.check_and_s(z_p.at_s(s_table_a,i+CHECK_X),z_p.at_s(s_table_a,i+CHECK63)
+       ,z_p.at_s(s_table_a,i+CHECK64),z_p.at_s(s_table_a,i+CHECK65)
+       ,z_p.at_s(s_table_a,i+CHECK66))+z_p.new_line_s()+" AND ?_X?.Z_CANCEL=' '":"");
+set_table_add_da_v(da_ai,name_si+"LEFT&"+z_p.at_s(s_table_a,i+DATA_NAME),ww_left_s,"");
+String ww_s="{"+def_s+"}"+"{"+z_p.trim_s(check_s)+"}"+"{"+z_p.trim_s(check2_s)+"}"
+      +"{"+z_p.at_s(s_table_a,i+MESSAGE)+"}"
+      +"{"+z_p.at_s(s_table_a,i+CHECK_X)+"}"
+      +"{"+(z_p.e5s_b(z_p.at_s(s_table_a,i+CHECK_X),"SECTION","CHECK","CHECK1","CHECK2")?"":
+             z_p.at_s(s_table_a,i+CHECK61))+"}"
+      +"{"+ww_left_s+"}"+"{{"+section_s+"}}"+z_p.at_s(s_table_a,i+TITLE);
+set_table_add_da_v(da_ai,name_si+"DATA&"+z_p.at_s(s_table_a,i+DATA_NAME)
+            ,z_p.at_s(s_table_a,i+DATA_NAME)+ww_s,"");
+set_table_add_da_v(da_ai,name_si+"DATA2&"+z_p.at_s(s_table_a,i+DATA_NAME),ww_s,"");
+ww_s=","+(z_p.e3c_b(type1_c,'+','-')?z_p.at_s(s_table_a,i+LENGTH2):"")
+    +","+(z_p.e6c_b(type1_c,'+','-','E','F','!')?z_p.at_s(s_table_a,i+TYPE1)
+    :(-1==z_p.index2c_i(z_p.TYPE1_NCHAR_S,type1_c)?"H":"/"))
+    +","+(z_p.e3s_b(z_p.at_s(s_table_a,i+TYPE2),"I","X")?"":
+         z_p.at_s(s_table_a,i+TYPE2))+"}"
+    +z_p.at_s(s_table_a,i+TITLE); 
+set_table_add_da_v(da_ai,name_si+"SET&"+z_p.at_s(s_table_a,i+DATA_NAME),
+     z_p.at_s(s_table_a,i+DATA_NAME)+"{"
+  +(z_p.e2s_b(z_p.at_s(s_table_a,i+LENGTH1),"1")?"2":
+      z_p.at_s(s_table_a,i+LENGTH1))+ww_s,"");
+set_table_add_da_v(da_ai,name_si+"SET2&"+z_p.at_s(s_table_a,i+DATA_NAME),
+    z_p.at_s(s_table_a,i+DATA_NAME)+"{"
+                +ww_s,"");
+set_table_add_da_v(da_ai,name_si+"DEFINE&"+z_p.at_s(s_table_a,i+DATA_NAME),def_s,"");
+return 0;
+}
+//--------------------------------------------------------
+//***( ディクショナリ定義情報をa_aiに設定 )*** 
+public int set_dictionary_da_i(List<ii_data_l> da_ai,String data_names_si,String usr_si,String permission_si)
+{int rc=0,i;
+String[] sx=z_p.split_sx(data_names_si,',');
+for(i=0;i<z_p.count_sx_i(sx);i++)
+ {if(0!=(rc=get_dictionary(sx[i],usr_si,permission_si)))return rc;
+  set_dictionary2_da_i(da_ai,0,"&",usr_s);
+ } 
+return 0;
+}
+//--------------------------------------------------------
+//***( テーブル定義情報をs_aiに設定 sw_ii(0=全部,1=&c&..のみ )*** 
+public int set_table_da_i(List<ii_data_l> da_ai,String name_si,String table_si,String usr_si,int sw_ii)
+{int i,j,rc=0,cnt=0,data_cnt=0,index_cnt=0,all_cnt=0,key_cnt=0;
+String s="",all_s="",datas_s="",create_s="",data_creates_s="",key_creates_s="";
+String unique_s="",work_s="",works_s="",works_key_s="",works_data_s="";
+String key_s="",keys_s="",key_data_s="",index_s="",type_long_s="",type_short_s="";
+if(-1!=z_p.index2c_i(name_si,' ')) {z_p.err_s="find space alias";return 5;}//VER28.1
+if(-1!=z_p.index2c_i(table_si,' ')){z_p.err_s="find space table";return 5;}//VER28.1
+if(z_p.e2s_b(name_si,""))name_si="&";
+else{if(!z_p.starts_with_b(name_si,"&"))name_si="&"+name_si;
+     name_si+=".";
+    }   
+if(5==z_p.length(name_si))
+  if(z_p.starts_with_b(name_si,"&S")||z_p.starts_with_b(name_si,"&E")||z_p.starts_with_b(name_si,"&T"))//VER28.1
+   {z_p.err_s="find string alias (&S or &E or &T)";return 5;}//VER28.1
+define_table_b(table_si,usr_si);
+if(0!=(rc=get_table(2,usr_si)))return rc;
+if(0!=(rc=get_index(usr_si)))return rc;
+if(0==sw_ii)set_table_add_da_v(da_ai,name_si+"TABLE",table_si,"");
+for(j=0;j<z_p.count_sx_i(z_value_sx);j++)z_value_sx[j]="0"; // Z_...化関値初期化
+for(i=0,j=1;z_p.count_s_i(s_table_a)>i;j++,i+=23)
+  {if(z_p.starts_with_b((z_p.at_s(s_table_a,i)),"Z_"))
+    {if(-1!=(j=z_p.index2sx_i(Z_NAME_SX,z_p.at_s(s_table_a,i))))z_value_sx[j]="1";continue;} //Z_...発見＝１
+   all_cnt++;
+   all_s+=(z_p.e2s_b(all_s,"")?"":",")+z_p.at_s(s_table_a,i);
+   type_long_s=type_set_b(i);type_short_s=get_type_short_s(type_long_s);
+   work_s="W"+(z_p.e2s_b(type_short_s,"D")?z_p.at_s(s_table_a,i+3) //DECIMALは小数点以下の桁数を設定
+   :(z_p.e2s_b(type_short_s,"I")?"0":(z_p.e2s_b(type_short_s,"V")?"C":z_p.substring3_s(type_short_s,0,1))))+"."+z_p.at_s(s_table_a,i); 
+   works_s+=(z_p.e2s_b(works_s,"")?"":",")+work_s; 
+   create_s=get_create_s(i,type_long_s);
+   if(z_p.e2s_b(z_p.at_s(s_table_a,i+6),""))
+     {cnt=++data_cnt;key_s="";key_data_s="DATA_";
+      datas_s+=(z_p.e2s_b(datas_s,"")?"":",")+z_p.at_s(s_table_a,i);
+      data_creates_s+=(z_p.e2s_b(data_creates_s,"")?"":",")+z_p.at_s(s_table_a,i)+create_s;
+      works_data_s+=(z_p.e2s_b(works_data_s,"")?"":",")+work_s; 
+     }
+   else
+    {cnt=++key_cnt;key_s="K";key_data_s="KEY_";
+     keys_s+=(z_p.e2s_b(keys_s,"")?"":",")+z_p.at_s(s_table_a,i);
+     key_creates_s+=(z_p.e2s_b(key_creates_s,"")?"":",")+z_p.at_s(s_table_a,i)+create_s;
+     works_key_s+=(z_p.e2s_b(works_key_s,"")?"":",")+work_s; 
+    }
+   if(0==sw_ii)
+     {set_dictionary2_da_i(da_ai,i,name_si,usr_s);//辞書情報設定
+      set_table_add_da_v(da_ai,name_si+"KEY&"+z_p.at_s(s_table_a,i),key_s,"");
+      set_table_add_da_v(da_ai,name_si+"ALL_"+z_p.to_i_s(all_cnt),z_p.at_s(s_table_a,i),"");
+      set_table_add_da_v(da_ai,name_si+"WORK_"+z_p.to_i_s(all_cnt),work_s,"");
+      set_table_add_da_v(da_ai,name_si+key_data_s+z_p.to_i_s(cnt),z_p.at_s(s_table_a,i),"");
+      set_table_add_da_v(da_ai,name_si+key_data_s+"KEY_"+z_p.to_i_s(cnt),key_s,"");
+      set_table_add_da_v(da_ai,name_si+key_data_s+"CREATE_"+z_p.to_i_s(cnt),z_p.at_s(s_table_a,i)+create_s,"");
+     }
+   set_table_add_da_v(da_ai,name_si+"C&"+z_p.at_s(s_table_a,i),z_p.at_s(s_table_a,i)+","+z_p.substring2_s(create_s,1),"");
+   if(0==sw_ii)
+     {set_table_add_da_v(da_ai,name_si+"C2&"+z_p.at_s(s_table_a,i),z_p.substring2_s(create_s,1),"");
+      set_table_add_da_v(da_ai,name_si+"C3&"+z_p.at_s(s_table_a,i),
+      type_long_s+('C'==z_p.at_s_c(type_long_s,0)||'N'==z_p.at_s_c(type_long_s,0)||'V'==z_p.at_s_c(type_long_s,0)||'D'==z_p.at_s_c(type_long_s,0)
+        ?"("+z_p.at_s(s_table_a,i+2)+('D'==z_p.at_s_c(type_long_s,0)?","+z_p.at_s(s_table_a,i+3):"")+")":""),"");
+     }
+  }
+if(0==sw_ii)
+  {set_table_add_da_v(da_ai,name_si+"ALL",all_s,"");
+   set_table_add_da_v(da_ai,name_si+"WORK",works_s,"");
+   set_table_add_da_v(da_ai,name_si+"WORK_DATA",works_data_s,"");
+   set_table_add_da_v(da_ai,name_si+"WORK_KEY",works_key_s,"");
+   set_table_add_da_v(da_ai,name_si+"KEY",keys_s,"");
+   set_table_add_da_v(da_ai,name_si+"DATA",datas_s,"");
+   set_table_add_da_v(da_ai,name_si+"KEY_CREATE",key_creates_s,"");
+   set_table_add_da_v(da_ai,name_si+"DATA_CREATE",data_creates_s,"");
+   for(unique_s="",index_s="",s="",i=0,index_cnt=-1;;i+=3)
+    {if(z_p.count_s_i(s_index_a)<=i||!z_p.e2s_b(index_s,z_p.at_s(s_index_a,i)))
+      {if(!z_p.e2s_b(index_s,""))
+         {j=z_p.to_int1s_i(index_s);
+          for(;;)
+            {index_cnt++;
+            if(j<=index_cnt)break;
+                set_table_add_da_v(da_ai,name_si+"INDEX_"+z_p.to_i_s(index_cnt),"","");
+                set_table_add_da_v(da_ai,name_si+"INDEX_UNIQUE_"+z_p.to_i_s(index_cnt),"","");
+            }
+          set_table_add_da_v(da_ai,name_si+"INDEX_"+z_p.to_i_s(index_cnt),s,"");
+          set_table_add_da_v(da_ai,name_si+"INDEX_UNIQUE_"+z_p.to_i_s(index_cnt),unique_s,"");
+         }
+       if(z_p.count_s_i(s_index_a)<=i)break;
+       index_s=z_p.at_s(s_index_a,i);s=unique_s=""; 
+      }
+     if(z_p.e2s_b(z_p.at_s(s_index_a,i+1),"0"))unique_s="UNIQUE";
+     s+=(z_p.e2s_b(s,"")?"":",")+z_p.at_s(s_index_a,i+2);
+    }
+   for(i=index_cnt+1;10>i;i++)
+    {set_table_add_da_v(da_ai,name_si+"INDEX_"+z_p.to_i_s(i),"","");
+     set_table_add_da_v(da_ai,name_si+"INDEX_UNIQUE_"+z_p.to_i_s(i),"","");
+    }
+   set_table_add_da_v(da_ai,name_si+"ALL_COUNT",z_p.to_i_s(all_cnt),"+");
+   set_table_add_da_v(da_ai,name_si+"KEY_COUNT",z_p.to_i_s(key_cnt),"+");
+   set_table_add_da_v(da_ai,name_si+"DATA_COUNT",z_p.to_i_s(data_cnt),"+");
+   set_table_add_da_v(da_ai,name_si+"INDEX_COUNT",z_p.to_i_s(index_cnt),"+");
+   for(j=0;j<z_p.count_sx_i(z_value_sx);j++)
+     set_table_add_da_v(da_ai,name_si+Z_NAME_SX[j],z_value_sx[j],"+"); // Z_...関連設定
+  }
+return 0;
+}
+//--------------------------------------------------------
+String get_type_long_s(String type_si)
+{type_si=z_p.upper_s(type_si);
+if  (z_p.e3s_b(type_si,"","C"))type_si="CHAR";
+else if(z_p.e2s_b(type_si,"D"))type_si="DECIMAL";
+else if(z_p.e2s_b(type_si,"I"))type_si="INT";
+else if(z_p.e2s_b(type_si,"V"))type_si=z_mt_p.db_n.sql_varchar_s;
+else if(z_p.e2s_b(type_si,"N"))type_si="NCHAR";  //DB2対応。
+else if(z_p.e2s_b(type_si,"NV"))type_si="NVARCHAR"; //DB2対応。
+else if(z_p.e2s_b(type_si,"F"))type_si="FLOAT";
+else if(z_p.e2s_b(type_si,"T"))type_si=z_mt_p.db_n.sql_date_time_s;
+else if(z_p.e2s_b(type_si,"E"))type_si=z_mt_p.db_n.sql_date_time_s;
+return type_si;
+}
+//--------------------------------------------------------
+String get_type_short_s(String type_long_si)
+{String w_s="N",s=type_long_si;
+if     (z_p.e2s_b(s,"CHAR"))                {w_s="C";}
+else if(z_p.e3s_b(s,"MCHAR","NCHAR"))       {w_s="N";}
+else if(z_p.e2s_b(s,"DECIMAL"))             {w_s="D";}
+else if(z_p.e2s_b(s,"INT"))                 {w_s="I";}
+else if(z_p.e2s_b(s,"FLOAT"))               {w_s="F";}
+else if(z_p.e3s_b(s,"VARCHAR","VARCHAR2"))  {w_s="V";}
+else if(z_p.e4s_b(s,"MVARCHAR","NVARCHAR2","NVARCHAR")){w_s="NV";}
+else if(z_p.e2s_b(s,"DATE"))                {w_s="DATE";}
+else if(z_p.e3s_b(s,"TIMESTAMP","DATETIME")){w_s="E";}
+else                                        {w_s="N";}
+return w_s;
+}
+//-------( declare_si(="":CREATE TABLE,!="":DECLARE)------------------------------------------------
+String define_s(String name_si,String type_si,String length_si,String length2_si,String default_si,String null_si,String declare_si)
+{String char_set_s="";
+if(z_p.e5s_b(z_p.upper_s(default_si),"GETDATE()","NOW()","CURRENT TIMESTAMP","SYSDATE"))
+      default_si=z_mt_p.db_n.now0_s;
+type_si=get_type_long_s(type_si);
+String z_type_s=z_p.type_s(type_si);//z_p.add_v(o_type_a,z_type_s);
+if(z_p.e2s_b(z_type_s,"E")) //DATETIME or DATE
+  if(z_p.e2s_b(type_si,"DATE")) //DATE
+    {if(z_p.e6s_b(z_p.upper_s(default_si),"GETDATE()","CURRENT_DATE","CURRENT DATE","SYSDATE","'0001-01-01'"))
+        default_si="*";//デフォルトを規定値化
+     if('L'==z_p.db_c)default_si="'0001-01-01'";//MysqlはDFAULTを'0001-01-01'に設定。
+    }
+  else //DATETIME
+    {type_si=z_mt_p.db_n.sql_date_time_s;
+     if(z_p.e6s_b(z_p.upper_s(default_si),"GETDATE()","NOW()","CURRENT TIMESTAMP","SYSDATE","'0001-01-01 00:00:00'"))
+        default_si="*";//デフォルトを規定値化
+     if('L'==z_p.db_c)default_si="'0001-01-01 00:00:00'";//MysqlはDFAULTを'0001-01-01 00:00:00'に設定。
+    }
+else if(z_p.e2s_b(z_type_s,"/"))//
+  {if(z_p.e3s_b(type_si,"NCHAR","MCHAR"))type_si=z_mt_p.db_n.sql_nchar_s;
+   else                                    type_si=z_mt_p.db_n.sql_nvarchar_s;
+   if('D'==z_p.db_c)char_set_s=" "+z_mt_p.db_n.sql_char_set_s+" ";//FirbirdはCHRACTER SETを追加。
+   if('I'==z_p.db_c)length_si=z_p.to1_i_s(z_p.to_int1s_i(length_si)*z_mt_p.db_n.utf8_set);//DB2は桁数を補正。
+  }
+else if(z_p.e2s_b(z_type_s," "))if(!z_p.e2s_b(type_si,"CHAR"))type_si=z_mt_p.db_n.sql_varchar_s;
+if(z_p.e2s_b(declare_si,""))//CREATE TABLE
+  return name_si+" "+type_si
+  +(-1!=z_p.index2sx_i(char_decimal_sx,type_si)?"("+length_si+(z_p.e2s_b(type_si,"DECIMAL")?","+length2_si:"")+")":"")
+  +char_set_s+(z_p.e3s_b(default_si," ","")?"":" DEFAULT "
+  +(!z_p.e2s_b(default_si,"*")?default_si:(z_p.e3s_b(z_type_s," ","/")
+  ?"' '":(z_p.e2s_b(z_type_s,"E")?(z_p.e2s_b(type_si,"DATE")?z_mt_p.db_n.now_date_s:z_mt_p.db_n.now0_s):"0"))))
+  +" "+(z_p.e2s_b(null_si,"1")?z_mt_p.db_n.sql_null_s:"NOT NULL");
+else //DRCLARE
+  return z_mt_p.db_n.o_declare_s+declare_si+name_si+" "+type_si
+  +(-1!=z_p.index2sx_i(char_decimal_sx,type_si)?"("+length_si+(z_p.e2s_b(type_si,"DECIMAL")?","+length2_si:"")+")":"")
+  +char_set_s+(z_p.e2s_b(z_mt_p.db_n.o_fd_s,declare_si)?"":z_mt_p.db_n.o_default_s
+  +(!z_p.e2s_b(default_si,"*")?default_si:(z_p.e3s_b(z_type_s," ","/")
+  ?"' '":(z_p.e2s_b(z_type_s,"E")?(z_p.e2s_b(type_si,"DATE")?z_mt_p.db_n.now_date_s:z_mt_p.db_n.now0_s):"0"))))
+  +";";
+}
+//***()***************************************************
+String get_create_s(int i_ii,String type_si)
+{return (z_p.e3s_b(type_si,"NCHAR","MCHAR")?"":","+get_type_short_s(type_si))+(-1!=z_p.index2sx_i(char_decimal_sx,type_si)?","
+   +z_p.at_s(s_table_a,i_ii+DEFAULT_LENGTH1):"")
+   +(z_p.e2s_b(type_si,"DECIMAL")?","+z_p.at_s(s_table_a,i_ii+DEFAULT_LENGTH2):"");
+}
+//***()***************************************************
+String type_set_b(int i_ii)
+{String default_s=z_p.at_s(s_table_a,i_ii+DEFAULT_TYPE);
+String dictionary_s=z_p.at_s(s_table_a,i_ii+DICTIONARY_TYPE);
+String type_s=dictionary_s;
+if(!(z_p.e2s_b(dictionary_s,default_s)
+   ||(z_p.e2s_b(dictionary_s,"NCHAR")&&z_p.e3s_b(default_s,"CHAR","MCHAR"))
+   ||(z_p.e2s_b(dictionary_s,"NVARCHAR")&&z_p.e3s_b(default_s,"VARCHAR","MVARCHAR"))))
+   type_s=default_s;
+return type_s;
+}
+//-----( return (0,5) )---------------------------------------------------
+public int create_index(String table_si,String index_si,String keys_si,String unique_si,String usr_si,int skip_ii)
+{String index_name_s="",sql_s="";int ibm_cnt=0,ix=0;
+keys_si=z_mt_p.set_column_names_s(keys_si,skip_ii);
+if(z_p.e2s_b(index_si,"")){z_p.err_s="index("+index_si+") is null";return 5;}
+ix=z_p.to_int_check(index_si,'+',0,1);if(!z_p.return_b)return 5;
+if(9<ix){z_p.err_s="over (9) index("+index_si+")";return 5;}
+index_name_s=('D'==z_p.db_c?table_si:define_table_name_s)+z_p.to_i_s(ix);
+if(!z_p.e4s_b(z_p.upper_s(unique_si),"","UNIQUE","U"))
+   {z_p.err_s="not (space or 'UNIQUE')("+unique_si+")";return 5;}
+if(!z_p.e2s_b(unique_si,""))unique_si="UNIQUE";
+int sw=0,IBM_OK=1;
+if('I'==z_p.db_c)
+ {for(ibm_cnt=0;9999>ibm_cnt;ibm_cnt++)
+   {index_name_s="X"+z_p.to_i_s(ix)+z_p.set_form_length_s(define_table_name_s,11)+z_p.to_i_s(ibm_cnt);
+    if(0!=sql_usr2("SELECT TBNAME FROM SYSIBM.SYSINDEXES WHERE NAME='"+index_name_s+"'",usr_si))return 5;
+    if(0==z_p.count_s_i(s_sql_a)){sw=IBM_OK;break;}//?go to ibm_ok;
+   }
+  if(IBM_OK!=sw){z_p.err_s="over index name("+define_table_name_s+")";return 5;}
+ }
+if(z_p.e2s_b(keys_si,"")){z_p.err_s="index keys is null";return 5;}
+if('F'!=z_p.db_c)
+  {if(0==ix&&!z_p.e3c_b(z_p.db_c,'H','F'))//H,Fは０も通常のインデックスで運用（データが存在する場合PRIMARY KEYを変更出来ないので）
+     {sql_s="ALTER TABLE "+table_si+" ADD CONSTRAINT "+index_name_s+" PRIMARY KEY";
+     }
+   else sql_s="CREATE "+unique_si+(z_p.e2s_b(unique_si,"")?"":" ")+"INDEX "+index_name_s+" ON "+table_si;
+   sql_s+="("+keys_si+")"+z_mt_p.db_n.rd_index_s;
+   if(0!=sql_usr2(sql_s,usr_si))
+      {//if(z_p.e2s_b(z_p.db_error_s,"F-4624"))go to loop_f;//インデックス名８文字以下対応。
+       if(!z_p.e2s_b(z_p.db_error_s,"o1408"))return 5;
+      }
+  } 
+else if(0!=f_index_dso_dsi(ix,keys_si,table_si,usr_si))return 5;//"F"はDSO 及びDSI設定
+return 0;
+}
+//--------( Return (0,5) )-------------------
+int f_index_dso_dsi(int ix_ii,String keys_si,String table_si,String usr_si)
+{String sql_s;
+ sql_s="CREATE DSO "+define_table_name_s+z_p.to_i_s(ix_ii)+" INDEX ON "+table_si+"("+keys_si+") TYPE BTREE(PAGESIZE1(16),PAGESIZE2(8),REALIGNMENT)";
+if(0!=sql_usr2(sql_s,usr_si))return 5;//DSO作成。
+sql_s="CREATE DSI "+define_table_name_s+z_p.to_i_s(ix_ii)+"DSI INDEX DSO "+define_table_name_s+z_p.to_i_s(ix_ii)+" ALLOCATE BASE ON "
+     +define_table_top2_s+" SIZE 400K,INDEX ON "+define_table_top2_s+" SIZE 200K";
+if(0!=sql_usr2(sql_s,usr_si))return 5;//DSI作成。
+return 0;
+}
+//--------------------------------------------------------
+public int create_object(String object_si,String kind_si,String param_si,String public_si,String usr_si)
+{String sql_s="";int rc=0;
+define_table_b(object_si,usr_si);
+object_kind_s=kind_s(kind_si);
+if('M'==z_p.db_c) //**** CREATE VIEW はＵＳＥとは別に実行する必要有り。
+  if(rc!=(use_on(usr_si)))return rc;
+String trigger_s="";
+if(z_p.e2s_b(object_kind_s,"TRIGGER"))
+  {trigger_s=z_mt_p.db_n.o_trig1_s+z_mt_p.sql_n.trig_table_s(object_si)+z_mt_p.db_n.o_trig2_s
+             +(z_p.e2s_b(z_mt_p.db_n.o_trig3_s,"")?"":object_si)+z_mt_p.db_n.o_trig3_s;
+             
+   if(z_p.ends_with_b(object_si,"U"))
+     {if('M'==z_p.db_c)trigger_s=z_p.replace_s_s(trigger_s,"UPDATE,INSERT,DELETE","UPDATE");
+      else             trigger_s=z_p.replace_s_s(trigger_s,"UPDATE OR INSERT OR DELETE","UPDATE");
+     } 
+   if(z_p.ends_with_b(object_si,"I"))
+      {if('M'==z_p.db_c)trigger_s=z_p.replace_s_s(trigger_s,"UPDATE,INSERT,DELETE","INSERT");
+       else             trigger_s=z_p.replace_s_s(trigger_s,"UPDATE OR INSERT OR DELETE","INSERT");
+       trigger_s=z_p.replace_s_s(trigger_s," OLD ROW AS XOLD","");
+      } 
+   if(z_p.ends_with_b(object_si,"D"))
+     {if('M'==z_p.db_c)trigger_s=z_p.replace_s_s(trigger_s,"UPDATE,INSERT,DELETE","DELETE");
+      else             trigger_s=z_p.replace_s_s(trigger_s,"UPDATE OR INSERT OR DELETE","DELETE");
+      trigger_s=z_p.replace_s_s(trigger_s," NEW ROW AS XNEW","");
+     }
+  }
+if(z_p.e2s_b(object_kind_s,"TRIGGER")&&'P'==z_p.db_c)//PはFUNCTIONで登録1/2
+     sql_s="CREATE FUNCTION "+object_si+"() RETURNS TRIGGER "+param_si;
+else sql_s="CREATE "+object_kind_s+" "+('M'==z_p.db_c?define_table_name_s:object_si)+" "+trigger_s+" "+param_si;
+if(0!=(rc=sql_usr2(sql_s,usr_si)))return rc;
+if(z_p.e2s_b(object_kind_s,"TRIGGER")&&'P'==z_p.db_c)  //PのTRIGGERを登録2/2
+  {sql_s="CREATE TRIGGER "+define_table_name_s+" "+trigger_s;
+   if(0!=(rc=sql_usr2(sql_s,usr_si)))return rc;
+  }
+if(rc!=(use_off(usr_si)))return rc;
+return rc;
+}
+//--------------------------------------------------------
+public int drop_object(String object_si,String kind_si,String usr_si)
+{String sql_s="";int rc=0;
+define_table_b(object_si,usr_si);
+object_kind_s=kind_s(kind_si);
+if('M'==z_p.db_c)if(0!=(rc=use_on(usr_si)))return rc;//MはUSEを実行。
+String w_types_s="";
+for(;;)
+  {if(z_p.e3c_b(z_p.db_c,'P','H'))                            // P,Hのみ実行
+     {if(z_p.e2s_b(object_kind_s,"FUNCTION")&&(!z_p.ends_with_b(object_si,")"))) //FUNCTIONで型指定のない場合はOBJECT_VIEWより設定。
+        {sql_s="SELECT SYSTEM_TYPES FROM "+define_table_top_sys_s+"ZZZZZZ_"+z_p.substring3_s(define_table_mast_work_s,0,1)
+            +"_"+define_table_permission_s+"_OBJECT_VIEW WHERE SYSTEM_NAME='"+define_table_name_s+"'";
+         List<String> s_ww_a=new List<String>();
+         if(0==sql_usr3(s_ww_a,sql_s,usr_si)&&z_p.count_s_i(s_ww_a)>0)w_types_s=z_p.at_s(s_ww_a,0);
+         else w_types_s="()";
+//HP     z_p.clear_s_v(s_ww_a);
+        }
+      else if('P'==z_p.db_c&&z_p.e2s_b(object_kind_s,"TRIGGER"))
+        {sql_s="DROP "+object_kind_s+" "+define_table_name_s+" ON "+trig_table_s(object_si);//PのTRIGGER削除1/2。
+         rc=sql_usr2(sql_s,usr_si);
+         if(z_p.e2s_b(z_p.db_i_error_s,"NOT_EXIST"))rc=0; //該当無しは正常と判定。
+         if(0!=rc)return rc;
+         sql_s="DROP FUNCTION "+object_si+"()"; //PのFUNCTION削除2/2．
+         break; //?go to sql_step;
+        }
+     }
+   sql_s="DROP "+object_kind_s+" "+('M'==z_p.db_c?define_table_name_s:object_si+w_types_s)
+   +('F'==z_p.db_c?" CASCADE":"");
+   break;
+  }
+if(0!=(rc=sql_usr2(sql_s,usr_si)))return rc;
+if(0!=(rc=use_off(usr_si)))return rc;
+return rc;
+}
+//--------------------------------------------------------
+public int drop_index(String table_si,int sw_ii,String usr_si)
+{if(1==sw_ii)define_table_b(table_si,usr_si);
+int i,rc=0;for(i=0;10>i;i++)if(0!=drop_index(table_si,i,0,usr_si))rc=z_p.SW_ERROR_5;
+return rc;
+}
+//--------------------------------------------------------
+public int drop_index(String table_si,int index_ii,int sw_ii,String usr_si)
+{String sql_s="",w_ibm_s="";int i,rc=0; 
+if(1==sw_ii||'M'==z_p.db_c)define_table_b(table_si,usr_si);
+if('I'==z_p.db_c)
+  {i=z_p.index2c_i(table_si,'.');
+   if(0<i)w_ibm_s=z_p.substring3_s(table_si,0,i);
+   else w_ibm_s="I_"+z_p.system_s+"_"+z_p.substring3_s(define_table_real_test_s,0,1)
+          +(z_p.e2s_b(define_table_mast_work_s,"MAST")?"_D_":"_I_")+usr_si;
+   if(0!=sql_usr2("SELECT NAME FROM SYSIBM.SYSINDEXES WHERE TBNAME='"+define_table_name_s+"'"
+
+   +" AND NAME LIKE 'X"+z_p.to_i_s(index_ii)+"%' AND TBCREATOR='"+w_ibm_s+"'",usr_si))return 5;
+   if(0==z_p.count_s_i(s_sql_a))return 0;
+  }
+sql_s=(0==index_ii&&'H'!=z_p.db_c?"ALTER TABLE "+('M'==z_p.db_c?define_table_name_s:table_si)
+        +('L'==z_p.db_c?" DROP PRIMARY KEY":" DROP CONSTRAINT "
+        +('I'==z_p.db_c?z_p.at_s(s_sql_a,0):('D'==z_p.db_c?table_si:define_table_name_s)+"0"))
+        :"DROP INDEX "+('M'==z_p.db_c?define_table_name_s+"."+define_table_name_s+z_p.to_i_s(index_ii)
+        :('I'==z_p.db_c?z_p.at_s(s_sql_a,0):('L'==z_p.db_c?define_table_name_s+z_p.to_i_s(index_ii)
+         +" on "+table_si:table_si+z_p.to_i_s(index_ii)))));
+ if(0!=(rc=use_on(usr_si)))return rc;
+ if(0!=(rc=sql_usr2(sql_s,usr_si)))return rc;
+ if(0!=(rc=use_off(usr_si)))return rc;
+return rc;
+}
+
+int use_on(String usr_si)
+{if('M'!=z_p.db_c||z_p.e2s_b(define_table_use_s,""))return 0;
+return sql_usr2("USE "+define_table_use_s,usr_si);
+}
+int use_off(String usr_si)
+{if('M'!=z_p.db_c||z_p.e2s_b(define_table_use_s,""))return 0;
+return sql_usr2(" USE I_"+z_p.system_s+"_"+z_p.substring3_s(z_p.real_test_s,0,1)+"_M_"+z_mt_p.program_p.job_permission_s,usr_si);
+}
+//--------------------------------------------------------
+String get_login_id_s(String real_test_si,String usr_si,String permission_si)
+{String s=('I'==z_p.db_c?"":"I"+z_mt_p.db_n.user_sep_s)+z_p.system_s+z_mt_p.db_n.user_sep_s+(0<z_p.length(real_test_si)?z_p.substring3_s(real_test_si,0,1):"")//VER12.0
+           +z_mt_p.db_n.user_sep_s+(0<z_p.length(usr_si)?z_p.substring3_s(usr_si,0,1):"")+z_mt_p.db_n.user_sep_s+permission_si;
+return (z_p.e3c_b(z_p.db_c,'P','I')?z_p.lower_s(s):s);// VER12.0
+}
+//--------------------------------------------------------
+public String kind_s(String kind_si)
+{String s=kind_si;
+if     (z_p.e2s_b(s,"FUNC")){return "FUNCTION";}
+else if(z_p.e3s_b(s,"PROCEDURE","PROC")){if('P'==z_p.db_c)return "FUNCTION";return "PROCEDURE";}
+else if(z_p.e2s_b(s,"TRIG")){return "TRIGGER";}
+return kind_si;
+}
+//--------------------------------------------------------
+public int grant_permission(String grant_revoke_si,String table_si,String kind_si,String permission_si,String user_si,String usr_si)
+{ii_zz_l ww_rc_i_n=new ii_zz_l();grant_s="";
+object_kind_s=kind_s(kind_si);
+if('G'==z_p.at_s_c(grant_revoke_si,0))
+  {grant_revoke_s="GRANT";
+   grant_s=get_grant_s(kind_si,"SELECT");
+  }
+else {grant_revoke_s="REVOKE";grant_s="ALL PRIVILEGES";}
+user_s="";
+add_user2_permission_v(user_si,permission_si,usr_si);
+grant_sql_v(ww_rc_i_n,table_si,usr_si);//GRANT/REVOKE実行。
+if(0!=ww_rc_i_n.i){z_p.err_s=err_s;z_p.db_error_s=db_error_s;}
+int rc=ww_rc_i_n.i;
+//HP delete ww_rc_i_n;
+return rc;
+}
+//--------------------------------------------------------
+String get_grant_s(String kind_si,String grant_si)
+{return (z_p.e3s_b(kind_si,"","TABLE")?z_mt_p.db_n.grant_add_s+grant_si
+  :((z_p.e2s_b(kind_si,"SELECT")||z_p.e2s_b(kind_si,"VIEW"))?z_mt_p.db_n.grant_add_s+"SELECT":"EXECUTE"));
+}
+public int grant_all(String table_si,String kind_si,String public_si,String usr_si,int sw_ii_revoke)
+{int i;grant_s="";ii_zz_l ww_rc_i_n=new ii_zz_l();
+err_s="";db_error_s="";
+object_kind_s=kind_s(kind_si);
+if(z_p.e2s_b(object_kind_s,"TRIGGER"))return 0;//トリガーはGRANTは不要
+//------( REVOKE )-----------------------------
+grant_s="ALL PRIVILEGES";
+if(!('I'==z_p.db_c&&z_p.e3s_b(object_kind_s,"FUNCTION","PROCEDURE")))
+   if(1==sw_ii_revoke)//REVOKE実行
+     {grant_revoke_s="REVOKE";
+      if(!z_p.e2s_b(public_si,"PUBLIC"))
+        {user_s="PUBLIC"+z_p.DUMMY_S+('L'==z_p.db_c?"@'%'":"");grant_sql_v(ww_rc_i_n,table_si,usr_si);}//PUBLIC設定
+      if(!z_p.e2s_b(public_si,"LINK"))
+        {user_s="";add_user4_v("LNK",usr_si);grant_sql_v(ww_rc_i_n,table_si,usr_si);}//LNK設定
+     }
+//------( GRANT )-----------------------------
+grant_revoke_s="GRANT";
+//------( all )-----------------------------
+user_s="";grant_s=get_grant_s(kind_si,"ALL PRIVILEGES");
+if(!('I'==z_p.db_c&&z_p.e3s_b(object_kind_s,"FUNCTION","PROCEDURE")))
+  {add_user4_v("DBO",usr_si);//ZZZ管理者に無条件設定する。
+   grant_sql_v(ww_rc_i_n,table_si,usr_si);//GRANT ALL 実行
+   //----( select,insert,update:execute ) ----------------------------------------------------
+   grant_s=get_grant_s(kind_si,"SELECT,INSERT,UPDATE");user_s="";
+   add_user4_v("INP",usr_si);grant_sql_v(ww_rc_i_n,table_si,usr_si);//INPへGRANT SELECT,INSERT,UPDATE 実行
+   //----( select )----------------------------------
+   grant_s=get_grant_s(kind_si,"SELECT");user_s="";
+   add_user4_v("OUT",usr_si);grant_sql_v(ww_rc_i_n,table_si,usr_si);//OUTへGRANT SELECT 実行
+  }
+if(z_p.e2s_b(public_si,"PUBLIC")||('I'==z_p.db_c&&z_p.e3s_b(object_kind_s,"FUNCTION","PROCEDURE")))
+       {user_s="PUBLIC";             grant_sql_v(ww_rc_i_n,table_si,usr_si);}//PUBLIC 設定
+int sw=0,FIN=1,FIN2=2;
+for(;;)
+  {if(!('I'==z_p.db_c&&z_p.e3s_b(object_kind_s,"FUNCTION","PROCEDURE")))
+     {if(z_p.e2s_b(public_si,"LINK"))  {user_s="";add_user4_v("LNK",usr_si);grant_sql_v(ww_rc_i_n,table_si,usr_si);}//LNK設定
+      if(z_p.e2s_b(public_si,"PUBLIC")||z_p.e2s_b(define_table_mast_work_s,"WORK")||0!=ww_rc_i_n.i){sw=FIN;break;}//?go to fin;
+      //----( 別ユーザー分GRANT設定 )---------------------------
+      if(0!=(ww_rc_i_n.i=get_permission(usr_si))){sw=FIN2;break;}//?go to fin2,
+      user_s="";
+      for(i=0;i<z_p.count_s_i(s_table_a);i+=2)add_user2_permission_v(z_p.at_s(s_table_a,i+1),z_p.at_s(s_table_a,i),usr_si);
+      grant_sql_v(ww_rc_i_n,table_si,usr_si);//GRANT実行
+     }
+   break;
+  }
+if(FIN>=sw)if(0!=ww_rc_i_n.i){z_p.err_s=err_s;z_p.db_error_s=db_error_s;}
+int rc=ww_rc_i_n.i;
+//HP delete ww_rc_i_n;
+return rc; 
+}
+//--------------------------------------------------------
+//--------------------------------------------------------
+void grant_sql_v(ii_zz_l rc_ni,String table_si,String usr_si)
+{if(z_p.e2s_b(user_s,""))return;//user_sが空は未処理。
+if(z_p.e3c_b(z_p.db_c,'H','P')&&z_p.e3s_b(object_kind_s,"PROCEDURE","FUNCTION"))return;// H,PでPROC,FUNCは実行せず。
+int rc2=0,i=0;
+if('L'==z_p.db_c&&z_p.e2s_b(user_s,"PUBLIC"))//MySQLのPUBLICは”PUBLIC"ユーザー及び該当ユーザーを設定。
+  {int len=z_p.length(z_p.system_s)+4;
+   sql_usr2("SELECT DISTINCT user FROM mysql.user WHERE LEFT(user,"+z_p.to_i_s(len)+") IN('I_"+z_p.system_s+"_R'"
+   +(z_p.e2s_b(define_table_real_test_s,"REAL")&&!z_p.e2s_b(table_si,"i_"+z_p.lower_s(z_p.system_s)+"_r_m_zzzz.ZZZZZZ_I_DICTIONARY_TABLE")?""//I_DICTIONARYは全ユーザー指定
+     :",'I_"+z_p.system_s+"_T'")+")",usr_si);//該当ユーザー抜き出しSQL。
+
+//*****( PUBLICユーザーは設定されている事をI言語が認識する為にわざと設定。)*****
+   user_s="PUBLIC@'%'";
+   for(i=0;i<z_p.count_s_i(s_sql_a);i++)//PUBLICなので全ユーザーにGRANT設定
+    user_s+=","+z_p.at_s(s_sql_a,i)+"@'%',"
+    +z_p.at_s(s_sql_a,i)+"@'"+z_p.server_name_s+"'";//該当ユーザー全て設定。
+  }
+if(0==(rc2=use_on(usr_si)))//MはUSEでデータベース変更。
+   if(0==(rc2=sql_usr2(grant_revoke_s+" "
+           +('I'==z_p.db_c&&z_p.e2s_b(object_kind_s,"PROCEDURE")
+             &&z_p.e2s_b(grant_revoke_s,"REVOKE")&&z_p.e2s_b(grant_s,"ALL PRIVILEGES")?"EXECUTE":grant_s)
+           +" ON "+((z_p.e3c_b(z_p.db_c,'I','L')||('D'==z_p.db_c&&z_p.e2s_b(grant_revoke_s,"GRANT")))
+            &&z_p.e3s_b(object_kind_s,"FUNCTION","PROCEDURE")?
+             object_kind_s+" ":"")
+           +('M'==z_p.db_c?define_table_name_user_s:table_si)+" "
+           +(z_p.e2s_b(grant_revoke_s,"GRANT")?"TO":"FROM")
+           +('I'==z_p.db_c&&!z_p.e2s_b(user_s,"PUBLIC")?" USER":"")//VER12.0
+           +('D'==z_p.db_c&&z_p.e3s_b(object_kind_s,"TRIGGER","PROCEDURE")?" "+object_kind_s+" ":" ")+user_s
+           +('I'==z_p.db_c&&z_p.e2s_b(object_kind_s,"PROCEDURE")
+             &&z_p.e2s_b(grant_revoke_s,"REVOKE")&&z_p.e2s_b(grant_s,"ALL PRIVILEGES")?" RESTRICT":"")
+            ,usr_si)))use_off(usr_si);
+if(0!=rc2)if(z_p.e7s_b(z_p.db_error_s,"F-3505","F-3512","I-556","L1144","L1147","L1403")){rc2=0;z_p.err_s="";z_p.db_error_s="";}
+if(0!=rc2){rc_ni.i=rc2;err_s=z_p.err_s;db_error_s=z_p.db_error_s;z_p.err_s="";z_p.db_error_s="";}
+}
+//--( add_user... )------------------------------------------------------
+void add_user4_v(String dbo_inp_out_lnk_si,String usr_si)
+{if(!z_p.e2s_b(define_table_permission_s,"ZZZZ"))add_user2_v(dbo_inp_out_lnk_si,"ZZZZ",usr_si);//ZZZZで設定。
+                                      add_user2_v(dbo_inp_out_lnk_si,define_table_permission_s,usr_si);//テーブル値で設定。
+}
+void add_user2_permission_v(String lnk_si,String permission_si,String usr_si)
+{if(z_p.e2s_b(lnk_si,""))//空白時はDBO,INP,OUTを設定。
+   {add_user2_v("DBO",permission_si,usr_si);
+    add_user2_v("INP",permission_si,usr_si);
+    add_user2_v("OUT",permission_si,usr_si);
+   }
+ else add_user2_v("LNK",permission_si,usr_si);//LNK設定
+}
+void add_user2_v(String dbo_inp_out_lnk_si,String usr_si)
+{add_user2_v(define_table_real_test_s,dbo_inp_out_lnk_si,define_table_permission_s,usr_si);//テーブルのREAL/TEST及びパーミッションで設定。
+}
+void add_user2_v(String dbo_inp_out_lnk_si,String permission_si,String usr_si)
+{add_user2_v(define_table_real_test_s,dbo_inp_out_lnk_si,permission_si,usr_si);//テーブルのREAL/TESTで設定
+}
+void add_user2_v(String real_test_si,String dbo_inp_out_lnk_si,String permission_si,String usr_si)
+{if(!z_p.e2s_b(real_test_si,"REAL"))add_user_v("REAL",dbo_inp_out_lnk_si,permission_si,usr_si);//REALで設定
+                   add_user_v(real_test_si,dbo_inp_out_lnk_si,permission_si,usr_si);//入力値で設定
+}
+void add_user_v(String real_test_si,String dbo_inp_out_lnk_si,String permission_si,String usr_si)
+{if(z_p.e2s_b(z_p.real_test_s,real_test_si)&&z_p.substring3_s(usr_si,0,1)==(0<z_p.length(dbo_inp_out_lnk_si)?z_p.substring3_s(dbo_inp_out_lnk_si,0,1):"*")
+    &&z_mt_p.sql_permission_s()==permission_si)return;//実行ユーザーと同じ場合は設定しない。
+String u_s=get_login_id_s(real_test_si,dbo_inp_out_lnk_si,permission_si);
+user_s+=(z_p.e2s_b(user_s,"")?"":",")+u_s;//user_sの設定。
+if('L'==z_p.db_c)user_s+="@'%',"+u_s+"@'"+z_p.server_name_s+"'"; //*ERR* ,"; +u_s+"@'LOCALHOST'"; //VER26.1
+}
+//--------------------------------------------------------
+public bool define_table_b(String table_si,String usr_si)
+{int i=-1,j=-1;bool rc_b=true;
+define_table_top_s="";define_table_top2_s="";define_table_top_sys_s="";define_table_use_s="";
+define_table_name_user_s=define_table_name_s=table_si;define_table_real_test_s=z_p.real_test_s;
+define_table_user_s="";
+define_table_mast_work_s="MAST";
+if(!z_p.e2s_b(table_si,"")&&-1!=(i=z_p.last_index2c_i(table_si,'.')))
+ {define_table_top_s=z_p.upper_s(z_p.substring3_s(table_si,0,i+1));
+  define_table_top2_s=z_p.upper_s(z_p.substring3_s(table_si,0,i));
+  define_table_name_s=z_p.upper_s(z_p.substring2_s(table_si,i+1));
+  if((z_p.ends_with_b((z_p.upper_s(define_table_name_s)),"_TABLE")||z_p.ends_with_b(define_table_name_s,"実"+z_p.to_c_s((char )0X8868)))&&z_p.form_length(define_table_name_s)>28)
+     {z_p.err_s="length(form) > 28 ("+define_table_name_s+")";rc_b=false;}
+  else if(z_p.form_length(define_table_name_s)>30)
+     {z_p.err_s="length(form) > 30 ("+define_table_name_s+")";rc_b=false;}
+  define_table_top_sys_s=define_table_top_s;
+ }
+define_table_permission_s=(3<z_p.length(define_table_name_s)?z_p.substring3_s(define_table_name_s,0,4):"ZZZZ");
+if(-1!=i)if(-1!=(j=z_p.last_index3c_i(table_si,'.',i-1)))
+    define_table_name_user_s=z_p.upper_s(z_p.substring2_s(table_si,j+1));
+String m_d_s="M";
+if(z_p.ends_with_b(define_table_top_s,".DBO."))//MSSQL
+ {if(z_p.length(define_table_top_s)>13)
+   {define_table_permission_s=z_p.substring3_s(define_table_top_s,z_p.length(define_table_top_s)-9,4);
+    define_table_mast_work_s=('M'==z_p.at_s_c(define_table_top_s,z_p.length(define_table_top_s)-11)?"MAST":"WORK");
+    define_table_real_test_s=('R'==z_p.at_s_c(define_table_top_s,z_p.length(define_table_top_s)-13)?"REAL":"TEST");
+    define_table_top_sys_s=z_p.substring3_s(define_table_top_s,0,z_p.length(define_table_top_s)-11)
+                     +"M_ZZZZ"+z_p.substring2_s(define_table_top_s,z_p.length(define_table_top_s)-5);
+   }
+ }
+else
+ if(z_p.length(define_table_top_s)>9)
+   {if(z_p.e3c_b(z_p.at_s_c(define_table_top_s,z_p.length(define_table_top_s)-7),'M','W')) //PostgeSQL,DB2
+       {define_table_permission_s=z_p.substring3_s(define_table_top_s,z_p.length(define_table_top_s)-5,4);
+        define_table_mast_work_s=('M'==z_p.at_s_c(define_table_top_s,z_p.length(define_table_top_s)-7)?"MAST":"WORK");
+       }
+    else // Oracle
+      {m_d_s="D";
+       define_table_user_s=z_p.substring3_s(define_table_top_s,z_p.length(define_table_top_s)-7,1);
+       if(z_p.e2s_b(define_table_user_s,"D"))
+         {if(3<z_p.length(define_table_name_s))define_table_permission_s=z_p.substring3_s(define_table_name_s,0,4);
+          else define_table_permission_s="ZZZZ";
+          define_table_mast_work_s="MAST";
+         }
+       else
+         {define_table_permission_s=z_p.substring3_s(define_table_top_s,z_p.length(define_table_top_s)-5,4);
+          define_table_mast_work_s="WORK";
+         }
+      }
+    define_table_real_test_s=('R'==z_p.at_s_c(define_table_top_s,z_p.length(define_table_top_s)-9)?"REAL":"TEST");
+    define_table_top_sys_s=z_p.substring3_s(define_table_top_s,0,z_p.length(define_table_top_s)-7)
+                   +m_d_s+"_ZZZZ"+z_p.substring2_s(define_table_top_s,z_p.length(define_table_top_s)-1);
+   }
+else if(z_p.e2s_b(z_mt_p.db_n.user_sep_s,"")&&9==z_p.length(define_table_top_s))//HiRDB||Symfoware
+  {m_d_s="D";
+   define_table_user_s=z_p.substring3_s(define_table_top_s,z_p.length(define_table_top_s)-6,1);
+   if(z_p.e2s_b(define_table_user_s,"D"))
+        {if(3<z_p.length(define_table_name_s))define_table_permission_s=z_p.substring3_s(define_table_name_s,0,4);
+         else define_table_permission_s="ZZZZ";
+         define_table_mast_work_s="MAST";
+        }
+      else
+        {define_table_permission_s=z_p.substring3_s(define_table_top_s,z_p.length(define_table_top_s)-5,4);
+         define_table_mast_work_s="WORK";
+        }
+   define_table_real_test_s=('R'==z_p.at_s_c(define_table_top_s,z_p.length(define_table_top_s)-7)?"REAL":"TEST");
+   define_table_top_sys_s=z_p.substring3_s(define_table_top_s,0,z_p.length(define_table_top_s)-6)
+                   +m_d_s+"ZZZZ"+z_p.substring2_s(define_table_top_s,z_p.length(define_table_top_s)-1);
+  }
+if(z_p.e2s_b(define_table_real_test_s,""))define_table_real_test_s=z_p.real_test_s;
+if(0<j)define_table_use_s=z_p.substring3_s(table_si,0,j);
+if('D'==z_p.db_c&&1<z_p.length(table_si))
+  {define_table_top2_s=define_table_top_s=z_p.substring3_s(table_si,0,2);
+   if(5<z_p.length(table_si))define_table_permission_s=z_p.substring3_s(table_si,2,4);
+   define_table_real_test_s=('R'==z_p.at_s_c(table_si,0)?"REAL":"TEST");
+   define_table_mast_work_s=('D'==z_p.at_s_c(table_si,1)?"MAST":"WORK");
+   define_table_top_sys_s=z_p.substring3_s(define_table_top_s,0,1)+"D";
+   define_table_name_s=z_p.substring2_s(table_si,2);
+  }
+if(z_p.e3c_b(z_p.db_c,'H','O')&&z_p.e2s_b(define_table_user_s,""))define_table_user_s="D";//H,Oは空白時Dに設定。
+return rc_b;
+}
+//-----------( return (0,1) )---------------------------------------------
+public int select_etc(List<ii_data_l> da_ai,String head_si)
+{int i;String s;z_p.clear_da_v(da_ai);
+if(0!=sql_dbo_zzzz_real_test("SELECT SYSTEM_KEY2,SYSTEM_ETC FROM "+(z_p.e2s_b(z_p.test_s,"REAL")?m_real_dbo_zzzzzz_s():
+   m_test_dbo_zzzzzz_s())+"_ETC_TABLE WHERE SYSTEM_KEY1='ZZZZZZ_"+head_si+"' AND Z_CANCEL=' ' ORDER BY 1"))return 1;
+for(i=0;z_p.count_s_i(s_sql_a)>i;i+=2)
+ {z_p.add_da(da_ai,new ii_data_l(z_p.at_s(s_sql_a,i),z_p.at_s(s_sql_a,i+1),"",z_p));
+  if(z_p.e2s_b(head_si,"@"))
+    if     (("DATE_"+z_p.lang_s)==z_p.at_s(s_sql_a,i))
+      {s=z_p.upper_s((z_p.at_s(s_sql_a,i+1)));
+       z_p.date_ymd_s=(z_p.length(s)>0?z_p.substring3_s(s,0,1):"Y");
+       if(!z_p.e3s_b(z_p.date_ymd_s,"M","D"))z_p.date_ymd_s="Y";
+       z_p.date_sep_s=(z_p.length(s)>1?z_p.substring3_s(s,1,1):"-");
+      } 
+ }
+return 0;
+}
+//--------------------------------------------------------
+#if IMENU
+//----------------------------------------------
+//=***( 削除で他テーブルに有るか判定 control=1_table)***
+public int table_1(String program_name_key_si,String table_si)
+{int i=0,rc=0;
+if(z_p.e2s_b(program_name_key_si,""))return 0; //キー項目なし処理せず
+String[] key_sx=z_p.split_sx(program_name_key_si,',');
+ii_zz_l ww_s_n=new ii_zz_l();
+z_mt_p.edit_b(ww_s_n,table_si);String ww_s=ww_s_n.s;
+//HP delete ww_s_n;
+define_table_b(ww_s,z_p.inp_out_s);
+if(!z_p.e2s_b(define_table_mast_work_s,"MAST"))return 0;//MAST以外処理せず
+ww_s="SELECT SYSTEM_NAME FROM "+('L'==z_p.db_c?z_p.lower_s(define_table_top_sys_s):define_table_top_sys_s)
+   +"ZZZZZZ_M_"+define_table_permission_s+"_OBJECT_VIEW O"+" WHERE SYSTEM_KIND='TABLE' AND SYSTEM_NAME<>"
+   +z_mt_p.db_n.n_s+"'"+define_table_name_s+"'";
+for(i=0;i<z_p.count_sx_i(key_sx);i++)
+   ww_s+=" AND EXISTS(SELECT SYSTEM_NAME FROM "
+      +('L'==z_p.db_c?z_p.lower_s(define_table_top_sys_s):define_table_top_sys_s)
+      +"ZZZZZZ_M_"+define_table_permission_s+"_COLUMN_VIEW C"
+      +" WHERE C.SYSTEM_DATA_NAME="+z_mt_p.db_n.n_s+"'"+key_sx[i]+"' AND C.SYSTEM_NAME=O.SYSTEM_NAME)";
+List<String> s_ww_a=new List<String>();
+rc=sql_usr3(s_ww_a,ww_s,z_p.inp_out_s);
+if(z_p.SW_OFF_0!=rc){z_mt_p.sw_err=rc;}
+else for(i=0;i<z_p.count_s_i(s_ww_a);i++)
+        {ww_s="SELECT COUNT(*) FROM "+define_table_top_s+z_p.at_s(s_ww_a,i)+" WHERE Z_CANCEL=' ' AND "
+         +z_mt_p.program_p.sql_data_all_s(" AND ",'K',1,"");       
+         rc=sql_usr2(ww_s,z_p.inp_out_s);
+         if(z_p.SW_OFF_0!=rc){z_mt_p.sw_err=rc;break;}
+         if(!z_p.e2s_b(z_p.at_s(s_sql_a,0),"0"))
+           {z_p.err_s="1_TABLE("+z_p.at_s(s_ww_a,i)+") coun("+z_p.at_s(s_sql_a,0)+")";
+           z_mt_p.sw_err=z_p.SW_ERROR_5;rc=z_mt_p.sw_err;break;
+           }
+        }
+//HP z_p.clear_s_v(s_ww_a);
+return rc;
+}
+#endif //MENU
+//-------------------------------------------------------------------
+public void sql_close_v(int commit_ii,int sw_ii)
+{if(0!=sw_sql)
+       {try{
+//SS        close_g(commit_ii);
+//JJ        sql2_n.close_v(commit_ii);
+           }catch(Exception){}sw_sql=sw_ii;
+       }
+}
+//--------------------------------------------------------
+public String m_real_dbo_zzzzzz_s(){return z_mt_p.db_n.db_s("_MM","REAL","DBO","ZZZZ","ZZ",z_p.db_c);}
+//--------------------------------------------------------
+public String m_test_dbo_zzzzzz_s(){return z_mt_p.db_n.db_s("_MM","TEST","DBO","ZZZZ","ZZ",z_p.db_c);}
+public String trig_table_s(String i_s)
+{if   (z_p.ends_with_b(i_s,"_TRIG"))return z_p.substring3_s(i_s,0,z_p.length(i_s)-4)+"TABLE";
+else if(z_p.ends_with_b(i_s,"_TRIGU")||z_p.ends_with_b(i_s,"_TRIGI")||z_p.ends_with_b(i_s,"_TRIGD"))
+        return z_p.substring3_s(i_s,0,z_p.length(i_s)-5)+"TABLE";
+else if(z_p.ends_with_b(i_s,"引金"))return z_p.substring3_s(i_s,0,z_p.length(i_s)-2)+"実"+z_p.to_c_s((char )0X8868);
+else if(z_p.ends_with_b(i_s,"引金U")||z_p.ends_with_b(i_s,"引金I")||z_p.ends_with_b(i_s,"引金D"))
+        return z_p.substring3_s(i_s,0,z_p.length(i_s)-3)+"実"+z_p.to_c_s((char )0X8868);
+else return i_s+"_TABLE";
+}
+public int zz_addlogin(String opt1_si,String opt2_si,String opt3_si,String usr_si)
+{String s1="CREATE USER ",s2="",s3="",s4="",s_1="",s_2="";
+char c=z_p.db_c;
+if     (z_p.e2c_b(c,'L')){s3=" IDENTIFIED BY '";s4="'";}
+else if(z_p.e2c_b(c,'M')){s1="EXEC SP_ADDLOGIN '";s2="','";s3="','";s4="'";}
+else if(z_p.e2c_b(c,'O')){s2=" IDENTIFIED BY \"";s3="\" DEFAULT TABLESPACE ";}//VER24.1 \"を２箇所追加。
+else if(z_p.e2c_b(c,'P')){s2=" WITH ";s3=" PASSWORD '";s4="'";opt2_si=z_p.lower_s(opt2_si);}
+else if(z_p.e2c_b(c,'I')){if('W'==z_p.os_c){s1="NET USER ";s2=" ";s4=" /ADD /EXPIRES:NEVER /PASSWORDCHG:NO";opt3_si="";}}
+else {opt3_si=opt2_si;s1="useradd -g db2users -d /home/I ";s3=" passwd ";}
+s_1=s1+opt2_si+s2;s_2=s4;
+if     ('P'==z_p.db_c)s_1+=opt3_si+s3;
+else if('L'==z_p.db_c)s_1+=(z_p.e2s_b(opt3_si,"")?"":"@'"+opt3_si+"'")+s3;
+else                  s_2=s3+opt3_si+s4;
+return(sql(s_sql_a,"SQL",z_p.real_test_s,usr_si,"",s_1,"",s_2,"",opt1_si));
+}
+}
+#endif //MENU||TIME

@@ -1,0 +1,418 @@
+//=II_FORMAT.SRC format list image sub author nobumichi.harasawa
+//= フォーマット クラス（画面の自動配置）
+//=( z_mt_p.program_p.program_s )"OUTPUT"=(出力用),"INPUT"=(入力処理)
+//==========( z_p.con_0==9 選択処理 )====================
+#if IMENU
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//SS using System.Data.SqlClient;
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.Drawing;
+//SS using System.IO;
+#if ITEST
+//SS using Xamarin.Forms;
+#else
+//SS using System.Windows.Forms;
+#endif
+//JJ import java.awt.*;
+//JJ import java.awt.event.*;
+//JJ import java.io.*;
+//JJ import java.math.*;
+//JJ import java.util.*;
+public class ii_format_l
+{
+//COPY $II_DIR
+//COPY $II_READ
+//COPY $II_SQL2
+//COPY $II_URL
+ii_z_l z_p;ii_z_mt_l z_mt_p;
+//----------------------------------------------
+public ii_format_l(ii_z_l z_ni,ii_z_mt_l z_mt_ni){z_p=z_ni;z_mt_p=z_mt_ni;}
+//public static int format(ii_z_l z_ni,ii_z_mt_l z_mt_ni)
+public int format()
+{
+int rc=0,i,j,k,length,length2,id_cnt=0,set_suu,form_line_offset=0;
+int list_column,list_column_2,list_line,list_line_2,list_occurs,psw,id_max=0;
+int work_line,work_column,cnt;
+bool sw_resize_format_b=false;
+String w_s,s1,s2,work_name_s;
+ii_data_l w_data_n;
+ii_data_l data_cnt_save_n;
+int[]  form_column_ix=new int[6]; //(C++対抗空白２個)//
+psw=0;
+int sw_list=1;//list_1からスタート
+for(;9!=sw_list;)//for()list_0:(9!=sw_list)(((((((((((((((((((((((((((((((((((
+  {rc=0;
+   list_occurs=0;work_line=0;work_column=0;
+   list_line=0;
+   list_column=1;
+   sw_resize_format_b=false;s1="";s2="";
+   cnt=0;w_data_n=z_p.at_da(z_mt_p.program_p.da_data_a,cnt);
+   w_data_n.filler=1;
+   if(-1==z_mt_p.program_p.click_set_bottom)set_suu=0;
+   else set_suu=z_mt_p.program_p.click_set_bottom-z_mt_p.program_p.click_set_top+1;
+   if(z_p.e2s_b(z_mt_p.program_p.program_s,"INPUT"))
+     {w_data_n.length0=12;w_data_n.length1=12;w_data_n.title_s="MESSAGE    *";
+     }
+   else 
+     {w_data_n.title_s="";
+      if(0!=z_mt_p.program_p.CONTROL_IX[z_mt_p.program_p.C_0])
+        {w_data_n.length0=1;w_data_n.length1=1;w_data_n.title_s="*";
+        }
+      else{w_data_n.length0=0;w_data_n.length1=0;
+          } // else
+     } // else
+   for(cnt=0;z_p.count_da_i(z_mt_p.program_p.da_data_a)>cnt;cnt++)
+     {w_data_n=z_p.at_da(z_mt_p.program_p.da_data_a,cnt);
+      ii_zz_l ww_title_n=new ii_zz_l();    
+      z_mt_p.edit_b(ww_title_n,w_data_n.title_s);
+      w_data_n.title_s=ww_title_n.s;
+//HP  delete ww_title_n;
+     } // for()
+   for(cnt=0;z_p.count_da_i(z_mt_p.program_p.da_data_a)>cnt;cnt++)
+     {w_data_n=z_p.at_da(z_mt_p.program_p.da_data_a,cnt);
+      if('N'==w_data_n.mark2_c)continue;
+      if(z_p.X_MAX<w_data_n.length0)length=z_p.X_MAX;else length=w_data_n.length0;
+      length2=length;
+      if(z_p.form_length(w_data_n.title_s)>length2)length2=z_p.form_length(w_data_n.title_s);
+      if(z_p.X_MAX<(length2+list_column-1))//幅オーバー
+        {if(0==z_mt_p.program_p.CONTROL_IX[z_mt_p.program_p.C_SCROLL_14]||z_p.e2s_b(z_mt_p.program_p.program_s,"NOT"))
+           {sw_list=2;break;}//list_2処理へ  
+         else
+           {if(z_mt_p.form_x_desktop>=(length2+list_column-1)&&0==z_mt_p.program_p.CONTROL_IX[z_mt_p.program_p.C_WIDTH_22])
+             {z_mt_p.program_p.form_x_max=length2+list_column-1;sw_resize_format_b=true;
+             } //横幅修正
+            else
+             {z_mt_p.program_p.sw_x_scroll=1;
+              if(0==z_mt_p.program_p.CONTROL_IX[z_mt_p.program_p.C_WIDTH_22])
+                 z_mt_p.program_p.form_x_max=z_mt_p.form_x_desktop;
+              sw_resize_format_b=true; //横幅最大化
+             }
+           }
+        }    
+      if((z_mt_p.program_p.form_right_max+1)<(length2+list_column))
+        {z_mt_p.program_p.form_right_max=length2+list_column;
+        }
+      if(0!=w_data_n.length0)list_column+=length+w_data_n.filler;
+     } //for() 
+   if(1==sw_list) //(1==sw_list)(((((((((((((((((((((((((((((((((((((((((((((((((((((((
+     {if(!z_p.e2s_b(z_mt_p.program_p.program_s,"NOT"))//"INPUT","OUTPUT"
+        {if(0==z_mt_p.program_p.CONTROL_IX[z_mt_p.program_p.C_HIGH_23])
+            z_mt_p.program_p.form_y_max=z_mt_p.form_y_desktop;//"HIGH"のない場合画面一杯の行数。
+         z_mt_p.program_p.sw_y_scroll=2;sw_resize_format_b=true;
+         z_mt_p.program_p.y_largechange=1;z_mt_p.program_p.y_maximum=0;
+        } //if
+      i=z_mt_p.program_p.form_y_max-set_suu-11;//最大ライン数;
+      if(0!=z_mt_p.program_p.line_default&&i>=z_mt_p.program_p.line_default)//0以外最大ライン数以下は設定
+        {z_mt_p.program_p.line_occurs=z_mt_p.program_p.line_default;
+         if(0==z_mt_p.program_p.CONTROL_IX[z_mt_p.program_p.C_HIGH_23])
+             z_mt_p.program_p.form_y_max=z_mt_p.program_p.line_occurs+set_suu+11;
+        } //if
+      else z_mt_p.program_p.line_occurs=i;
+      id_cnt=5;
+      if(z_p.e2s_b(z_mt_p.program_p.program_s,"NOT")){z_mt_p.program_p.line_occurs=1;}//”NOT"は繰り返し無し。
+         //=======( 見出し行数確認 )================
+         list_column=1;
+         list_line=0;
+         for(cnt=0;z_p.count_da_i(z_mt_p.program_p.da_data_a)>cnt;cnt++)
+           {w_data_n=z_p.at_da(z_mt_p.program_p.da_data_a,cnt);
+            if('N'==w_data_n.mark2_c)continue;
+            if(z_p.X_MAX<w_data_n.length0)length=z_p.X_MAX;else length=w_data_n.length0;
+            if((z_mt_p.program_p.form_right_max+1)<length+list_column)
+              {list_line+=id_cnt+3+z_mt_p.program_p.line_occurs;list_column=1;
+              }
+            w_data_n.line=list_line;w_data_n.column=list_column;
+            if(0!=w_data_n.length0)list_column+=length+w_data_n.filler;
+           } //for()
+      id_max=0;
+      form_line_offset=4+set_suu;
+      form_column_ix[5]=form_column_ix[4]=form_column_ix[3]=(int )1;
+      form_column_ix[2]=form_column_ix[1]=form_column_ix[0]=(int )1;
+      data_cnt_save_n=z_p.at_da(z_mt_p.program_p.da_data_a,0);
+      cnt=0;
+     }// if(1==sw_list))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
+   for(;1==sw_list;)//for() head_1:(1==sw_list)((((((((((((((((((((((((((((((((((((((((((((((((((
+     {if(z_p.count_da_i(z_mt_p.program_p.da_data_a)<=cnt)
+        {if((0==id_max&&form_column_ix[5]>list_column)
+         ||(1==id_max&&form_column_ix[5]>list_column&&form_column_ix[4]>list_column)
+         ||(2==id_max&&form_column_ix[5]>list_column&&form_column_ix[4]>list_column
+         &&form_column_ix[5]>list_column)
+         ||(3==id_max&&form_column_ix[5]>list_column&&form_column_ix[4]>list_column
+         &&form_column_ix[3]>list_column&&form_column_ix[2]>list_column)
+         ||(4==id_max&&form_column_ix[5]>list_column&&form_column_ix[4]>list_column
+         &&form_column_ix[3]>list_column&&form_column_ix[2]>list_column
+         &&form_column_ix[1]>list_column))
+         id_max++;  //見出し右端オーバー補正
+         if(id_cnt>id_max&&!z_p.e2s_b(z_mt_p.program_p.program_s,"NOT"))
+           {if(0==z_mt_p.program_p.line_default)z_mt_p.program_p.line_occurs+=id_cnt-id_max;
+            else z_mt_p.program_p.form_y_max-=id_cnt-id_max;
+            id_cnt=id_max;
+           }
+         break; //head_1:終了 bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+        }
+      else w_data_n=z_p.at_da(z_mt_p.program_p.da_data_a,cnt);
+      if(0==w_data_n.length0||'N'==w_data_n.mark2_c){cnt++;continue;
+                                                    } //cccccccccccccccccccc
+      data_cnt_save_n=w_data_n;
+      length=z_p.form_length(w_data_n.title_s);
+      k=z_mt_p.program_p.form_column_offset+w_data_n.column;
+      if(k<1)k=1;
+      if((k+length)>(z_mt_p.program_p.form_right_max+1))k=z_mt_p.program_p.form_right_max+1-length;
+      for(i=id_cnt;i>=0;i--)if(k>=form_column_ix[i])break;
+      if(0>i)
+        {i=id_cnt;k=z_mt_p.program_p.form_right_max+1;
+         for(j=id_cnt;j>=0;j--)if(k>form_column_ix[j]){k=form_column_ix[j];i=j;
+                                                      }
+        }
+      if((z_mt_p.program_p.form_right_max+1)>=(k+length))
+        {form_column_ix[i]=k+length+1;
+         if((id_cnt-i)>id_max)id_max=id_cnt-i;
+        }
+      cnt++;
+     } //for() head_1:(1==sw_list)))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
+   //=======( line , column 決定 )========================
+   if(1==sw_list)//if(1==sw_list)(((((((((((((((((((((((((((((((((((((((((((((((((((((((
+     {z_mt_p.program_p.line_start=6+set_suu+id_cnt;
+      list_column=1;
+      list_line=0;
+      for(cnt=0;z_p.count_da_i(z_mt_p.program_p.da_data_a)>cnt;cnt++)
+        {w_data_n=z_p.at_da(z_mt_p.program_p.da_data_a,cnt);
+         if('N'==w_data_n.mark2_c)continue;
+         if(z_p.X_MAX<w_data_n.length0)length=z_p.X_MAX;else length=w_data_n.length0; 
+         if((z_mt_p.program_p.form_right_max+1)<length+list_column)
+           {list_line+=id_cnt+3+z_mt_p.program_p.line_occurs;list_column=1;
+           }
+         w_data_n.line=list_line;w_data_n.column=list_column;
+         if(0!=w_data_n.length0)list_column+=length+w_data_n.filler;
+        }
+      z_mt_p.program_p.form_column_offset=0;
+      //=================( 見出し印字 )=======================
+      list_column=1;
+      form_line_offset=4+set_suu;
+      form_column_ix[5]=form_column_ix[4]=form_column_ix[3]=1;
+      form_column_ix[2]=form_column_ix[1]=form_column_ix[0]=1;
+     }//if(1==sw_list)****************************************************************
+   for(;1==sw_list;) //for() list_10:(1==sw_list)(((((((((((((((((((((((((((((((((((
+     {data_cnt_save_n=z_p.at_da(z_mt_p.program_p.da_data_a,0);
+      cnt=0;
+      for(;1==sw_list;) //for() list_1:(1==sw_list)(((((((((((((((((((((((((((((((((((
+        {if(z_p.count_da_i(z_mt_p.program_p.da_data_a)<=cnt)break;//    break;list_1:bbbbbbbbbbbbbbbbbbbb
+         w_data_n=z_p.at_da(z_mt_p.program_p.da_data_a,cnt);
+         if(0==cnt)
+           {z_mt_p.program_p.click_data_top=form_line_offset+id_cnt+1;
+            z_mt_p.program_p.click_data_bottom=form_line_offset+id_cnt+2+z_mt_p.program_p.line_occurs;
+           }
+         if(!(0==w_data_n.length0||'N'==w_data_n.mark2_c))
+           {data_cnt_save_n=w_data_n;
+            w_s="";
+            if(0==cnt){if(z_p.e2s_b(z_mt_p.program_p.program_s,"INPUT"))w_s="********** ";w_s+="*"; //VER23.1
+                      }
+            else 
+            w_s=z_p.pad_end_s("",w_data_n.length0,('K'==w_data_n.mark1_c?'+':('*'==w_data_n.mark1_c?'*':'-')));
+            z_mt_p.program_p.scroll_y_line_top=form_line_offset+id_cnt+2;
+            z_mt_p.program_p.paint_list_n.add_v(w_s,form_line_offset+id_cnt+1
+            ,z_mt_p.program_p.form_column_offset+w_data_n.column,w_data_n.length0
+            ,z_p.font_s,z_p.Font_n,z_p.Brush_nx[z_mt_p.BACKCOLOR]);
+            if(z_mt_p.program_p.column_max<(z_mt_p.program_p.form_column_offset+w_data_n.column+w_data_n.length0))
+               z_mt_p.program_p.column_max=(z_mt_p.program_p.form_column_offset+w_data_n.column+w_data_n.length0);
+            w_s="";
+            if(0==cnt)
+              {if(z_p.e2s_b(z_mt_p.program_p.program_s,"INPUT"))w_s="========== ";w_s+='#';
+              }
+            else 
+               w_s=z_p.pad_end_s("",w_data_n.length0
+               ,('O'==w_data_n.mark2_c||z_p.e2s_b(z_mt_p.program_p.program_s,"OUTPUT")?'=':'#'));
+            z_mt_p.program_p.paint_list_n.add_v(w_s,form_line_offset+id_cnt+z_mt_p.program_p.line_occurs+2
+            ,z_mt_p.program_p.form_column_offset+w_data_n.column,w_data_n.length0
+            ,z_p.font_s,z_p.Font_n,z_p.Brush_nx[z_mt_p.BACKCOLOR]);
+            //==(見出し位置計算)
+            length=z_p.form_length(w_data_n.title_s);
+            k=z_mt_p.program_p.form_column_offset+w_data_n.column;
+            if(k<1)k=1;
+            if((k+length)>(z_mt_p.program_p.form_right_max+1))k=(z_mt_p.program_p.form_right_max+1)-length;
+            for(i=id_cnt;i>=0;i--)if(k>=form_column_ix[i])break;
+            if(0>i)
+              {i=id_cnt;k=(z_mt_p.program_p.form_right_max+1);
+               for(j=id_cnt;j>=0;j--)if(k>form_column_ix[j]){k=form_column_ix[j];i=j;
+                                                            }
+              }
+           if((z_mt_p.program_p.form_right_max+1)>=(k+length))
+             {z_mt_p.program_p.paint_list_n.add_v(w_data_n.title_s,form_line_offset+i,k,length
+              ,z_p.font_s,z_p.Font_n,z_p.Brush_nx[z_mt_p.BACKCOLOR]);
+              form_column_ix[i]=k+length+1;
+             }
+           if(z_mt_p.program_p.scroll_x_line_top>(form_line_offset+i-1))
+              z_mt_p.program_p.scroll_x_line_top=form_line_offset+i-1;
+           } //if
+         cnt++;
+        }//for() list_1:(1==sw_list)))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
+     if(1==z_mt_p.program_p.sw_x_scroll)//横スクロール初期値セット
+       {if(z_p.e2s_b(z_mt_p.program_p.program_s,"OUTPUT")&&0==z_mt_p.program_p.CONTROL_IX[z_mt_p.program_p.C_0])
+             z_mt_p.program_p.scroll_cnt_start=1;
+        else z_mt_p.program_p.scroll_cnt_start=0;
+        for(cnt=0;z_p.count_da_i(z_mt_p.program_p.da_data_a)>cnt;cnt++)
+          {w_data_n=z_p.at_da(z_mt_p.program_p.da_data_a,cnt) ;
+           if(0==w_data_n.length0||'N'==w_data_n.mark2_c)continue;
+           z_mt_p.program_p.scroll_cnt_max=cnt;//横スクロール値決定
+           if(z_p.X_MAX>=(z_mt_p.program_p.column_max-(z_mt_p.program_p.form_column_offset+w_data_n.column)))break;
+          } // for()
+       } //if
+     if(0==psw)
+       {if(10>z_mt_p.program_p.line_occurs){list_occurs=0;z_mt_p.program_p.column_occurs=1;}
+        else 
+          {z_mt_p.program_p.column_offset
+           =data_cnt_save_n.column+data_cnt_save_n.length0+data_cnt_save_n.filler;
+           z_mt_p.program_p.column_offset++;z_mt_p.program_p.column_occurs=z_p.X_MAX/z_mt_p.program_p.column_offset;
+           list_occurs=z_mt_p.program_p.column_occurs;
+           if(0==z_mt_p.program_p.column_occurs)z_mt_p.program_p.column_occurs=1;
+          } // else
+       } // if
+     psw=1;//fin_11 実行済
+     if(0<--list_occurs)
+       {z_mt_p.program_p.form_column_offset+=z_mt_p.program_p.column_offset;
+        continue;  //  continue list1_10:ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+       }
+     if(z_p.e2s_b(z_mt_p.program_p.program_s,"NOT"))//"NOT"
+       {z_mt_p.program_p.begin_line=z_mt_p.program_p.line_start;
+        if(0==z_mt_p.program_p.CONTROL_IX[z_mt_p.program_p.C_HIGH_23])//高さ固定指示無し。
+          {z_mt_p.program_p.form_y_max=form_line_offset+id_cnt+z_mt_p.program_p.line_occurs+2;//NOTは画面縦サイズ圧縮
+           sw_resize_format_b=true;//画面サイズ変更指示
+          }
+       }
+      sw_list=9;break; //list_10 終了 bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+     } // for() list_10(1==sw_list))))))))))))))))))))))))))))))))))))))))))))))))))))))))
+  //=**********************************************************
+  //=*******************( list_2  )*****************************
+  //(１行表示できなかったので項目データを順に表示）
+  //=***********************************************************
+  for(int sw2_list=0;2==sw_list;)//for() list_s: (2==sw_list)(((((((((((((((((((((((((((((((((((
+    {if(0==sw2_list)
+      {cnt=0;
+       w_data_n=z_p.at_da(z_mt_p.program_p.da_data_a,0);
+       z_mt_p.program_p.line_occurs=1;
+       z_mt_p.program_p.form_column_offset=z_mt_p.program_p.column_offset=0;z_mt_p.program_p.column_occurs=1;
+       z_mt_p.program_p.line_start=(z_p.e2s_b(z_mt_p.program_p.program_s,"NOT")?4:set_suu+5);
+       z_mt_p.program_p.click_data_top=z_mt_p.program_p.line_start-1;
+       form_line_offset=z_mt_p.program_p.line_start;
+       if(z_p.e2s_b(z_mt_p.program_p.program_s,"INPUT")||0!=z_mt_p.program_p.CONTROL_IX[z_mt_p.program_p.C_0])w_data_n.title_s="";
+      }//if(0==sw2_list) 
+    list_line=0;s1="";s2="";
+    if(1==psw&&!z_p.e2s_b(z_mt_p.program_p.program_s,"NOT"))//(1==pswはfin_11実行済)
+      {w_s=z_p.pad_end_s("",z_p.X_MAX,'=');//" ========================================"を表示
+       z_mt_p.program_p.paint_list_n.add_v(w_s,form_line_offset-1,1,z_p.X_MAX,z_p.font_s
+       ,z_p.Font_n,z_p.Brush_nx[z_mt_p.BACKCOLOR]);
+      }
+    if(z_p.e2s_b(z_mt_p.program_p.program_s,"INPUT"))
+      {list_column=11;(z_p.at_da(z_mt_p.program_p.da_data_a,0)).length0=1;(z_p.at_da(z_mt_p.program_p.da_data_a,0)).length1=1;
+      }
+    else 
+    if(0!=z_mt_p.program_p.CONTROL_IX[z_mt_p.program_p.C_0])
+      {list_column=0;(z_p.at_da(z_mt_p.program_p.da_data_a,0)).length0=1;(z_p.at_da(z_mt_p.program_p.da_data_a,0)).length1=1;
+      }
+    else {list_column=1;(z_p.at_da(z_mt_p.program_p.da_data_a,0)).length0=0;(z_p.at_da(z_mt_p.program_p.da_data_a,0)).length1=0;
+         }
+    data_cnt_save_n=z_p.at_da(z_mt_p.program_p.da_data_a,0);
+    for(cnt=0;z_p.count_da_i(z_mt_p.program_p.da_data_a)>cnt;cnt++)
+      {w_data_n=z_p.at_da(z_mt_p.program_p.da_data_a,cnt);
+       if(0==w_data_n.length0)
+         {if(1!=cnt){w_data_n.line=work_line;w_data_n.column=work_column;
+                    }
+          work_line=w_data_n.line;work_column=w_data_n.column;
+          continue;
+         }
+       work_line=w_data_n.line;work_column=w_data_n.column;
+       if(0==w_data_n.length0||'N'==w_data_n.mark2_c)continue;
+       if(z_p.X_MAX<w_data_n.length0){w_data_n.length0=length=z_p.X_MAX;w_data_n.length1=length=z_p.X_MAX;
+                                     }
+       else length=w_data_n.length0;
+       if(0!=cnt)
+         {s1=('K'==w_data_n.mark1_c?"+":('*'==w_data_n.mark1_c?"*":"-"));
+          s2=('O'==w_data_n.mark2_c||z_p.e2s_b(z_mt_p.program_p.program_s,"OUTPUT")?"=":"#");
+          work_name_s=w_data_n.title_s+s1+s2;
+          length=z_p.form_length(work_name_s);
+         }
+       else {length=0;work_name_s="";
+            }
+       list_line_2=list_line;list_column_2=list_column;
+       list_column+=length;
+       if(z_p.X_MAX<list_column)
+         {list_line++;list_column=1;list_line_2=list_line;list_column_2=list_column;
+          list_column+=length;
+         } 
+       if(z_p.X_MAX<(list_column+w_data_n.length0+2))
+         {if(z_p.X_MAX>(length+w_data_n.length0+2))
+            {list_column_2=1;list_column=1+length;list_line_2=list_line+1;
+            }
+          else list_column=0;
+          list_line++;
+          if(z_p.Y_MAX<(z_mt_p.program_p.line_start+list_line+2))
+            {if(!z_p.e2s_b(z_mt_p.program_p.program_s,"NOT")) //画面オーバー
+               {z_mt_p.program_p.CONTROL_IX[z_mt_p.program_p.C_SCROLL_14]=1;sw_list=1;break;
+               } // list_0実行へ
+            }
+         }
+       w_data_n.line=list_line;w_data_n.column=list_column+1;
+       list_column+=w_data_n.length0+w_data_n.filler+1;
+       if(1==psw&&!z_p.e2s_b(work_name_s,""))z_mt_p.program_p.paint_list_n.add_v(work_name_s,form_line_offset+list_line_2//(1==pswはfin_11実行済)
+         ,list_column_2,length+1,z_p.font_s,z_p.Font_n,z_p.Brush_nx[z_mt_p.BACKCOLOR]);
+      }
+   if(0==psw)//(0==pswは下記処理実行前)
+     {if(!z_p.e2s_b(z_mt_p.program_p.program_s,"NOT"))//"OUTPUT","INPUT"
+        {z_mt_p.program_p.y_largechange=1;z_mt_p.program_p.y_maximum=0;
+         if(0==z_mt_p.program_p.line_default)
+           {if(0==z_mt_p.program_p.CONTROL_IX[z_mt_p.program_p.C_HIGH_23])
+               z_mt_p.program_p.form_y_max=z_mt_p.form_y_desktop;//高さデスクトップ一杯に変更
+            sw_resize_format_b=true;
+           }
+        }
+      psw=1;//(psw=1は上記処理実行済)
+      sw2_list=0;continue; // ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+     }
+   if(z_p.Y_MAX<=(z_mt_p.program_p.line_start+list_line))
+     {z_mt_p.program_p.line_max=z_mt_p.program_p.line_start+list_line;//+1をカット。
+      int over=(0==z_mt_p.program_p.CONTROL_IX[z_mt_p.program_p.C_HIGH_23]?z_mt_p.form_y_desktop:z_p.Y_MAX);
+        {if(z_mt_p.program_p.line_max>over)//画面オーバー
+           {z_mt_p.program_p.form_y_max=over;
+            z_mt_p.program_p.scroll_y_line_top=z_mt_p.program_p.line_start;
+            z_mt_p.program_p.sw_y_scroll=1;
+           }
+         else{if(0==z_mt_p.program_p.CONTROL_IX[z_mt_p.program_p.C_HIGH_23])
+              z_mt_p.program_p.form_y_max=z_mt_p.program_p.line_max+1;
+              sw_resize_format_b=true;
+             }
+        }
+     }
+   else {z_mt_p.program_p.scroll_y_line_top=z_mt_p.program_p.line_start;
+        }
+   form_line_offset+=list_line+2;
+   if(!z_p.e2s_b(z_mt_p.program_p.program_s,"NOT"))//"INPUT","OUTPUT"
+     {if((form_line_offset+list_line)<(z_mt_p.program_p.form_y_max-1))
+      if(0==z_mt_p.program_p.line_default||z_mt_p.program_p.line_occurs<z_mt_p.program_p.line_default)  
+        {z_mt_p.program_p.line_occurs++;w_s=z_p.pad_end_s("",z_p.X_MAX,'-');sw2_list=1;continue;
+        } // ccccccccccccccccccccccccc
+      z_mt_p.program_p.line_offset=list_line+2;
+      w_s=z_p.pad_end_s("",z_p.X_MAX,'=');
+      z_mt_p.program_p.paint_list_n.add_v(w_s,form_line_offset-1,1,z_p.X_MAX
+      ,z_p.font_s,z_p.Font_n,z_p.Brush_nx[z_mt_p.BACKCOLOR]);
+      z_mt_p.program_p.click_data_bottom=form_line_offset-1;
+      if(z_mt_p.program_p.form_y_max!=(z_mt_p.program_p.click_data_bottom+1))
+         if(0==z_mt_p.program_p.CONTROL_IX[z_mt_p.program_p.C_HIGH_23])//縦固定指定無し。
+            {z_mt_p.program_p.form_y_max=z_mt_p.program_p.click_data_bottom+1;sw_resize_format_b=true;
+            }//縦サイズ変更。 
+      z_mt_p.program_p.sw_y_scroll=2;
+     }
+   else //"NOT" 
+      {if(0==z_mt_p.program_p.CONTROL_IX[z_mt_p.program_p.C_HIGH_23])//縦固定指示無し。
+     //NOTは画面縦サイズ圧縮
+         {z_mt_p.program_p.form_y_max=z_mt_p.program_p.line_start+list_line;sw_resize_format_b=true;}
+      } 
+     sw_list=9;break; // bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+    } //for() list_2:))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
+  } //for() list_0;)))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
+z_mt_p.program_p.sw_resize_b=sw_resize_format_b;
+return rc;
+}
+//COPY $II_WRITE
+}
+#endif

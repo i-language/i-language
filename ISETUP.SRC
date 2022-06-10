@@ -1,0 +1,49 @@
+//ISETUP.SRC iprogram server name file setup author nobumichi.harasawa
+//インストール用オプションファイル作成
+// argv 0=pass,1=setup,2=server(new)
+// argv 0=pass1,1=pass2,2=path1,3=setup,4=server(new)
+#if ISETUP
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//PP #include "isetup.h"
+//SS using System;
+//SS using System.Collections.Generic;
+//JJ import java.util.*;
+class isetup_l
+{readonly String PASSWORD_S="NAGANO";
+//HP int main(int arg_i,char** arg_cci)
+//SJ public static void Main(String[] arg_sxi)//ここから開始。
+{
+//HP QApplication app_nn(arg_i,arg_cci);
+ii_z_l z_n=new ii_z_l("ISETUP",
+//HP                          arg_i,arg_cci
+//SJ                          arg_sxi
+                                           ); //共通使用インスタンスを作成。);
+
+new isetup_l(z_n);
+}
+public isetup_l(ii_z_l z_ni)
+{ii_z_l z_p=z_ni;
+ii_write_l write_n=new ii_write_l(z_p);
+for(;;)
+  {if(3!=z_p.count_s_i(z_p.s_arg_a)){z_p.err_s="3!=z_p.count(z_p.s_arg_a)";break;}
+   String passowrd_s=z_p.arg_get_s(z_p.at_s(z_p.s_arg_a,0));
+   String setup_s=z_p.arg_get_s(z_p.at_s(z_p.s_arg_a,1));
+   String server_s=z_p.arg_get_s(z_p.at_s(z_p.s_arg_a,2));
+   if(!z_p.e2s_b(passowrd_s,PASSWORD_S)){z_p.err_s="PASSWORD";break;}
+   if(!write_n.open_b(".."+z_p.dir_s+setup_s+"_"+server_s+".III","OT",",W")) //VER35
+     {z_p.err_s="OPEN FILE("+write_n.write_file_s+")";break;}
+   if(!write_n.write_b(z_p.password_n.pwd64_s("",setup_s,server_s)))
+     {z_p.err_s="WRITE FILE("+write_n.write_file_s+")";break;}
+   write_n.write_close_v();
+   z_p.console_write_v("CREATE "+write_n.write_file_s+")");
+//JJ System.exit(0);
+   return;
+  }
+z_p.console_write_v("ERROR "+z_p.err_s);
+z_p.console_write_v("PAUSE ");
+//SS z_p.console_read_s();
+//JJ System.exit(0);
+}
+}
+#endif 

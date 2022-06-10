@@ -1,0 +1,197 @@
+// IPAPER.SRC 
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//PP #include "ipaper.h"
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.Drawing;
+//SS using System.Drawing.Drawing2D;
+//SS using System.Drawing.Printing;
+//SS using System.Globalization;
+//SS using System.IO;
+//SS using System.Text;
+//SS using System.Timers;
+//SS using System.Windows.Forms;
+
+//JJ import java.applet.*;
+//JJ import java.awt.*;
+//JJ import java.awt.event.*;
+//JJ import java.awt.geom.*;
+//JJ import java.awt.image.*;
+//JJ import java.awt.print.*;
+//JJ import java.io.*;
+//JJ import java.lang.*;
+//JJ import java.math.*;
+//JJ import java.util.*;
+//JJ import java.util.concurrent.*;
+//JJ import javax.imageio.*;
+//JJ import javax.print.*;
+//JJ import javax.print.attribute.*;
+//JJ import javax.print.attribute.standard.*;
+class ipaper_l
+{static String paper_size_s="A4",errs="";
+static ii_z_l z_n;static ii_z_l z_p;static String[] sx;
+static ii_write_l write_n;
+//JJ static MediaSizeName MediaSizeName_n,n_n;MediaSize MediaSize_n; 
+//JJ static void java_v(String si)
+//JJ {write_n.write_b("if(z_p.e2s_b(paper_s,z_p.upper_s(\""+sx[2]+"\"),\""+si+"\"){paper_h_f="+sx[0]+";paper_w_f="+sx[1]+";");
+//JJ  write_n.write_b("//SS paper_size_s=\""+sx[2]+"\"};");
+//JJ  write_n.write_b("//JJ MediaSizeName_n=MediaSizeName."+si+";}");
+//JJ }
+//HP int main(int arg_i,char** arg_cci)
+//SJ public static void Main(String[] arg_sxi)
+{z_n=new ii_z_l("IPAPER",
+//HP                     arg_i,arg_cci
+//SJ                     arg_sxi                         
+                                      );z_p=z_n;
+write_n=new ii_write_l(z_n);
+//JJ ii_read_l read_n=new ii_read_l(z_n);
+try{
+//SS write_n.open_b(arg_sxi[0],"OT","");
+//SS PrintDocument PrintDocument_n=new PrintDocument(); 
+//SS PrintDialog PrintDialog_n=new PrintDialog();
+//SS PrintDialog_n.Document=PrintDocument_n;
+//SS    foreach(PaperSize paper_size in PrintDocument_n.PrinterSettings.PaperSizes)
+//SS      write_n.write_b((1000>paper_size.Height?"0":"")+paper_size.Height+"\t"
+//SS                     +(1000>paper_size.Width ?"0":"")+paper_size.Width+ "\t"+paper_size.PaperName);
+//JJ read_n.open_b(arg_sxi[0],"");
+//JJ write_n.open_b(arg_sxi[1],"OT","SJIS");
+//JJ for(;0==read_n.read();)
+//JJ   {sx=read_n.read_data_s.split("\t");
+//JJ    MediaSizeName_n=MediaSize.findMedia((float)(z_p.to_int1s_i(sx[1])/100),(float)(z_p.to_int1s_i(sx[0])/100),Size2DSyntax.INCH); 
+//JJ    if(null==MediaSizeName_n)java_v("*NG*");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.A0))java_v("A0");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.A1))java_v("A1");
+//////JJ    else if(MediaSizeName_n.equals(MediaSizeName.A10))java_v("A10");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.A2))java_v("A2");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.A3))java_v("A3");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.A4))java_v("A4");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.A5))java_v("A5");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.A6))java_v("A6");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.A7))java_v("A7");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.A8))java_v("A8");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.A9))java_v("A9");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.B0))java_v("B0");
+//////JJ    else if(MediaSizeName_n.equals(MediaSizeName.B1))java_v("B1");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.B10))java_v("B10");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.B2))java_v("B2");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.B3))java_v("B3");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.B4))java_v("B4");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.B5))java_v("B5");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.B6))java_v("B6");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.B7))java_v("B7");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.B8))java_v("B8");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.B9))java_v("B9");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.C0))java_v("C0");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.C1))java_v("C1");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.C2))java_v("C2");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.C3))java_v("C3");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.C4))java_v("C4");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.C5))java_v("C5");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.C6))java_v("C6");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.DESIGNATED_LONG))java_v("DESIGNATED_LONG");
+//////JJ    else if(MediaSizeName_n.equals(MediaSizeName.CHOU_1))java_v("CHOU_1");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.CHOU_2))java_v("CHOU_2");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.CHOU_3))java_v("CHOU_3");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.CHOU_4))java_v("CHOU_4");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.CHOU_30))java_v("CHOU_30");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.CHOU_40))java_v("CHOU_40");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.KAKU_0))java_v("CHOU_0");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.KAKU_1))java_v("CHOU_1");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.KAKU_2))java_v("CHOU_2");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.KAKU_3))java_v("CHOU_3");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.KAKU_4))java_v("CHOU_4");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.KAKU_5))java_v("CHOU_5");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.KAKU_6))java_v("CHOU_6");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.KAKU_7))java_v("CHOU_7");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.KAKU_8))java_v("CHOU_8");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.KAKU_20))java_v("CHOU_20");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.KAKU_A4))java_v("CHOU_A4");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.YOU_1))java_v("YOU_1");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.YOU_2))java_v("YOU_2");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.YOU_3))java_v("YOU_3");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.YOU_4))java_v("YOU_4");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.YOU_5))java_v("YOU_5");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.YOU_6))java_v("YOU_6");
+////JJ    else if(MediaSizeName_n.equals(MediaSizeName.YOU_7))java_v("YOU_7");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.A))java_v("A");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.B))java_v("B");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.C))java_v("C");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.D))java_v("D");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.E))java_v("E");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.EXECUTIVE))java_v("EXECUTIVE");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.FOLIO))java_v("FOLIO");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.INVOICE))java_v("INVOICE");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.ISO_A0))java_v("ISO_A0");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.ISO_A1))java_v("ISO_A1");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.ISO_A10))java_v("ISO_A10");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.ISO_A2))java_v("ISO_A2");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.ISO_A3))java_v("ISO_A3");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.ISO_A4))java_v("ISO_A4");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.ISO_A5))java_v("ISO_A5");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.ISO_A6))java_v("ISO_A6");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.ISO_A7))java_v("ISO_A7");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.ISO_A8))java_v("ISO_A8");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.ISO_A9))java_v("ISO_A9");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.ISO_B0))java_v("ISO_B0");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.ISO_B1))java_v("ISO_B1");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.ISO_B10))java_v("ISO_B10");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.ISO_B2))java_v("ISO_B2");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.ISO_B3))java_v("ISO_B3");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.ISO_B4))java_v("ISO_B4");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.ISO_B5))java_v("ISO_B5");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.ISO_B6))java_v("ISO_B6");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.ISO_B7))java_v("ISO_B7");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.ISO_B8))java_v("ISO_B8");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.ISO_B9))java_v("ISO_B9");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.ISO_C0))java_v("ISO_C0");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.ISO_C1))java_v("ISO_C1");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.ISO_C2))java_v("ISO_C2");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.ISO_C3))java_v("ISO_C3");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.ISO_C4))java_v("ISO_C4");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.ISO_C5))java_v("ISO_C5");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.ISO_C6))java_v("ISO_C6");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.ISO_DESIGNATED_LONG))java_v("ISO_DESIGNATED_LONG");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.ITALY_ENVELOPE))java_v("ITALY_ENVELOPE");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.JAPANESE_DOUBLE_POSTCARD))java_v("JAPANESE_DOUBLE_POSTCARD");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.JAPANESE_POSTCARD))java_v("JAPANESE_POSTCARD");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.JIS_B0))java_v("JIS_B0");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.JIS_B1))java_v("JIS_B1");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.JIS_B10))java_v("JIS_B10");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.JIS_B2))java_v("JIS_B2");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.JIS_B3))java_v("JIS_B3");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.JIS_B4))java_v("JIS_B4");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.JIS_B5))java_v("JIS_B5");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.JIS_B6))java_v("JIS_B6");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.JIS_B7))java_v("JIS_B7");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.JIS_B8))java_v("JIS_B8");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.JIS_B9))java_v("JIS_B9");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.LEDGER))java_v("LEDGER");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.MONARCH_ENVELOPE))java_v("MONARCH_ENVELOPE");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.NA_10X13_ENVELOPE))java_v("NA_10X13_ENVELOPE");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.NA_10X14_ENVELOPE))java_v("A_10X14_ENVELOPE");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.NA_10X15_ENVELOPE))java_v("NA_10X15_ENVELOPE");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.NA_5X7))java_v("NA_5X7");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.NA_6X9_ENVELOPE))java_v("NA_6X9_ENVELOPE");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.NA_7X9_ENVELOPE))java_v("NA_7X9_ENVELOPE");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.NA_8X10))java_v("NA_8X10");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.NA_9X11_ENVELOPE))java_v("NA_9X11_ENVELOPE");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.NA_9X12_ENVELOPE))java_v("NA_9X12_ENVELOPE");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.NA_LEGAL))java_v("NA_LEGAL");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.NA_LETTER))java_v("NA_LETTER");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.NA_NUMBER_10_ENVELOPE))java_v("NA_NUMBER_10_ENVELOPE");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.NA_NUMBER_11_ENVELOPE))java_v("NA_NUMBER_11_ENVELOPE");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.NA_NUMBER_12_ENVELOPE))java_v("NA_NUMBER_12_ENVELOPE");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.NA_NUMBER_14_ENVELOPE))java_v("NA_NUMBER_14_ENVELOPE");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.NA_NUMBER_9_ENVELOPE))java_v("NA_NUMBER_9_ENVELOPE");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.PERSONAL_ENVELOPE))java_v("PERSONAL_ENVELOPE");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.QUARTO))java_v("QUARTO");
+//JJ    else if(MediaSizeName_n.equals(MediaSizeName.TABLOID))java_v("TABLOID");
+//JJ    else java_v("*NG*");
+//JJ   }
+   }
+catch(Exception e_ni){z_p.console_write_v(z_p.message_s(e_ni));}
+      write_n.write_close_v();
+//JJ   read_n.read_close_v();
+}
+}

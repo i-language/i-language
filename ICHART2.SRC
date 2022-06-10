@@ -1,0 +1,240 @@
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//PP #include "ichart2.h"
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.Drawing;
+//SS using System.IO;
+//SS using System.Windows.Forms;
+//JJ import java.awt.*;
+//JJ import java.awt.event.*;
+//JJ import java.io.*;
+//JJ import java.math.*;
+//JJ import java.util.*;
+public class ichart2_l
+{
+static ii_read_l read_n;
+static ii_write_l write_n;
+static int i,j,k,l,m,rc=0;
+static ii_z_l z_n;static ii_z_l z_p;
+static String s,cmd_s="$",cmd2_s,cmd2_org_s,value_s,code_s,old_s,com_s;
+static List<String> s_enum_a=new List<String>(); 
+//HP int main(int argc_i, char ** argv_cci)
+//SJ public static int Main(String[] arg_sxi)//プログラムがここから開始
+{
+//String path_s="d:\\HARASAWA\\I\\I33_SRC\\";
+String path_s="";
+z_n=new ii_z_l("ICHART2");z_p=z_n;//各種関数用。
+read_n=new ii_read_l(z_n);
+write_n=new ii_write_l(z_n);
+if(!read_n.open_b(path_s+"ICHART.SRC","/")){err_v("read file open/"+path_s+"ICHART.SRC");return(1);}
+if(!write_n.open_b(path_s+"II_CHART.SRC","OT","/")){err_v("wite file open/"+path_s+"II_CHART.SRC");return(1);}
+w_v("//*(注意)*このファイルはICHART2のプログラムで作られます。");
+w_v("#if ICHART");
+// w_v("//COPY #IMENU"); //VER27.1 (VER30.1)
+w_v("//HH #include \"ii_include_hh.h\""); //VER30.1
+w_v("//PP #include \"ii_include_pp.h\""); //VER30.1
+w_v("//PP #include \"ichart.h\"");//VER30.1
+w_v("//SS using System.Windows.Forms.DataVisualization.Charting;"); //VER30.1
+w_v("//SS using System;"); //VER30.1
+w_v("//SS using System.Collections;"); //VER30.1
+w_v("//SS using System.Drawing;"); //VER30.1
+w_v("//SS using System.IO;"); //VER30.1
+w_v("//SS using System.Windows.Forms;"); //VER30.1
+w_v("//JJ import java.awt.*;"); //VER30.1
+w_v("//JJ import java.awt.event.*;"); //VER30.1
+w_v("//JJ import java.io.*;"); //VER30.1
+w_v("//JJ import java.math.*;"); //VER30.1
+w_v("//JJ import java.util.*;"); //VER30.1
+//******************( loop )*******************************************************************************
+loop:
+old_s=read_n.read_data_s;
+if(0!=read_n.read())goto fin;//ファイル読み込み。
+if(z_p.starts_with_b(z_p.trim_s(read_n.read_data_s),"//"))goto loop;//コメントは無視。
+if(z_p.starts_with_b(read_n.read_data_s,"using ")){w_v(read_n.read_data_s);goto loop;} 
+if(z_p.starts_with_b(read_n.read_data_s,"public class"))
+  {w_v("public class ii_chart_l");
+   w_v("{static String class_s,no_s;static int help;static ii_z_l z_p;static ii_write_l write_n;static bool rc_b=true;");
+   w_v("public ii_chart_l(ii_z_l z_ni,ii_write_l write_ni,int help_i)");
+   w_v("{z_p=z_ni;write_n=write_ni;help=help_i;}");
+   w_v("public bool go_b()");
+   w_v("{class_s=\"$\";no_s=\"1\";//最上位設定の為。");
+   goto loop;
+  }
+/////( "(... ni)" 発見 )/////////////////////////////////
+i=z_p.index2s_i(read_n.read_data_s," ni)");
+if(-1==i)goto j1;
+j=z_p.last_index3s_i(read_n.read_data_s,"(",i);
+if(-1==j){err_v("( not found");goto j1;}
+s=z_p.substring3_s(read_n.read_data_s,j+1,i-j-1);//
+switch(s)
+{
+case "Chart":    cmd_v("C","","全体(Chartクラス)に対する設定をします。");break;
+case "ChartArea":cmd_v("A","","エリア(ChartAtreクラス）に対する設定をします。");break;
+case "Title":    cmd_v("T","","タイトル(Titleクラス）に対する設定をします。");break;
+case "Legend":   cmd_v("L","","凡例(Legendクラス）に対する設定をします。");break;
+case "Axis":     cmd_v("(X,X2,Y,Y2)","X","軸(Axisクラス）に対する設定をします。");break;
+case "Series":   cmd_v("","","グラフの設定をします。(ChartTypeが開始となります)");break;
+case "System.Windows.Forms.DataVisualization.Charting.Cursor":
+                 cmd_s="A.(CURSOR_X,CURSOR_Y)";w_v("no_s=\"3\";class_s=\"CURSOR_X\";");break;
+case "DataPointCustomProperties":cmd_s="EMPTY_POINT_STYLE";
+              w_v("no_s=\"3\";class_s=\"EMPTY_POINT_STYLE\";");break;
+case "SmartLabelStyle":cmd_s=upper_name_s(s);w_v("no_s=\"3\";class_s=\""+upper_name_s(s)+"\";");break;
+case "LabelStyle":         xy_v(s,"");break;
+case "AxisScrollBar":      xy_v(z_p.substring2_s(s,4),"");break;
+case "AxisScaleBreakStyle":xy_v(z_p.substring2_s(s,4),"");break;
+case "AxisScaleView":      xy_v(z_p.substring2_s(s,4),"");break;
+case "Grid":               xy_v("(MAJOR_GRID,MINOR_GRID)","MajorGrid");break;
+case "TickMark":           xy_v("(MAJOR_TICK_MARK,MINOR_TICK_MARK)","MajorTickMark");break;
+case "ChartArea3DStyle":cmd_s="A.AREA_3D_STYLE";w_v("no_s=\"3\";class_s=\"AREA_3D_STYLE\";");break;
+case "ElementPosition":cmd_s="((A,L,T).POSITION,A.INNER_PLOT_POSITION)";
+             w_v("no_s=\"3\";class_s=\"POSITION\";");break;
+case "BorderSkin":cmd_s="C."+upper_name_s(s);w_v("no_s=\"3\";class_s=\""+upper_name_s(s)+"\";");break;
+default: err_v("("+s+" ni) error");goto loop; 
+//  }
+}
+goto loop;
+j1:
+/////( ":ni." 発見 )/////////////////////////////////
+int start=4,end=0;
+i=z_p.index2s_i(read_n.read_data_s,":ni.");//":ni/"
+code_s="";
+if(-1==i)
+   {i=z_p.index2s_i(read_n.read_data_s,":ni[");//":n[/"　//特殊処理。["..."]="..."対応。
+    if(-1==i)
+      {i=z_p.index2s_i(read_n.read_data_s,":ni_");//":ni_/"　//メソッド対応
+       if(-1==i)goto j2;
+       code_s="."; //メソッド対応。
+      }
+    else
+      {start=5;end=2;//開始位置と終了位置補正。
+       code_s="[";  //特殊処理。["..."]対応。
+      }
+   }
+j=z_p.last_index3s_i(read_n.read_data_s,"\"",i);
+if(-1==j){err_v("\" not found");goto j2;}
+k=z_p.last_index3s_i(read_n.read_data_s,"\"",j-1);
+if(-1==k){err_v("\" not found");goto j2;}
+cmd2_org_s=z_p.substring3_s(read_n.read_data_s,k+1,j-k-1);
+if(z_p.e2s_b(code_s,"."))//メソッド処理
+  {l=z_p.index3s_i(read_n.read_data_s,"(",i);
+   if(-1==l){err_v("( not found");goto j2;}
+   m=z_p.index3s_i(read_n.read_data_s,")",l);
+   if(-1==l){err_v(") not found");goto j2;}
+   cmd2_s=z_p.substring3_s(read_n.read_data_s,l+4,m-l-4);
+  }
+else
+  {l=z_p.index3s_i(read_n.read_data_s,"=",i);
+   if(-1==l){err_v("= not found");goto j2;}
+   cmd2_s=z_p.substring3_s(read_n.read_data_s,i+start,l-i-start-end);
+   m=z_p.index3s_i(read_n.read_data_s,";",l);
+   if(-1==m){err_v("; not found");goto j2;}
+   value_s=z_p.substring3_s(read_n.read_data_s,l+1,m-l-1);
+  }
+for(i=0;i<old_s.Length;i++)if(' '!=old_s[i])break;//最初の文字発見。
+for(i++;i<old_s.Length;i++)if(' '==old_s[i])break;//最初の文字終わり発見。
+for(i++;i<old_s.Length;i++)if(' '!=old_s[i])break;//次の文字発見。
+for(i++;i<old_s.Length;i++)if(' '==old_s[i])break;//最初の文字終わり発見。
+com_s=z_p.replace_s_s(z_p.replace_s_s(z_p.replace_s_s(z_p.substring2_s(old_s,i)," ",""),"取得または",""),"\"","\\\"");
+if(2<z_p.length(cmd2_org_s))if(!z_p.e2s_b(cmd2_org_s,z_p.upper_s(cmd2_s))){err_v("CMD unmatch/"+cmd2_org_s+"/"+cmd2_s+"/");goto j2;}
+if(z_p.e2s_b(code_s,"["))value_s="to_int()";//文字列をIntに変更。
+if(z_p.e2s_b(code_s,"."))//メソッド処理。
+  {value_s=(z_p.e2s_b(cmd_s,"$")?cmd2_org_s:cmd2_s);
+   switch(value_s)
+     {case "X2":case "Y":case "Y2":value_s="X";break; 
+      case "CursorY":              value_s="CursorX";break; 
+      case "MinorGrid":            value_s="MajorGridk";break; 
+      case "MinorTickMark":        value_s="MajorTickMark";break;
+      case "InnerPlotPosition":    value_s="Position";break;
+      default:break; 
+     }
+  }
+else
+  switch(value_s)
+   {case "data_s":value_s="string";
+                  break;
+    case "bool_b()":value_s="bool";break;
+    case "color_n()":value_s="color";break;
+    case "font_n()":value_s="font";break;
+    case "to_double_o()":value_s="double";break;
+    case "to_int()":value_s="int";break;
+    case "to_float_f()":value_s="float";break;
+    case "point_n()":value_s="point";break;
+    case "size_n()":value_s="size";break;
+    default:
+        if(-1==z_p.index3s_i(read_n.read_data_s,"Enum.Parse(",j))
+            {err_v("Enum.Parse( not found");goto j2;}
+        k=z_p.index3s_i(read_n.read_data_s,"(",j);
+        if(-1==k){err_v("( not found");goto j2;}
+        l=z_p.index3s_i(read_n.read_data_s,")",k);
+        if(-1==l){err_v(") not found");goto j2;}
+        value_s=z_p.substring3_s(read_n.read_data_s,k+1,l-k-1);
+       if(-1==z_p.index2as_i(s_enum_a,value_s))s_enum_a.Add(value_s);//enum一覧追加。
+        code_s="#";//ENUM判定        
+        break;
+   }
+w_v("w_v(\""+cmd_s+"\",\""+upper_name_s((z_p.e2s_b(cmd_s,"$"))?cmd2_org_s:cmd2_s)+"\",\""+upper_name_s(value_s)+"\",\""+code_s+"\",\""+com_s+"\");"); 
+j2:
+goto loop;
+fin:
+s_enum_a.Add("FontStyle");s_enum_a.Sort();
+for(i=0;i<s_enum_a.Count;i++)
+  {w_v("foreach ("+s_enum_a[i]+" enum_n in Enum.GetValues(typeof("+s_enum_a[i]+")))");
+   w_v("   w_enum_v(\""+s_enum_a[i]+"\",enum_n.ToString());");
+  }
+w_v("return rc_b;");w_v("}"); 
+w_v("public void w_enum_v(String s1_si,String s2_si)");
+w_v("{w_v((1==help?\"\":\"4\\t\")+upper_name_s(s1_si)+(1==help?\"の種類:\":\"\\t\")+(z_p.e3s_b(z_p.upper_s(s1_si),\"FONT\",\"CUSTOMPROPERTIES\")?s2_si:upper_name_s(s2_si))+(1==help?\"\":\"\\t\\t\\t\"));");
+w_v("}"); 
+w_v("public void w_v(String s1_si,String s2_si,String s3_si,String s4_si,String s5_si)//引数5個");
+w_v("{if(1==help)w_v(\" \"+(\"$\"==s1_si?\"〇\"+s2_si:(\"\"==s1_si?\"\":s1_si+\".\")+s2_si+(\".\"==s4_si?\".\":\"=\")+s3_si)+(\"#\"==s4_si?\"の種類\":\"\")+\" ----- \"+s5_si);");
+w_v(" else{w_v(no_s+\"\\t\"+class_s+\"\\t\"+s2_si+\"\\t\"+s3_si+\"\\t\"+s4_si+\"\\t\"+s5_si);}");
+w_v("}"); 
+w_v("public static void w_v(String s1_si,String s2_si,String s3_si)//引数3個");
+w_v("{if(1==help)return;");
+w_v("if(z_p.e2s_b(s1_si,\"\"))");
+w_v("  {if(3>z_p.length(s2_si)){write_n.write_b(\"1\\t\"+s2_si+\"\\t\\t\\t\\t\"+s3_si);no_s=\"2\";}");
+w_v("   else                   {write_n.write_b(\"2\\t\"+s2_si+\"\\t\\t\\t\\t\"+s3_si);no_s=\"3\";}");
+w_v("  }"); 
+w_v("else                      {write_n.write_b(\"2\\t\"+s1_si+\"\\t\"+s2_si+\"\\t\\t\\t\"+s3_si);no_s=\"3\";}");
+w_v("}");
+w_v("public static void w_help_v(String s_si)   {if(1==help)w_v(s_si);}");
+w_v("public static void w_setting_v(String s_si){if(0==help)w_v(s_si);}");
+w_v("public static void w_v(String s_si){if(!write_n.write_b((1==help?\"<br>\":\"\")+s_si))rc_b=true;}//引数１個");
+w_v("public static String upper_name_s(String si)");
+w_v("  {String s=\"\";");
+w_v("   for(int i=0;z_p.length(si)>i;i++)");
+w_v("     {if(0<i)//１文字目はそのまま");
+w_v("        {if(z_p.e2s_b(z_p.substring3_s(si,i,2),\"3D\")){s+=\"_3D\";i++;continue;}");
+w_v("         if('A'<=si[i]&&'Z'>=si[i])s+='_';");
+w_v("        }");
+w_v("      s+=z_p.upper_s(\"\"+si[i]);");
+w_v("     }");
+w_v("   return s;");
+w_v("  }");
+w_v("}"); 
+w_v("#endif");
+write_n.write_close_v();read_n.read_close_v();
+return(rc); 
+}
+static void xy_v(String cmd_si,String cmd_class_si)
+{cmd_s="(X,X2,Y,Y2)."+(""==cmd_class_si?upper_name_s(cmd_si):cmd_si);
+ w_v("no_s=\"3\";class_s=\""+(""==cmd_class_si?upper_name_s(cmd_si):upper_name_s(cmd_class_si))+"\";");
+}
+static void cmd_v(String cmd_si,String cmd_class_si,String com_si)
+  {cmd_s=cmd_si;w_v("no_s=\"2\";class_s=\""+(""==cmd_class_si?cmd_si:cmd_class_si)+"\";");w_v("w_help_v(\"〇"+cmd_si+".名前---"+com_si+"\");");}
+static String upper_name_s(String si)
+  {String s="";
+   for(int i=0;z_p.length(si)>i;i++)
+     {if(0<i)//１文字目はそのまま
+        {if(z_p.e2s_b(z_p.substring3_s(si,i,2),"3D")){s+="_3D";i++;continue;}
+         if('A'<=si[i]&&'Z'>=si[i])s+='_';
+        }
+      s+=z_p.upper_s(""+si[i]);
+     }
+   return s;
+  }
+static void w_v(String si){if(!write_n.write_b(si))errw_v();}
+static void errw_v(){rc=1;z_p.console_write_v("wite file error");}
+static void err_v(String si){rc=1;z_p.console_write_v("*(ERR)*"+si+"/"+read_n.read_data_s);}
+}

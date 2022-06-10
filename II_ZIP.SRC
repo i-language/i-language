@@ -1,0 +1,126 @@
+//= II_ZIP.SRC zip class author nobumichi harasawa
+#if IMENU||ITIME
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.Drawing;
+//SS using System.IO;
+//JJ import java.awt.*;
+//JJ import java.awt.event.*;
+//JJ import java.io.*;
+//JJ import java.math.*;
+//JJ import java.util.*;
+//SS using System.Data.SqlClient;
+public class ii_zip_l
+{
+//COPY *BEGIN
+int zip_rc=0;
+String name_s= null ;
+//JJ File name_n= null ;
+//JJ File zip_n= null ;
+//JJ File dir_n= null ;
+//JJ FileOutputStream fos_n= null ;
+//JJ java.util.zip.ZipOutputStream zos_n= null ;
+ii_z_l z_p;
+public ?void? ii_zip_l(ii_z_l z_ni){z_p=z_ni;}
+public int zip(String name_si)
+{zip_rc=0;name_s=name_si;
+//JJ name_n=new File(name_s);
+if(z_p.ends_with_b(z_p.lower_s(name_s),".zip"))
+     return(zip_to_dir());
+else return(dir_to_zip());
+}
+int zip_to_dir()
+{String dir_s=z_p.substring3_s(name_s,0,z_p.length(name_s)-4);
+//JJ FileInputStream  fis_n= null ;
+try{
+//JJ dir_n=new File(dir_s);
+//SS if(!File.Exists(name_s))//ファイル無エラー
+//JJ if(!name_n.isFile())//ファイル無エラー
+     {z_p.err_s="not file ("+name_s+")";return 1;}//ファイル無エラー
+//SS if(Directory.Exists(dir_s))Directory.Delete(dir_s,true);//ディレクトリを消す。
+//JJ if(dir_n.isDirectory())dir_n.delete();//ディレクトリを消す。
+//JJ dir_n.mkdirs();//ディレクトリを作成。
+//SS System.IO.Compression.ZipFile.ExtractToDirectory(name_s,dir_s);//解凍処理
+//SS  return 0;
+//JJ fis_n=new FileInputStream(name_n);
+//JJ java.util.zip.ZipInputStream zis_n=new java.util.zip.ZipInputStream(fis_n);
+//JJ java.util.zip.ZipEntry ze_n= null ;
+//JJ for(;((ze_n=zis_n.getNextEntry())!= null );)
+//JJ   {String gn_s=ze_n.getName();
+//JJ    if(ze_n.isDirectory()){File dir2_n=new File(dir_n,gn_s);dir2_n.mkdirs();}
+//JJ    else
+//JJ      {File file_n=new File(dir_n,gn_s);
+//JJ       File pf_n=file_n.getParentFile();pf_n.mkdirs();
+//JJ       fos_n=new FileOutputStream(file_n);
+//JJ       byte[] byte_nx=new byte[256];
+//JJ       int cnt=0;
+//JJ       for(;(cnt=zis_n.read(byte_nx))>0;)fos_n.write(byte_nx,0,cnt);
+//JJ       fos_n.close();
+//JJ       fos_n= null ;
+//JJ      }
+//JJ   }
+//JJ  zis_n.closeEntry();
+   }
+catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);zip_rc=1;}
+//JJ if(fis_n!= null ){try{fis_n.close();}catch( Exception e){}fis_n= null ;}
+//JJ if(fos_n!= null ){try{fos_n.close();}catch( Exception e){}fos_n= null ;}
+return zip_rc;    
+}
+int dir_to_zip()
+{String zip_s=name_s+".zip";
+try {
+//SS if(!Directory.Exists(name_s))//ディレクトリ無エラー
+//JJ if(!name_n.isDirectory())//ディレクトリ無エラー
+     {z_p.err_s="not directory ("+name_s+")";return 1;}//ディレクトリ無エラー
+//JJ zip_n=new File(zip_s);
+//SS if(File.Exists(zip_s))File.Delete(zip_s);//ファイルを消す。
+//JJ if(zip_n.isFile())zip_n.delete();//ファイルを消す。
+//SS  System.IO.Compression.ZipFile.CreateFromDirectory(name_s,zip_s);//圧縮処理
+//SS  return 0;
+//JJ  zos_n=new java.util.zip.ZipOutputStream(new FileOutputStream(zip_n));
+//JJ  dir_to_zip(name_n,0);
+    }
+catch (Exception e_ni){z_p.err_s=z_p.message_s(e_ni);zip_rc=1;}
+//JJ if(zos_n!= null )
+//JJ   {try{zos_n.closeEntry();}catch(Exception e){}
+//JJ    try{zos_n.flush();}catch(Exception e){}
+//JJ    try{zos_n.close();}catch(Exception e){}
+//JJ    zos_n= null ;
+//JJ   }
+return zip_rc;
+}
+//JJ int dir_to_zip(File name_ni,int sw)
+//JJ {
+//JJ if(1==sw){if(0!=dir_to_zip(name_ni))return 1;}
+//JJ if(name_ni.isDirectory())
+//JJ   {File[] lf_yx=name_ni.listFiles();
+//JJ    for(File lf_n:lf_yx)
+//JJ        {if(lf_n.isDirectory()){if(0!=dir_to_zip(lf_n,1))return 1;}
+//JJ         else
+//JJ         if(0!=dir_to_zip(lf_n))return 1;
+//JJ        }
+//JJ  }
+//JJ return 0;
+//JJ }
+//JJ int dir_to_zip(File name_ni)
+//JJ {
+//JJ zos_n.setLevel(6);
+//JJ try{
+//JJ zos_n.putNextEntry(new java.util.zip.ZipEntry(z_p.substring2_s(name_ni.getAbsolutePath(),z_p.length(name_s+z_p.dir_s))+(name_ni.isDirectory()?"/":"")));
+//JJ if(!name_ni.isDirectory())
+//JJ   {BufferedInputStream bis_n=new BufferedInputStream(new FileInputStream(name_ni));
+//JJ    int cnt=0;
+//JJ     byte[] byte_yx=new byte[1024]; // 読み込みバッファ
+//JJ    for(;(cnt=bis_n.read(byte_yx,0,byte_yx.length))!=-1;)zos_n.write(byte_yx,0,cnt);
+//JJ    bis_n.close();
+//JJ   }
+//JJ zos_n.closeEntry();
+//JJ     }
+//JJ catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);return 1;}
+//JJ return 0;
+//JJ }
+//COPY *END
+}
+#endif     

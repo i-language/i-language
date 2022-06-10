@@ -1,0 +1,293 @@
+// ISRVC.CS service author nobumichi.harasawa 
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//PP #include "isrvc.h"
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.ComponentModel;
+//SS using System.Data;
+//SS using System.Diagnostics;
+//SS using System.IO;
+//SS using System.Net;
+//SS using System.Net.Sockets;
+//SS using System.Threading;
+//SS using System.Text;
+//JJ import java.lang.*;
+//JJ import java.net.*;
+//JJ import java.io.*;
+//JJ import java.util.*;
+//PP #include "isrvc.h"
+//PP #include <stdarg.h>
+////HP #define SERVICE_NAME TEXT("i33srvc")
+//HP #define DEBUG_BUFF_SIZE (1024)
+#if W
+#if DOTNET
+//SS using System.Linq;
+//SS using System.Threading.Tasks;
+//SS using Microsoft.Extensions.Hosting;
+//SS using Microsoft.Extensions.DependencyInjection;
+//SS using Microsoft.Extensions.Logging;
+#else //DOTNET
+//SS using System.Configuration.Install;
+#endif //DOTNET 
+//SS using System.ServiceProcess;
+//HP /* void dummy(){ */ //プログラム変換で下記CPP側に定義設定の為設定
+//HP ii_z_l z_n;ii_z_l z_p;
+//HP SERVICE_TABLE_ENTRY ServiceTable[]={{TEXT("I37SRVC"),ServiceMain},{NULL,NULL}};
+//HP BOOL run_b=TRUE;
+//HP BOOL stop_b=FALSE;
+//HP BOOL start_b=TRUE;
+//HP SERVICE_STATUS_HANDLE service_status_handle_nn=NULL;
+//HP /*             }//dummy()*/ //プログラム変換で上記CPP側に定義設定の為設定
+//HP int main(){StartServiceCtrlDispatcher(ServiceTable);}
+//HP DWORD WINAPI HandlerEx(DWORD Control_dwi,DWORD EventType_dwi,LPVOID EventData_lpi,LPVOID Context_lpi)
+//HP {SERVICE_STATUS service_status_nn;
+//HP  BOOL rc_b;
+//HP  service_status_nn.dwServiceType=SERVICE_WIN32_OWN_PROCESS;
+//HP  service_status_nn.dwWin32ExitCode=NO_ERROR;
+//HP  service_status_nn.dwServiceSpecificExitCode=0;
+//HP  service_status_nn.dwCheckPoint=1;
+//HP  service_status_nn.dwWaitHint=3000;
+//HP  service_status_nn.dwControlsAccepted=SERVICE_ACCEPT_STOP;
+//HP  switch(Control_dwi)
+//HP    {
+//HP     case SERVICE_CONTROL_STOP:
+////HP          service_status_nn.dwCurrentState=SERVICE_STOP_PENDING;
+////HP          rc_b=SetServiceStatus (service_status_handle_nn,&service_status_nn);
+////HP          if(!rc_b){z_p.srvc_log_file_v(9,"ERROR SERVICE_CONTROL_STOP/1");break;}
+////HP          service_b=FALSE;
+////HP          Sleep (3 * 1000);
+//HP          service_status_nn.dwCurrentState=SERVICE_STOPPED;
+//HP          service_status_nn.dwCheckPoint=0;
+//HP          service_status_nn.dwWaitHint=0;
+//HP          rc_b=SetServiceStatus (service_status_handle_nn,&service_status_nn);
+//HP          if(!rc_b){z_p.srvc_log_file_v(9,"ERROR SERVICE_CONTROL_STOP");break;}
+//HP          stop_b=TRUE;run_b=FALSE;
+//HP          break;
+//HP     case SERVICE_CONTROL_PAUSE:
+////HP           service_status_nn.dwCurrentState=SERVICE_PAUSE_PENDING;
+////HP           rc_b=SetServiceStatus (service_status_handle_nn,&service_status_nn);
+////HP           if(!rc_b){z_p.srvc_log_file_v(9,"ERROR SERVICE_CONTROL_PAUSE");break;}
+////HP          run_b=FALSE;
+//HP          service_status_nn.dwCurrentState=SERVICE_PAUSED;
+//HP          service_status_nn.dwCheckPoint=0;
+//HP          service_status_nn.dwWaitHint=0;
+//HP          service_status_nn.dwControlsAccepted|=SERVICE_ACCEPT_PAUSE_CONTINUE;
+//HP          rc_b=SetServiceStatus (service_status_handle_nn,&service_status_nn);
+//HP          if(!rc_b){z_p.srvc_log_file_v(9,"ERROR SERVICE_CONTROL_PAUSE");break;}
+//HP          stop_b=TRUE;
+//HP          break;
+//HP     case SERVICE_CONTROL_CONTINUE:
+////HP          service_status_nn.dwCurrentState=SERVICE_START_PENDING;
+////HP          rc_b=SetServiceStatus (service_status_handle_nn,&service_status_nn);
+////HP           if(!rc_b){z_p.srvc_log_file_v(9,"ERROR SERVICE_CONTROL_CONTINUE/1");break;}
+////HP           run_b=TRUE;
+//HP           service_status_nn.dwCurrentState=SERVICE_RUNNING;
+//HP           service_status_nn.dwCheckPoint=0;
+//HP           service_status_nn.dwWaitHint=0;
+//HP           service_status_nn.dwControlsAccepted|=SERVICE_ACCEPT_PAUSE_CONTINUE;
+//HP           rc_b=SetServiceStatus(service_status_handle_nn,&service_status_nn);
+//HP           if(!rc_b){z_p.srvc_log_file_v(9,"ERROR SERVICE_CONTROL_CONTINUE");break;}
+//HP           start_b=TRUE;
+//HP           break;
+//HP     default:
+//HP           return ERROR_CALL_NOT_IMPLEMENTED;
+//HP    }
+//HP      return NO_ERROR;
+//HP }
+//HP VOID WINAPI ServiceMain(DWORD Argc_dwi,PTSTR* pszArgv_pti)
+//HP {
+//HP z_n=new ii_z_l("ISRVC");z_p=z_n;
+//HP Thread Thread_6_n;
+//HP z_p.srvc_log_file_v(0,"Begin");
+//HP z_p.srvc_log_file_v(1,"Start");
+//HP ii_srvc_l srvc_6_n=new ii_srvc_l(z_p,6);
+//HP  run_b=TRUE;
+//HP  stop_b=FALSE;
+//HP  start_b=TRUE;
+//HP  BOOL rc_b;
+//HP  SERVICE_STATUS service_status_nn;
+//HP  service_status_nn.dwServiceType=SERVICE_WIN32_OWN_PROCESS;
+//HP  service_status_nn.dwWin32ExitCode=NO_ERROR;
+//HP  service_status_nn.dwServiceSpecificExitCode=0;
+//HP  service_status_nn.dwCheckPoint=1;
+//HP  service_status_nn.dwWaitHint=1000;
+//HP  service_status_nn.dwControlsAccepted=SERVICE_ACCEPT_STOP;
+//HP  service_status_handle_nn=RegisterServiceCtrlHandlerEx(TEXT("I37SRVC"),HandlerEx,NULL);
+//HP  if(0==service_status_handle_nn){z_p.srvc_log_file_v(9,"ERROR ServiceMain/1");return;}
+//HP  service_status_nn.dwCurrentState=SERVICE_START_PENDING;
+//HP  rc_b=SetServiceStatus(service_status_handle_nn,&service_status_nn);
+//HP  if(!rc_b){z_p.srvc_log_file_v(9,"ERROR ServiceMain/2");return;}
+//HP  service_status_nn.dwCurrentState=SERVICE_RUNNING;
+//HP  service_status_nn.dwCheckPoint=0;
+//HP  service_status_nn.dwWaitHint=0;
+//HP  service_status_nn.dwControlsAccepted=SERVICE_ACCEPT_PAUSE_CONTINUE|SERVICE_ACCEPT_STOP;
+//HP  rc_b=SetServiceStatus (service_status_handle_nn,&service_status_nn);
+//HP  if(!rc_b){z_p.srvc_log_file_v(9,"ERROR ServiceMain/3");return;}
+//HP  for(;;)
+//HP    {if(start_b){srvc_6_n.start();start_b=FALSE;}//開始 	
+//HP     if(stop_b) {srvc_6_n.quit(); stop_b=FALSE;}//終了
+//HP     if(!run_b)break;   //終了
+//HP     Sleep(5000);
+//HP    }
+//HP  z_p.srvc_log_file_v(9,"END ServiceMain");
+//HP }
+#if DOTNET
+//SS public class Worker:BackgroundService
+//SS {private readonly ILogger<Worker> _logger;
+//SS  public Worker(ILogger<Worker> logger){_logger=logger;}
+//SS  protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+//SS    {while (!stoppingToken.IsCancellationRequested)
+//SS       {_logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+//SS        await Task.Delay(1000,stoppingToken);
+//SS       }
+//SS    }
+//SS }
+//SS public static class ServiceBaseLifetimeHostExtensions
+//SS {public static IHostBuilder UseServiceBaseLifetime(this IHostBuilder ihost_builder_ni)
+//SS   {return ihost_builder_ni.ConfigureServices((hostContext,services) => services.AddSingleton<IHostLifetime,isrvc_l>());}
+//SS  public static Task RunAsServiceAsync(this IHostBuilder ihost_builder_ni,CancellationToken cancell_ation_token_ni=default)
+//SS   {return ihost_builder_ni.UseServiceBaseLifetime().Build().RunAsync(cancell_ation_token_ni);}
+//SS }
+#else //DOTNET
+//SS [RunInstallerAttribute(true)]
+//SS public class installer:Installer
+//SS {
+//SS private ServiceInstaller service;
+//SS private ServiceProcessInstaller process;
+//SS public installer()
+//SS {
+//SS process=new ServiceProcessInstaller();
+//SS service=new ServiceInstaller();
+//SS process.Account=ServiceAccount.LocalSystem;
+//SS service.StartType=ServiceStartMode.Automatic;
+//SS service.ServiceName="isrvc_l";
+//SS Installers.Add(service);
+//SS Installers.Add(process);
+//SS }
+//SS }
+#endif //DOTNET 
+//SS #pragma warning disable CA1416
+//SS public class isrvc_l:System.ServiceProcess.ServiceBase
+#if DOTNET
+//SS ,IHostLifetime
+//SS {private readonly TaskCompletionSource<object> task_completion_source_n = new TaskCompletionSource<object>();
+//SS  public isrvc_l(IHostApplicationLifetime iapplication_lifetime_ni)
+//SS   {isrvc_v();
+//SS    iapplication_lifetime_n=iapplication_lifetime_ni ?? throw new ArgumentNullException(nameof(iapplication_lifetime_ni));}
+//SS    private IHostApplicationLifetime iapplication_lifetime_n{get;}
+//SS    public Task WaitForStartAsync(CancellationToken cancellation_token_ni)
+//SS      {cancellation_token_ni.Register(() => task_completion_source_n.TrySetCanceled());
+//SS       iapplication_lifetime_n.ApplicationStopping.Register(Stop);
+//SS       new Thread(Run).Start(); 
+//SS       return task_completion_source_n.Task;
+//SS      }
+//SS    private void Run()
+//SS      {try{Run(this);task_completion_source_n.TrySetException(new InvalidOperationException("Invalid Opereation"));}
+//SS       catch (Exception e_ni){task_completion_source_n.TrySetException(e_ni);}
+//SS      }
+//SS    public Task StopAsync(CancellationToken cancellation_token_ni)
+//SS      {Stop();return Task.CompletedTask;}
+#else //DOTNET 
+//SS {
+#endif //DOTNET 
+//SS ii_z_l z_n;ii_z_l z_p;
+//SS Thread Thread_6_n,Thread_4_n;
+//SS ii_srvc_l srvc_6_n,srvc_4_n;
+//SS private System.ComponentModel.Container components= null ;
+#if DOTNET
+//SS public void isrvc_v()
+#else //DOTNET
+//SS public isrvc_l()
+#endif //DOTNET
+//SS {z_n=new ii_z_l("ISRVC");z_p=z_n;
+//SS components=new System.ComponentModel.Container();
+//SS AutoLog=false;
+//SS ServiceName=z_p.service_name_s;
+//SS z_p.srvc_log_file_v(0,"Begin");
+//SS try{srvc_6_n=new ii_srvc_l(z_p,6);
+//SS     Thread_6_n=new Thread(new ThreadStart(srvc_6_n.go_v));
+//SS    }
+//SS catch(Exception e_ni){z_p.srvc_log_file_v(9,"Thread(6)new thread"+z_p.message_s(e_ni));}
+//SS try{srvc_4_n=new ii_srvc_l(z_p,4);
+//SS     Thread_4_n=new Thread(new ThreadStart(srvc_4_n.go_v));
+//SS    }
+//SS catch(Exception e_ni){z_p.srvc_log_file_v(9,"Thread(4)new thread"+z_p.message_s(e_ni));}
+#if DOTNET
+//SS return;
+#endif //DOTNET
+//SS }
+#if DOTNET
+//SS public static IHostBuilder CreateHostBuilder(string[] args) =>
+//SS    Host.CreateDefaultBuilder(args).ConfigureServices((hostContext, services) =>
+//SS   {services.AddHostedService<Worker>();});
+//SS static async Task Main(string[] arg_sxi)
+//SS {var create_host_builder_n=CreateHostBuilder(arg_sxi);
+//SS  await create_host_builder_n.RunAsServiceAsync();
+#else //DOTNET
+//SS public static void Main()
+//SS {
+//SS System.ServiceProcess.ServiceBase[] ServicesToRun
+//SS  =new System.ServiceProcess.ServiceBase[]{new isrvc_l()};
+//SS  Run(ServicesToRun);
+#endif //DOTNET
+//SS }
+//SS protected override void Dispose(bool disposing_bi)
+//SS {if(disposing_bi)if(components!= null )components.Dispose();
+//SS  base.Dispose( disposing_bi );
+//SS }
+//SS protected override void OnStop()
+//SS {z_p.srvc_log_file_v(1,"Stop");
+////SS try{srvc_6_n.abort();Thread_6_n.Abort();} //VER35.1
+//SS try{srvc_6_n.abort();     //VER35.1
+//SS     srvc_6_n.sw_abort=1;  //VER35.1
+//SS    }                      //VER35.1 
+//SS catch(Exception e_ni){z_p.srvc_log_file_v(9,"Abort(4)"+z_p.message_s(e_ni));}
+////SS try{srvc_4_n.abort();Thread_4_n.Abort();} //VER35.1
+//SS try{srvc_4_n.abort();     //VER35.1
+//SS     srvc_4_n.sw_abort=1;  //VER35.1
+//SS    }                      //VER35.1 
+//SS catch(Exception e_ni){z_p.srvc_log_file_v(9,"Abort(6)"+z_p.message_s(e_ni));}
+#if DOTNET
+//SS base.OnStop();
+#endif //DOTNET 
+//SS }
+//SS protected override void OnStart(String[] arg_sxi)
+//SS {z_p.sleep_v(3000);
+//SS z_p.srvc_log_file_v(1,"Start");
+//SS try{Thread_6_n.Start();}
+//SS catch(Exception e_ni){z_p.srvc_log_file_v(9,"Start(4)"+z_p.message_s(e_ni));}
+//SS try{Thread_4_n.Start();}
+//SS catch(Exception e_ni){z_p.srvc_log_file_v(9,"Start(6)"+z_p.message_s(e_ni));}
+#if DOTNET
+//SS base.OnStart(arg_sxi);
+#endif //DOTNET 
+//SS #pragma warning disable CA1416
+//SS }
+//SS }
+#else //W
+//SJ public class isrvc_l
+//SJ {
+//HP int main(int arg_i, char** arg_cci)
+//SJ public static void Main(String[] arg_sxi)
+{
+//HP QApplication app_nn(arg_i,arg_cci);
+//SJ ii_z_l z_n=new ii_z_l("ISRVC",arg_sxi);ii_z_l z_p=z_n;
+//SJ Thread Thread_6_n;
+//SS Thread Thread_4_n;
+//SJ z_p.srvc_log_file_v(0,"Begin");
+//SJ z_p.srvc_log_file_v(1,"Start");
+//SJ try{
+//SJ ii_srvc_l srvc_6_n=new ii_srvc_l(z_p,6);
+//SS Thread_6_n=new Thread(new ThreadStart(srvc_6_n.go_v));
+//SS Thread_6_n.Start();
+//JJ srvc_6_n.start();  //(JavaはIPv4とIPv6を受信）
+//SJ    }catch(Exception e_ni){z_p.srvc_log_file_v(9,"Thread(4)thread_start/"+z_p.message_s(e_ni));}
+//SS try{ii_srvc_l srvc_4_n=new ii_srvc_l(z_p,4);
+//SS     Thread_4_n=new Thread(new ThreadStart(srvc_4_n.go_v));
+//SS     Thread_4_n.Start();
+//SS     } 
+//SS catch(Exception e_ni){z_p.srvc_log_file_v(9,"Thread(6)thread_start/"+z_p.message_s(e_ni));}
+}
+//SJ }
+#endif //W

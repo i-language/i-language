@@ -1,0 +1,3 @@
+@ECHO OFF
+REM SET_RENAME_MKDIR_UP.BAT 一つ上のディレクトリ対応
+CALL SET_RENAME_MKDIR.BAT ..\%1 %2 %3 %4 %5 %6 %7 %8 %9

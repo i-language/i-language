@@ -1,0 +1,41 @@
+//II_PRINT.SRC VER4 iprogram author nobumich harasawa
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.Drawing;
+//SS using System.IO;
+//SS using System.Drawing.Printing;
+//SS using System.Drawing.Drawing2D;
+//JJ import java.awt.*;
+//JJ import java.awt.event.*;
+//JJ import java.io.*;
+//JJ import java.math.*;
+//JJ import java.util.*;
+//JJ import javax.print.*;
+//JJ import javax.print.attribute.*;
+//JJ import javax.print.attribute.standard.*;
+//JJ import java.awt.print.*;
+//=========( iprint_l )=========================================================================
+public class ii_print_l
+{                                                                    
+public String command_s=""; // 　　CODE39　IMAGE　　TEXT
+public int data=0;          //(0=外部からもらわない,1=新規で外部からもらう,2=継続で外部からもらう）
+public String data_s="";    //     [文字列] ファイル名
+public String etc_s="";     //　　             　　 編集
+public int index=0;         // 　　(文字名) （線名）　　　
+public int cnt=0;           // 　　　　　   　　　　文字数 　　　　　　　
+public float x=0;           //　　　x　　　　x
+public float y=0;           //　　　y　　　　ｙ
+public float x2=0;          //　　　文字x　　x2 
+public float y2=0;          //　　　文字y　　y2
+public float etc1=0;        //　    細線幅　　　    文字間隔 　　　　　　　　
+public float etc2=0;        //　    コード縦　
+public float etc3=0;        //　　　文字サイズ　
+public ii_print_l(){}
+public ii_print_l(ii_print_l p_ni)
+{command_s=p_ni.command_s;data=p_ni.data;data_s=p_ni.data_s;
+etc_s=p_ni.etc_s;index=p_ni.index;cnt=p_ni.cnt;x=p_ni.x;y=p_ni.y;x2=p_ni.x2;y2=p_ni.y2;
+etc1=p_ni.etc1;etc2=p_ni.etc2;etc3=p_ni.etc3;
+}
+}

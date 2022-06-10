@@ -1,0 +1,15 @@
+@ECHO ON
+IF "%I_VER%"=="" CALL C_BEGIN.BAT
+IF "%1"=="" CALL C_SOURCE.BAT 
+@ECHO ON
+SET I_LOG=TMP_CPP_COMPILE.TXT
+SET Path=%Path%;%I_QT_TOOLS%
+CD ..\%I_VER%_WORK
+%I_QMAKE_W% ITESTWC.pro -spec win32-g++ "CONFIG+=qtquickcompiler"
+%I_MAKE_W% -j6 >NUL 2>%I_LOG%
+IF EXIST *.o ERASE /Q *.o  
+%I_XCOPYF% release\ITESTWC.EXE ..\%I_VER%_BIN\CLIENT_WC
+IF "%1"=="" FIND "error:" %I_LOG%
+IF "%1"=="" %I_XCOPYD% ..\%I_VER%_BIN\CLIENT_WC\ITESTWC.* %I_BIN%
+IF "%1"=="" %I_BIN%\ITESTWC.EXE
+IF "%1"=="" PAUSE

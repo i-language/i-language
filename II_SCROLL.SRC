@@ -1,0 +1,153 @@
+//= II_SCROLL.SRC i menu author nocumichi.harasawa
+//= メニュー及びファイル起動ジョブ開始
+//=***********( using )**********************
+#if IMENU
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//SS using System.Data.SqlClient;
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.IO;
+#if ITEST
+//SS using Xamarin.Forms;
+////SS using System.Drawing.Common;
+#else
+//SS using System.Windows.Forms;
+//SS using System.Drawing;
+#endif
+//JJ import java.awt.*;
+//JJ import java.awt.event.*;
+//JJ import java.io.*;
+//JJ import java.math.*;
+//JJ import java.util.*;
+//---------------------------------------------------------
+public class  ii_scroll_l
+//JJ extends Scrollbar implements AdjustmentListener,FocusListener 
+//HP :public
+//HP QScrollBar
+{
+//COPY $II_DIR
+//COPY $II_READ
+//COPY $II_SQL2
+//COPY $II_URL
+//COPY *BEGIN
+public //(PP対応) 
+ii_z_mt_l scroll_z_mt_p;ii_z_l scroll_z_p;char xy_c;
+#if XAMARIN
+//SS public ScrollView  scroll_n;
+#else
+//SS public ScrollBar  scroll_n;
+#endif
+//JJ Scrollbar  scroll_n;
+public ?void? ii_scroll_l(char xy_ci,ii_z_mt_l z_mt_ni,ii_z_l z_ni)
+{xy_c=xy_ci;scroll_z_mt_p=z_mt_ni;scroll_z_p=z_ni;
+if('X'==xy_c)
+   {
+//HP setOrientation(Qt::Horizontal);
+//SJ scroll_n=new 
+//SS HScrollBar();
+//SS scroll_n.Anchor=AnchorStyles.Left|AnchorStyles.Bottom|AnchorStyles.Right;//横スクロール下端に設定。
+//JJ Scrollbar(Scrollbar.HORIZONTAL);
+   }
+ else {
+//HP setOrientation(Qt::Vertical);
+//SJ scroll_n=new 
+//SS VScrollBar();
+//SS scroll_n.Anchor=AnchorStyles.Top|AnchorStyles.Bottom|AnchorStyles.Right;//縦スクロール右端に設定。
+//JJ Scrollbar(Scrollbar.VERTICAL);
+      }
+//HP setParent(scroll_z_mt_p.imenu_p);
+//SS scroll_n.Scroll+=new ScrollEventHandler(scroll_v);
+//JJ scroll_n.addAdjustmentListener(this);//スクロールイベント有効化。
+//JJ scroll_n.addFocusListener(this);//フォーカスリスナー有効化。
+}
+//======================================================
+public void show_v()//スクロールバー表示
+{
+//HP if('X'==xy_c)
+//HP      setGeometry(0,scroll_z_mt_p.y_window_size-scroll_z_p.lang_y_high,scroll_z_mt_p.x_window_size-scroll_z_p.lang_x_width*2,scroll_z_p.lang_y_high);
+//HP else setGeometry(scroll_z_mt_p.x_window_size-scroll_z_p.lang_x_width*2,0,scroll_z_p.lang_x_width*2,scroll_z_mt_p.y_window_size);
+//HP show();
+//SS scroll_z_mt_p.menu_p.Controls.Add(scroll_n);
+//JJ if('X'==xy_c)scroll_z_mt_p.menu_p.add(scroll_n,BorderLayout.SOUTH);
+//JJ else         scroll_z_mt_p.menu_p.add(scroll_n,BorderLayout.EAST);
+}
+public void hide_v()//スクロールバー非表示
+{try{ 
+//HP hide();
+//SS scroll_z_mt_p.menu_p.Controls.Remove(scroll_n);
+//JJ scroll_z_mt_p.menu_p.remove(scroll_n);
+//HP  setPageStep    (0);
+//SJ scroll_n.
+//SS LargeChange=     0;
+//JJ setVisibleAmount(0);
+//HP setMaximum(0);
+//SJ scroll_n.
+//SS    Maximum=0;
+//JJ setMaximum(0);
+    }catch(Exception){}
+}
+//----------------------------------------------------------------------
+public void set_value_v(int ii)
+{
+//HP setValue(ii);
+//HP repaint();
+//SJ scroll_n.
+//SS    Value=ii;
+//JJ setValue(ii-1);
+}
+public void set_max_large_v(int max_ii,int large_ii)
+{
+//HP  setMaximum(max_ii);
+//SJ scroll_n.
+//SS     Maximum=max_ii;
+//JJ  setMaximum(max_ii);
+//HP  setPageStep     (large_ii);
+//SJ scroll_n.
+//SS  LargeChange=     large_ii;
+//JJ  setVisibleAmount(large_ii);
+//JJ  scroll_n.setBlockIncrement(large_ii);
+}
+public int get_value()
+{return 
+//HP value();
+//SJ scroll_n. 
+//SS  Value;
+//JJ  getValue()+1; //(0>scroll_n.getValue()?0:scroll_n.getValue());
+}
+public int get_large()
+{return 
+//HP  pageStep();
+//SJ  scroll_n.
+//SS  LargeChange;
+//JJ  getVisibleAmount();
+}
+public int  get_max()
+{return 
+//HP  maximum();
+//SJ scroll_n.
+//SS  Maximum;
+//JJ  getMaximum();
+}
+//---------------------------------------------------------------------
+//=**( バーが操作された )***
+//HP void sliderChange(SliderChange change_nn)
+#if XAMARIN
+//SS private void scroll_v(Object o_ni,EventArgs e_ni)
+#else
+//SS private void scroll_v(Object o_ni,ScrollEventArgs e_ni)
+#endif
+//JJ public void adjustmentValueChanged(AdjustmentEvent e_ni)
+{if('X'==xy_c)scroll_z_mt_p.program_p.scroll_x_v(get_value());
+ else {scroll_z_mt_p.program_p.scroll_y_v(get_value()+1,2);
+       if(scroll_z_p.SW_ABORT_9==scroll_z_mt_p.sw_err)scroll_z_mt_p.menu_p.fin_v();
+      }
+}
+//JJ public void focusGained(FocusEvent e_ni)
+//JJ {scroll_z_mt_p.imenu_p.set_focus_v();}//フォーカスを親に戻す。
+//JJ public void focusLost(FocusEvent e_ni){}
+//COPY *END
+//COPY $II_WRITE
+}
+//---------------------------------------------------------------------
+#endif

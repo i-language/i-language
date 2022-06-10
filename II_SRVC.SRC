@@ -1,0 +1,94 @@
+#if ISRVC
+// II_SRVC.SRC service author nobumichi.harasawa 
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//SS using System;
+//SS using System.Collections.Generic;
+////SS using System.Configuration.Install;
+//SS using System.ComponentModel;
+//SS using System.Data;
+//SS using System.Diagnostics;
+//SS using System.IO;
+//SS using System.Net;
+//SS using System.Net.Sockets;
+//SS using System.ServiceProcess;
+//SS using System.Threading;
+//SS using System.Text;
+
+//JJ import java.lang.*;
+//JJ import java.net.*;
+//JJ import java.io.*;
+//JJ import java.util.*;
+
+class ii_srvc_l
+//JJ extends Thread 
+//HP :public
+//HP QThread
+{
+//HP Q_OBJECT
+ii_z_l z_p;int ip46;
+Thread t;
+//HP QTcpServer *Socket_n= null ;
+//SS Socket       Socket_n= null ;
+//JJ ServerSocket Socket_n= null ;
+//SS public int sw_abort=0; //VER35.1 
+ii_srvc2_l srvc2_n; //VER35.1
+public ii_srvc_l(ii_z_l z_ni,int ip46_i){z_p=z_ni;ip46=ip46_i;}
+//SS public void go_v()
+//JP public void run()
+{
+//SJ try{
+//HP     Socket_n=new QTcpServer(); 
+//HP     connect(Socket_n,SIGNAL(newConnection()),this,SLOT(event_v()));
+//HP     connect(Socket_n,SIGNAL(error(QAbstractSocket::SocketError)),this,SLOT(udp_error_v()));  //エラー
+//HP     sw_event=0;Socket_n.listen(QHostAddress::Any,z_p.SERVICE_PORT_NO);
+//HP     for(;0==sw_event&&0==sw_error;)z_p.sleep_v(1000);//完了待ち。
+//HP     if(0!=sw_error){z_p.srvc_log_file_v(9,"Socket()Listen/");return;}//エラー有り。
+////SS     z_p.srvc_log_file_v(1,"Socket("+ip46+")");
+//SS     IPEndPoint ipe_o=new IPEndPoint((4==ip46?IPAddress.Any:IPAddress.IPv6Any),z_p.SERVICE_PORT_NO);
+//SS     Socket_n=new Socket(ipe_o.Address.AddressFamily,SocketType.Stream,ProtocolType.Tcp);
+//JJ     Socket_n=new ServerSocket(z_p.SERVICE_PORT_NO);
+//SS     Socket_n.ExclusiveAddressUse=false;
+//SS     Socket_n.Bind(ipe_o);
+//SS     Socket_n.Listen((int )SocketOptionName.MaxConnections);
+//SJ    }catch(Exception e_ni){z_p.srvc_log_file_v(9,"Socket("+ip46+")Listen/"+z_p.message_s(e_ni));return;}
+for(;;)
+  {
+//SS if(0!=sw_abort)break; //VER35.1
+//SJ try{
+//HP   connect(Socket_n,SIGNAL(readyRead()),this,SLOT(event_v())); //受信待ち準備
+//HP   sw_event=0;QTcpSocket* Socket_2_n=Socket_n.nextPendingConnection();//受信
+//HP   for(;0==sw_event&&0==sw_error;)z_p.sleep_v(1000);//完了待ち。
+//HP   if(0!=sw_error){z_p.srvc_log_file_v(9,"Connect()");return;}//エラー有り。
+//SS   Socket Socket_2_n=Socket_n.Accept();
+//JJ   Socket Socket_2_n=Socket_n.accept();
+//       ii_srvc2_l srvc2_n=new ii_srvc2_l(Socket_2_n,z_p); //VER35.1
+       srvc2_n=new ii_srvc2_l(Socket_2_n,z_p); //VER35.1
+//SS   t=new Thread(new ThreadStart(srvc2_n.go_v));
+//SS   t.Start();
+//JP   srvc2_n.start();
+//SJ    }catch(Exception e_ni){z_p.srvc_log_file_v(9,"Socket("+ip46+")start/"+z_p.message_s(e_ni));}
+  }
+}
+public void abort()
+{
+try{
+//SS Socket_n.Shutdown(SocketShutdown.Both);
+//SS Socket_n.Close();
+////SS t.Abort();        //VER35.1
+//SS srvc2_n.sw_abort=1; //VER35.1  
+//JJ Socket_n.close();
+   }catch(Exception){}
+}
+//HP int sw_error=0,sw_event=0,sw_connect=0;
+//HP String CLOSE_S="The remote host closed the connection";
+//HH private slots:
+//HP void tcp_error_v()
+//HP {z_p.err_s=Socket_n.errorString();
+//HP  sw_error=1;
+//HP }
+//HH private slots:
+//HH private slots:
+//HP void event_v(){sw_event=1;}
+}
+#endif //SRVC||TEST

@@ -1,0 +1,2429 @@
+//= II_Z.SRC e.t.c class author nobumichi harasawa
+//= 共有クラス
+//#if IMENU||ITIME||ISRVC||ICHART||IPRINT||ISETUP||IPAPER||ICHART2||IROOT||ITEST
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//SS using System.Data.SqlClient;
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.IO;
+#if IMENU||ICHART||IPRINT||ISETUP||IPAPER||ICHART2
+//SS using System.Drawing;
+#if XAMARIN
+//SS using Xamarin.Forms;
+#else
+//SS using System.Windows.Forms;
+#endif
+#endif
+//JJ import java.awt.*;
+//JJ import java.awt.event.*;
+//JJ import java.io.*;
+//JJ import java.math.*;
+//JJ import java.util.*;
+//JJ import java.awt.Font;
+//JJ import java.awt.font.FontRenderContext;
+//JJ import java.awt.geom.AffineTransform;
+public class ii_z_l
+{
+public enum prog_e
+{BEGIN
+//###(END以前をトレースし標準出力に書きます。)#############
+      ,AA  //全部に共通
+  ,END
+      ,KE  //KEYBOARD
+      ,ME  //MENU	　
+      ,PR  //PROGRAM
+      ,SE  //SECTION
+      ,LI  //LISTOX
+      ,LI2 //LISTOX2
+      ,KE2 //KEYBOARD2
+      ,ME2 //MENU2	　
+      ,PR2 //PROGRAM2
+      ,SE2 //SECTION2
+//########################################
+};
+public void t_v(int trace_i,String s_i)
+{if(END<trace_i)return;
+String s="";
+if(AA==trace_i)s="AA";
+else if(ME==trace_i)s="ME"; else if(ME2==trace_i)s="ME2"; else if(KE==trace_i)s="KE"; else if(KE2==trace_i)s="KE2";
+else if(LI==trace_i)s="LI"; else if(LI2==trace_i)s="LI2"; else if(PR==trace_i)s="PR"; else if(PR2==trace_i)s="PR2";
+else if(SE==trace_i)s="SE"; else if(SE2==trace_i)s="SE2";
+console_write_v(s+"/"+s_i);
+}
+//SJ public int BEGIN=(int)prog_e.BEGIN.ordinal(),END=(int)prog_e.END.ordinal(),AA=(int)prog_e.AA.ordinal();
+//SJ public int ME=(int)prog_e.ME.ordinal(),ME2=(int)prog_e.ME2.ordinal(),KE=(int)prog_e.KE.ordinal(),KE2=(int)prog_e.KE2.ordinal();
+//SJ public int LI=(int)prog_e.LI.ordinal(),LI2=(int)prog_e.LI.ordinal(),PR=(int)prog_e.PR.ordinal(),PR2=(int)prog_e.PR2.ordinal();
+//SJ public int SE=(int)prog_e.SE.ordinal(),SE2=(int)prog_e.SE2.ordinal();
+public int lang_font_org=
+//HP 12
+//SS 12   //初期値(.NET Framework) 
+//JJ 20   //初期値(Java）          
+;
+public readonly String DUMMY_S="";
+public char os_c=' ';
+public readonly char FRAMEWORK_C= 
+//HP        'C';
+#if DOTNET
+//SS        'D';
+#else //DOTNET
+//SS        '4';
+#endif //DOTNET
+//JJ        'J';
+public String main_program_s="";
+public String dir_s="";
+public String rm_s="";
+public String e_err_s="";
+public bool return_b=false;
+public int x_font2=0;
+public String lang_font_org_s=
+////HP                     "FixedSys";
+                         "MS Gothic";
+public String font_s=
+////HP                 "FixedSys";
+                     "MS Gothic";
+//#if IPAPER
+//#else
+//#if IMENU||ITIME||IPRINT||ICHART
+public ii_version_l version_n;
+//#endif MENU||TIME||PRINT||CHART
+//#endif
+public List<String> s_arg_a=new List<String>(); 
+//HP public int sw_on_paint=0;
+public int sw_printer=0;
+#if IMENU
+readonly String COLOR_S="WLNDXYRGBEP";
+#endif
+#if IMENU||IPRINT
+public int lang_x_offset=0;//横表示位置
+public int lang_y_offset=0;//縦表示位置
+public int lang_x_offset2=0;//横枠位置補正 //VER31.1
+public int lang_y_offset2=0;//縦枠位置補正 //VER31.1
+public int lang_x_geta=0;//画面横方向補正。//VER24.1
+public int lang_y_geta=0;//画面縦方向補正。//VER24.1
+public int lang_x_mouse=0;//横マウス位置補正 //VER31.1
+public int lang_y_mouse=0;//縦マウス位置補正 //VER31.1
+readonly public int N_COLOR=210;
+//SJ public Brush [] Brush_nx;
+//HP public QVector<QBrush> Brush_nx;
+public readonly int WHITE=0,LIGHTGRAY=1,BACKCOLOR=2,DARKGRAY=3,BLACK=4,YELOW=5,RED=6,GREEN=7,BLUE=8;
+public int x_geta_printer=0; 
+public int y_geta_printer=0; 
+public float get_x_offset2_f()
+{return lang_x_offset2+(1==sw_printer?x_geta_printer:0);
+}
+public float get_y_offset2_f()
+{
+return lang_y_offset2+(1==sw_printer?y_geta_printer:0);
+}
+#endif //MENU
+#if IMENU||ITIME||ISRVC||ISETUP
+public ii_password_l password_n;
+#endif
+//HP public ii_z_l(String main_program_si,int arg_i,char** arg_cci)
+//SJ public ii_z_l(String main_program_si,String[] arg_sxi)
+{
+//===(new)===
+prog_n=new ii_zz_l();prog_s_n=new ii_zz_l();prog_c_n=new ii_zz_l();
+//HP exe_name_s=QString::fromLocal8Bit(arg_cci[0]);
+//HP for(int i=1;i<arg_i;i++)s_arg_a->n.push_back(QString::fromLocal8Bit(arg_cci[i]));
+//SJ for(int i=0;i<count_sx_i(arg_sxi);i++)add_s(s_arg_a,arg_sxi[i]);
+sub_v(main_program_si);
+}
+public ii_z_l(String main_program_si){sub_v(main_program_si);}
+void sub_v(String main_program_si)
+{ 
+#if IMENU||ITIME||ISRVC||ISETUP
+password_n=new ii_password_l(this);
+#endif
+//#if IPAPER
+//#else
+//#if IMENU||ITIME||IPRINT||ICHART
+version_n=new ii_version_l(this);
+//#endif MENU||TIME||PRINT||CHART
+//#endif
+//***(***)***
+#if DOTNET
+//SS System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance); //VER35 Shift_JIS対応
+#endif
+main_program_s=main_program_si;
+//HP #if W
+//HP os_c='W';
+//HP #else
+//HP os_c='U';
+//HP #endif
+//SS String s=System.Environment.SystemDirectory;
+//SS os_c=((2<s.Length&&':'==s[1])?'W':'U');//.NET FrameworkのOS判定。 
+//JJ os_c=(e2s_b(System.getProperty("file.separator"),"\\")?'W':'U');//JAVAのOS判定。
+////int i;
+#if IMENU||IPRINT
+//HP Font font(lang_font_org_s,lang_font_org);
+//HP Font_n=font;
+//SJ Font_n=new Font(lang_font_org_s,
+//JJ 0,
+//SJ     lang_font_org);
+font_s=lang_font_org_s;
+//HP Brush_nx.push_back(QBrush(QColor::fromRgb(255,255,255),Qt::SolidPattern)); //W(★JAVA★ は(new Color(255,255,255))に修正で対応。
+//HP Brush_nx.push_back(QBrush(QColor::fromRgb(224,224,224),Qt::SolidPattern)); //L
+//HP Brush_nx.push_back(QBrush(QColor::fromRgb(N_COLOR,N_COLOR,N_COLOR),Qt::SolidPattern)); //N（VER9で変更）
+//HP Brush_nx.push_back(QBrush(QColor::fromRgb(128,128,128),Qt::SolidPattern)); //D
+//HP Brush_nx.push_back(QBrush(QColor::fromRgb(0,0,0),Qt::SolidPattern));       //X
+//HP Brush_nx.push_back(QBrush(QColor::fromRgb(255,255,128),Qt::SolidPattern)); //Y
+//HP Brush_nx.push_back(QBrush(QColor::fromRgb(255,128,192),Qt::SolidPattern)); //R
+//HP Brush_nx.push_back(QBrush(QColor::fromRgb(128,255,128),Qt::SolidPattern)); //G
+//HP Brush_nx.push_back(QBrush(QColor::fromRgb(128,192,255),Qt::SolidPattern)); //B
+//HP Brush_nx.push_back(QBrush(QColor::fromRgb(255,191,127),Qt::SolidPattern)); //E
+//HP Brush_nx.push_back(QBrush(QColor::fromRgb(192,128,255),Qt::SolidPattern));//P
+//SJ Brush_nx=new Brush [11];
+//SJ Brush_nx[0]=new SolidBrush(Color.FromArgb(255,255,255)); //W(★JAVA★ は(new Color(255,255,255))に修正で対応。
+//SJ Brush_nx[1]=new SolidBrush(Color.FromArgb(224,224,224)); //L
+//SJ Brush_nx[2]=new SolidBrush(Color.FromArgb(N_COLOR,N_COLOR,N_COLOR)); //N（VER9で変更）
+//SJ Brush_nx[3]=new SolidBrush(Color.FromArgb(128,128,128)); //D
+//SJ Brush_nx[4]=new SolidBrush(Color.FromArgb(0,0,0));       //X
+//SJ Brush_nx[5]=new SolidBrush(Color.FromArgb(255,255,128)); //Y
+//SJ Brush_nx[6]=new SolidBrush(Color.FromArgb(255,128,192)); //R
+//SJ Brush_nx[7]=new SolidBrush(Color.FromArgb(128,255,128)); //G
+//SJ Brush_nx[8]=new SolidBrush(Color.FromArgb(128,192,255)); //B
+//SJ Brush_nx[9]=new SolidBrush(Color.FromArgb(255,191,127)); //E
+//SJ Brush_nx[10]=new SolidBrush(Color.FromArgb(192,128,255));//P
+#endif
+//#if IMENU||ITIME||ISRVC||ICHART||IROOT //TEST
+//String version2_s=to_i_s(version_n.VERSION2); //VER36.000600003
+//if(length(version2_s)<9)version2_s="0"+version2_s; //VER36.000600003
+//if(length(version2_s)<9)version2_s="0"+version2_s; //VER36.000600003
+//if(length(version2_s)<9)version2_s="0"+version2_s; //VER36.000600003
+String version21_s=substring3_s(version_n.VERSION2_S,0,4);         //VER36.000600003
+String version22_s=substring3_s(version_n.VERSION2_S,4,2);         //VER36.000600003
+String version23_s=substring3_s(version_n.VERSION2_S,6,3);         //VER36.000600003
+if(starts_with_b(version21_s,"0"))version21_s=substring2_s(version21_s,1); //VER36.000600003
+if(starts_with_b(version21_s,"0"))version21_s=substring2_s(version21_s,1); //VER36.000600003
+if(starts_with_b(version21_s,"0"))version21_s=substring2_s(version21_s,1); //VER36.000600003
+if(starts_with_b(version22_s,"0"))version22_s=substring2_s(version22_s,1); //VER36.000600003
+if(starts_with_b(version23_s,"0"))version23_s=substring2_s(version23_s,1); //VER36.000600003
+if(starts_with_b(version23_s,"0"))version23_s=substring2_s(version23_s,1); //VER36.000600003
+//version_s=to_i_s(version_n.VERSION1)+"."+to_i_s(version_n.VERSION2);//VER36.000600003
+version_s=to_i_s(version_n.VERSION1)+"/"+version21_s+"."+version22_s+"."+version23_s; //VER36.000600003
+iv_s="I"+to_i_s(version_n.VERSION1);
+//#endif //MENU||TIME||SRVC||CHART||TEST
+service_name_s=iv_s+"SRVCW"
+//HP +"C"
+////SS +"4" //VER33
+//SS +FRAMEWORK_C //VER33
+         ;
+computer_name_s=machine_name_s();
+server_name_s=upper_s(computer_name_s);
+computer_s=replace_c_s(server_name_s,'-','_');
+if('W'==os_c)
+  {dir_s="\\";rm_s="DEL";
+//SS  os_drive_s=substring3_s(Environment.SystemDirectory,0,2);
+//JP  os_drive_s=environment_s("SystemDrive");
+  }
+else //MENU||TIME||SRVC||PRINT||SETUP||PAPER||CHART||CHART2||TEST
+  {dir_s="/"; rm_s="RM";os_drive_s="/home";}
+//SS os_ver_s=Environment.OSVersion.ToString();
+//JJ os_ver_s=System.getProperty("os.version"); 
+//SS int i=index2c_i(Environment.CommandLine,' ');
+//SS if(-1==i)exe_name_s=Environment.CommandLine.Trim('"');
+//SS else     exe_name_s=substring3_s(Environment.CommandLine,0,i).Trim('"');
+//SS exe_name_s=exe_name_s.Replace(".dll",".exe");
+//JJ exe_name_s=os_drive_s+dir_s+"I"+dir_s+"BIN"+iv_s+dir_s/*+iv_s*/+"IJAVA.jar"; //VER33 VER36.6.0.3
+     exe_path_s=get_current_directory_s();
+int ii=length(exe_name_s)-1; //VER33
+for(;0<ii;ii--)if(e2s_b(substring3_s(exe_name_s,ii,1),dir_s))break; //VER33
+bin_path_s=substring3_s(exe_name_s,0,ii+1); //VER33
+//JJ frc_n=new FontRenderContext(new AffineTransform(),true,true); 
+//#if IMENU||IPRINT
+////SS   StringFormat_n=new StringFormat();
+//#endif 
+}
+//JJ FontRenderContext frc_n;
+//JAVA対応
+
+//=====( java 対応 )=====
+public void console_write_v(String si)
+{
+//HP QTextStream out_nn(stdout);
+////HP out_nn << si.toLocal8Bit() << "\n";
+////HP out_nn << "[UTF-8]" << si.toUtf8() << "\n";
+//HP out_nn << si.toLocal8Bit() << (si.toLocal8Bit()==si.toUtf8()?"":"("+si.toUtf8()+")") << "\n";
+//SS Console.WriteLine(si);
+//JJ System.out.println(si);
+}
+public String console_read_s()
+{
+//HP QTextStream in_nn(stdin);
+//HP return in_nn.readLine(); 
+//SS return Console.ReadLine();
+//JJ try{return (new BufferedReader(new InputStreamReader(System.in))).readLine();}
+//JJ catch(Exception e_ni){return "";}
+}
+public int length(String si)
+{try{
+return 
+//SS si.Length;
+//JP si.length();
+    }catch(Exception){return 0;}
+}
+public int  at_s_i(String si,int ii){return to_c_i(at_s_c(si,ii));}
+public char at_s_c(String si,int ii)
+{if(0>ii)ii=0;
+//HP if(si.length()<(ii+1))return ' ';
+//SS if(si.Length  <(ii+1))return ' ';
+//JJ if(si.length()<(ii+1))return ' ';
+//HP return si.at(ii);
+//SS return si.Substring(ii,1)[0];
+//JJ return si.charAt(ii);
+}
+public int to_c_i(char c_i)
+{return (int )c_i
+//HP            .unicode()
+                          ;
+}
+public String to_c_s(char c_i)
+{return 
+//HP (QString)c_i
+//SS c_i.ToString()
+//JJ String.valueOf(c_i)
+;
+}
+public String to_i_s(int i_i)
+{return 
+//HP QString::fromStdString(std::to_string(i_i)) 
+//SS i_i.ToString()
+//JJ String.valueOf(i_i)
+;
+}
+//HP public String to_cx_s(char *cx_i,int i_i)
+//SJ public String to_cx_s(char[] cx_i,int i_i)
+{String w_s="";
+//HP for(int i=0;i<i_i;i++)w_s+=(QString)cx_i[i];
+//SJ w_s=substring3_s(new String(cx_i),0,i_i);
+return w_s;
+} 
+
+public String substring2_s(String si,int start)
+{if(0>start)start=0;
+//SS if(si.Length  <(start+1))return "";
+//JP if(si.length()<(start+1))return "";
+//HP return si.mid(start);
+//SS return si.Substring(start);
+//JJ return si.substring(start);
+}
+public String substring3_s(String si,int start,int length)
+{if(0>start)start=0;if(0>length)length=0;
+//SS    if(si.Length  <(start+1))return "";
+//JP    if(si.length()<(start+1))return "";
+//SS    if(si.Length  <(start+length))length=si.Length  -start;
+//JP    if(si.length()<(start+length))length=si.length()-start;
+//HP    return si.mid(start,length);
+//SS    return si.Substring(start,length);
+//JJ    return si.substring(start,start+length);
+}
+public String trim_s(String si)
+{return 
+//HP si.trimmed();
+//SS si.Trim();
+//JJ si.trim();
+}
+public String trim_start_s(String si)
+{
+//SS  return si.TrimStart();
+//JP int i=0;for(;(si.length()-1)>=i&&substring3_s(si,i,1)
+//HP                                                      <=" "
+//JJ                                                      .compareTo(" ")<=0 
+//JP                                                                        ;i++){};
+//JP  return substring3_s(si,i,si.length()-i);
+}
+public String trim_end_s(String si)
+{ 
+//SS return si.TrimEnd();
+//JP int i=si.length()-1;for(;0<=i&&substring3_s(si,i,1)
+//HP                                                    <=" "
+//JJ                                                    .compareTo(" ")<=0 
+//JP                                                                      ;i--){};
+//JP return substring3_s(si,0,i+1);
+}
+public String pad_start_s(String si,int ii){return pad_start_s(si,ii,' ');}
+public String pad_start_s(String si,int ii,char ci)
+{
+//SS return si.PadLeft(ii,ci);
+//JP for(;ii>si.length();)si=to_c_s(ci)+si;return si;
+}
+public String pad_end_s(String si,int ii){return pad_end_s(si,ii,' ');}
+public String pad_end_s(String si,int ii,char ci)
+{
+//SS return si.PadRight(ii,ci);
+//JP for(;ii>si.length();)si=si+to_c_s(ci);return si;
+}
+public String lower_s(String si)
+{return 
+//HP si.toLower();
+//SS si.ToLower();
+//JJ si.toLowerCase();
+}
+public String upper_s(String si)
+{return 
+//HP si.toUpper();
+//SS si.ToUpper();
+//JJ si.toUpperCase();
+}
+//#if IMENU||ITIME
+////HP public void      to_daa_v(da_l* da_out_ni,da_l* da_in_ni)
+////SJ public List<ii_data_l> to_daa_daa(List<ii_data_l> da_i)
+//{
+////HP clear_da_v(da_out_ni);for(int i=1;i<count_da_i(da_in_ni);i++)add_da(da_out_ni,new ii_data_l(at_da(da_in_ni,i)));
+////SJ return new List<ii_data_l>(da_i);
+//}
+//#endif 
+//HP public void         to_sa_v(s_l* s_out_ai,s_l* s_in_ai)
+//SJ public List<String> to_sa_sa(List<String> s_ai)
+{ 
+//HP clear_s_v(s_out_ai);for(int i=0;i<count_s_i(s_in_ai);i++)add_s(s_out_ai,at_s(s_in_ai,i));
+//SJ return new List<String>(s_ai);
+}
+//HP public void      to_ca_v(c_l* c_out_ai,c_l* c_in_ai)
+//SJ public List<char> to_ca_ca(List<char> c_ai)
+{ 
+//HP clear_c_v(c_out_ai);for(int i=0;i<count_c_i(c_in_ai);i++)add_c(c_out_ai,at_c(c_in_ai,i));
+//SJ return new List<char>(c_ai);
+}
+public String to1_i_s(int ii)
+{return 
+//HP QString::number(ii); 
+//SS Convert.ToString(ii);
+//JJ Integer.toString(ii);
+}
+public String to2_i_s(int ii,int length_ii)
+{ 
+//HP String s=QString::number(ii); 
+//HP for(;length_ii>s.length();)s="0"+s;return s;
+//SS return ii.ToString("D"+length_ii);
+//JJ return String.format("%1$0"+length_ii+"d",ii);
+}
+public String to_o_s(double oi)
+{return 
+//HP QString::number(oi); 
+//SS oi.ToString();
+//JJ Double.toString(oi);
+}
+//SJ public String to_d_s(decimal di)
+//SJ {return 
+//SS di.ToString();
+//JJ di.toString();
+//SJ }
+public String replace_c_s(String si,char before_ci,char after_ci)
+{return 
+//SS si.Replace(before_ci,after_ci);
+//JP si.replace(before_ci,after_ci);
+}
+public String replace_s_s(String si,String before_si,String after_si)
+{return 
+//SS si.Replace(before_si,after_si);
+//JP si.replace(before_si,after_si);
+}
+public String url_encode_s(String si,String encode_si)
+{encode_si=encode_s(encode_si); //VER35
+//HP QUrl url(si);QByteArray ba=url.toEncoded();
+//HP return QString::fromUtf8(ba);
+//SS try{return System.Web.HttpUtility.UrlEncode(si,System.Text.Encoding.GetEncoding(encode_si));}catch(Exception)
+//JJ try{return java.net.URLEncoder.encode(si,encode_si);}catch(UnsupportedEncodingException e)
+    {return si;}
+}
+public String encode_s(String encode_si)
+{String encode_upper_s=upper_s(encode_si);
+if(e2s_b(encode_si,"/"))
+#if W
+//HP return "Shift-JIS";
+//SS return "shift_jis"; 
+//JJ if('W'==os_c) return "SJIS";else 
+#else
+//JP  return "UTF-8";
+//SS  return "utf-8";
+#endif
+if(e5s_b(encode_upper_s,"","UTF_8","UTF-8","UTF8"))return 
+//JP  "UTF-8";
+//SS  "utf-8";
+if(e4s_b(encode_upper_s,"EUC_JP","EUC-JP","EUCJP"))return 
+//JP   "EUC-JP";
+//SS   "euc-jp";
+if(e4s_b(encode_upper_s,"SHIFT_JIS","SHIFT-JIS","SJIS"))return 
+//HP    "Shift-JIS";
+//SS    "shift_jis"; 
+//JJ    "SJIS";
+//SS encode_si=lower_s(encode_si);
+return encode_si;
+}
+public String url_decode_s(String si,String encode_si)
+{encode_si=encode_s(encode_si); //VER35
+////HP QTextCodec* tc_n=QTextCodec::codecForName("UTF-8");//VER36.1
+////HP QStringConverter* tc_n=QStringConverter::Utf8;//VER36.1
+////HP return QUrl::fromPercentEncoding(tc_n->fromUnicode(si));//VER36.1
+//HP return QUrl::fromPercentEncoding(si.toUtf8());  //VER36.1
+//SS try{return System.Web.HttpUtility.UrlDecode(si,System.Text.Encoding.GetEncoding(encode_si));}catch(Exception)
+//JJ try{return java.net.URLDecoder.decode(si,encode_si);}catch(UnsupportedEncodingException e)
+    {return si;}
+
+}
+//*****( カンマ区切りで=以降を無視し設定,引用符内も無視 )****
+public String name_only_s(String si)
+{String w_s="";int i=0,sta=0,lsw=0;
+for(;i<length(si);i++)
+   if('\''==at_s_c(si,i)){if(1==lsw)lsw=2;else if(2==lsw)lsw=1;}
+   else if(0==lsw&&e2c_b(at_s_c(si,i),'=')){w_s+=substring3_s(si,sta,i-sta);lsw=1;}
+        else if(1==lsw&&e2c_b(at_s_c(si,i),',')){lsw=0;sta=i;}
+if(0==lsw)w_s+=substring3_s(si,sta,i-sta);
+return w_s;
+}
+public void split_s_v(List<String> s_out_ai,String si,char split_ci)
+{
+clear_s_v(s_out_ai);
+//HP int w_start=0;
+//HP for(int i=0;i<si.length();i++)if(split_ci==si[i]){s_out_ai->n.push_back(si.mid(w_start,i-w_start));w_start=i+1;}
+//HP s_out_ai->n.push_back(si.mid(w_start)); 
+//SJ String[] w_sx= 
+//SS si.Split(split_ci);
+//JJ si.split(""+('.'==split_ci?"\\.":split_ci),-1);
+//SJ console_write_v("count_sx_i(w_sx)="+count_sx_i(w_sx));
+}
+public String[] split_sx(String si,char split_ci)
+{
+//HP String[] w_sx;int w_start=0;
+//HP for(int i=0;i<si.length();i++)if(split_ci==si[i]){w_sx.push_back(si.mid(w_start,i-w_start));w_start=i+1;}
+//HP w_sx.push_back(si.mid(w_start));return w_sx; 
+//SS return si.Split(split_ci);
+//JJ return si.split(""+('.'==split_ci?"\\.":split_ci),-1);
+}
+public int index2s_i(String si,String find_si){return index3s_i(si,find_si,0);}
+public int index3s_i(String si,String find_si,int start)
+{return 
+//SS si.IndexOf(find_si,start);
+//JP si.indexOf(find_si,start);
+}
+public int index2c_i(String si,char find_ci){return index3c_i(si,find_ci,0);}
+public int index3c_i(String si,char find_ci,int start)
+{return 
+//SS si.IndexOf(find_ci,start);
+//JP si.indexOf(find_ci,start);
+}
+public int index2sx_i(String[] sxi,String find_si){return index3sx_i(sxi,find_si,0);}
+public int index3sx_i(String[] sxi,String find_si,int start)
+{
+//SS return Array.IndexOf(sxi,find_si,start);
+//JP int i=start;for(;i<sxi.
+//HP                        size()
+//JJ                        length
+//JP                               &&!(e2s_b(sxi[i],find_si));i++){}
+//JP return (i>= sxi.
+//HP                 size()
+//JJ                 length
+//JP                       ?-1:i);
+}
+public int index2as_i(List<String> s_ai,String find_si){return index3as_i(s_ai,find_si,0);}
+public int index3as_i(List<String> s_ai,String find_si,int start)
+{
+//SS return s_ai.IndexOf(find_si,start);
+//JP int i=start;for(;i<count_s_i(s_ai)&&!(e2s_b(at_s(s_ai,i),find_si));i++){}
+//JP return (i>=count_s_i(s_ai)?-1:i);
+}
+public int index2ac_i(List<char> c_ai,char find_ci){return index3ac_i(c_ai,find_ci,0);}
+public int index3ac_i(List<char> c_ai,char find_ci,int start)
+{
+//SS return c_ai.IndexOf(find_ci,start);
+//JP int i=start;for(;i<count_c_i(c_ai)&&!(e2c_b(at_c(c_ai,i),find_ci));i++){}
+//JP return (i>=count_c_i(c_ai)?-1:i);
+}
+public int last_index2s_i(String si,String find_si)
+{return 
+//SS si.LastIndexOf(find_si);
+//JP si.lastIndexOf(find_si);
+}
+public int last_index3s_i(String si,String find_si,int start)
+{return 
+//SS si.LastIndexOf(find_si,start);
+//JP si.lastIndexOf(find_si,start);
+}
+public int last_index2c_i(String si,char find_ci)
+{return 
+//SS si.LastIndexOf(find_ci);
+//JP si.lastIndexOf(find_ci);
+}
+public int last_index3c_i(String si,char find_ci,int start)
+{return 
+//SS si.LastIndexOf(find_ci,start);
+//JP si.lastIndexOf(find_ci,start);
+}
+public int index2sc_i(String si,String find_si){return index3sc_i(si,find_si,0);}
+public int index3sc_i(String si,String find_si,int start_i)
+{for(int i=start_i;i<length(si);i++)
+  {for(int j=0;j<length(find_si);j++)
+    {//console_write_v("at_s_c(si,i)"+to_c_s(at_s_c(si,i))+",at_s_c(find_si,j)="+to_c_s(at_s_c(find_si,j))+"/"+to_i_s(i)+"/"+to_i_s(j));
+     if(at_s_c(si,i)==at_s_c(find_si,j))return i;
+    }
+  }
+return -1;
+}
+public bool ends_with_b(String si,String ends_si)
+{return 
+//SS si.EndsWith(ends_si);
+//JP si.endsWith(ends_si);
+}
+public bool starts_with_b(String si,String starts_si)
+{return 
+//SS si.StartsWith(starts_si);
+//JP si.startsWith(starts_si);
+}
+public int to_int1s_i(String si)
+{
+try{return  
+//HP si.toInt();
+//SS Convert.ToInt32(si);
+//JJ Integer.parseInt(si);
+   }catch(Exception){return 0;}
+}
+public int to_int2s_i(String si,int ii)//iiで基数を設定。
+{try{return  
+//HP si.toInt(0,ii);
+//SS Convert.ToInt32(si,ii);
+//JJ Integer.parseInt(si,ii);
+    }catch(Exception){return 0;}
+}
+public int to_int_c_i(char ci)
+{return 
+//HP to_int1s_i(QString(ci));
+//SS to_int1s_i(ci.ToString()); 
+//JJ to_int1s_i(String.valueOf(ci));
+}
+public char to_upper_c(char ci)
+{return 
+//HP ci.toUpper();
+//SS char.ToUpper(ci);
+//JJ Character.toUpperCase(ci);
+}
+public char to_lower_c(char ci)
+{return 
+//HP ci.toLower();
+//SS char.ToLower(ci);
+//JJ Character.toLowerCase(ci);
+}
+public bool is_upper_b(char ci)
+{return 
+//HP ci.isUpper();
+//SS char.IsUpper(ci);
+//JJ Character.isUpperCase(ci);
+}
+public bool is_lower_b(char ci)
+{return 
+//HP ci.isLower();
+//SS char.IsLower(ci);
+//JJ Character.isLowerCase(ci);
+}
+public bool is_digit_b(char ci)
+{return 
+//HP ci.isDigit();
+//SS char.IsDigit(ci);
+//JJ Character.isDigit(ci);
+}
+public bool is_letter_b(char ci)
+{return 
+//HP ci.isLetter();
+//SS char.IsLetter(ci);
+//JJ Character.isLetter(ci);
+}
+
+public int count_sx_i(String[] sxi)
+{return 
+//HP (int )sxi.size();
+//SS sxi.Length;
+//JJ sxi.length;
+}
+//HP public int count_pe_i(pe_l* pe_ai)
+//HP {return (int )pe_ai->n.size();}
+public int count_b_i(List<byte> b_ai)
+//HP   {return (int )b_ai->n.size();}
+//SJ   {return b_ai.Count;}
+public int count_c_i(List<char> c_ai)
+//HP   {return (int )c_ai->n.size();}
+//SJ   {return  c_ai.Count;}
+#if IMENU
+public int count_pa_i(List<ii_paint_l> pa_ai)
+//HP   {return (int )pa_ai->n.size();}
+//SJ   {return pa_ai.Count;}
+#endif
+#if IMENU||ITIME
+public int count_da_i(List<ii_data_l> da_ai)
+//HP   {return (int )da_ai->n.size();}
+//SJ   {return da_ai.Count;}
+public int count_xm_i(List<ii_xml_json_l> xm_ai)
+//HP   {return (int )xm_ai->n.size();}
+//SJ   {return xm_ai.Count;}
+public int count_pr_i(List<ii_program_l> pr_ai)
+//HP   {return (int )pr_ai->n.size();}
+//SJ   {return pr_ai.Count;}
+#endif
+public int count_i_i(List<int> i_ai)
+//HP   {return (int )i_ai->n.size();}
+//SJ   {return i_ai.Count;}
+public int count_f_i(List<float> f_ai)
+//HP   {return (int )f_ai->n.size();}
+//SJ   {return f_ai.Count;}
+public int count_p_i(List<ii_print_l> p_ai)
+//HP   {return (int )p_ai->n.size();}
+//SJ   {return p_ai.Count;}
+#if IROOT
+#else
+public int count_re_i(List<ii_read_l> re_ai)
+//HP {return (int )re_ai->n.size();}
+//SJ {return re_ai.Count;}
+#endif
+public int count_s_i(List<String> s_ai)
+//HP   {return (int )s_ai->n.size();}
+//SJ   {return s_ai.Count;}
+public int count_wr_i(List<ii_write_l> wr_ai)
+//HP {return (int )wr_ai->n.size();}
+//SJ {return wr_ai.Count;}
+public int max_value()
+{return 
+//HP 2147483647;
+//SS int.MaxValue;
+//JJ Integer.MAX_VALUE;
+}
+public byte add_b(List<byte> b_ai,byte n_i)
+//HP     { b_ai->n.push_back(n_i); return  b_ai->n.back();}
+//SS     {b_ai.Add(n_i);return(b_ai[b_ai.Count-1]);} 
+//JJ     {b_ai.add(n_i);return(b_ai.get(b_ai.size()-1));}
+
+public char  add_c(List<char> c_ai,char n_i) 
+//HP  {c_ai->n.push_back(n_i); return  c_ai->n.back();}
+//SS  {c_ai.Add(n_i);return(c_ai[c_ai.Count-1]);} 
+//JJ  {c_ai.add(n_i);return(c_ai.get(c_ai.size()-1));}
+public float add_f(List<float> f_ai,float n_i)
+//HP  {f_ai->n.push_back(n_i); return f_ai->n.back();}
+//SS  {f_ai.Add(n_i);return(f_ai[f_ai.Count-1]);} 
+//JJ  {f_ai.add(n_i);return(f_ai.get(f_ai.size()-1));}
+public int   add_i(List<int> i_ai,int n_i)
+//HP  {i_ai->n.push_back(n_i); return  i_ai->n.back();}
+//SS  {i_ai.Add(n_i);return(i_ai[i_ai.Count-1]);} 
+//JJ  {i_ai.add(n_i);return(i_ai.get(i_ai.size()-1));}
+#if IPRINT
+public ii_print_l add_p(List<ii_print_l> p_ai,ii_print_l n_i)
+//HP   {p_ai->n.push_back(n_i);return p_ai->n.back();}
+//SS   {p_ai.Add(n_i);return(p_ai[p_ai.Count-1]);} 
+//JJ   {p_ai.add(n_i);return(p_ai.get(p_ai.size()-1));}
+#endif
+#if IMENU
+public ii_paint_l  add_pa(List<ii_paint_l> pa_ai,ii_paint_l n_i)
+//HP  {pa_ai->n.push_back(n_i);return pa_ai->n.back();}
+//SS  {pa_ai.Add(n_i);return(pa_ai[pa_ai.Count-1]);} 
+//JJ  {pa_ai.add(n_i);return(pa_ai.get(pa_ai.size()-1));}
+#endif
+#if IMENU||ITIME
+public ii_data_l add_da(List<ii_data_l> da_ai,ii_data_l n_i)
+//HP        {da_ai->n.push_back(n_i);return da_ai->n.back();}
+//SS        {da_ai.Add(n_i);return(da_ai[da_ai.Count-1]);} 
+//JJ        {da_ai.add(n_i);return(da_ai.get(da_ai.size()-1));}
+public ii_program_l  add_pr(List<ii_program_l> pr_ai,ii_program_l n_i) 
+//HP     {pr_ai->n.push_back(n_i);return pr_ai->n.back();}
+//SS  {pr_ai.Add(n_i);return(pr_ai[pr_ai.Count-1]);} 
+//JJ  {pr_ai.add(n_i);return(pr_ai.get(pr_ai.size()-1));}
+public ii_xml_json_l add_xm(List<ii_xml_json_l> xm_ai,ii_xml_json_l n_i)
+//HP      {xm_ai->n.push_back(n_i);return xm_ai->n.back();}
+//SS  {xm_ai.Add(n_i);return(xm_ai[xm_ai.Count-1]);} 
+//JJ  {xm_ai.add(n_i);return(xm_ai.get(xm_ai.size()-1));}
+#endif
+#if IMENU||IPRINT
+public Pen add_pe(List<Pen> pe_ai,Pen n_i)
+//HP   {pe_ai->n.push_back(n_i);return pe_ai->n.back();}
+//SS   {pe_ai.Add(n_i);return(pe_ai[pe_ai.Count-1]);} 
+//JJ   {pe_ai.add(n_i);return(pe_ai.get(pe_ai.size()-1));}
+#endif
+public String        add_s(List<String> s_ai,String n_i)  
+//HP   { s_ai->n.push_back(n_i);return  s_ai->n.back();}
+//SS   {s_ai.Add(n_i);return(s_ai[s_ai.Count-1]);} 
+//JJ   {s_ai.add(n_i);return(s_ai.get(s_ai.size()-1));}
+#if IROOT
+#else
+public ii_read_l     add_re(List<ii_read_l> re_ai,ii_read_l n_i)
+//HP     {re_ai->n.push_back(n_i);return re_ai->n.back();}
+//SS     {re_ai.Add(n_i);return(re_ai[re_ai.Count-1]);} 
+//JJ     {re_ai.add(n_i);return(re_ai.get(re_ai.size()-1));}
+public ii_write_l    add_wr(List<ii_write_l> wr_ai,ii_write_l n_i)
+//HP     {wr_ai->n.push_back(n_i);return wr_ai->n.back();}
+//SS     {wr_ai.Add(n_i);return(wr_ai[wr_ai.Count-1]);} 
+//JJ     {wr_ai.add(n_i);return(wr_ai.get(wr_ai.size()-1));}
+#endif
+////HP public void clear_p_v(p_l * p_ai)
+////HP {for(int i=0;i<count_p_i(p_ai);i++)delete at_p(p_ai,i);p_ai->n.clear();}
+public void clear_b_v(List<byte>  b_ai)
+//HP {b_ai->n.clear();}
+//SJ {b_ai.Clear();}
+public void clear_c_v(List<char> c_ai)
+//SJ {c_ai.Clear();}
+//HP {c_ai->n.clear();}
+public void clear_f_v(List<float> f_ai)
+//HP {f_ai->n.clear();}
+//SJ {f_ai.Clear();}
+public void clear_i_v(List<int>   i_ai)
+//HP {i_ai->n.clear();}
+//SJ {i_ai.Clear();}
+#if IMENU
+public void clear_pa_v(List<ii_paint_l> pa_ai)
+//HP {for(int i=0;i<count_pa_i(pa_ai);i++)delete at_pa(pa_ai,i);pa_ai->n.clear();}
+//SJ {pa_ai.Clear();}
+#endif
+#if IMENU||ITIME
+public void clear_da_v(List<ii_data_l>     da_ai)
+//HP {for(int i=0;i<count_da_i(da_ai);i++)delete at_da(da_ai,i);da_ai->n.clear();}
+//SJ {da_ai.Clear();}
+public void clear_pr_v(List<ii_program_l>    pr_ai)
+//HP {for(int i=0;i<count_pr_i(pr_ai);i++)delete at_pr(pr_ai,i);pr_ai->n.clear();}
+//SJ {pr_ai.Clear();}
+public void clear_xm_v(List<ii_xml_json_l> xm_ai)
+//HP {for(int i=0;i<count_xm_i(xm_ai);i++)delete at_xm(xm_ai,i);xm_ai->n.clear();}
+//SJ {xm_ai.Clear();}
+#endif
+#if IMENU||IPRINT
+public void clear_pe_v(List<Pen>  pe_ai)
+//HP   {/*for(int i=0;i<count_pe_i(pe_ai);i++)delete at_pe(pe_ai,i);*/pe_ai->n.clear();}
+//SJ   {pe_ai.Clear();}
+#endif
+#if IROOT
+#else
+public void clear_re_v(List<ii_read_l>  re_ai)
+//HP {for(int i=0;i<count_re_i(re_ai);i++)delete at_re(re_ai,i);re_ai->n.clear();}
+//SJ {re_ai.Clear();}
+#endif
+public void clear_s_v(List<String>     s_ai)
+//HP {s_ai->n.clear();}
+//SJ {s_ai.Clear();}
+public void clear_wr_v(List<ii_write_l> wr_ai)
+//HP {for(int i=0;i<count_wr_i(wr_ai);i++)delete at_wr(wr_ai,i);wr_ai->n.clear();}
+//SJ {wr_ai.Clear();}
+
+public void remove_b_v(List<byte> b_ai,int ii)  
+//HP {b_ai->n.erase(b_ai->n.begin()+ii);}
+//SJ {try{b_ai.RemoveAt(ii);}catch(Exception){}}
+public void remove_c_v(List<char> c_ai ,int ii)  
+//HP {c_ai->n.erase(c_ai->n.begin()+ii);}
+//SJ {try{c_ai.RemoveAt(ii);}catch(Exception){}}
+public void remove_i_v(List<int> i_ai ,int ii)  
+//HP {i_ai->n.erase( i_ai->n.begin()+ii);}
+//SJ {try{i_ai.RemoveAt(ii);}catch(Exception){}}
+#if IMENU
+public void remove_pa_v(List<ii_paint_l>  pa_ai,int ii)
+//HP {delete at_pa(pa_ai,ii);pa_ai->n.erase(pa_ai->n.begin()+ii);}
+//SJ {try{pa_ai.RemoveAt(ii);}catch(Exception){}}
+#endif
+#if IMENU||ITIME
+public void remove_da_v(List<ii_data_l> da_ai,int ii)
+//HP {delete at_da(da_ai,ii);da_ai->n.erase(da_ai->n.begin()+ii);}
+//SJ {try{da_ai.RemoveAt(ii);}catch(Exception){}}
+public void remove_pr_v(List<ii_program_l> pr_ai,int ii)
+//HP {delete at_pr(pr_ai,ii);pr_ai->n.erase(pr_ai->n.begin()+ii);}
+//SJ {try{pr_ai.RemoveAt(ii);}catch(Exception){}}
+public void remove_xm_v(List<ii_xml_json_l>  xm_ai,int ii)
+//HP {xm_ai->n.erase(xm_ai->n.begin()+ii);}
+//SJ {try{xm_ai.RemoveAt(ii);}catch(Exception){}}
+#endif
+#if IROOT
+#else
+public void remove_re_v(List<ii_read_l> re_ai,int ii)
+//HP {delete at_re(re_ai,ii);re_ai->n.erase(re_ai->n.begin()+ii);}
+//SJ {try{re_ai.RemoveAt(ii);}catch(Exception){}}
+#endif
+public void  remove_s_v(List<String>  s_ai ,int ii)
+//HP {s_ai->n.erase( s_ai->n.begin()+ii);}
+//SJ {try{s_ai.RemoveAt(ii);}catch(Exception){}}
+public void remove_wr_v(List<ii_write_l> wr_ai,int ii)
+//HP {delete at_wr(wr_ai,ii);wr_ai->n.erase(wr_ai->n.begin()+ii);}
+//SJ {try{wr_ai.RemoveAt(ii);}catch(Exception){}}
+public void remove_range_c_v(List<char> c_ai,int start_ii,int end_ii)
+//HP {c_ai->n.erase(c_ai->n.begin()+start_ii-1,c_ai->n.begin()+end_ii-1);}
+//SS {c_ai.RemoveRange(start_ii,end_ii);}
+//JJ {for(;0<end_ii;end_ii--)c_ai.remove(start_ii);}
+public void  insert_c_v(List<char> c_ai ,int ii,char ci)  
+//HP {c_ai->n.insert(c_ai->n.begin()+ii,ci);}
+//SJ {c_ai.Insert(ii,ci);}
+#if IMENU
+public void insert_pa_v(List<ii_paint_l> pa_ai,int ii,ii_paint_l ni)
+//HP {pa_ai->n.insert(pa_ai->n.begin()+ii,ni);}
+//SJ {pa_ai.Insert(ii,ni);}
+#endif
+public void  insert_s_v(List<String> s_ai,int ii,String ni) 
+//HP {s_ai->n.insert(s_ai->n.begin()+ii,ni);}
+//SJ {s_ai.Insert(ii,ni);}
+public byte          at_b(List<byte> b_ai ,int ii)
+//HP {if((int )b_ai->n.size()>ii)return(b_ai->n[ii]);else return(0);}
+//SS {if(b_ai.Count >ii)return(b_ai[ii]);    else return(0);}
+//JJ {if(b_ai.size()>ii)return(b_ai.get(ii));else return(0);}
+public char          at_c(List<char> c_ai ,int ii)
+//HP {if((int )c_ai->n.size()>ii) return(c_ai->n[ii]);else return(' ');}
+//SS {if(c_ai.Count >ii)return(c_ai[ii]);    else return(' ');}
+//JJ {if(c_ai.size()>ii)return(c_ai.get(ii));else return(' ');}
+public int           at_i(List<int> i_ai ,int ii)
+//HP {if((int )i_ai->n.size() >ii) return(i_ai->n[ii]);else return(0);}
+//SS {if(i_ai.Count >ii)return(i_ai[ii]);    else return(0);}
+//JJ {if(i_ai.size()>ii)return(i_ai.get(ii));else return(0);}
+#if IMENU
+////SJ public Brush         at_br(List<Brush> ai,int ii)
+////SS {if(ai.Count >ii)return(ai[ii]);    else return(null);}
+////JJ {if(ai.size()>ii)return(ai.get(ii));else return(null);}
+public ii_paint_l    at_pa(List<ii_paint_l> pa_ai,int ii)
+//HP {if((int )pa_ai->n.size() >ii)return(pa_ai->n[ii]);else return( null );}
+//SS {if(pa_ai.Count >ii)return(pa_ai[ii]);    else return(null);}
+//JJ {if(pa_ai.size()>ii)return(pa_ai.get(ii));else return(null);}
+#endif
+#if IMENU||ITIME
+public ii_data_l     at_da(List<ii_data_l> da_ai,int ii)
+//HP {if((int )da_ai->n.size() >ii)return(da_ai->n[ii]);else return( null );}
+//SS {if(da_ai.Count >ii)return(da_ai[ii]);    else return(null);}
+//JJ {if(da_ai.size()>ii)return(da_ai.get(ii));else return(null);}
+public ii_program_l  at_pr(List<ii_program_l> pr_ai,int ii)
+//HP {if((int )pr_ai->n.size() >ii)return(pr_ai->n[ii]);else return(  null );}
+//SS {if(pr_ai.Count >ii)return(pr_ai[ii]);    else return(null);}
+//JJ {if(pr_ai.size()>ii)return(pr_ai.get(ii));else return(null);}
+public ii_xml_json_l at_xm(List<ii_xml_json_l> xm_ai,int ii)
+//HP {if((int )xm_ai->n.size() >ii)return(xm_ai->n[ii]);else return( null );}
+//SS {if(xm_ai.Count >ii)return(xm_ai[ii]);    else return(null);}
+//JJ {if(xm_ai.size()>ii)return(xm_ai.get(ii));else return(null);}
+#endif
+public float         at_f(List<float> f_ai,int ii)
+//HP {if((int )f_ai->n.size()>ii) return(f_ai->n[ii]);else return(0.0f);}
+//SS {if(f_ai.Count >ii)return(f_ai[ii]);    else return(0.0f);}
+//JJ {if(f_ai.size()>ii)return(f_ai.get(ii));else return(0.0f);}
+#if IMENU||IPRINT
+public Pen           at_pe(List<Pen> pe_ai,int ii)
+//HP {if((int )pe_ai->n.size() >ii)return(pe_ai->n[ii]);/*else return(  null );*/}
+//SS {if(pe_ai.Count >ii)return(pe_ai[ii]);    else return(null);}
+//JJ {if(pe_ai.size()>ii)return(pe_ai.get(ii));else return(null);}
+#endif
+public ii_read_l     at_re(List<ii_read_l> re_ai,int ii)
+//HP {if((int )re_ai->n.size() >ii)return(re_ai->n[ii]);else return(  null );}
+//SS {if(re_ai.Count >ii)return(re_ai[ii]); else return(null);}
+//JJ {if(re_ai.size()>ii)return(re_ai.get(ii));else return(null);}
+public ii_write_l    at_wr(List<ii_write_l> wr_ai,int ii)
+//HP {if((int )wr_ai->n.size() >ii)return(wr_ai->n[ii]);else return( null );}
+//SS {if(wr_ai.Count >ii)return(wr_ai[ii]);    else return(null);}
+//JJ {if(wr_ai.size()>ii)return(wr_ai.get(ii));else return(null);}
+public String        at_s(List<String> s_ai,int ii)
+//HP {if((int )s_ai->n.size()  >ii)return(s_ai->n[ii] );else return("");}
+//SS {if(s_ai.Count >ii)return(s_ai[ii]);    else return("");}
+//JJ {if(s_ai.size()>ii)return(s_ai.get(ii));else return("");}
+#if IPRINT
+public ii_print_l    at_p(List<ii_print_l> p_ai,int ii)
+//HP {if((int )p_ai->n.size() >ii)return(p_ai->n[ii]);else return( null );}
+//SS {if(p_ai.Count >ii)return(p_ai[ii]);    else return(null);}
+//JJ {if(p_ai.size()>ii)return(p_ai.get(ii));else return(null);}
+#endif
+//HP public void set_c_v(c_l * c_ai,int ii,char ni){c_ai->n[ii]=ni;}
+//HP public void set_i_v(i_l* i_ai,int ii,int ni){i_ai->n[ii]=ni;}
+//HP public void set_s_v(s_l* s_ai,int ii,String ni){s_ai->n[ii]=ni;}
+//SJ public void set_c_v(List<char> a_i,int i_i,char n_i)
+//SS   {a_i[i_i]=n_i;}
+//JJ   {a_i.set(i_i,n_i);}
+//SJ public void set_i_v(List<int> a_i,int i_i,int n_i)
+//SS   {a_i[i_i]=n_i;}
+//JJ   {a_i.set(i_i,n_i);}
+//SJ public void set_s_v(List<String> a_i,int i_i,String n_i)
+//SS   {a_i[i_i]=n_i;}
+//JJ   {a_i.set(i_i,n_i);}
+////SJ void set_v(ArrayList ai,int ii,Object ni)
+////SJ {
+////SS ai[ii]=ni;
+////JJ ai.set(ii,ni);
+////SJ }
+//HP public int length(QVector<GLbyte> b_yxi)
+//SJ public int length(byte[] b_yxi)
+{return 
+//HP b_yxi.size();
+//SS b_yxi.Length;
+//JJ b_yxi.length;
+}
+public bool low_code_b(String si,int ii)
+{return (e3i_b(kind_code(at_s_c(si,ii)),COMBINING_0,LOW_SURROGATE_5))?true:false;
+}
+//public bool is_surrogate_b(char ci)
+//{return     
+////HP (true==ci.isHighSurrogate()||ci.isLowSurrogate()?true:false);
+////SS Char.IsSurrogate(ci);
+////JJ Character.isSurrogate(ci);
+//}
+//public bool is_low_surrogate_b(char ci)
+//{return     
+////HP ci.isLowSurrogate();
+////SS Char.IsLowSurrogate(ci);
+////JJ Character.isLowSurrogate(ci);
+//}
+//public bool is_high_surrogate_b(char ci)
+//{return     
+////HP ci.isHighSurrogate();
+////SS Char.IsHighSurrogate(ci);
+////JJ Character.isHighSurrogate(ci);
+//}
+#if IMENU||IPRINT
+public bool e2k_b(Keys s_ni,Keys x1_ni)
+{
+if(s_ni==x1_ni)return true;
+//HP e_err_s="\""+to_i_s(s_ni)+"\" not in('"+to_i_s(x1_ni)+"')";
+//SJ e_err_s="\""+s_ni+"\" not in('"+x1_ni+"')";
+return false;
+} 
+public bool e3k_b(Keys s_ni,Keys x1_ni,Keys x2_ni)
+{if( s_ni==x1_ni||s_ni==x2_ni)return true;
+//HP e_err_s="\""+to_i_s(s_ni)+"\" not in('"+to_i_s(x1_ni)+"','"+to_i_s(x2_ni)+"')";
+//SJ e_err_s="\""+s_ni+"\" not in('"+x1_ni+"','"+x2_ni+"')";
+return false;
+} 
+#endif
+public bool e2s_b(String s_si,String x1_si)
+{
+//SP if(s_si==x1_si)return true;
+//JJ if(s_si.equals(x1_si))return true;
+e_err_s="\""+s_si+"\" not in('"+x1_si+"')";
+return false;
+} 
+public bool e3s_b(String s_si,String x1_si,String x2_si)
+{if(
+//SP s_si==x1_si||s_si==x2_si)return true;
+//JJ s_si.equals(x1_si)||s_si.equals(x2_si))return true; 
+e_err_s="\""+s_si+"\" not in('"+x1_si+"','"+x2_si+"')";
+return false;
+} 
+public bool e4s_b(String s_si,String x1_si,String x2_si,String x3_si)
+{if(
+//SP s_si==x1_si||s_si==x2_si||s_si==x3_si)return true;
+//JJ s_si.equals(x1_si)||s_si.equals(x2_si)||s_si.equals(x3_si))return true; 
+e_err_s="\""+s_si+"\" not in('"+x1_si+"','"+x2_si+"','"+x3_si+"')";
+return false;
+} 
+public bool e5s_b(String s_si,String x1_si,String x2_si,String x3_si,String x4_si)
+{if(
+//SP s_si==x1_si||s_si==x2_si||s_si==x3_si||s_si==x4_si)return true;
+//JJ s_si.equals(x1_si)||s_si.equals(x2_si)||s_si.equals(x3_si)||s_si.equals(x4_si))return true; 
+e_err_s="\""+s_si+"\" not in('"+x1_si+"','"+x2_si+"','"+x3_si+"','"+x4_si+"')";
+return false;
+} 
+public bool e6s_b(String s_si,String x1_si,String x2_si,String x3_si,String x4_si,String x5_si)
+{if(
+//SP s_si==x1_si||s_si==x2_si||s_si==x3_si||s_si==x4_si||s_si==x5_si)return true;
+//JJ s_si.equals(x1_si)||s_si.equals(x2_si)||s_si.equals(x3_si)||s_si.equals(x4_si)||s_si.equals(x5_si))return true;
+e_err_s="\""+s_si+"\" not in('"+x1_si+"','"+x2_si+"','"+x3_si+"','"+x4_si+"','"+x5_si+"')";
+return false;
+} 
+public bool e7s_b(String s_si,String x1_si,String x2_si,String x3_si,String x4_si,String x5_si,String x6_si)
+{if(
+//SP s_si==x1_si||s_si==x2_si||s_si==x3_si||s_si==x4_si||s_si==x5_si||s_si==x6_si)return true;
+//JJ s_si.equals(x1_si)||s_si.equals(x2_si)||s_si.equals(x3_si)||s_si.equals(x4_si)||s_si.equals(x5_si)||
+//JJ    s_si.equals(x6_si))return true;
+e_err_s="\""+s_si+"\" not in('"+x1_si+"','"+x2_si+"','"+x3_si+"','"+x4_si+"','"+x5_si+"','"+x6_si+"')";
+return false;
+} 
+public bool e8s_b(String s_si,String x1_si,String x2_si,String x3_si,String x4_si,String x5_si,String x6_si,String x7_si)
+{if(
+//SP s_si==x1_si||s_si==x2_si||s_si==x3_si||s_si==x4_si||s_si==x5_si||s_si==x6_si||s_si==x7_si)
+//SP    return true;
+//JJ s_si.equals(x1_si)||s_si.equals(x2_si)||s_si.equals(x3_si)||s_si.equals(x4_si)||s_si.equals(x5_si)||
+//JJ    s_si.equals(x6_si)||s_si.equals(x7_si))return true; 
+e_err_s="\""+s_si+"\" not in('"+x1_si+"','"+x2_si+"','"+x3_si+"','"+x4_si+"','"+x5_si+"','"+x6_si+"','"+x7_si+"')";
+return false;
+} 
+public bool e9s_b(String s_si,String x1_si,String x2_si,String x3_si,String x4_si,String x5_si,String x6_si ,String x7_si,String x8_si)
+{if(
+//SP s_si==x1_si||s_si==x2_si||s_si==x3_si||s_si==x4_si||s_si==x5_si||s_si==x6_si||s_si==x7_si
+//SP    ||s_si==x8_si)return true;
+//JJ s_si.equals(x1_si)||s_si.equals(x2_si)||s_si.equals(x3_si)||s_si.equals(x4_si)||s_si.equals(x5_si)||
+//JJ    s_si.equals(x6_si)||s_si.equals(x7_si)||s_si.equals(x8_si))return true; 
+e_err_s="\""+s_si+"\" not in('"+x1_si+"','"+x2_si+"','"+x3_si+"','"+x4_si+"','"+x5_si+"','"+x6_si+"','"+x7_si+"','"+x8_si+"')";
+return false;
+} 
+public bool e10s_b(String s_si,String x1_si,String x2_si,String x3_si,String x4_si,String x5_si,String x6_si,String x7_si,String x8_si,String x9_si)
+{if(
+//SP s_si==x1_si||s_si==x2_si||s_si==x3_si||s_si==x4_si||s_si==x5_si||s_si==x6_si||s_si==x7_si
+//SP    ||s_si==x8_si||s_si==x9_si)return true;
+//JJ s_si.equals(x1_si)||s_si.equals(x2_si)||s_si.equals(x3_si)||s_si.equals(x4_si)||s_si.equals(x5_si)||
+//JJ    s_si.equals(x6_si)||s_si.equals(x7_si)||s_si.equals(x8_si)||s_si.equals(x9_si))return true; 
+e_err_s="\""+s_si+"\" not in('"+x1_si+"','"+x2_si+"','"+x3_si+"','"+x4_si+"','"+x5_si+"','"+x6_si+"','"+x7_si+"','"+x8_si+"','"+x9_si+"')";
+return false;
+} 
+public bool e2c_b(char c_ci,char x1_ci)
+{if(c_ci==x1_ci)return true;return false;}
+public bool e3c_b(char c_ci,char x1_ci,char x2_ci)
+{if(c_ci==x1_ci||c_ci==x2_ci)return true;return false;}
+public bool e4c_b(char c_ci,char x1_ci,char x2_ci,char x3_ci)
+{if(c_ci==x1_ci||c_ci==x2_ci||c_ci==x3_ci)return true;return false;}
+public bool e5c_b(char c_ci,char x1_ci,char x2_ci,char x3_ci,char x4_ci)
+{if(c_ci==x1_ci||c_ci==x2_ci||c_ci==x3_ci||c_ci==x4_ci)return true;return false;}
+public bool e6c_b(char c_ci,char x1_ci,char x2_ci,char x3_ci,char x4_ci,char x5_ci)
+{if(c_ci==x1_ci||c_ci==x2_ci||c_ci==x3_ci||c_ci==x4_ci||c_ci==x5_ci)return true;return false;}
+public bool e7c_b(char c_ci,char x1_ci,char x2_ci,char x3_ci,char x4_ci,char x5_ci,char x6_ci)
+{if(c_ci==x1_ci||c_ci==x2_ci||c_ci==x3_ci||c_ci==x4_ci||c_ci==x5_ci||c_ci==x6_ci)return true;return false;}
+public bool e8c_b(char c_ci,char x1_ci,char x2_ci,char x3_ci,char x4_ci,char x5_ci,char x6_ci,char x7_ci)
+{if(c_ci==x1_ci||c_ci==x2_ci||c_ci==x3_ci||c_ci==x4_ci||c_ci==x5_ci||c_ci==x6_ci||c_ci==x7_ci)return true;
+return false;
+}
+public bool e9c_b(char c_ci,char x1_ci,char x2_ci,char x3_ci,char x4_ci,char x5_ci,char x6_ci,char x7_ci,char x8_ci)
+{if(c_ci==x1_ci||c_ci==x2_ci||c_ci==x3_ci||c_ci==x4_ci||c_ci==x5_ci||c_ci==x6_ci||c_ci==x7_ci||c_ci==x8_ci)return true;
+return false;
+}
+public bool e10c_b(char c_ci,char x1_ci,char x2_ci,char x3_ci,char x4_ci,char x5_ci,char x6_ci,char x7_ci,char x8_ci,char x9_ci)
+{if(c_ci==x1_ci||c_ci==x2_ci||c_ci==x3_ci||c_ci==x4_ci||c_ci==x5_ci||c_ci==x6_ci||c_ci==x7_ci||c_ci==x8_ci||c_ci==x9_ci)return true;
+return false;
+}
+public bool e2i_b(int i,int ix1)
+{if(i==ix1)return true;return false;}
+public bool e3i_b(int i,int ix1,int ix2)
+{if(i==ix1||i==ix2)return true;return false;}
+public bool e4i_b(int i,int ix1,int ix2,int ix3)
+{if(i==ix1||i==ix2||i==ix3)return true;return false;}
+public bool e5i_b(int i,int ix1,int ix2,int ix3,int ix4)
+{if(i==ix1||i==ix2||i==ix3||i==ix4)return true;return false;}
+public bool e6i_b(int i,int ix1,int ix2,int ix3,int ix4,int ix5)
+{if(i==ix1||i==ix2||i==ix3||i==ix4||i==ix5)return true;return false;}
+public bool e7i_b(int i,int ix1,int ix2,int ix3,int ix4,int ix5,int ix6)
+{if(i==ix1||i==ix2||i==ix3||i==ix4||i==ix5||i==ix6)return true;return false;}
+public bool e8i_b(int i,int ix1,int ix2,int ix3,int ix4,int ix5,int ix6,int ix7)
+{if(i==ix1||i==ix2||i==ix3||i==ix4||i==ix5||i==ix6||i==ix7)return true;return false;}
+public bool e9i_b(int i,int ix1,int ix2,int ix3,int ix4,int ix5,int ix6,int ix7,int ix8)
+{if(i==ix1||i==ix2||i==ix3||i==ix4||i==ix5||i==ix6||i==ix7||i==ix8)return true;return false;}
+public bool e10i_b(int i,int ix1,int ix2,int ix3,int ix4,int ix5,int ix6,int ix7,int ix8,int ix9)
+{if(i==ix1||i==ix2||i==ix3||i==ix4||i==ix5||i==ix6||i==ix7||i==ix8||i==ix9)return true;return false;}
+//public int f_index_count=100000;//バグ回避中。
+public String machine_name_s()
+{String s="";
+//HP QProcess process_nn;process_nn.start("hostname");process_nn.waitForFinished();
+//HP QByteArray output_nn=process_nn.readLine();s=trim_end_s(QString::fromLocal8Bit(output_nn));
+//SS s=Environment.MachineName;
+//JJ try{s=java.net.InetAddress.getLocalHost().getHostName();}
+//JJ catch(Exception){s= null ;}
+//JJ if( null ==s){s="?";ii_read_l read_n=new ii_read_l(this);  // RedHat Linux系 null対応
+//JJ             if(read_n.open_b("/etc/hostname","/"))
+//JJ               {if(0==read_n.read())s=read_n.read_data_s;
+//JJ                read_n.read_close_v();  
+//JJ               }else 
+//JJ             if(read_n.open_b("/etc/sysconfig/network","/"))
+//JJ               {for(;0==read_n.read();)if(starts_with_b(read_n.read_data_s,"HOSTNAME=")){s=substring2_s(read_n.read_data_s,9);break;}
+//JJ                read_n.read_close_v();  
+//JJ               }
+//JJ            }
+String[] sx=split_sx(s,'.');
+return sx[0];
+}
+public String user_name_s()
+{
+//HP return environment_s('W'==os_c?"USERNAME":"USER");  
+//SS return Environment.UserName;
+//JJ try{return System.getProperty("user.name");}
+//JJ catch(Exception en_i){return "";}
+}
+public String get_current_directory_s()
+{return
+//HP QDir::currentPath();
+//SS Environment.CurrentDirectory;
+//JJ (new File(".").getAbsoluteFile().getParent());
+}
+public bool check_path_b(String si)
+{return (':'==at_s_c(si,1)||starts_with_b(si,dir_s)||starts_with_b(si,"."+dir_s)||starts_with_b(si,".."+dir_s)?true:false);
+}
+public String get_tmp_file_s(String si)
+{
+return (check_path_b(si)?"":get_tmp_path_s(dir_s))+si; 
+}
+public String get_tmp_path_s(String si)
+{return get_tmp_path_s(si,main_program_s);
+}
+public String get_tmp_path_s(String si,String time_s)
+{
+if(e2s_b(time_s,"TIME"))
+      return os_drive_s+dir_s+"I"+dir_s+"I."+system_s+dir_s+"TMP_"+test_s+si; //VER16.1
+else  return os_drive_s+dir_s+"I"+dir_s+"TMP"+si;                             //VER16.1
+}
+////public String get_i_path_s() //VER33
+////{ //VER33
+////return os_drive_s+dir_s+"I"+(e3s_b(main_program_s,"TIME","SRVC")?dir_s+"I."+system_s:"")+dir_s; //VER16.1 //VER17//VER33
+////} //VER33
+//public String get_bin_path_s()//VER33
+//{
+//return get_i_path_s()+"BIN"+(e3s_b(main_program_s,"TIME","SRVC")?"":iv_s)+dir_s; //VER33
+//}
+public String environment_s(String si)
+{
+//HP return QString::fromUtf8(qgetenv(si.toUtf8()));
+//SJ try{return 
+//SS Environment.GetEnvironmentVariable(si);
+//JJ System.getenv(si);
+//SJ    }
+//SJ catch(Exception){return "";}
+}
+public String drives_s()
+{String s="";
+#if W
+//HP TCHAR   ds_tx[128];LPTSTR  ds_lp;
+//HP GetLogicalDriveStrings(sizeof(ds_tx),ds_tx);
+//HP for(ds_lp=ds_tx;*ds_lp!=TEXT('\0');ds_lp++){String ss=(LPSTR)ds_lp;s+=ss;ds_lp+=_tcslen(ds_lp);}
+#endif //W
+//SS System.IO.DriveInfo[] drives_nx=System.IO.DriveInfo.GetDrives();
+//SS foreach(System.IO.DriveInfo drives_n in drives_nx)s+=at_s_c(drives_n.Name,0);
+//JJ File[] File_nx=File.listRoots();for(File File_n:File_nx)s+=at_s_c(File_n.getPath(),0);
+return s;
+}
+public String new_line_s()
+{return 
+#if W
+//HP to_c_s((char )0X0D)+
+#endif //W
+//HP to_c_s((char )0X0A);  
+//SS Environment.NewLine;
+//JJ System.getProperty("line.separator");
+}
+public DateTime date_time_now_s()
+{return
+//HP DateTime ::currentDateTime();
+//SS DateTime.Now;
+//JJ (new java.util.Date());  
+}
+public bool cgi_password_b=true;
+public int sw_cgi=0,sleep_count=0;
+public String cgi_info_s="",cgi_info_begin_s="",cgi_info_job_s="",cgi_info_end_s="";
+public String version_s;
+public String service_name_s;
+public readonly int SERVICE_PORT_NO=65432;
+public readonly int X_MAX=80,Y_MAX=25,COMMIT=0,ROLLBACK=1,NOT_TRANSACTION=-1;
+public char head_c='N',input_c=' ';
+public String iv_s,inp_out_s="INP";
+public String receive_lang_s="",receive_system_s="",receive_job_s="",receive_person_s=""
+,receive_computer_name_s="",receive_s="",receive_sw_s="0";
+public String[] parameter_sx; 
+#if IMENU||ITIME
+public List<ii_data_l> da_security_a=new List<ii_data_l>();
+#endif
+public bool sw_click_b=false;
+public int sw_program=-1; //0<処理中のプログラム番号,0=初期値,-1=処理続行中,-2=選択処理(次へ),-9=異常終了
+public int sw_exe=0,sw_setup=0,sw_mouse=-1,sw_job_use=0
+,sw_return_sql=0,scroll_x_now=0,x_now=0,scroll_y_now=0,y_now=0,timer=0,sw_beep=0,sw_beep_udp=0
+,sql_limit=0,sql_count_123=0,split_count=0,timeout_connect=30,timeout_sql=600,form_percent=0;
+public String person_security_s="",setup_s="",hh_s="",mm_s=""
+,menu_permission_s="ZZZZ",part_s="ZZ",lang_s="JA",lang_system_s="",real_test_s="REAL"
+,test_s="REAL",computer_name_s="",server_name_s="",system_s="",system_name_s="",db_i_error_s="",err_s="",err11_s="",err2_s="",err21_s="",err3_s=""
+,scroll_s="",prog_save_s,trace_file_s="_TRACE.TXT",trace_add_s="OT",sw_trace_s="",computer_s
+,os_drive_s,os_ver_s,exe_name_s="",bin_path_s="",exe_option_s="",exe_param_s="30/600",exe_path_s="",password_s=""
+,job_name_s="",title_s="",menu_kind_s="NOT",password_check_s="ng",password64_check_s="NG"
+,password_test_s="",password_real_s="",menu_security_s="A",password_link_s="",instance_s=""
+,registry_key_s="",x_s="",set_s="",trim_trim_s="",db_error_s="",registry_s="",person_permission_s=""
+,sql_s="",sql_old_s="",sql_program_s="",date_ymd_s="Y",date_sep_s="-"
+,job_s="ZZZZ000000",job_cgi_s="zzzz800000",password_cgi_s="",person_cgi_s="",person_s=" ",person_name_s="",db_soft_s="";
+public char db_c=' ';
+public readonly String CHECK2_TYPE1_DECIMAL_S="+,{Numeric}.[0-9],-,{Numeric}-.[0-9]"
+,CHECK2_TYPE2_DECIMAL_S=",Normal,C,No Comma,Z,Display 0,E,C+Z"
+,CHECK2_TYPE1_NCHAR_S
+  ="/,All,*,All+IME,!,Full All,N,Name[0-9A-Z_(Japanese)],:,File Name(Japanese),J,Japanese Only"
+,TYPE1_NCHAR_S="/*!N:J"
+,CHECK2_TYPE1_CHAR_S=
+",Default(ASCII)[^`~{}]],9,[0-9],A,[0-9A-Z],B,BarCode39,C,[0-9A-Z] or -,D,Date(8),H,ASCII ALL,I,File Name,M,Name[0-9A-Z_],S,String(ASCII)[^`~{}]],T,DateTime(17),U,Upper(ASCII)[^ `~{}]],V,(ASCII)[^ ],Z,[A-Z]"
+,CHECK2_TYPE1_FLOAT_S="F,Float"
+,CHECK2_TYPE1_INT_S="+,{Numeric}[0-9],-,{Numeric}-[0-9]"
+,CHECK2_TYPE1_DATETIME_S="E,DateTime"
+,CHECK2_TYPE2_NCHAR_S=",Normal,I,[^IO],L,[a-z],R,[a-z](Reverse),*,Display *,#,Display *[a-z],X,[^{}],K,Kana"    //RをVER15.1で追加。
+,TYPE2_NCHAR_S="K"
+,CHECK2_TYPE2_CHAR_S=",Normal,I,[^IO],L,[a-z],R,[a-z](Reverse),*,Display *,#,Display *[a-z],X,[^{}]";           //RをVER15.1で追加。
+public String begin_program_s="NOT",page_sw_s="";
+public int db_record_cnt=0,db_column_cnt=0,db_affected_cnt=0,db_cancel=-1;
+#if IMENU||ITIME
+public List<ii_data_l> da_common_a=new List<ii_data_l>();
+public List<ii_data_l> da_fix_a=new List<ii_data_l>();
+public List<ii_data_l> da_sw_a=new List<ii_data_l>();
+#endif
+public List<String> s_lang_a=new List<String>();
+public List<String> s_lang_name_a=new List<String>();
+public List<String> s_program_a=new List<String>();
+public List<String> s_program_name_a=new List<String>();
+public List<String> s_copy_etc_name_a=new List<String>();
+public List<int> i_copy_etc_start_a=new List<int>();
+public List<int> i_copy_etc_end_a=new List<int>(); 
+public int program_a_max=0;
+int rc=0;
+public readonly int FOCUS_START_M2=-2,FOCUS_OFF_M1=-1,FOCUS_OFF_TO_ON_0=0,FOCUS_ON_TO_ON_1=1,FOCUS_MOUSE_MOVE_2=2;
+public readonly int SW_OFF_0=0,SW_ON_1=1,SW_ERROR_5=5,SW_ABORT_9=9;
+public ii_zz_l prog_n;public ii_zz_l prog_s_n;public ii_zz_l prog_c_n;
+public readonly int COMBINING_0=0,HALF_1=1,FULL_2=2,KANA_3=3,HIGH_SURROGATE_4=4,LOW_SURROGATE_5=5;
+#if IMENU||IPRINT
+public Font Font_n;
+public Font Font_now_n;
+public Graphics Graphics_n;
+//HP public QPainter *Graphics_p = nullptr;
+public Brush Brush_now_n;
+public float old_xx_f,old_yy_f,old_x_f,end_x_f;
+public float y_left_f,x_len_f,y_len_f,xx_f,yy_f,left_f,right_f;
+public int x_len,x_left,x,y;
+public int x_font_size(String si)//フォント幅X計算
+{
+//HP QFontMetrics fontMetrics(Font_n);
+////HP return fontMetrics.width(si); //VER36.1
+//HP QRect rect_nn=fontMetrics.boundingRect(si); //VER36.1
+//HP return rect_nn.y(); //VER36.1
+//SJ try{return 
+//SS TextRenderer.MeasureText(Graphics_n,si,Font_n).Width;
+//JJ Graphics_n.getFontMetrics(Font_n).stringWidth(si);
+//SJ    }catch(Exception){return 0;}
+}
+public void fill_rect_v(Graphics Graphics_ni,Brush Brush_ni,float x_left_fi,float y_left_fi,float x_len_fi,float y_len_fi)
+{
+//HP if(1==sw_on_paint||1==sw_printer)
+//HP   {Graphics_p.setBrush(Brush_ni);
+//HP    Graphics_p.setPen(Qt::NoPen);
+//HP       Graphics_p.drawRect(x_left_fi,y_left_fi,x_len_fi,y_len_fi);
+//HP   }
+//SJ try{
+//SS Graphics_ni.FillRectangle(Brush_ni,x_left_fi,y_left_fi,x_len_fi,y_len_fi);
+//JJ Graphics_ni.setColor(Brush_ni);
+//JJ Graphics_ni.fillRect((int )x_left_fi,(int )y_left_fi,(int )x_len_fi,(int )y_len_fi);
+//SJ    }catch(Exception){}
+}
+#endif //MENU||PRINT
+#if IMENU
+public int lang_x_width=8,lang_y_high=16;  //VER24.1
+//=***( ブラシ色設定 )*****
+public Brush Brush_n(char color_ci)
+{int i;for(i=0;length(COLOR_S)>i;i++)if(color_ci==at_s_c(COLOR_S,i))return Brush_nx[i];
+ return Brush_nx[BACKCOLOR];
+}
+#endif //MENU
+//---------------------------------------------------------------------
+//---------------------------------------------------------------------
+#if IMENU||IPRINT
+//=***( ビープ音発生 )*****
+////SS [SupportedOSPlatform("windows")]
+public void beep_v()
+{
+#if W
+//SS #pragma warning disable CA1416
+//SS   System.Media.SystemSounds.Beep.Play();
+//SS #pragma warning restore CA1416
+#endif //W
+//JJ java.awt.Toolkit.getDefaultToolkit().beep();
+}
+#endif //MENU||PRINT
+//---------------------------------------------------------------------
+//=****( ディレクトリ変更)*****
+public int change_dir(String s_si)
+{
+//HP if(QDir::setCurrent(s_si))return 0;else return 5;
+//SS try{Directory.SetCurrentDirectory(s_si);}
+//SS catch(Exception e_ni){err_s=message_s(e_ni);return 5;}
+//SS return 0;
+//JJ err_s="not use (java) CHANGE_DIR{"+s_si+"}";return 5;
+}
+//---------------------------------------------------------------------
+//=***( コード39デジット設定 )*****
+public String code39_s(String s_si)
+{String s="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%";
+int i,j=0;
+for(int iz=0;iz<length(s_si);iz++){if(-1!=(i=index2c_i(s,to_upper_c(at_s_c(s_si,iz)))))j+=i;else return "";}
+if(43<=j)j%=43;
+return to_c_s(at_s_c(s,j));
+}
+//---------------------------------------------------------------------
+//=***( 数値コンマ付加 )*****
+public String comma_s(String s_si)
+{String s="",ss="";int i=last_index2c_i(s_si,'.'),j;
+if(-1==i)i=length(s_si);
+if(length(s_si)>1&&'-'==at_s_c(s_si,0))i--;
+j=(i-1)/3;  
+if(j>0)
+ {j=i%3;if(0==j)j=3;ss=s_si;s="";
+  for(i=0;length(ss)>i;i++)
+   {s+=at_s_c(ss,i);if((i+1)==length(ss)||'.'==at_s_c(ss,i+1))j=-1;
+    if(-1!=j&&'-'!=at_s_c(ss,i))j--;
+    if(0==j){s+=",";j=3;} 
+   } 
+ }
+else s=s_si;
+return s;
+} 
+//---------------------------------------------------------------------
+//=***( コマンド実行 )*****
+//JJ  InputStream  is_n= null ,es_n= null ;
+//JJ  OutputStream os_n= null ;
+//JJ  BufferedReader ib_n= null ,eb_n= null ;
+//JJ  Thread it_n= null ,et_n= null ,ot_n= null ;    
+//JJ  PrintStream p_n;
+//JJ  String command_i_s="",command_e_s="";
+public int command(String s_si){return command2(s_si,"");}
+public int command2(String s_si,String s2_si)//passwd処理の場合s2_siにパスワードを入れる事で標準入力から２回読み込む。
+{int rc_rc=0;
+//JJ int i=0;
+if('W'==os_c)rc_rc=process("cmd","/c "+s_si,s2_si,true);  //ver18.1
+else {
+//SJ  rc_rc=process("sh","-c \""+s_si+"\"",s2_si,true);  //SS   //ver18.1 //VER36.6.0.3
+////JJ  try{
+////JJ     Process process_n=Runtime.getRuntime().exec(s_si);
+////JJ     is_n=process_n.getInputStream(); 
+////JJ     es_n=process_n.getErrorStream();
+////JJ     os_n=process_n.getOutputStream();
+////JJ     command_i_s="";command_e_s="";
+////JJ     try 36.{Runnable or_n=new Runnable()
+////JJ              {public void run()
+////JJ                 {String ss;		
+////JJ                  try{p_n=new PrintStream(os_n);
+////JJ                  p_n.println(s2_si);
+////JJ                  p_n.println(s2_si);
+////JJ                  p_n.close();
+////JJ                     }catch (Exception e_ni){}
+////JJ                 }
+////JJ             };
+////JJ          Runnable ir_n=new Runnable()
+////JJ           {public void run()
+////JJ              {String ss;		
+////JJ               try{ib_n=new BufferedReader(new InputStreamReader(is_n));
+////JJ                   for(; null !=(ss=ib_n.readLine());)command_i_s+=ss+" ";
+////JJ                  }catch (Exception e_ni){}
+////JJ              }
+////JJ           };
+////JJ         Runnable er_n=new Runnable()
+////JJ           {public void run()
+////JJ              {String ss;		
+////JJ               try{eb_n=new BufferedReader(new InputStreamReader(es_n));
+////JJ                   for(; null !=(ss=eb_n.readLine());)command_e_s+=ss+" ";
+////JJ                  }catch (Exception e_ni){}		
+////JJ              }
+////JJ           };
+////JJ         it_n=new Thread(ir_n);et_n=new Thread(er_n);
+////JJ        if(!e2s_b(s2_si,"")){ot_n=new Thread(or_n);ot_n.start();}
+////JJ         process_n.waitFor();it_n.start();et_n.start();
+////JJ         process_n.waitFor();it_n.join(); et_n.join();
+////JJ         process_n.destroy();
+////JJ        }catch (Exception e_ni) {}    
+////JJ     if( null !=ib_n){ib_n.close();ib_n= null ;}
+////JJ     if( null !=eb_n){eb_n.close();eb_n= null ;}
+////JJ     if( null !=is_n){is_n.close();is_n= null ;}
+////JJ     if( null !=es_n){es_n.close();es_n= null ;}
+////JJ     if( null !=os_n){os_n.close();os_n= null ;}		
+////JJ     i=process_n.exitValue();
+////JJ     if(0<i){err_s=command_e_s+command_i_s;rc_rc=5;}
+////JJ     }catch(Exception e_ni){}
+     }
+// return 0; //ver18.1
+ return rc_rc; //ver36.0006000003
+}
+ 
+//---------------------------------------------------------------------
+//=***( 比較処理 rc(9=error,0=OK、1=NG)*****
+//=****( int compare(o_s,s1_si,i_type_x,sw_great_ii,sw_e_ii,sw_less_ii,s_si) )***** 
+public int compare(ii_zz_l s_ni,String s1_si,char type_ci,int sw_great_ii,int sw_e_ii,int sw_less_ii,String s2_si)
+{
+//SJ decimal decimal1_d,decimal2_d;
+double double1_o,double2_o;s_ni.s="?";
+//SJ if(e3c_b(type_ci,'+','-'))
+//SJ   {decimal1_d=to_decimal_d(s1_si,'-',decimal_d(0),1);if(!return_b)return 9;
+//SJ    decimal2_d=to_decimal_d(s2_si,'-',decimal_d(0),1);if(!return_b)return 9;
+//SJ    if(
+//SS     decimal1_d==decimal2_d
+//JJ 0==decimal1_d.compareTo(decimal2_d)
+//SJ       ){s_ni.s="=";if(1==sw_e_ii)return 0;else return 1;} 
+//SJ    if(
+//SS     decimal1_d< decimal2_d
+//JJ 0>decimal1_d.compareTo(decimal2_d)
+//SJ      ){s_ni.s="<";if(1==sw_less_ii) return 0;else return 1;}
+//SJ                               s_ni.s=">";if(1==sw_great_ii)return 0;else return 1; 
+//SJ   }
+//HP if(e4c_b(type_ci,'F','-','+')) 
+//SJ if('F'==type_ci)
+  {double1_o=to_double_o(s1_si,'-',0,1);if(!return_b)return 9;
+   double2_o=to_double_o(s2_si,'-',0,1);if(!return_b)return 9;
+   if(double1_o==double2_o){s_ni.s="=";if(1==sw_e_ii)return 0;else return 1;} 
+   if(double1_o< double2_o){s_ni.s="<";if(1==sw_less_ii) return 0;else return 1;} 
+                            s_ni.s=">";if(1==sw_great_ii)return 0;else return 1; 
+  }
+s1_si=trim_end_s(s1_si);s2_si=trim_end_s(s2_si);
+if(e2s_b(s1_si,s2_si))                {s_ni.s="=";if(1==sw_e_ii)return 0;else return 1;} 
+if(
+//HP s1_si.compare(s2_si) 
+//SS String.CompareOrdinal(s1_si,s2_si)
+//JJ s1_si.compareTo(s2_si) 
+   <0){s_ni.s="<";if(1==sw_less_ii) return 0;else return 1;} 
+                                         s_ni.s=">";if(1==sw_great_ii)return 0;else return 1; 
+} 
+//---------------------------------------------------------------------
+//=***( CSV入力変換 )*****
+public void csv_in_v(List<String> s_ai,String s_si,String kind_si)
+{int i,sta,sw=0;String out_s;clear_s_v(s_ai);
+kind_si=upper_s(kind_si);
+if(ends_with_b(kind_si,"CSV"))
+  for(sta=i=0;;i++)
+   {if(length(s_si)<=i||(','==at_s_c(s_si,i)&&0==sw))
+     {out_s=trim_s(substring3_s(s_si,sta,i-sta));
+      if(1<length(out_s)&&'"'==at_s_c(out_s,0)&&'"'==at_s_c(out_s,length(out_s)-1))
+      out_s=substring3_s(out_s,1,length(out_s)-2);
+      out_s=replace_s_s(out_s,"\"\"","\"");
+      out_s=trim_end_s(out_s);//HiRDB対応
+      add_s(s_ai,out_s);
+      if(length(s_si)<=i)break;
+      sta=i+1;
+      if(length(s_si)<=sta){add_s(s_ai,"");break;}
+      continue;
+     }
+    if('"'==at_s_c(s_si,i))if(0==sw)sw=1;else sw=0;
+   }
+else
+  {String[] sx=split_sx(s_si,'\t');
+   for(int iz=0;iz<count_sx_i(sx);iz++)add_s(s_ai,trim_end_s(sx[iz]));
+  }
+}
+//---------------------------------------------------------------------
+public String replace_rn_s(String s_si,char c_ci)
+{return replace_c_s(replace_c_s(s_si,'\r',c_ci),'\n',c_ci);}
+//=***( CSV出力変換 )*****
+public String csv_out_s(ii_zz_l s_ni,String s_si,String kind_si)
+{kind_si=upper_s(kind_si);
+s_si=replace_rn_s(s_si,'?');
+if(ends_with_b(kind_si,"CSV"))
+ {s_ni.s=",";
+//  if(-1!=index_any(s_si,to_char_array(",\""),0))return "\""+replace_s_s(s_si,"\"","\"\"")+"\"";
+  if(-1!=index3sc_i(s_si,",\"",0))return "\""+replace_s_s(s_si,"\"","\"\"")+"\"";
+ } 
+else {s_ni.s="\t";} //陽にタブが付いたデーターもそのまま出力されるように変更！
+return s_si;
+}
+//---------------------------------------------------------------------
+//=***( 正しい日付けに変更新(0000年は0001年に変更） )*****
+public String date_good_s(String s_si,int sw)
+{
+//char[]  out_c8?=?{'0','0','0','0','0','0','0','0'};//C++対応空白２個//
+char[]  out_c8=new char[8]; //C++対応空白２個//
+int i;
+for(i=0;i<8;i++)out_c8[i]='0';
+for(i=0;8>i&&length(s_si)>i;i++)
+   {if('0'>at_s_c(s_si,i)||'9'<at_s_c(s_si,i))continue;out_c8[i]=at_s_c(s_si,i);}//数値は転送,数値以外は0のまま
+if('0'==out_c8[0]&&'0'==out_c8[1]&&'0'==out_c8[2]&&'0'==out_c8[3])out_c8[3]='1';//0000年は0001年
+if(1==sw)//swが１の時は１７５３年以降とする
+  if('1'>out_c8[0]||('1'==out_c8[0]&&('7'>out_c8[1]||('7'==out_c8[1]&&('5'>out_c8[2]||('5'==out_c8[2]&&'3'>out_c8[3]))))))
+    {out_c8[0]='1';out_c8[1]='7';out_c8[2]='5';out_c8[3]='3';}
+if     ('1'<out_c8[4])out_c8[4]='1'; //月1が１より大きいい場合は１
+if     ('1'==out_c8[4]){if('2'<out_c8[5])out_c8[5]='2';}//月1が１の時月２が２以上は２
+else if('0'==out_c8[5])out_c8[5]='1'; //月１が０で月2が０は月2を１
+if('2'<out_c8[6]) //日1が２以上の時
+ {if('0'==out_c8[4]&&'2'==out_c8[5]){out_c8[6]='2';out_c8[7]='9';}//２月は２９日
+  else out_c8[6]='3';//２月以外は３？日
+ }
+if     ('0'==out_c8[6]){if('0'==out_c8[7])out_c8[7]='1';}//日が００は０１日に
+else if('3'==out_c8[6]&&'0'<out_c8[7])//３０日より大きい場合
+ {if(e4c_b(out_c8[5],'4','6','9')||('1'==out_c8[4]&&'1'==out_c8[5]))
+     out_c8[7]='0';else out_c8[7]='1';//４，６，９，１１月の場合は30日以外は31日
+ }
+if('0'==out_c8[4]&&'2'==out_c8[5]&&'2'==out_c8[6]&&'9'==out_c8[7]) //02-29はうるう年判定
+ {
+//HP i=to_int1s_i(substring3_s(to_cx_s(out_c8,8),0,4));
+//SJ i=to_int1s_i(substring3_s((new String(out_c8)),0,4));
+  if(0!=i%400)if(0==i%100||0!=i%4)out_c8[7]='8';
+ }
+String s=to_cx_s(out_c8,8);
+////HP delete[] out_c8; 
+return s;
+}
+//---------------------------------------------------------------------
+public String date_time_good_s(String s_si)
+{
+//char[]  out_c9?=?{'0','0','0','0','0','0','0','0','0'};//C++対応空白２個/
+int i,j;
+char[]  out_c9=new char[9]; //C++対応空白２個//
+for(i=0;i<9;i++)out_c9[i]='0';
+for(j=0,i=8;17>i&&length(s_si)>i;i++,j++)
+  {if('0'>at_s_c(s_si,i)||'9'<at_s_c(s_si,i))continue;out_c9[j]=at_s_c(s_si,i);}//数値は転送,数値以外は0のまま
+if('2'<out_c9[0])out_c9[0]='2';//2？時以上は２？時
+if('2'==out_c9[0]&&'3'<out_c9[1])out_c9[1]='3'; //23時以上は２３時
+if('5'<out_c9[2])out_c9[2]='5'; //5?分以上は５？分
+if('5'<out_c9[4])out_c9[4]='5'; //5?秒以上は５？秒
+if('2'==out_c9[0]&&'3'==out_c9[1]&&'5'==out_c9[2]&&'9'==out_c9[3]&&'5'==out_c9[4]
+ &&'9'==out_c9[5]&&'9'==out_c9[6]&&'9'==out_c9[7]&&'9'==out_c9[8])out_c9[8]='8'; //235959999は235959998
+String s=date_good_s(s_si,1)+to_cx_s(out_c9,9);
+////HP delete out_c9[];
+return s;
+}
+//---------------------------------------------------------------------
+//=****( 日付文字列変換 i_ii(0=数値のみ,0!=編集 )*****
+public String date_time_s(DateTime DateTime_nni,int i_ii)
+{String h_s="",s_s="",c_s="",d_s="";
+if(0!=i_ii){h_s="-";s_s=" ";c_s=":";d_s=".";}
+//HP   if(0!=i_ii)return DateTime_nni.toString("yyyy-MM-dd HH:mm:ss.zzz");
+//HP   else       return DateTime_nni.toString("yyyyMMddHHmmsszzz");
+//SS return DateTime_nni.Year.ToString("d4")+h_s+DateTime_nni.Month.ToString("d2")+h_s+DateTime_nni.Day.ToString("d2")+s_s
+//SS +DateTime_nni.Hour.ToString("d2")+c_s+DateTime_nni.Minute.ToString("d2")+c_s
+//SS +DateTime_nni.Second.ToString("d2")+d_s+DateTime_nni.Millisecond.ToString("d3");
+//JJ   if(0!=i_ii)return (new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")).format(DateTime_nni);
+//JJ   else       return (new java.text.SimpleDateFormat("yyyyMMddHHmmssSSS"      )).format(DateTime_nni);
+
+}
+//---------------------------------------------------------------------
+//=****( 日付編集 )*****
+public String date_time_edit_s(String s_si,int sw_ii)//sw_ii(=0:飾り無し,=1:飾り付き,=2：データベース更新用)
+{String s="",sep_s="",sep2_s="",sep3_s="",sep4_s="";
+if(0!=sw_ii){sep_s=(1==sw_ii?date_sep_s:"-");sep2_s=" ";sep3_s=":";sep4_s=".";}
+if(8>length(s_si))return s_si;
+if(e2s_b(date_ymd_s,"Y")||2==sw_ii)s=to_c_s(at_s_c(s_si,0))+to_c_s(at_s_c(s_si,1))+to_c_s(at_s_c(s_si,2))+to_c_s(at_s_c(s_si,3))
+                                     +sep_s+to_c_s(at_s_c(s_si,4))+to_c_s(at_s_c(s_si,5))+sep_s+to_c_s(at_s_c(s_si,6))+to_c_s(at_s_c(s_si,7));
+else if(e2s_b(date_ymd_s,"M"))     s=to_c_s(at_s_c(s_si,4))+to_c_s(at_s_c(s_si,5))+sep_s+to_c_s(at_s_c(s_si,6))+to_c_s(at_s_c(s_si,7))
+                                     +sep_s+to_c_s(at_s_c(s_si,0))+to_c_s(at_s_c(s_si,1))+to_c_s(at_s_c(s_si,2))+to_c_s(at_s_c(s_si,3));
+else                        s=""+to_c_s(at_s_c(s_si,6))+to_c_s(at_s_c(s_si,7))+sep_s+to_c_s(at_s_c(s_si,4))+to_c_s(at_s_c(s_si,5))
+                                +sep_s+to_c_s(at_s_c(s_si,0))+to_c_s(at_s_c(s_si,1))+to_c_s(at_s_c(s_si,2))+to_c_s(at_s_c(s_si,3));
+if(11<length(s_si))s+=sep2_s+to_c_s(at_s_c(s_si,8))+to_c_s(at_s_c(s_si,9))+sep3_s+to_c_s(at_s_c(s_si,10))+to_c_s(at_s_c(s_si,11));
+if(13<length(s_si))s+=sep3_s+to_c_s(at_s_c(s_si,12))+to_c_s(at_s_c(s_si,13));
+if(16<length(s_si))s+=sep4_s+to_c_s(at_s_c(s_si,14))+to_c_s(at_s_c(s_si,15))+to_c_s(at_s_c(s_si,16));
+return s;     
+}
+//---------------------------------------------------------------------
+public bool dot_dot_check_b(String s_si)
+{if(-1!=index2s_i(s_si,"..\\")||-1!=index2s_i(s_si,"../")){err_s="bad char (..\\ or ../)";return false;}
+return true;
+}
+//---------------------------------------------------------------------
+//public String at_s_s(String s_si,int i_i){substring3_s(s_si,i_i,1);}//Stringから１文字分抜き出し。
+//=****( 最後のドット以下を設定 )*****
+public String dot_string_s(String s_si)
+{return trim_s(substring2_s(s_si,last_index2c_i(s_si,'.')+1));
+}
+//---------------------------------------------------------------------
+public int draw_string_len(String s_si,int i_ii)
+{if(HIGH_SURROGATE_4==kind_code(at_s_c(s_si,i_ii)))return 2;//サロゲートペア
+ int len=1;
+ for(;;)if((i_ii+len)<length(s_si)&&COMBINING_0==kind_code(at_s_c(s_si,i_ii+len)))len++;else break;//結合文字
+return len;
+}
+//---------------------------------------------------------------------
+//=****( 左側一致判定 i_nは無視)*****
+public bool e_left_b(String find_si,String s_si)
+{ii_zz_l ww_i_n=new ii_zz_l();
+bool b=e_left_b(ww_i_n,find_si,s_si);
+//HP delete ww_i_n;
+return b;
+}
+//---------------------------------------------------------------------
+//=****( 左側一致判定 index_ni.iを計算)*****
+public bool e_left_b(ii_zz_l index_ni,String find_si,String s_si)
+{int start=index_ni.i ;
+for(;;start++)if(length(s_si)<=start)return false;else if(' '<at_s_c(s_si,start))break;
+if(!starts_with_b(upper_s(substring2_s(s_si,start)),upper_s(find_si)))return false;
+index_ni.i =start+length(find_si);
+return true;
+}
+//---------------------------------------------------------------------
+//=****( 文字発見 )*****
+public bool find_char_b(char c_ci,String s_si)
+{if(-1==index2c_i(s_si,c_ci))return false;
+return true;
+}
+//---------------------------------------------------------------------
+//=****( 文字列発見 )*****
+public int find_string(ii_zz_l i_n,String s_si,String find_si)
+{int i,k_sw=0,q_sw=0;
+for(;length(s_si)>i_n.i;i_n.i++)
+ {if('\''==at_s_c(s_si,i_n.i))if(0==q_sw)q_sw=1;else q_sw=0;
+  if(0!=q_sw)continue;
+  if('('==at_s_c(s_si,i_n.i))k_sw++;
+  if(')'==at_s_c(s_si,i_n.i))k_sw--;
+  if(0!=k_sw)continue;
+  for(i=0;length(find_si)>i;i++)
+     if((i+i_n.i)>=length(s_si)||(at_s_c(find_si,i)!=at_s_c(s_si,i+i_n.i)&&(' '<at_s_c(find_si,i)||' '<at_s_c(s_si,i+i_n.i))))break;
+  if(length(find_si)>i)continue;
+  i_n.i+=i;
+  for(;length(s_si)>i_n.i;i_n.i++)if(at_s_c(s_si,i_n.i)>' ')break;
+  break;
+ }
+if(length(s_si)>i_n.i)return i_n.i;else return -1;
+}
+//---------------------------------------------------------------------
+//=****( 文字列表示長計算 )*****
+public int form_length(char c_ci)
+{int i=kind_code(c_ci);
+ if(KANA_3>i)return i;else{if(KANA_3==i)return 1;else{if(LOW_SURROGATE_5==i)return 0;else return 2;}} //VER36.000600003
+}
+public int form_length(ii_zz_l i_n,char c_ci)
+{if(HIGH_SURROGATE_4==kind_code(c_ci))i_n.i++;return form_length(c_ci); 
+}
+//---------------------------------------------------------------------
+//=****( 文字表示長計算 )*****
+public int form_length(String s_si){return form_length(s_si,length(s_si));}
+//---------------------------------------------------------------------
+public int form_length(String s_si,int i_ii)
+{int len=0;ii_zz_l ww_i_n=new ii_zz_l();
+ for(;i_ii>ww_i_n.i&&length(s_si)>ww_i_n.i;ww_i_n.i++){len+=form_length(ww_i_n,at_s_c(s_si,ww_i_n.i));}
+//HP delete ww_i_n; 
+return len;
+}
+//---------------------------------------------------------------------
+//=****( 表示位置 )=====
+public int form_position(String s_si,int i_ii)
+{ii_zz_l ww_length_n=new ii_zz_l();
+int i=form_position_sub(ww_length_n,s_si,i_ii);
+//HP delete ww_length_n;
+return i;
+}
+public int form_position_sub(ii_zz_l length_ni,String s_si,int i_ii)
+{int ii;ii_zz_l ww_i_n=new ii_zz_l(); 
+for(length_ni.i=ww_i_n.i=0;length(s_si)>ww_i_n.i&&i_ii>length_ni.i;)
+  {ii=ww_i_n.i;length_ni.i+=form_length(ww_i_n,at_s_c(s_si,ww_i_n.i));
+   if(ww_i_n.i==ii)for(ww_i_n.i++;;)
+      if(ww_i_n.i<length(s_si)&&COMBINING_0==kind_code(at_s_c(s_si,ww_i_n.i)))ww_i_n.i++;else break;//サロゲート以外結合文字は次へ。
+   else ww_i_n.i++;
+  }
+int i=ww_i_n.i;
+//HP delete ww_i_n;
+return i; 
+}
+//---------------------------------------------------------------------
+public int form_position_code(String s_si,int i_ii)
+{ii_zz_l ww_length_n=new ii_zz_l();
+int i=form_position_sub(ww_length_n,s_si,i_ii);
+i=(ww_length_n.i==i_ii||length(s_si)==i?0:1);
+//HP delete ww_length_n;
+return i;
+}
+//---------------------------------------------------------------------
+//=****( LANG別文字設定 )*****
+public String lang_find_s(String s_si)
+{int i;
+if(-1!=(i=index3as_i(s_lang_name_a,s_si,0)))
+  if(starts_with_b(s_si,"MSG_"))return substring2_s(at_s(s_lang_a,i),1);
+  else return at_s(s_lang_a,i);
+else return "";
+}
+//---------------------------------------------------------------------
+//=****( 16進変換 )*****
+public int hex(char c_ci)
+{if('0'<=c_ci&&'9'>=c_ci)return to_int_c_i(c_ci);
+char c=to_upper_c(c_ci);
+if     (e2c_b(c,'A')){return 10;}
+else if(e2c_b(c,'B')){return 11;}
+else if(e2c_b(c,'C')){return 12;}
+else if(e2c_b(c,'D')){return 13;}
+else if(e2c_b(c,'E')){return 14;}
+else if(e2c_b(c,'F')){return 15;}
+else {return -1;}
+}
+//---------------------------------------------------------------------
+public int error_log(String msg_si)
+{
+return rc;
+}
+//---------------------------------------------------------------------
+//=****( digit11 デジット１１計算 )*****
+public String digit11_s(String s_si)
+{char c;
+int i,w,x;
+x=(length(s_si)-1)%6+2;w=0;
+for(i=0;i<length(s_si);i++,x--)
+ {if(1==x)x=7;
+  c=(char )((to_c_i(at_s_c(s_si,i))&0X0F)|0X30);
+  if('9'<c)c=(char )(to_c_i(c)&0X37);
+  w+=x*to_int_c_i(c);
+ }
+w%=11;
+if(0==w||1==w)return "0";
+else return to1_i_s(11-w);
+}
+//---------------------------------------------------------------------
+//=****( 次文字設定(a-z は b-a に 0-9 は1-0 にします)*****
+public String next_s(String s_si)
+{if(0==length(s_si))return "";
+if('9'==at_s_c(s_si,0))return "0";
+if('z'==at_s_c(s_si,0))return "a";
+if('Z'==at_s_c(s_si,0))return "A";
+if(('0'<=at_s_c(s_si,0)&&'9'>at_s_c(s_si,0))||
+   ('a'<=at_s_c(s_si,0)&&'z'>at_s_c(s_si,0))||
+//   ('A'<=at_s_c(s_si,0)&&'Z'>at_s_c(s_si,0)))return to_c_s((char )((int )at_s_c(s_si,0)+1))
+     ('A'<=at_s_c(s_si,0)&&'Z'>at_s_c(s_si,0)))return to_c_s((char )(to_c_i(at_s_c(s_si,0))+1));
+return to_c_s(at_s_c(s_si,0));
+}
+//---------------------------------------------------------------------
+//=****( 数値情報補正 )***********
+public String numeric_revision_s(String i_s)
+{int i=0,start=0,end=length(i_s);String sign_s="";
+if(e2s_b(i_s,""))return "0";//ゼロ長文字は０
+if('-'==at_s_c(i_s,0)){i++;sign_s="-";}//符号キープ
+for(;i<length(i_s)&&'0'==at_s_c(i_s,i);i++)continue;//先頭の０カット
+start=i;
+int BAD=0,OK=1;int sw=BAD;
+if(-1!=index2c_i(i_s,'.'))//小数点有り 
+  {for(end--;end>0&&e3c_b(at_s_c(i_s,end),'0','.');end--)//小数点以下有りは最後の０をカット
+     if('.'==at_s_c(i_s,end)){sw=OK;break;}//?go to ok;//小数点以下有り全部０は.もカット
+   if(OK!=sw)end++;//最終位置補正。
+  }
+return (start>=end?"0":sign_s+('.'==at_s_c(i_s,start)?"0":"")+substring3_s(i_s,start,end-start));
+}
+//---------------------------------------------------------------------
+//=****( 半角文字全角文字に変換)*****
+public String full_size_s(String s_si)
+{String h_s="ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ";
+ String c_s="00000000000000001111111111111110000022222000000000000000";
+ String f_s="ヲァィゥェォャュョッーアイウエオカキクケコサシスセ"
+            +DUMMY_S+to_c_s((char )0X30BD) //+"ソ"
+            +DUMMY_S+"タチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワン";
+int i,j;String s="";
+int BAD=0,OK=1;int sw;
+for(i=0;i<length(s_si);i++)
+ {char c=at_s_c(s_si,i);
+  char c2=(length(s_si)>(i+1)?at_s_c(s_si,i+1):' ');//c2に次の文字転送
+  if((char )0X21<=c&&(char )0X7E>=c)c=(char )(to_c_i(c)+0XFEE0);//半角英数字//VER36.1
+  else if((char )0XFF66<=c&&(char )0XFF9F>=c) //半角カナ  /VER 36.1
+    {sw=BAD;
+     for(j=0;j<length(h_s);j++)if(c==at_s_c(h_s,j)){sw=OK;break;}//?go to ok;//一致文字有り
+     if(OK==sw)
+       {c=at_s_c(f_s,j);//全角文字設定 
+        if('0'!=at_s_c(c_s,j))
+          {if(
+//HP          u'ﾞ' //VER36.1
+//SJ           'ﾞ'
+                  ==c2){c=(char )(to_c_i(c)+1);i++;}//"ﾞ"付き//VER36.1
+           else if('2'==at_s_c(c_s,j)&&
+//HP                                   u'ﾟ' //VER36.1
+//SJ                                    'ﾟ'
+                                           ==c2){c=(char )(to_c_i(c)+2);i++;}//'ﾟ'付き
+          }
+       }
+    }
+  s=s+c;
+ }
+return s;
+}
+//---------------------------------------------------------------------
+//=****( JAN用デジット文字決定)*****
+public String jan_s(String s_si)
+{int i,j,k;
+i=length(s_si);
+if(1>i)return "";
+j=0;i%=2;if(1==i)i=3;else i=1;
+//for-each(char c in s_si)
+for(int iz=0;iz<length(s_si);iz++)
+ {char c=at_s_c(s_si,iz);
+  if('0'>c||'9'<c)k=0;else k=to_int_c_i(c);
+  j+=k*i;if(3==i)i=1;else i=3; 
+ }
+j%=10;j=10-j;if(10==j)j=0;
+return to1_i_s(j);
+}
+//=****( int:COMBINING_0=結合文字,HALF_1=1byte,FULL_2=2byte,KANA_3=半角カナ,HIGH_SURROGATE_4=上位サロゲート,LOW_SURROGATE_5=下位サロゲート,（ kind_code(c_ci) )*****
+public int kind_code(char c_ci)
+{
+//SS if(System.Globalization.UnicodeCategory.NonSpacingMark==Char.GetUnicodeCategory(c_ci)
+//JJ if(Font_n.getStringBounds("A"+String.valueOf(c_ci),frc_n).getWidth()
+//JJ  ==Font_n.getStringBounds("A",frc_n).getWidth()
+//SJ     )return COMBINING_0;
+#if IMENU||IPRINT
+//HP    QFontMetrics fm_pp(Font_n);
+//HP    if(fm_pp.horizontalAdvance("A"+(QString)c_ci)==fm_pp.horizontalAdvance("A"))return COMBINING_0;
+#endif
+if(
+//HP c_ci.isLowSurrogate()
+//SS Char.IsLowSurrogate(c_ci)
+//JJ Character.isLowSurrogate(c_ci)
+  )return LOW_SURROGATE_5;
+if(
+//HP c_ci.isHighSurrogate()
+//SS Char.IsHighSurrogate(c_ci)
+//JJ Character.isHighSurrogate(c_ci)
+  )return HIGH_SURROGATE_4;
+if((char )0XFF66<=c_ci&&(char )0XFF9F>=c_ci)return KANA_3;
+//if(is_surrogate_b(c_ci))return SURROGATE_4;
+if((char )0X7F<c_ci)return FULL_2;
+return HALF_1;
+}
+public int process(String s1_si,String s2_si,String s3_si,bool b_bi)
+{
+if(!dot_dot_check_b(s1_si))return 5; 
+if(!dot_dot_check_b(s2_si))return 5; 
+s1_si=replace_rn_s(s1_si,' ');
+s2_si=replace_rn_s(s2_si,' ');
+//HP  QProcess process_nn;
+//HP  QStringList sx=s2_si.split(" ");
+////HP  if(true==b_bi)process_nn.start(        s1_si+" "+s2_si);//VER 36.6.0.5
+////HP  else {bool b=process_nn.startDetached(s1_si+" "+s2_si);//VER 36.6.0.5
+//HP  if(true==b_bi)process_nn.start(s1_si,sx);//VER 36.6.0.5
+//HP  else { bool b=process_nn.startDetached(s1_si,sx);//VER 36.6.0.5
+//HP         if(!b){err_s="Process "+s1_si+" "+s2_si+" error";return 5;}
+//HP       }
+//SJ try{
+//SS  System.Diagnostics.Process Process_n=new System.Diagnostics.Process();
+//SS  Process_n=System.Diagnostics.Process.Start(s1_si,s2_si);
+////JJ  Process Process_n=Runtime.getRuntime().exec(s1_si+" "+s2_si); //VER36.6.0.3
+//JJ  List<String> cmd_a=new List<String>();
+//JJ  int begin,end,l1=0,l2=0;
+//JJ  String s=s1_si+" "+s2_si;
+//JJ  for(begin=0,end=0;end<s.length();end++)
+//JJ     {if('\''==s.charAt(end)){if(0==l1)l1=1;else l1=0;continue;}
+//JJ      if('"' ==s.charAt(end)){if(0==l2)l2=1;else l2=0;continue;}
+//JJ      if(1==l1||1==l2||' '!=s.charAt(end))continue;
+//JJ      cmd_a.add(substring3_s(s,begin,end-begin));
+//JJ      for(;end<s.length();end++)if(' '!=s.charAt(end))break;
+//JJ      begin=end;
+//JJ     } 
+//JJ  if(begin<s.length())cmd_a.add(substring2_s(s,begin));
+//JJ  ProcessBuilder ProcessBuilder_n=new ProcessBuilder(cmd_a);
+//JJ  Process Process_n=ProcessBuilder_n.start();
+//JJ  if(e3s_b(lower_s((String)cmd_a.get(0)),"sh","cmd"))
+//JJ    {is_n=Process_n.getInputStream(); 
+//JJ      es_n=Process_n.getErrorStream();
+//JJ      os_n=Process_n.getOutputStream();
+//JJ      command_i_s="";command_e_s="";
+//JJ      try {Runnable or_n=new Runnable()
+//JJ             {public void run()
+//JJ                {String ss;		
+//JJ                 try{p_n=new PrintStream(os_n);
+//JJ                     p_n.println(s3_si);
+//JJ                     p_n.println(s3_si);
+//JJ                     p_n.close();
+//JJ                    }catch (Exception e_ni){}
+//JJ                }
+//JJ             };
+//JJ           Runnable ir_n=new Runnable()
+//JJ             {public void run()
+//JJ                {String ss;		
+//JJ                 try{ib_n=new BufferedReader(new InputStreamReader(is_n,('W'==os_c?"SHIFT_JIS":"UTF-8")));
+////JJ                     for(; null !=(ss=ib_n.readLine());)command_i_s+=ss+" "; //VER36.6.0.3
+//JJ                     for(; null !=(command_i_s=ib_n.readLine());)console_write_v(command_i_s); //VER36.6.0.3
+//JJ                    }catch (Exception e_ni){}
+//JJ                }
+//JJ             };
+//JJ           Runnable er_n=new Runnable()
+//JJ             {public void run()
+//JJ                {String ss;		
+//JJ                 try{eb_n=new BufferedReader(new InputStreamReader(es_n,('W'==os_c?"SHIFT_JIS":"UTF-8")));
+/////JJ                     for(; null !=(ss=eb_n.readLine());)command_e_s+=ss+" ";//VER36.6.0.3
+//JJ                     for(; null !=(command_e_s=eb_n.readLine());)console_write_v(command_e_s); //VER36.6.0.3
+//JJ                    }catch (Exception e_ni){}		
+//JJ                }
+//JJ             };
+//JJ           it_n=new Thread(ir_n);et_n=new Thread(er_n);
+//JJ           if(!e2s_b(s3_si,"")){ot_n=new Thread(or_n);ot_n.start();}
+//JJ            Process_n.waitFor();it_n.start();et_n.start();
+//JJ            Process_n.waitFor();it_n.join(); et_n.join();
+//JJ            Process_n.destroy();
+//JJ           }catch (Exception e_ni) {}    
+//JJ        if( null !=ib_n){ib_n.close();ib_n= null ;}
+//JJ        if( null !=eb_n){eb_n.close();eb_n= null ;}
+//JJ        if( null !=is_n){is_n.close();is_n= null ;}
+//JJ        if( null !=es_n){es_n.close();es_n= null ;}
+//JJ        if( null !=os_n){os_n.close();os_n= null ;}		
+//JJ        int i=Process_n.exitValue();
+//JJ        if(0<i){err_s=command_e_s;return 5;} //VER 36.0.3
+//JJ    }
+if(true==b_bi)
+//HP  process_nn.waitForFinished();
+//SS  Process_n.WaitForExit();
+//JJ  Process_n.waitFor();
+//SJ    }catch(Exception e_ni){err_s=message_s(e_ni);return 5;}
+return 0;
+}
+//---------------------------------------------------------------------
+public bool prog_left_b(String s_si){return e_left_b(prog_n,s_si,prog_s_n.s);}
+//---------------------------------------------------------------------
+public String prog_word_s="";
+public bool prog_word_b(ii_zz_l s_ni,String s_si)
+{bool b=word_b(s_ni,prog_n,prog_c_n,prog_s_n.s,s_si,1);
+//prog_word_s=s_n.s;
+return b;
+}
+//---------------------------------------------------------------------
+public bool prog_skip_b(String s_si)
+{ii_zz_l ww_s_n=new ii_zz_l();
+bool b=word_b(ww_s_n,prog_n,prog_c_n,prog_s_n.s,s_si,0);
+//HP delete ww_s_n;
+return b;
+}
+//---------------------------------------------------------------------
+public String server_file_path_s()
+{return os_drive_s+dir_s+"I"+dir_s+"I."+system_s;} //VER16.1
+//---------------------------------------------------------------------
+public String server_i_file_path_s(){return os_drive_s+dir_s+"I";} //VER16.1
+//---------------------------------------------------------------------
+//=**** 全角文字を考慮して文字を指定長さにする )*****
+public String fix_form_length_s(String s_si,int i_ii)
+{String w_s=set_form_length_s(s_si,i_ii);return pad_end_s(w_s,i_ii);}
+//---------------------------------------------------------------------
+//=**** 全角文字を考慮して文字を指定長さ以下で切る )*****
+public String set_form_length_s(String s_si,int i_ii)
+{int j,k,l=0;ii_zz_l ww_i_n=new ii_zz_l();
+if(!e2s_b(s_si,""))
+  for(ww_i_n.i=0;ww_i_n.i<length(s_si);ww_i_n.i++)
+    {k=ww_i_n.i;j=form_length(ww_i_n,at_s_c(s_si,ww_i_n.i));if(l+j>i_ii)return substring3_s(s_si,0,k);l+=j;}
+//HP delete ww_i_n;
+return s_si;
+}
+//---------------------------------------------------------------------
+//=****( 型を判定する )*****
+public String type_s(String type_si)
+{if(e4s_b(type_si,"CHAR","VARCHAR","VARCHAR2"))return " ";//CHAR判定
+if(e6s_b(type_si,"NCHAR","NVARCHAR","NVARCHAR2","MCHAR","MVARCHAR"))return "/";//NCHAR判定
+if(e3s_b(type_si,"DECIMAL","INT"))return "-";//INT判定
+if(e3s_b(type_si,"FLOAT","DOUBLE"))return "F";//FLOAT判定
+if(e4s_b(type_si,"DATETIME","TIMESTAMP","DATE"))return "E";//DATETIME/DATE判定
+return " ";//CHAR判定
+}
+//---------------------------------------------------------------------
+//=**( return 1=error,0=normal )***
+//=**( s_siのindex_ir からi_char_sのどれかの文字を探しそこの直前までをs_ni.sに入れる)***
+//=**( ”'”が有った場合は2個にする )***
+public bool word_b(ii_zz_l s_ni,ii_zz_l index_ni,ii_zz_l char_c_ni,String s_si,String char_si,int sw_set_ii)
+{
+int start=index_ni.i;
+for(;;)
+  {if(length(s_si)>index_ni.i &&-1!=(index_ni.i=index3sc_i(s_si,char_si+"'",index_ni.i)))
+     if('\''==at_s_c(s_si,index_ni.i))
+       {index_ni.i ++;
+        if(length(s_si)>index_ni.i&&-1!=(index_ni.i=index3c_i(s_si,'\'',index_ni.i)))
+          {index_ni.i++;continue;}//?go to loop;} 
+       }
+     else
+      {if(1==sw_set_ii)
+           {s_ni.s=trim_s(substring3_s(s_si,start,index_ni.i-start));
+          //  console_write_v("s_ni.s="+s_ni.s+",start="+to_i_s(start)+",index_ni.i="+to_i_s(index_ni.i)+"/"+s_si);
+           }
+       char_c_ni.c=at_s_c(s_si,index_ni.i++);
+       return true;      
+      }  
+   break;
+  }//for(;;)
+index_ni.i=length(s_si);
+char_c_ni.c='\0';
+if(1==sw_set_ii)s_ni.s=(start<length(s_si)?substring2_s(s_si,start):"");
+err_s="not found ('"+char_si+"')";
+return false;
+}
+//---------------------------------------------------------------------
+//---------------------------------------------------------------------
+//=****( INTをDECIMALに変換 )****
+//SJ  public decimal decimal_d(int i_ii)
+//SJ {return
+//SS i_ii;
+//JJ BigDecimal.valueOf(i_ii);
+//SJ }
+//=****( 文字列をDECIMALに変換,変換不能時d_diを設定,sw_ii:(1=変換エラーはerr_sを設定する）(結果をreturn_bに設定)****
+//SJ public decimal to_decimal_d(String s_si,char type_ci,decimal d_di,int sw_ii)
+//SJ {decimal d=decimal_d(0);
+//SJ  if(e2s_b(s_si,"")){return_b=true;return decimal_d(0);}
+//SS try{d=Convert.ToDecimal(s_si);}
+//JJ try{d=new    BigDecimal(s_si);}
+//SJ catch(Exception){if(1==sw_ii)err_s="not numeric \""+s_si+"\"";return_b=false;return d_di;}
+//SS if('+'==type_ci&&d<decimal_d(0))
+//JJ if('+'==type_ci&&0>d.compareTo(decimal_d(0)))
+//SJ {if(1==sw_ii)err_s="not plus \""+s_si+"\""; return_b=false;return d_di;}
+//SJ return_b=true;return d;
+//SJ }
+//---------------------------------------------------------------------
+//=****( INTをDOUBLEに変換 )****
+////public double double_o(int i_ii){return (double)i_ii;}
+//=****( to_duble 文字列をDUBLEに変換,変換不能時o_oiを設定,sw_ii:(1=変換エラーはエerr_sを設定する）(結果をreturn_bに設定)****
+public double to_double_o(String s_si,char type_ci,double o_oi,int sw_ii)
+{double o=0L;
+if(e2s_b(s_si,"")){return_b=true;return 0L;}
+//HP bool b;o=s_si.toDouble(&b);
+//SS try{o=(double)Convert.ToDouble(s_si);}
+//JJ try{o=Double.parseDouble(s_si);}
+//SJ catch(Exception)
+//HP if(!b)
+    {if(1==sw_ii)err_s="not numeric \""+s_si+"\"";return_b=false;return o_oi;}
+if('+'==type_ci&&o<0)
+    {if(1==sw_ii)err_s="not plus \""+s_si+"\""; return_b=false;return o_oi;}
+return_b=true;return o;
+}
+//---------------------------------------------------------------------
+//=****( to_int 文字列を数値に変換,type_ci:(-=全ての値OK,+=0以上OK,0=1以上OK（ZEROと負はエラー））)(結果をreturn_bに設定)*****
+public int to_int_check(String s_si,char type_ci,int i_ni,int sw_ii)
+{int i=0;
+ if(!e2s_b(s_si,""))
+   {
+//SJ try{
+//HP     bool b;
+         i=
+//HP      s_si.toInt(&b);
+//HP      if(false==b){if(1==sw_ii)err_s="not numeric \""+s_si+"\"";return_b=false;return i_ni;}
+//SS      Convert.ToInt32(s_si);
+//JJ      Integer.parseInt(s_si);
+//SJ    }catch(Exception){if(1==sw_ii)err_s="not numeric \""+s_si+"\"";return_b=false;return i_ni;}
+   } 
+if('-'!=type_ci&&0>i){if(1==sw_ii)err_s="not plus \""+s_si+"\"";return_b=false;return i;}
+if('0'==type_ci&&0==i){if(1==sw_ii)err_s="bad zero \""+s_si+"\"";return_b=false;return i;}
+return_b=true;return i;
+}
+#if IMENU||ITIME||IPRINT //TEST
+//---------------------------------------------------------------------
+//=****( List<char>を文字列化する)*****
+public String to_ca_s(List<char> c_ai)
+{String s="";
+for(int iz=0;iz<count_c_i(c_ai);iz++)s+=to_c_s((char )at_c(c_ai,iz));
+return trim_end_s(s);//(VER10.1)
+}
+//=***( read(file_si,i_encod_s,ii_zz_l data_ni) )*****
+public int read(String file_si,String encoding_si,ii_zz_l data_ni)
+{int rc=0;ii_read_l ww_read_n=new ii_read_l(this);
+data_ni.s="";
+if(!ww_read_n.open_b(file_si,encode_s(encoding_si)))rc=5;//ファイル無しはエラー
+if(0==rc)rc=ww_read_n.read();data_ni.s=ww_read_n.read_data_s;ww_read_n.read_close_v();
+//HP delete ww_read_n;
+return rc;
+}
+#endif //MENU||TIME||PRINT
+#if IMENU||ITIME||IPRINT //TEST
+//---------------------------------------------------------------------
+//=***( write ファイルに書き出す)*****
+public bool write_b(String file_si,String append_si,String encoding_si,String data_si)
+{bool b=true;ii_write_l ww_write_n=new ii_write_l(this);
+if(!ww_write_n.open_b(file_si,append_si,encode_s(encoding_si)))b=false;//オープン出来ずはエラー
+if(true==b)b=ww_write_n.write_b(data_si);ww_write_n.write_close_v();
+//HP delete ww_write_n;
+return b;
+}
+#endif //MENU||TIME||PRINT
+//---------------------------------------------------------------------
+//=*****( コマンドラインパラメータに使えない特殊文字変換(...#+英字...) ",%,!,`,\,$(#) )*****
+public String arg_set_s(String s_si)
+{return replace_s_s(replace_s_s(replace_s_s(replace_s_s(replace_s_s(replace_s_s(replace_s_s(replace_s_s(
+              s_si,"#","#C"),"\"","#Q"),"%","#P"),"!","#E"),"`","#A"),"\\","#Y"),"$","#D")," ","#S");
+}
+//---------------------------------------------------------------------
+//=*****( 引用符内コマンドラインパラメータに使えない特殊文字戻し(#+英字) ",%,!,`,\,$(#) )*******************
+public String arg_get_s(String s_si)
+{return replace_s_s(replace_s_s(replace_s_s(replace_s_s(replace_s_s(replace_s_s(replace_s_s(replace_s_s(
+              s_si,"#Q","\""),"#P","%"),"#E","!"),"#A","`"),"#Y","\\"),"#D","$"),"#S"," "),"#C","#");
+}
+//public String command_set_s(String s_si)
+//  {return replace_s_s(replace_s_s(replace_s_s(replace_s_s(s_si,"#","#C"),"<","#L"),">","#G"),"|","#V");}
+//public String command_get_s(String s_si)
+//  {return replace_s_s(replace_s_s(replace_s_s(replace_s_s(s_si,"#L","<"),"#G",">"),"#V","|"),"#C","#");}  
+//---------------------------------------------------------------------
+public String before_one_sec_s(String s_si)
+{int hh=0,mm=0,ss=0;
+ try{ss=to_int1s_i(substring3_s(s_si,4,2));
+     if(0<ss){ss--;s_si=substring3_s(s_si,0,4)+to2_i_s(ss,2);}
+     else
+       {mm=to_int1s_i(substring3_s(s_si,2,2));
+        if(0<mm){mm--;s_si=substring3_s(s_si,0,2)+to2_i_s(mm,2)+"59";}
+        else
+          {hh=to_int1s_i(substring3_s(s_si,0,2));
+           if(0<hh)hh--;else hh=23;
+           s_si=to2_i_s(hh,2)+"59"+"59";
+          } 
+       } 
+    }
+ catch(Exception){}
+return s_si;
+}
+//---------------------------------------------------------------------
+//=************( 表示データを編集 )*************************************************
+public String set_display_s(char type2_ci,String s_si)
+{if('*'==type2_ci||'#'==type2_ci)//表示をアスタリスクに変更 //VER20.1
+   {String w_s="";s_si=trim_s(s_si);
+    for(int i=0;i<length(s_si);i++)
+      {int kind=kind_code(at_s_c(s_si,i));
+       if     (e3i_b(kind,HALF_1,KANA_3))w_s+="*";
+       else if(e3i_b(kind,FULL_2,HIGH_SURROGATE_4)) w_s+="＊";
+       if(HIGH_SURROGATE_4==kind)i++;
+      }
+    return w_s;
+   } 
+else return s_si;
+}
+//---------------------------------------------------------------------
+public int unicode_length(String s_si)
+{int len=0;
+for(int i=0;i<length(s_si);i++,len++)
+ if(e3i_b(kind_code(at_s_c(s_si,i)),HIGH_SURROGATE_4,LOW_SURROGATE_5))i++;
+ else for(;;)if(COMBINING_0==kind_code(at_s_c(s_si,i)))i++;else break;
+return len;
+}
+//---------------------------------------------------------------------
+//=****( ユニコードを設定する )****************************
+public String set_unicode_s(String s_si,int pos_ii,int len_ii,int sw_ii)
+{int posi=1,i=0;
+for(;posi<pos_ii&&i<length(s_si);i++,posi++)//位置計算
+  {if(e3i_b(kind_code(at_s_c(s_si,i)),HIGH_SURROGATE_4,LOW_SURROGATE_5))i++;//サロゲートペア判定
+   for(;;)if((i+1)<length(s_si)&&COMBINING_0==kind_code(at_s_c(s_si,i+1)))i++;else break;//結合文字判定
+  }
+if(i>=length(s_si))return "";//先頭位置オーバー
+if(-1==len_ii)return substring2_s(s_si,i);//文字数指定なし最後まで
+//文字数計算
+posi=i;int old=i,len=0;
+for(len=0;len<len_ii&&i<length(s_si);)
+  {if(e3i_b(kind_code(at_s_c(s_si,i)),HIGH_SURROGATE_4,LOW_SURROGATE_5)){i++;i++;}//サロゲートペア判定
+   else
+     {i++;
+      for(;;)if(i<length(s_si)&&COMBINING_0==kind_code(at_s_c(s_si,i)))i++;else break;//結合文字判定
+     } 
+   if(0==sw_ii)if(len_ii<(i-posi)){i=old;break;}//物理長指定
+   len++;
+   if(len==len_ii)break;
+   old=i;
+  }
+if(i>length(s_si))i=length(s_si);//バグ回避
+return substring3_s(s_si,posi,i-posi);//部分文字設定 
+}
+//---------------------------------------------------------------------
+//=****( encoding エンコードを設定する)***********************************
+//SS public System.Text.Encoding encoding_n(String s_si)
+//SS {
+////SS if(e2s_b(s_si,"/"))return System.Text.Encoding.Default; //VER36.1
+//SS try{return System.Text.Encoding.GetEncoding(encode_s(e2s_b(s_si,"/")?('W'==os_c?"SHIFT_JIS":"UTF-8"):e2s_b(s_si,"")?"UTF-8":s_si));} //VER36.1//VER24.1 //VER35
+//SS catch(ArgumentException){err_s="bad encoding \""+s_si+"\"("+encode_s(e2s_b(s_si,"")?"UTF-8":s_si)+")";}
+//SS return  null ;     
+//SS }
+//---------------------------------------------------------------------
+//=****( split_comma 引用符内のコンマは無視してコンマで区切る )***********************************
+public void split_comma_s_v(List<String> s_split_comma_a,String s_si)
+{int st=0,i=0,sw=0;clear_s_v(s_split_comma_a);
+for(i=0;i<length(s_si);i++)
+  {if('\''==at_s_c(s_si,i))sw=(0==sw?1:0);
+   if(1==sw)continue;
+   if(','==at_s_c(s_si,i)){add_s(s_split_comma_a,substring3_s(s_si,st,i-st));st=i+1;}
+  }
+add_s(s_split_comma_a,substring2_s(s_si,st));
+}
+public String message_s(Exception e_ni)
+{return
+//HP "error";
+//SS e_ni.Message;
+//JJ e_ni.getMessage();
+}
+//---------------------------------------------------------------------
+#if IMENU||IPRINT
+public Font font_n(String si,float fi)
+{
+//HP Font font(si,fi);return font;
+//SJ return new Font(si,
+//JJ 0,(int )
+//SJ     fi);
+}
+#endif
+public bool copy_file_b(String in_si,String out_si,String error_si)
+{bool rc_b=true;
+//JJ java.nio.channels.FileChannel  in_n= null ;java.nio.channels.FileChannel out_n= null ;
+try{
+//SS File.Copy(in_si,out_si,true);
+//JJ  in_n=new FileInputStream(in_si  ).getChannel();
+//JJ out_n=new FileOutputStream(out_si).getChannel();
+//JJ in_n.transferTo(0,in_n.size(),out_n);
+   }
+catch(Exception e_ni){err_s=(e2s_b(error_si,"")?"":error_si+" "+message_s(e_ni));rc_b=false;}  
+//JJ try{in_n.close();out_n.close();}catch(Exception e_ni){}
+return rc_b;
+}
+public bool delete_dir_b(String si,String error_si)
+{try{
+//SS Directory.Delete(si,true);
+//JJ File dir_n=new File(si);
+//JJ if(dir_n.isDirectory())delete(dir_n);
+     return true;
+    }catch(Exception e_ni){err_s=(e2s_b(error_si,"")?"":error_si+" "+message_s(e_ni));return false;}  
+}
+//JJ static private void delete(File dir_ni)
+//JJ {if(dir_ni.exists()==false )return;
+//JJ  if(dir_ni.isFile())dir_ni.delete();
+//JJ  if(dir_ni.isDirectory())
+//JJ    {File[] dir_nx=dir_ni.listFiles();
+//JJ     for(int i=0;dir_nx.length>i;i++)delete(dir_nx[i]);
+//JJ     dir_ni.delete();
+//JJ    }
+//JJ }
+public bool delete_file_b(String si,String error_si)
+{
+//HP QFile file_nn(si);
+//HP if(file_nn.exists())if(!file_nn.remove()){err_s="delete file error("+si+")";return false;};
+//SJ try{
+//SS File.Delete(si);
+//JJ File file_n=new File(si);
+//JJ if(file_n.isFile())file_n.delete();
+      return true;
+//SJ     }
+//SJ catch(Exception e_ni){err_s=(e2s_b(error_si,"")?"":error_si+" "+message_s(e_ni));return false;}
+}
+public bool rename_file_b(String in_si,String out_si,String error_si)
+{
+//HP QDir dir=QDir(dir_s);
+//HP if(!dir.rename(in_si,out_si)){err_s="rename file error("+in_si+")";return false;}
+//SJ try{
+//SJ in_si=get_tmp_path_s(dir_s)+in_si;
+//SJ out_si=get_tmp_path_s(dir_s)+out_si;
+//SS File.Move(in_si,out_si);
+//JJ File file_in_n=new File(in_si);
+//JJ File file_out_n=new File(out_si);
+//JJ if(!file_in_n.renameTo(file_out_n)){err_s="not rename";return false;}
+   return true;
+//SJ    }catch(Exception e_ni){err_s=(e2s_b(error_si,"")?"":error_si+" "+message_s(e_ni));return false;}  
+}
+public bool make_directory_b(String si,String error_si)
+{
+//HP QDir dir=QDir("");if(dir.exists(si))return true;
+//HP if(!dir.mkdir(si)){err_s="make dir error("+si+")";return false;}
+//SJ try{
+//SS Directory.CreateDirectory(si);
+//JJ (new File(si)).mkdir();
+     return true;
+//SJ    }catch(Exception e_ni){err_s=(e2s_b(error_si,"")?"":error_si+" "+message_s(e_ni));return false;}  
+}
+public void sleep_v(int ii)
+{
+//HP QEventLoop loop;
+//HP QTimer::singleShot(ii,&loop,SLOT(quit()));
+//HP loop.exec();
+//SJ try{
+//SS System.Threading.Thread.Sleep(ii);
+//JJ Thread.sleep(ii);
+//SJ    }catch(Exception){}
+}
+#if IMENU
+public void set_clipboard_v(String si)
+{
+//HP QClipboard *clipboard=QApplication::clipboard();
+//HP clipboard->setText(si); 
+//SJ try{
+//SS Clipboard.SetDataObject(si,true);
+//JJ Toolkit.getDefaultToolkit().getSystemClipboard()
+//JJ     .setContents(new java.awt.datatransfer.StringSelection(si), null );
+//SJ     }catch(Exception){}
+}
+public String get_clipboard_s()
+{
+//HP return QApplication::clipboard()->text();
+//SJ try{
+//SS IDataObject IDataObject_n=Clipboard.GetDataObject();
+//SS if(!IDataObject_n.GetDataPresent(DataFormats.UnicodeText))return "";
+//SS return (String)IDataObject_n.GetData(DataFormats.UnicodeText);
+//JJ return (String)Toolkit.getDefaultToolkit().getSystemClipboard()
+//JJ  .getData(java.awt.datatransfer.DataFlavor.stringFlavor);
+//SJ    }catch(Exception){return "";}
+} 
+//SP public void dialog_box_error_v(String message_si,String title_si)
+//JJ public void dialog_box_error_v(ii_z_mt_l z_mt_ni,String message_si,String title_si)
+{for(;!dialog_box_b(
+//JJ z_mt_ni,
+message_si,title_si,1);){}
+}
+//SP public bool dialog_box_yes_no_b(String message_si,String title_si)
+//JJ public bool dialog_box_yes_no_b(ii_z_mt_l z_mt_ni,String message_si,String title_si)
+{return dialog_box_b(
+//JJ z_mt_ni,
+message_si,title_si,0);
+}
+//HP QMessageBox messagebox_nn;
+//SP bool dialog_box_b(String message_si,String title_si,int error_i)
+//JJ bool dialog_box_b(ii_z_mt_l z_mt_ni,String message_si,String title_si,int error_i)
+{
+//HP messagebox_nn.setIcon(QMessageBox::Critical);
+//HP messagebox_nn.setWindowTitle(title_si);
+//HP messagebox_nn.setText(message_si);
+//HP messagebox_nn.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+//HP messagebox_nn.setDefaultButton(QMessageBox::No);
+//HP if(QMessageBox::Yes==messagebox_nn.exec())return true;else return false;
+//SS if(
+//SS  (0==error_i?DialogResult.Yes:DialogResult.OK)==MessageBox.Show(
+//SS       message_si,title_si,
+//SS   (0==error_i?MessageBoxButtons.YesNo:MessageBoxButtons.OKCancel),
+//SS   (0==error_i?MessageBoxIcon.None:MessageBoxIcon.Error)
+//SS         ,MessageBoxDefaultButton.Button2
+//SS     ))return true;
+//SS return false;
+//JJ dialog_l dialog_n=new dialog_l(z_mt_ni,message_si,title_si,error_i);return dialog_n.return_b;
+}
+#endif
+//HP public String to_yx_s(QByteArray yxi)
+//SJ public String to_yx_s(byte[]     yxi)
+{
+//HP return QString::fromUtf8(yxi);
+//SJ try{return 
+//SS System.Text.Encoding.UTF8.GetString(yxi);
+//JJ new String(yxi,"UTF-8");
+//SJ    }catch(Exception){return "";}
+}
+//HP public String to_utf8_s(QByteArray yxi,int start_i,int length_i)
+//SJ public String to_utf8_s(byte[]     yxi,int start_i,int length_i)
+{
+//HP return substring3_s(QString::fromUtf8(yxi),start_i,length_i);
+//SJ try{return 
+//SS System.Text.Encoding.UTF8.GetString(yxi,start_i,length_i);
+//JJ substring3_s(new String(yxi,"UTF-8"),start_i,length_i);
+//SJ    }catch(Exception){return "";}
+}
+//HP public QByteArray to_utf8_yx(String si)
+//SJ public byte[]     to_utf8_yx(String si)
+{
+//HP return si.toUtf8();
+//SJ try{return 
+//SS  System.Text.Encoding.UTF8.GetBytes(si);
+//JJ  si.getBytes("UTF-8");
+//SJ    }catch(Exception){return  null ;}
+}
+//HP public QByteArray to_encode_yx(String si,String encode_si)
+//SJ public byte[]     to_encode_yx(String si,String encode_si)
+{
+////HP QTextCodec* codec_n=QTextCodec::codecForName(encode_s(encode_si) .toUtf8());//VER36.1
+////HP return  codec_n.fromUnicode(si);//VER36,1
+//HP return  si.toUtf8();//VER36,1
+//SJ try{return 
+//SS  System.Text.Encoding.UTF8.GetBytes(si);
+//JJ  si.getBytes(encode_s(encode_si));
+//SJ    }catch(Exception){return  null ;}
+}
+#if ISRVC
+public void srvc_log_file_v(int i_ii,String error_si) //VER31.1
+{log_file_v(i_ii,service_name_s+(9==i_ii?" Error ":" ")+error_si,service_name_s+".TXT");}
+#endif //SRVC||TEST
+#if IMENU||ITIME||ISRVC //TEST
+//---------------------------------------------------------------------
+String log_file_s="",log_add_s="OT";
+public void log_file_v(int err_ii,String msg_si,String file_si)
+{if(e2s_b(log_file_s,""))log_file_s=file_si;else log_add_s="ADD";
+if(0==err_ii)log_add_s="OT";//サービス処理開始時クリアー 
+ii_write_l ww_write_n=new ii_write_l(this);
+if(ww_write_n.open_b(server_i_file_path_s()+dir_s+"SHARE"+dir_s+"MESSAGE"+dir_s+log_file_s,log_add_s,"UTF-8,W"))
+  {ww_write_n.write_b((9!=err_ii?"  ":"? ")+date_time_s(date_time_now_s(),1)+" "+msg_si);
+   ww_write_n.write_close_v();
+  }
+//HP delete ww_write_n;
+}
+//--------( server_bat() ---------------------------------
+public int server_bat(String work_si,String command_si)  //VER17
+{String exit_file_s=get_tmp_path_s(dir_s,"TIME")+work_si+".EXIT";//VER17
+ii_write_l ww_write_n=new ii_write_l(this);//開始をファイルに宣言。//VER17
+int rc=0;
+if(ww_write_n.open_b(exit_file_s,"OT","/")){ww_write_n.write_b("(NOT START (SERVER,BAT,EXIT FILE,"+command_si+"))");ww_write_n.write_close_v();} //VER17
+else {err_s="(WRITE ERROR (SERVER,BAT,"+exit_file_s+"))";rc=5;}//VER17
+//HP delete ww_write_n;
+if(0==rc)
+  {if(0!=command(server_file_path_s()+dir_s+"BAT"+dir_s+command_si)){err_s="(ERRROR)"+command_si;rc=5;} 
+   else
+     {ii_read_l ww_read_n=new ii_read_l(this);//VER17
+      if(ww_read_n.open_b(exit_file_s,"/"))//VER17
+        {int rc2=ww_read_n.read();ww_read_n.read_close_v();//VER17
+         delete_file_b(exit_file_s,"");//VER17
+         if(0==rc2)if(starts_with_b(ww_read_n.read_data_s,"!!!")){}//正常終了判定。//VER17
+                  else {err_s=ww_read_n.read_data_s;rc=5;}//VER17
+         else {err_s="(SPACE ERROR (SERVER,BAT,EXIT FILE,"+command_si+"))";rc=5;} //VER17
+        }
+      else {err_s="(READ ERROR (SERVER,BAT,EXIT FILE,"+exit_file_s+"))"+exit_file_s;rc=5;}//VER17
+      //return 5;
+//HP  delete ww_read_n;       
+     }
+  }
+return rc;
+}
+#endif //MENU||TIME||SRVC
+}
+//JJ class dialog_l extends Dialog implements ActionListener
+//JJ {//listener_n listener;
+//JJ   bool return_b=false;
+//JJ   Button Button_true_n,Button_false_n;
+//JJ   dialog_l(ii_z_mt_l z_mt_ni,String message_s,String title_s,int error_i)
+//JJ   {super(z_mt_ni.imenu_p,title_s,ModalityType.APPLICATION_MODAL);
+//JJ    setSize(300,200); 
+//JJ     TextArea TextArea_n=new TextArea(message_s,1,1,TextArea.SCROLLBARS_VERTICAL_ONLY);
+//JJ     TextArea_n.setEditable(false);
+//JJ     add(TextArea_n,BorderLayout.CENTER);
+//JJ     Panel Panel_n=new Panel();
+//JJ     Panel_n.add(Button_true_n=new Button(1==error_i?"OK":"Yes"));
+//JJ     Button_true_n.addActionListener(this);
+//JJ     Panel_n.add(Button_false_n=new Button(1==error_i?"Cancel":"No"));
+//JJ     Button_false_n.addActionListener(this);
+//JJ     add(Panel_n,BorderLayout.SOUTH);
+//JJ    setVisible(true);
+//JJ   }
+//JJ public void actionPerformed(ActionEvent e_i)
+//JJ {return_b=(Button_true_n==e_i.getSource()?true:false);
+//JJ  dispose();
+//JJ }
+//JJ }
+//#endif //MENU||TIME||SRVC||PRINT||SETUP 

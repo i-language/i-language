@@ -1,0 +1,42 @@
+// IROOT.SRC run ROOT program author nobumichi.harasawa 
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//PP #include "iroot.h"
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.Diagnostics;
+//SS using System.IO;
+//JJ import java.util.*;
+//JJ import java.io.*;
+//JJ import java.lang.*;
+class iroot_l
+{
+//HP int main(int arg_i,char** arg_cci)
+//SJ static void Main(String[] arg_sxi)
+{
+//HP QApplication app_nn(arg_i,arg_cci);
+ii_z_l z_n=new ii_z_l("IROOT",
+//HP                  arg_i,arg_cci
+//SJ                  arg_sxi
+                                   );ii_z_l z_p=z_n; //共通使用インスタンスを作成。);
+String exe_s=(0==z_p.count_s_i(z_p.s_arg_a)?"":z_p.at_s(z_p.s_arg_a,0));
+String arg_s="";
+for(int i=1;z_p.count_s_i(z_p.s_arg_a)>i;i++)arg_s+=z_p.at_s(z_p.s_arg_a,i)+" ";
+z_p.console_write_v("===( IROOT"+z_p.to_c_s(z_p.os_c)+z_p.to_c_s(z_p.FRAMEWORK_C)+(z_p.e2c_b(z_p.os_c,'W')?".EXE":"")+" )===");
+z_p.console_write_v(exe_s+" "+arg_s);
+////for(;;) //VER36.000600003
+////  {String s="";
+////   if(z_p.starts_with_b(z_p.upper_s(exe_s+" "+arg_s),z_p.upper_s("WSCRIPT.EXE \\"))
+////    ||z_p.starts_with_b(z_p.upper_s(exe_s+" "+arg_s),z_p.upper_s(z_p.os_drive_s+z_p.dir_s+"I"+z_p.dir_s)))
+////        s="YES";
+////   else {z_p.console_write_v("***=#=#=#=#=#( YES or NO and Enter )#=#=#=#=#=***");
+////         s=z_p.upper_s(z_p.console_read_s());
+////        }
+////   if(z_p.e2s_b(s,"YES"))
+//     {if(0!=z_p.process(exe_s,arg_s,"",false))z_p.console_write_v(z_p.err_s);break;} //VER35
+       /*{*/if(0!=z_p.process(exe_s,arg_s,"",true))z_p.console_write_v(z_p.err_s);/*break;}*/ //VER35.1 VER36.6.0.3
+////   else if(z_p.e2s_b(s,"NO"))break;
+////  }
+//HP return 0;
+}
+}

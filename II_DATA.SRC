@@ -1,0 +1,173 @@
+//= II_DATA.CS program data class author nobumichi harasawa
+#if IMENU||ITIME
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//SS using System.Data.SqlClient;
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.Drawing;
+//SS using System.IO;
+//JJ import java.awt.*;
+//JJ import java.awt.event.*;
+//JJ import java.io.*;
+//JJ import java.math.*;
+//JJ import java.util.*;
+//=****( データ用クラス )*****
+public class ii_data_l
+{
+//COPY $II_DIR
+//COPY $II_READ
+//COPY $II_SQL2
+//COPY $II_URL
+ii_z_l z_p;
+public String data_s="",data_save_s="",name_s="",title_s="",select_s=""
+,section1_s=""  //section1_sはDATA=内の命令群及び＄での初期転送用。
+,section2_s=""  //section2_sは通常の=から書かれた命令群用。
+,check_s="",check2_s="",click_s="",message_s="",type1_s=" ",alias_s="",where_s="";
+#if IMENU
+public Font Font_n;public Brush Brush_n,org_Brush_n,save_Brush_n;
+#endif //MENU
+public String font_s;
+public int line=0,column=0,length0=0 //表示の長さ
+,length1=0,length2=0,filler=1,left_cnt=-1;
+public char mark1_c=' '; //(属性1,K=KEY,'*'=更新対象でない、' '=更新対象）
+public char mark2_c=' '; //(属性2,' ','O'=表示,'N'=非表示,'/'=EnterのみOK,'!'='/'回避,'#'=SETでKeys.Down停止)
+public String mark3_s=""; //(属性3,"","L","I","E","=",">=","<=","<>" Where設定,L,I,EはLIKE,D=DESC,C=CUT,B=BOTTOM)
+public String mark4_s=""; //(属性4,"G","",GROUP BY)
+public int mark5=0;//属性５、０から９で表示幅拡大。
+public String dictionary_check_s=""; //データ辞書のCHECK
+public String dictionary_table_s=""; //データ辞書のCHECK61
+public String dictionary_left_s="";  //データ辞書のLEFT用SQL文
+public String input_s="";  //INPUT=のプログラム。
+public char type2_c=' ';//数値の場合("C","Z","E"）文字の場合("I","L","K","X","*","#"）。
+//----------------------------------------------
+public ii_data_l(ii_z_l z_ni){init_v(z_ni);}
+public ii_data_l(String s_si,ii_z_l z_ni){init_v(z_ni);name_s=z_p.upper_s(s_si);}
+public ii_data_l(String s1_si,String s2_si,String s_si,ii_z_l z_ni)
+{init_v(z_ni);name_s=z_p.upper_s(s1_si);data_s=s2_si;type1_s=(z_p.e2s_b(s_si,"")?" ":s_si);}
+public ii_data_l(String s1_si,String s2_si,String s_si,int line_ii,int column_ii,int length0_ii,int length1_ii,int length2_ii,ii_z_l z_ni)
+{init_v(z_ni);name_s=z_p.upper_s(s1_si);data_s=s2_si;type1_s=(z_p.e2s_b(s_si,"")?" ":s_si);
+line=line_ii;column=column_ii;length0=length0_ii;length1=length1_ii;length2=length2_ii;
+}
+public ii_data_l(ii_data_l da_ni)
+{
+z_p=da_ni.z_p;
+data_s=da_ni.data_s;data_save_s=da_ni.data_save_s;name_s=da_ni.name_s;title_s=da_ni.title_s;
+select_s=da_ni.select_s;section1_s=da_ni.section1_s;section2_s=da_ni.section2_s;  
+check_s=da_ni.check_s;check2_s=da_ni.check2_s;click_s=da_ni.click_s;
+message_s=da_ni.message_s;type1_s=da_ni.type1_s;alias_s=da_ni.alias_s;where_s=da_ni.where_s;
+#if IMENU
+Font_n=da_ni.Font_n;Brush_n=da_ni.Brush_n;org_Brush_n=da_ni.org_Brush_n;save_Brush_n=da_ni.save_Brush_n;
+#endif //MENU
+font_s=da_ni.font_s;
+line=da_ni.line;column=da_ni.column;length0=da_ni.length0;
+length1=da_ni.length1;length2=da_ni.length2;filler=da_ni.filler;left_cnt=da_ni.left_cnt;
+mark1_c=da_ni.mark1_c;mark2_c=da_ni.mark2_c;mark3_s=da_ni.mark3_s;mark4_s=da_ni.mark4_s; 
+mark5=da_ni.mark5;dictionary_check_s=da_ni.dictionary_check_s;
+dictionary_table_s=da_ni.dictionary_table_s;dictionary_left_s=da_ni.dictionary_left_s; 
+input_s=da_ni.input_s;type2_c=da_ni.type2_c;
+}
+//----------------------------------------------
+//=****( 初期設定 )*****
+void init_v(ii_z_l z_ni)
+{z_p=z_ni;
+#if IMENU
+font_s=z_p.font_s;
+//SS Font_n=new Font(z_p.Font_n,FontStyle.Regular);
+//SS Brush_n=(Brush )z_p.Brush_n('W').Clone();org_Brush_n=(Brush )z_p.Brush_n('W').Clone();
+//JP if(z_p.e2s_b(z_p.main_program_s,"IMENU"))
+//JP {Font_n=z_p.Font_n;Brush_n=(Brush )z_p.Brush_n('W');org_Brush_n=(Brush )z_p.Brush_n('W');}
+#endif //MENU
+}
+#if IMENU
+//----------------------------------------------
+//=****( 色設定 )*****
+public Brush set_color_Brush_n(String s_si)
+{
+int j=0,k=0,r=255,g=255,b=255;
+if(5<z_p.length(s_si))
+  for(int i=0;;i++)//R数G数B数指定
+    {if(i==z_p.length(s_si))
+       {if(3!=j)break;
+        b=z_p.to_int1s_i(z_p.substring3_s(s_si,k,i-k));
+        if(255<b)b=255;
+        return(
+//SJ           new SolidBrush(Color.FromArgb(r,g,b))
+//HP           QBrush(QColor(r,g,b),Qt::SolidPattern)
+               );
+       }
+     if('R'==z_p.at_s_c(z_p.upper_s(s_si),i)){if(0!=j)break;j++;k=i+1;continue;}
+     if('G'==z_p.at_s_c(z_p.upper_s(s_si),i))
+       {if(1!=j)break;
+        r=z_p.to_int1s_i(z_p.substring3_s(s_si,k,i-k));
+        if(255<r)r=255;
+        j++;k=i+1;continue;
+       }
+     if('B'==z_p.at_s_c(z_p.upper_s(s_si),i))
+       {if(2!=j)break;
+        g=z_p.to_int1s_i(z_p.substring3_s(s_si,k,i-k));
+        if(255<g)g=255;
+        j++;k=i+1;continue;
+       }
+     if('0'>z_p.at_s_c(s_si,i)||'9'<z_p.at_s_c(s_si,i))break;
+    }
+//SS return((Brush )z_p.Brush_n((z_p.e2s_b(s_si,"")?' ':z_p.at_s_c(s_si,0))).Clone());
+//JP return((Brush )z_p.Brush_n((z_p.e2s_b(s_si,"")?' ':z_p.at_s_c(s_si,0))));
+}
+//----------------------------------------------
+public void color_v(String s_si)
+{
+Brush_n=set_color_Brush_n(s_si);
+}
+#endif //MENU
+//=****( オリジナルの色を設定 )*****
+public void org_color_v(String s_si)
+{
+#if IMENU
+org_Brush_n=set_color_Brush_n(s_si);color_v(s_si);
+#endif //MENU
+}
+//=****( セーブデータと比較 )*****
+public bool compare_save_b(String s_si)
+{ii_zz_l ww_s_n=new ii_zz_l();
+int i=z_p.compare(ww_s_n,s_si,z_p.at_s_c(type1_s,0),0,1,0,data_save_s);
+//HP delete ww_s_n;
+if(0==i)return true;
+return false;
+}
+//=****( タイプに合わせdata_sを設定 )*****
+//=*****( return 0=normal,5=error,9=abort )*****
+int under_flow(String s_si){z_p.err_s="under flow ("+name_s+"{,"+z_p.to_i_s(length2)+"}) \""+s_si+"\"";return 5;}
+public int set_i(String s_si)
+{int i=0,rc=0;
+//SJ decimal d;
+double o;
+for(;;)
+  {if(z_p.e3s_b(type1_s,"+","-"))//数値判定
+     {
+//SJ  d=z_p.to_decimal_d(s_si,z_p.at_s_c(type1_s,0),z_p.decimal_d(0),1);if(!z_p.return_b)return 9;//数値情報判定
+//SJ  data_s=z_p.numeric_revision_s(z_p.to_d_s(d));//数値補正 
+//HP  o=z_p.to_double_o(s_si,z_p.at_s_c(type1_s,0),0,1);if(!z_p.return_b)return 9;//数値情報判定
+//HP  data_s=z_p.numeric_revision_s(s_si);//数値補正 //HPは元の値を修正。
+      if(-1==(i=z_p.index2c_i(data_s,'.'))){i=z_p.length(data_s);break;} //小数点無し
+      if(0==length2){data_s=z_p.substring3_s(data_s,0,i);rc=under_flow(s_si);break;}
+      if(length2>=(z_p.length(data_s)-(i+1)))break;  
+      data_s=z_p.substring3_s(data_s,0,i+length2+1); 
+      rc=under_flow(s_si);break; //under flow;
+     }
+   if(z_p.e2s_b(type1_s,"F")){o=z_p.to_double_o(s_si,'-',0,1);if(!z_p.return_b)return 9;data_s=z_p.to_o_s(o);break;}
+   data_s=s_si;
+   if(0==length1)return 0;
+   data_s=z_p.set_form_length_s(s_si,length1);//表示長に変更(VER7.3)
+   if(!z_p.e2s_b(s_si,data_s))
+     {z_p.err_s="over length ("+name_s+"{"+z_p.to_i_s(length1)+"}<"+z_p.to_i_s(z_p.form_length(s_si))+") \""+s_si+"\"";return 5;} //VER32.1
+   return 0;
+  }
+if(0!=length2)i+=length2;
+if(z_p.starts_with_b(s_si,"-"))i--;//符号文補正
+if(0!=length1&&i>length1){z_p.err_s="over flow ("+name_s+"{"+z_p.to_i_s(length1)+"}) \""+s_si+"\"";return 5;}//VER18.1 9->5
+return rc;  
+}
+//COPY $II_WRITE
+}
+#endif //MENU||TIME||TEST 

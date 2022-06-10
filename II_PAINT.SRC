@@ -1,0 +1,97 @@
+//= II_PAINT.SRC paint class author nobumichi harasawa
+#if IMENU 
+//=****( 画面表示及び印刷 )*************
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//SS using System.Data.SqlClient;
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.IO;
+#if XAMARIN
+//SS using Xamarin.Forms;
+////SS using System.Drawing.Common;
+#else
+//SS using System.Windows.Forms;
+////SS using System.Drawing;
+#endif
+//SS using System.Drawing;
+//JJ import java.awt.*;
+//JJ import java.awt.event.*;
+//JJ import java.io.*;
+//JJ import java.math.*;
+//JJ import java.util.*;
+public class ii_paint_l
+{
+//COPY $II_DIR
+//COPY $II_READ
+//COPY $II_SQL2
+//COPY $II_URL
+ii_z_l paint_z_p;ii_z_mt_l paint_z_mt_p;
+public int x=0,y=0,length=0;public String data_s="";Brush Brush_n;public String font_s;
+public void on_paint_v()
+{ii_zz_l ww_old_xx_f_n=new ii_zz_l();ii_zz_l ww_old_yy_f_n=new ii_zz_l();ii_zz_l ww_old_x_f_n=new ii_zz_l();
+ww_old_xx_f_n.f=-1;ww_old_yy_f_n.f=-1;ww_old_x_f_n.f=-1;float end_x_f=-1;
+on_paint_v(paint_z_p.Graphics_n,ww_old_xx_f_n,ww_old_yy_f_n,ww_old_x_f_n,end_x_f,0,paint_z_p.lang_x_width
+,paint_z_p.lang_y_high,paint_z_p.Font_n,(float)0,(float)0,(float)0);
+//HP delete ww_old_xx_f_n;delete ww_old_yy_f_n;delete ww_old_x_f_n;
+}
+//***( 旧１行分の消しこみ処理 )****
+public void on_paint_v(Graphics Graphics_ni,ii_zz_l old_xx_f_ni,ii_zz_l old_yy_f_ni,ii_zz_l old_x_f_ni,float end_x,int printer_ii,float xx_fi,float yy_fi,Font Font_ni,float left_fi,float top_fi,float right_fi)
+{ii_zz_l ww_x_n=new ii_zz_l();ii_zz_l ww_y_n=new ii_zz_l(); 
+bool b=true;
+//SJ if( null ==Font_ni)Font_ni=paint_z_p.Font_n;
+ww_x_n.i=x;ww_y_n.i=y;float x_left,x_len;
+if(paint_z_p.e3i_b(1,paint_z_mt_p.program_p.sw_y_scroll,paint_z_mt_p.program_p.sw_x_scroll))
+  {if(!paint_z_mt_p.program_p.scroll_set_b(ww_x_n,ww_y_n))b=false;//スクロール分補正。
+   else
+     {if(ww_y_n.i>paint_z_mt_p.program_p.form_y_max)//画面範囲が下の場合は無視
+         if(0==printer_ii||!paint_z_p.e2s_b(paint_z_mt_p.program_p.program_s,"NOT"))b=false;//印刷で”NOT"の場合は印刷する。
+      if(ww_x_n.i>paint_z_mt_p.program_p.form_x_max)b=false;//画面範囲より右の場合は無視
+     }
+  } 
+if(true==b)
+  {if(-1!=old_xx_f_ni.f)
+     {for(;;)
+        if(old_yy_f_ni.f<ww_y_n.i)
+          {x_left=old_x_f_ni.f+left_fi;
+           x_len=end_x-old_x_f_ni.f;
+           if(1==printer_ii){if((x_len+x_left)>right_fi)x_len=right_fi-x_left;}
+           else
+             {
+              paint_z_mt_p.fill_rect_geta_v(Graphics_ni,paint_z_p.Brush_nx[paint_z_p.BACKCOLOR],x_left,yy_fi*(old_yy_f_ni.f-1)-1+top_fi,x_len,yy_fi);
+             }
+           old_x_f_ni.f=0;old_yy_f_ni.f++;
+           continue; 
+          }
+        else break; 
+      if(1<=(x_len=xx_fi*(ww_x_n.i-1)-1-old_x_f_ni.f))
+        {x_left=old_x_f_ni.f+left_fi;
+         if(1==printer_ii){if((x_len+x_left)>right_fi)x_len=right_fi-x_left;}
+         else
+           {
+            paint_z_mt_p.fill_rect_geta_v(Graphics_ni,paint_z_p.Brush_nx[paint_z_p.BACKCOLOR],x_left,yy_fi*(old_yy_f_ni.f-1)-1+top_fi,x_len,yy_fi);
+           }
+        } 
+     }
+   x_left=xx_fi*(ww_x_n.i-1)-1+left_fi;
+   x_len=xx_fi*(length+1)-1;
+   if(1==printer_ii)if((x_len+x_left)>right_fi)x_len=right_fi-x_left;
+   old_x_f_ni.f=xx_fi*(ww_x_n.i-1)-1+xx_fi*(length+1)-1;
+   paint_z_mt_p.text_renderer_b(Graphics_ni,printer_ii,data_s,ww_x_n.i,ww_y_n.i,Font_ni,Color.Black,Brush_n,left_fi,top_fi,length,(int )xx_fi,(int )yy_fi);//表示又は印字
+  }//if(true==b)
+//HP delete ww_x_n;delete ww_y_n;
+}
+//=***( 初期設定 )*****************
+public void set_b(int y_ii,int x_ii,int length_ii,String data_si,String font_si,Font Font_ni,Brush Brush_ni)
+{x=x_ii;y=y_ii;length=length_ii;data_s=data_si;
+font_s=font_si;
+//SS Brush_n=(Brush)Brush_ni.Clone();
+//JP Brush_n=(Brush )Brush_ni;
+on_paint_v();
+}
+//=***( クラス作成（１行分） )*****************
+public ii_paint_l(int y_ii,int x_ii,int length_ii,String data_si,String font_si,Font Font_ni,Brush Brush_ni,ii_z_l z_ni,ii_z_mt_l z_mt_ni)
+{paint_z_p=z_ni;paint_z_mt_p=z_mt_ni;set_b(y_ii,x_ii,length_ii,data_si,font_si,Font_ni,Brush_ni);}
+//COPY $II_WRITE
+}
+#endif

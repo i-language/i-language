@@ -1,0 +1,12 @@
+<?xml version='1.0'?>
+<Obfuscator>
+  <Var name="InPath"  value="..\I37_BIN_OBFUSCATE\OLD" />
+  <Var name="OutPath" value="..\I37_BIN_OBFUSCATE\NEW" />
+  <Var name="KeepPublicApi"  value="false" />
+  <Var name="HidePrivateApi" value="true" />
+  <Var name="HideStrings"    value="true" />
+  <Module file="$(InPath)\IMENUWD.dll" />
+  <Module file="$(InPath)\ITIMEWD.dll" />
+<!--  <Module file="$(InPath)\IMENUUD.dll" />
+  <Module file="$(InPath)\ITIMEUD.dll" /> -->
+</Obfuscator>

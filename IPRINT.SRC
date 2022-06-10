@@ -1,0 +1,1762 @@
+//IPRINT.SRC VER4 iprogram author nobumich harasawa
+#if IPRINT
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//PP #include "iprint.h"
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.Drawing;
+//SS using System.IO;
+//SS using System.Windows.Forms;
+//SS using System.Drawing.Printing;
+//SS using System.Drawing.Drawing2D;
+//JJ import java.awt.*;
+//JJ import java.awt.event.*;
+//JJ import java.io.*;
+//JJ import java.math.*;
+//JJ import java.util.*;
+//JJ import javax.print.*;
+//JJ import javax.print.attribute.*;
+//JJ import javax.print.attribute.standard.*;
+//JJ import java.awt.print.*;
+//=========( iprint_l )=========================================================================
+public class iprint_l
+//HH :public
+//HH  QWidget //画面を継承
+//SS :Form
+//JJ extends Frame implements Printable,KeyListener
+{
+////HH Q_OBJECT
+////HH signals:
+ii_print_l print_n;
+//JJ iprint2_l iprint2_n= null ;//JAVAはComponent使用。（イメージ描画の為）
+//HP public int main(int arg_i,char** arg_cci)
+//SJ public static void Main(String[] arg_sxi)//プログラムがここから開始
+{
+//HP QApplication app_nn(arg_i,arg_cci);
+ii_z_l z_n=new ii_z_l("IPRINT",
+//HP                           arg_i,arg_cci
+//SJ                           arg_sxi
+                                            ); //共通使用インスタンスを作成。);
+if(z_n.version_n.version_b(z_n.s_arg_a))return
+//HP 0 
+  ;//バージョン判定はファイル作成し終了。
+//SS Application.Run(new iprint_l(z_n));//画面を出し処理開始。
+//JP                 new iprint_l(z_n); //画面を出し処理開始。
+//HP int rc=app_nn.exec();
+//HP  return rc; 
+}
+//JP float mm_f=(float)1/(float)0.35278;//mm補正用。
+float unix_mm_f=1;//.NET Ftamwork 4でLINUXの時線幅不足を対応。
+int sw_printer=0;//印刷時1,。
+//JP int sw_paint=0;//paint抑止。
+String text_s="",today_s="";
+//JJ String[] media_size_name_sx={"A","B","C","D","E","EXECUTIVE","FOLIO","INVOICE","ISO_A0","ISO_A1","ISO_A10"
+//JJ ,"ISO_A2","ISO_A3","ISO_A4","ISO_A5","ISO_A6","ISO_A7","ISO_A8","ISO_A9","ISO_B0","ISO_B1","ISO_B10","ISO_B2"
+//JJ ,"ISO_B3","ISO_B4","ISO_B5","ISO_B6","ISO_B7","ISO_B8","ISO_B9","ISO_C0","ISO_C1","ISO_C2","ISO_C3","ISO_C4"
+//JJ ,"ISO_C5","ISO_C6","ISO_DESIGNATED_LONG","ITALY_ENVELOPE","JAPANESE_DOUBLE_POSTCARD","JAPANESE_POSTCARD"
+//JJ ,"JIS_B0","JIS_B1","JIS_B10","JIS_B2","JIS_B3","JIS_B4","JIS_B5","JIS_B6","JIS_B7","JIS_B8","JIS_B9"
+//JJ ,"LEDGER","MONARCH_ENVELOPE","NA_10X13_ENVELOPE","NA_10X14_ENVELOPE","NA_10X15_ENVELOPE"
+//JJ ,"NA_5X7","NA_6X9_ENVELOPE","NA_7X9_ENVELOPE","NA_8X10","NA_9X11_ENVELOPE","NA_9X12_ENVELOPE"
+//JJ ,"NA_LEGAL","NA_LETTER","NA_NUMBER_10_ENVELOPE","NA_NUMBER_11_ENVELOPE","NA_NUMBER_12_ENVELOPE"
+//JJ ,"NA_NUMBER_14_ENVELOPE","NA_NUMBER_9_ENVELOPE","PERSONAL_ENVELOPE","QUARTO","TABLOID"};
+//JJ MediaSizeName[] media_size_nx={MediaSizeName.A,MediaSizeName.B,MediaSizeName.C,MediaSizeName.D 
+//JJ ,MediaSizeName.E,MediaSizeName.EXECUTIVE,MediaSizeName.FOLIO,MediaSizeName.INVOICE,MediaSizeName.ISO_A0 
+//JJ ,MediaSizeName.ISO_A1,MediaSizeName.ISO_A10,MediaSizeName.ISO_A2,MediaSizeName.ISO_A3,MediaSizeName.ISO_A4 
+//JJ ,MediaSizeName.ISO_A5,MediaSizeName.ISO_A6,MediaSizeName.ISO_A7,MediaSizeName.ISO_A8,MediaSizeName.ISO_A9 
+//JJ ,MediaSizeName.ISO_B0,MediaSizeName.ISO_B1,MediaSizeName.ISO_B10,MediaSizeName.ISO_B2,MediaSizeName.ISO_B3 
+//JJ ,MediaSizeName.ISO_B4,MediaSizeName.ISO_B5,MediaSizeName.ISO_B6,MediaSizeName.ISO_B7, MediaSizeName.ISO_B8
+//JJ ,MediaSizeName.ISO_B9,MediaSizeName.ISO_C0,MediaSizeName.ISO_C1,MediaSizeName.ISO_C2,MediaSizeName.ISO_C3 
+//JJ ,MediaSizeName.ISO_C4,MediaSizeName.ISO_C5,MediaSizeName.ISO_C6,MediaSizeName.ISO_DESIGNATED_LONG 
+//JJ ,MediaSizeName.ITALY_ENVELOPE,MediaSizeName.JAPANESE_DOUBLE_POSTCARD,MediaSizeName.JAPANESE_POSTCARD 
+//JJ ,MediaSizeName.JIS_B0,MediaSizeName.JIS_B1,MediaSizeName.JIS_B10,MediaSizeName.JIS_B2 ,MediaSizeName.JIS_B3
+//JJ ,MediaSizeName.JIS_B4,MediaSizeName.JIS_B5,MediaSizeName.JIS_B6,MediaSizeName.JIS_B7, MediaSizeName.JIS_B8
+//JJ ,MediaSizeName.JIS_B9,MediaSizeName.LEDGER,MediaSizeName.MONARCH_ENVELOPE,MediaSizeName.NA_10X13_ENVELOPE 
+//JJ ,MediaSizeName.NA_10X14_ENVELOPE,MediaSizeName.NA_10X15_ENVELOPE,MediaSizeName.NA_5X7
+//JJ ,MediaSizeName.NA_6X9_ENVELOPE,MediaSizeName.NA_7X9_ENVELOPE,MediaSizeName.NA_8X10
+//JJ ,MediaSizeName.NA_9X11_ENVELOPE,MediaSizeName.NA_9X12_ENVELOPE,MediaSizeName.NA_LEGAL
+//JJ ,MediaSizeName.NA_LETTER,MediaSizeName.NA_NUMBER_10_ENVELOPE,MediaSizeName.NA_NUMBER_11_ENVELOPE
+//JJ ,MediaSizeName.NA_NUMBER_12_ENVELOPE,MediaSizeName.NA_NUMBER_14_ENVELOPE,MediaSizeName.NA_NUMBER_9_ENVELOPE  
+//JJ ,MediaSizeName.PERSONAL_ENVELOPE,MediaSizeName.QUARTO,MediaSizeName.TABLOID};
+////int aaa=0;
+String[] help_sx=
+{"IPRINT??.EXE {PRINT[REAL],DISPLAY[TEST],DATA[TEST_DATA]_} データ レイアウト 開始 終了",
+"文字，罫線，バーコード(code39,jan)を紙に印刷するためのプログラムです。",
+"◎'PRINT[REAL]'の時は実際に印刷します。、'DISPLAY[TEST]'の時は印刷情報を画面に出します。",
+"◎'DISPLAY[TEST]_DATA'の時はデータを読まないで自動的に作り出します。",
+"  (VER11で廃止）マウス右ボタンのPrintで１頁分のテスト印刷をします。",
+"  ”P”キー押下で１頁分のテスト印刷をします。(VER11）",
+"  Enterキーで次のページを出し，Escキーで終了します。",
+"  →,←,↑,↓,で画面内を移動し,Inset,Delete,Home,Endで拡大縮小します。",
+"  線幅が異なっても解像度の問題で画面で幅が変わって見えない時は拡大して下さい。",
+"◎作業中のディレクトリはWindowsは%SystemDrive%\\I\\TMP,LINUXは/home/I/TMPと見なします。(Ver4)",
+"◎データが空の時は'IPRINT.TXT'と見なします。",
+"  データでそれぞれの印刷データをタブで区切って指定します。",
+"  １ページ分のデータの終わりがレコードの切れ目と合わない場合エラーになります。",
+"◎レイアウトが空の時は'IPRINT.CSV'と見なします。",
+"  レイアウトで印刷レイアウトをＣＳＶ形式で指定します。",
+"  先頭に'*'の有るレコードは注釈とみなします。",
+"  最後に'\\'の有るレコードは継続します。",
+"  文字列が空の時はデータより文字列を読み込みます。",
+"  ｘは右方向，ｙは下方向のオフセットの位置です。(左上)",
+"  位置，高，幅は１ｍｍ単位で指定し小数点以下も指定できます。",
+"  線種は次の指定ができます。（0=実線,1=破線,2=点線,3=１点破線,4=２点破線）",
+"  数値項目を省略した場合は0見なし、くり返し項目が0の時は以降くり返し無しと見なします。",
+"◎開始は開始頁を指定します、省略又は０の時は１頁目の指定です。",
+"◎終了は終了頁を指定します、省略又は０の時は最後の頁の指定です。",
+"◎文字列が?_PAGE?の場合はページに変更します。（VER10)",
+"◎文字列が?_TODAY?の場合は印刷日で「年-月-日」に変更します。（VER10)",
+"■用紙を指定 PAPER,用紙サイズ,印刷の向き",
+"             用紙サイズはA4,B5等プリンタで指定出来る物です,空は既定値です。",
+"             印刷の向きは1が縦向きで、2が横向きです、空は既定値です。",
+"■オフセット情報を指定 OFFSET,x,y[,x以降くり返し]。",
+"■線名を指定    LINE_SET,線名,線幅,線種,線名以降くり返し",
+"■文字名を指定  FONT,フォント (Ver7)",
+"                  以降のCHAR_SETでフォントを省略した場合のフォントを指定します。",
+"■文字名を指定  CHAR_SET,文字名,文字サイズ,フォント,属性,文字名以降くり返し",
+"                文字サイズが0の場合はデータ側から「文字サイズ:文字列」で受け取ります。(Ver7)",
+"                属性は'B'が太字で、'I'が斜体です、'BI'が太字で斜体です。",
+"◆下記の繰り返し指定 OCCURS,繰り返し数,ｘ,ｙ,繰り返し数以降くり返し",
+"                  　   ｘ,ｙはオフセット位置です、次のoccurs指定まで有効です。",
+"●任意の線を引く   LINE,線名,x1,y1,x2,y2[,x1以降くり返し]",
+"●長方形の線を引く BOX,線名,x1,y1,x2,y2[,x1以降くり返し]",
+"●横の線を引く     X_LINE,線名,x1,y,x2[,yのくり返し]",
+"●縦の線を引く     Y_LINE,線名,x,y1,y2[,xのくり返し]",
+"●楕円を引く       ARC,線名,x1,y1,x2,y2,開始角度,終了角度[,x1以降のくり返し]",
+"●文字を印字       TEXT[_FIX][_V],文字列,文字名,[文字間隔],x,y,文字数,編集[,文字名以降くり返し]",
+"〇データを印字     DATA[_FIX][_V],文字名,[文字間隔],x,y,文字数,編集[,文字名以降くり返し]",
+"                     文字数が０の時は文字列(データ）より文字数を計算します。",
+"                     編集はRは右詰め,Dは日付け(YYYY-MM-DD),-,+,.は数値で','を付加して右詰め、",
+"                     Zは単に右詰めしますがZと．は少数点以下が０の時は．以下を印字しません。",
+"                     Yは日付けを日月年の順番（DD-MM-YYYY)で出します。",
+"                     ..._Vは縦方向に印刷します(★注意:JAVA版は縦方向印刷は出来ません。",
+"                     ..._FIXは文字間隔を右端位置とみなして等間隔に印刷します。",
+"                     ..._FIX_Vは文字間隔を下端位置とみなして等間隔に印刷します。(★注意:JAVA版は出来ません)",
+"●縦印字文字を変更 REPLACE_V,変更前文字,変更後文字[,変更前文字以降くり返し]　(ver7)",
+"                     DATA_..._Vのデータの文字を更します。",
+"●CODE39を印字 CODE39,[文字列],細線幅,ｺｰﾄﾞ縦,x,y,文字ｻｲｽﾞ,文字x,文字y[,細線幅以降くり返]",
+"                 文字ｘと文字ｙはバーコード印字左下位置からのオフセット位置です。",
+"                 文字列の最初と最後に'*'が無い場合はデジット文字と*を付加します。",
+"                 文字列にバーコード変換出来ない文字が有るとエラー終了します。",
+"                 文字列が空白の場合データから設定します。",
+"●IMAGEを印字する IMAGE,[ファイル名],x1,y1,x2,y2[,x1以降くり返し] （VER3) ",
+"                    ファイル名が空白の場合データから設定します。",
+"                  　x2とy2が0の時は実物大で印刷します★注意:サイズ補正が出来ないので環境により大きさが異なります",
+"●JANを印字する JAN,[文字列],細線幅,ｺｰﾄﾞ縦,x,y[,細線幅以降くり返し]",
+"                  ８文字か１３文字以外印字出来ませんが、７文字か１２文字の時はデジット文字を付加します。",
+"                  文字はOCR-Bフォントではありません。",
+"                  文字列が空白の場合データから設定します。",
+"●VERSIONを判定 VERSION,バージョン番号",
+"○用紙の種類は該当プリンタの指定出来るもののみ使用下さい。"
+};
+int bb,ss,dd,i,k,jan_pt_no,jan_0,jan_1,jan_2
+  ,jan_3,control=0,kk,test_data_no=0
+  ,page_cnt=-1,page_max=-1,data_max=0
+  ,sw_data=0 //-2=データ有り無しを判定,-1=元々データ無し、0=データ不要(data_s有り)、1=新規データ必要、継続データ必要
+  ,keep_data_cnt=-1,data_cnt=0,sw_data_end=0,char_occurs_start=-1
+  ,line_occurs_start=-1,rc,max,sw_error=0,sw_fin=0,sw_continue=0
+  ,PRINT_3=3,DISPLAY_2=2,DATA_1=1,start=0,loop=0;
+float xx_f,yy_f,x1_f,x2_f,y1_f,y2_f,xxx_f,yyy_f,ritu_f=1,xOf_f=0,yOf_f=0,pos_f,nxt_f,short_bar_f
+   ,short_bar2_f,short_bar3_f,short_space_f
+   ,long_bar_f,long_bar2_f,long_bar3_f,long_space_f;
+String doc_s,layout_file_s="IPRINT.CSV",paper_size_s="",paper_hv_s=""
+  ,data_file_s="IPRINT.TXT",read_s,
+  default_font_s="MS Gothic",font_s="MS Gothic" 
+  ,code39_mozi_s="1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ-. *$/+%";
+String[] data_sx;
+float
+//SJ []
+    jan_e_fx
+//HP [2]
+    ={0,0}
+   ,jan_b_fx
+//HP [2]
+    ={0,0};
+int
+//SJ [?,?]
+     code39_bar_ixx
+//HP [12][5]
+     ={{0,0,0,0,0},{1,0,0,0,1},{0,1,0,0,1},{1,1,0,0,0},{0,0,1,0,1},{1,0,1,0,0},
+       {0,1,1,0,0},{0,0,0,1,1},{1,0,0,1,0},{0,1,0,1,0},{0,0,1,1,0},{0,0,0,0,0}
+      }
+  ,code39_space_ixx
+//HP [8][5]
+   ={{1,1,1,0,0},{1,1,0,1,0},{1,0,1,1,0},{0,1,1,1,0}
+     ,{0,1,0,0,0},{0,0,1,0,0},{0,0,0,1,0},{1,0,0,0,0}
+    }
+ ,jan_bar
+//HP [10][4]
+        ={{3,2,1,1},{2,2,2,1},{2,1,2,2},{1,4,1,1},{1,1,3,2},
+          {1,2,3,1},{1,1,1,4},{1,3,1,2},{1,2,1,3},{3,1,1,2}
+         }
+ ,jan_pt
+//HP [10][6]
+     ={{1,1,1,1,1,1},{1,1,0,1,0,0},{1,1,0,0,1,0},{1,1,0,0,0,1},{1,0,1,1,0,0},{1,0,0,1,1,0},
+       {1,0,0,0,1,1},{1,0,1,0,1,0},{1,0,1,0,0,1},{1,0,0,1,0,1}
+      };
+Font font_n,default_font_n;
+Pen pen_nn;
+Brush black_n,red_n;
+ List<String> s_char_name_a=new List<String>();
+ List<float> f_char_size_a=new List<float>();
+ List<String> s_char_font_a=new List<String>();
+ List<String> s_char_kind_a=new List<String>();
+ List<String> s_replace_a=new List<String>();
+ List<String> s_line_name_a=new List<String>();
+ List<float> f_line_size_a=new List<float>();
+ List<String> s_line_kind_a=new List<String>();
+ List<Pen> pe_pen_a=new List<Pen>();
+ List<float> f_offset_a=new List<float>();
+ List<int> i_occurs_a=new List<int>();
+ List<float> f_occurs_x_a=new List<float>();
+ List<float> f_occurs_y_a=new List<float>();
+ List<ii_print_l> p_char_a=new List<ii_print_l>();
+ List<ii_print_l> p_line_a=new List<ii_print_l>();
+ List<String> s_a=new List<String>();
+ List<String> s_err_a=new List<String>();
+ List<String> s_keep_data_a=new List<String>();
+ii_z_l z_p;
+ii_zz_l start_cnt_n;ii_zz_l stop_cnt_n;
+ii_zz_l f_n;ii_zz_l j_n;
+int fix=0,length=0;float length_f=(float)0.0;
+ii_read_l read_n;
+int sw_read=0;
+//SS System.Drawing.StringFormat v_stringformat_n;
+//SS System.Drawing.StringFormat h_stringformat_n;
+iprint_l  iprint_p;
+String err_s="",cmd_s="";
+int form_size=800;
+int read_layout_cnt=0,read_data_cnt=0;
+//HP QFontDatabase FontFamily_nx;
+//SS FontFamily[] FontFamily_nx;
+//JJ String[] FontFamily_s;
+//===( iprint_l(...)==============================================
+public iprint_l(ii_z_l z_ni)
+{
+//SP iprint_p=this;
+z_p=z_ni;
+start_cnt_n=new ii_zz_l();stop_cnt_n=new ii_zz_l();
+f_n=new ii_zz_l();j_n=new ii_zz_l();
+//SS FontFamily_nx=FontFamily.Families;//フォントファミリーセット
+//JJ GraphicsEnvironment ge_n=GraphicsEnvironment.getLocalGraphicsEnvironment();
+//JJ FontFamily_s=ge_n.getAvailableFontFamilyNames();//フォントファミリーセット
+//JJ addWindowListener(new WindowAdapter(){public void windowClosing(WindowEvent e){System.exit(0);}});
+z_p.add_s(s_err_a,"★エラーが有ります★Esc=終了"); 
+if('U'==z_p.os_c)unix_mm_f=4;//.NET Framework LINUXでの線の太さ不具合対応。
+start_cnt_n.i=1;//開始ページ。
+today_s=z_p.substring3_s(z_p.date_time_s(z_p.date_time_now_s(),1),0,10);
+read_n=new ii_read_l(z_p);//読み込みファイル用インスタンス作成。
+black_n=
+//HP QBrush(QColor::       fromRgb(0,0,0),Qt::SolidPattern);
+//SJ new SolidBrush(Color.FromArgb(0,0,0));       //黒色設定。
+red_n=
+//HP QBrush(QColor::       fromRgb(255,128,192),Qt::SolidPattern);
+//SJ new SolidBrush(Color.FromArgb(255,128,192)); //赤色設定。
+font_n=new_font_n(default_font_s,4,"");//デフォルトフォント設定。
+default_font_n=new_font_n(default_font_s,4,"");//デフォルトフォント設定。
+//HP resize(form_size,form_size);//Formのサイズ設定。
+//SS ClientSize=new Size(form_size,form_size);//Formのサイズ設定。
+//JJ setSize((int )(form_size+x_geta_f()),(int )(form_size+y_geta_f()));//Frameのサイズ設定。
+//HP QPalette Palette_nn(palette()); 
+////HP Palette_nn.setColor(QPalette::Background,QColor::fromRgb(210,210,210)); //VER36.1
+//HP Palette_nn.setColor(QPalette::Window,QColor::fromRgb(210,210,210)); //VER36.1
+//HP setAutoFillBackground(true);setPalette(Palette_nn); //背景色を設定。
+//SS BackColor=Color.FromArgb(210,210,210);//Formの背景色設定（灰色）
+//JJ setBackground(new Color(210,210,210));//Frameの背景色設定（灰色）
+//HP show();//画面出力
+//JJ setVisible(true);//画面出力
+z_p.add_s(s_char_name_a,"");z_p.add_f(f_char_size_a,(float)3.5);//文字名空白は3.5ミリのデフォルトフォントとする。
+z_p.add_s(s_char_font_a,default_font_s);z_p.add_s(s_char_kind_a,"");////文字名空白データ設定。
+//JJ iprint2_n=new iprint2_l(z_p,this);//Componentのインスタンス作成。
+//JJ iprint2_n.setSize((int )(form_size+x_geta_f()),(int )(form_size+y_geta_f()));//Componentのサイズ設定。
+//JJ iprint2_n.setBackground(new Color(210,210,210));//Componentの背景色設定（灰色）
+//JJ add(iprint2_n);//フレームにComponentを追加。
+i=0;
+if(z_p.count_s_i(z_p.s_arg_a)>0)//コマンドラインパラメータ有り。
+  {if     (z_p.e3s_b(z_p.upper_s(z_p.at_s(z_p.s_arg_a,0)),"PRINT","REAL"))   control=PRINT_3;  //１個目のパラメータ設定。
+  else if(z_p.e3s_b(z_p.upper_s(z_p.at_s(z_p.s_arg_a,0)),"DISPLAY","TEST"))  control=DISPLAY_2;//１個目のパラメータ設定。
+  else if(z_p.e3s_b(z_p.upper_s(z_p.at_s(z_p.s_arg_a,0)),"DATA","TEST_DATA"))control=DATA_1;   //１個目のパラメータ設定。
+  }
+if(z_p.count_s_i(z_p.s_arg_a)>1)data_file_s=z_p.at_s(z_p.s_arg_a,1);//２個目（データファイル）のパラメータ設定。
+if(z_p.count_s_i(z_p.s_arg_a)>2)layout_file_s=z_p.at_s(z_p.s_arg_a,2);//３個目（レイアウトファイル）のパラメータ設定。
+if(z_p.count_s_i(z_p.s_arg_a)>3)if(!to_int_b(start_cnt_n,z_p.at_s(z_p.s_arg_a,3))){err_s="開始[4]";add_err_v(1);return;}//４個目（開始）のパラメータ設定。
+if(z_p.count_s_i(z_p.s_arg_a)>4)if(!to_int_b(stop_cnt_n,z_p.at_s(z_p.s_arg_a,4))){err_s="終了[5]";add_err_v(1);return;}//５個目（終了）のパラメータ設定。
+if(1>start_cnt_n.i){err_s="開始[4]";z_p.err_s="("+z_p.to_i_s(start_cnt_n.i)+") error";add_err_v(1);return;}//開始位置が0以下はエラー。
+if(0>stop_cnt_n.i||(0!=stop_cnt_n.i&&stop_cnt_n.i<start_cnt_n.i))//終了位置確認。
+ {err_s="終了[5]";z_p.err_s="("+z_p.to_i_s(stop_cnt_n.i)+") error";add_err_v(1);return;}//終了位置エラー。
+if(-1==(i=z_p.last_index2c_i(data_file_s,z_p.at_s_c(z_p.dir_s,0))))i=0;//ディレクトリ区切り文字最後の位置設定。
+doc_s=z_p.substring2_s(data_file_s,i);//ディレクトリ無ファイル名設定。
+//SS KeyDown+=new KeyEventHandler(keydown_v);//キーイベント受け取り設定。
+//JJ addKeyListener(this);//キーイベント受け取り設定。
+//SS h_stringformat_n=new System.Drawing.StringFormat();//横印刷用。
+//SS v_stringformat_n=new System.Drawing.StringFormat();//縦印刷用。
+//SS v_stringformat_n.FormatFlags=StringFormatFlags.DirectionVertical;//縦印刷指定。
+if(0==control)//ヘルプ出力。
+  {paper_size_s="A4";paper_hv_s="1";// z_p.clear_p_v(p_char_a);////aaa=0;
+//SS PrintDocument PrintDocument_n=new PrintDocument(); 
+  for(i=0;z_p.count_sx_i(help_sx)>i;i++)add_text_v(help_sx[i]);
+     String s="★用紙一覧",sep_s="{"; 
+//SS for(int j=0;j<PrintDocument_n.PrinterSettings.PaperSizes.Count;j++)
+//SS   {if(z_p.form_length(s+sep_s+PrintDocument_n.PrinterSettings.PaperSizes[j].PaperName)>72)
+//SS      {add_text_v(s);i++;s="";}
+//SS    s+=sep_s+PrintDocument_n.PrinterSettings.PaperSizes[j].PaperName;sep_s=",";
+//SS   } 
+//SS add_text_v(s+"}");i++;
+    s="★フォント一覧";sep_s="{";
+    for(int j=0;j<
+
+//HP         FontFamily_nx.families() .size()
+//SS         FontFamily_nx.Length
+//JJ         FontFamily_s.length
+                             ;j++)
+        {if(z_p.form_length(s+sep_s+
+//HP         FontFamily_nx.families() .at(j)
+//SS         FontFamily_nx[j].Name
+//JJ         FontFamily_s[j]
+                                  )>72)
+          {add_text_v(s);i++;s="";}
+    s+=sep_s+
+//HP        FontFamily_nx.families() .at(j);
+//SS        FontFamily_nx[j].Name
+//JJ         FontFamily_s[j]
+      ;sep_s=",";
+        }
+    add_text_v(s+"}");i++;
+     z_p.add_f(f_offset_a,(float)10);z_p.add_f(f_offset_a,(float)10);
+//JP sw_paint=1;repaint(); 
+   return;
+  }
+//==========================================
+//=====( レイアウトファイルの読み込み）=====
+//==========================================
+if(!read_n.open_b(z_p.get_tmp_file_s(layout_file_s),"")){err_s="レイアウト[2]";add_err_v(1);return;}
+int LAYOUT_LOOP=1,LAYOUT_READ=2
+//JJ ,LAYOUT_END=9
+,sw=0;
+for(;;)
+  {
+//JJ  if(LAYOUT_END==sw)break;//強制終了。
+   if(LAYOUT_LOOP>=sw){if(0!=sw_read)break;read_s="";}//0!=sw_readで終了。
+   read_layout_cnt++;
+   if(0!=(rc=read_n.read()))if(1==rc)sw_read=1;else {err_s="レイアウト[2]";add_err_v(0);break;} //1件読み込み、終了はsw_read=1、エラーはerrに飛ぶ。
+   else if(z_p.length(read_n.read_data_s)>0&&'\\'==z_p.at_s_c(read_n.read_data_s,z_p.length(read_n.read_data_s)-1)) //最後に"\"がある場合は次の行に続く。
+          {read_s+=z_p.trim_start_s(z_p.substring3_s(read_n.read_data_s,0,z_p.length(read_n.read_data_s)-1)); //"\"を除きread_sに足す。
+            sw=LAYOUT_READ;continue;
+          }
+         else read_s+=z_p.trim_start_s(read_n.read_data_s);//read_sに足す。
+    sw=LAYOUT_LOOP;//以降のcontinueはlayout_loopに戻る。
+   if(z_p.e2s_b(read_s,"")||(z_p.length(read_s)>0&&'*'==z_p.at_s_c(read_s,0)))continue;//空及び先頭が"*"のデータは読み飛ばす。
+    csv_split_v(s_a,read_s);//レイアウト情報をs_aに分割し格納。
+    if(0==z_p.count_s_i(s_a))continue;//レイアウト無は続行。
+    cmd_s=z_p.upper_s(z_p.at_s(s_a,0));//コマンド設定。
+    err_s="("+z_p.to_i_s(read_layout_cnt)+") "+cmd_s;//エラー文字準備。
+    sw_data=0;//初期値データを外部からもらわない。　　
+   if(z_p.e9s_b(cmd_s,"DATA_V","DATA_FIX_V","TEXT_V","TEXT_FIX_V","DATA_FIX","DATA","TEXT_FIX","TEXT"))
+     {
+//JJ  if(z_p.e5s_b(cmd_s,"DATA_V","DATA_FIX_V","TEXT_V","TEXT_FIX_V"))
+//JJ     if(java_cmd_err_b()){close_v();sw=LAYOUT_END;continue;}//Javaはエラー。         
+      start=(z_p.starts_with_b(z_p.at_s(s_a,0),"DATA")?1:2);loop=6;//DATA...は1、TEXT...は2。
+      if(1==start)sw_data=1; //外部からデータをもらう。
+      add_space_data_v();//入力データ省略分追加。
+      for(i=start;i<z_p.count_s_i(s_a);i+=loop)
+        {set_print_v();//入力データ省略分追加。
+         if(-1==(j_n.i=z_p.index2as_i(s_char_name_a,z_p.at_s(s_a,i))))
+           {z_p.err_s="Char name ("+z_p.at_s(s_a,i)+") not found";add_err_v(0);continue;}//文字番号設定
+         print_n.index=j_n.i;//文字番号
+         if(!to_float_b(f_n,z_p.at_s(s_a,i+1))){add_err_v(0);continue;}
+         print_n.etc1=f_n.f;//5..=文字間隔                             //VER36.6.0.4
+         if(!to_float_b(f_n,z_p.at_s(s_a,i+2))){add_err_v(0);continue;} 
+         print_n.x=f_n.f; //6..=x
+         if(!to_float_b(f_n,z_p.at_s(s_a,i+3))){add_err_v(0);continue;}
+         print_n.y=f_n.f; //7..=y
+         if(!to_int_b(j_n,z_p.at_s(s_a,i+4))){add_err_v(0);continue;}
+         print_n.cnt=j_n.i; //8..=文字数｡
+         print_n.etc_s=z_p.at_s(s_a,i+5); //9..=編集｡
+         z_p.add_p(p_char_a,print_n);//CHARデータ追加
+        }
+     }
+   else if(z_p.e2s_b(cmd_s,"CODE39"))
+     {start=2;loop=7;sw_data=-2;//データ有り判定
+      add_space_data_v();//入力データ省略分追加。(0=データ判定）
+      for(i=2;i<z_p.count_s_i(s_a);i+=7) 
+        {set_print_v(); //print_n作成。
+         if(!to_float_b(f_n,z_p.at_s(s_a,i))){add_err_v(0);continue;}
+         print_n.etc1=(f_n.f); //細線幅
+         if(!to_float_b(f_n,z_p.at_s(s_a,i+1))){add_err_v(0);continue;}
+         print_n.etc2=(f_n.f); //コード縦
+         if(!to_float_b(f_n,z_p.at_s(s_a,i+2))){add_err_v(0);continue;}
+         print_n.x=(f_n.f); //x
+         if(!to_float_b(f_n,z_p.at_s(s_a,i+3))){add_err_v(0);continue;}
+         print_n.y=(f_n.f); //y
+         if(!to_float_b(f_n,z_p.at_s(s_a,i+4))){add_err_v(0);continue;}
+         print_n.etc3=(f_n.f); //文字サイズ
+         if(!to_float_b(f_n,z_p.at_s(s_a,i+5))){add_err_v(0);continue;}
+         print_n.x2=(f_n.f); //x
+         if(!to_float_b(f_n,z_p.at_s(s_a,i+6))){add_err_v(0);continue;}
+         print_n.y2=(f_n.f); //y
+         z_p.add_p(p_char_a,print_n);//CHARデータ追加
+        }
+     }
+   else if(z_p.e2s_b(cmd_s,"JAN"))
+     {start=2;loop=4;sw_data=-2;//データ有り判定
+      add_space_data_v();//入力データ省略分追加。
+      for(i=start;i<z_p.count_s_i(s_a);i+=loop) 
+        {set_print_v(); //print_n作成。
+         if(!to_float_b(f_n,z_p.at_s(s_a,i))){add_err_v(0);continue;}
+         print_n.etc1=(f_n.f); //細線幅
+         if(!to_float_b(f_n,z_p.at_s(s_a,i+1))){add_err_v(0);continue;}
+         print_n.etc2=(f_n.f); //コード縦
+         if(!to_float_b(f_n,z_p.at_s(s_a,i+2))){add_err_v(0);continue;}
+         print_n.x=(f_n.f); //x
+         if(!to_float_b(f_n,z_p.at_s(s_a,i+3))){add_err_v(0);continue;}
+         print_n.y=(f_n.f); //y
+         z_p.add_p(p_char_a,print_n);//CHARデータ追加
+        } 
+     }
+   else if(z_p.e2s_b(cmd_s,"X_LINE")){loop=3;box_v();}
+   else if(z_p.e2s_b(cmd_s,"Y_LINE")){loop=3;box_v();}
+   else if(z_p.e2s_b(cmd_s,"LINE")){loop=4;box_v();}
+   else if(z_p.e2s_b(cmd_s,"ARC")){loop=6;box_v();}
+   else if(z_p.e2s_b(cmd_s,"BOX")){loop=4;box_v();}
+   else if(z_p.e2s_b(cmd_s,"OCCURS"))
+     {occurs();
+      line_occurs_start=z_p.count_p_i(p_line_a);   //***(line_occurs_start)***
+      char_occurs_start=z_p.count_p_i(p_char_a);   //***(char_occurs_start)***
+      for(i=1;z_p.count_s_i(s_a)>j_n.i;j_n.i+=3)
+        {if(!to_int_b(j_n,z_p.at_s(s_a,i))){add_err_v(0);continue;}
+         z_p.add_i(i_occurs_a,j_n.i);               //***(occurs_a 1/3)***
+         if(!to_float_b(f_n,z_p.at_s(s_a,i+1))){add_err_v(0);continue;}
+         z_p.add_f(f_occurs_x_a,f_n.f);               //***(occurs_a 2/3)***
+         if(!to_float_b(f_n,z_p.at_s(s_a,i+2))){add_err_v(0);continue;}
+         z_p.add_f(f_occurs_y_a,f_n.f);               //***(occurs_a 3/3)***
+        }
+     }
+   else if(z_p.e2s_b(cmd_s,"LINE_SET"))
+     {start=1;loop=3;sw_data=-1;//データ無し
+      add_space_data_v();//入力データ省略分追加。
+      for(i=start;z_p.count_s_i(s_a)>i;i+=loop)                //***( 繰り返し )***  
+        {z_p.add_s(s_line_name_a,z_p.at_s(s_a,i));              //***(1,line_name_a)***
+         if(!to_float_b(f_n,z_p.at_s(s_a,i+1))){add_err_v(0);continue;}
+         z_p.add_f(f_line_size_a,zero_float_f(f_n.f));           //***(2,line_size_a)***
+         z_p.add_s(s_line_kind_a,z_p.at_s(s_a,i+2));            //***(3,line_kind_a)***
+        }
+     }
+   else if(z_p.e2s_b(cmd_s,"CHAR_SET"))
+     {start=1;loop=4;sw_data=-1;//データ無し
+      add_space_data_v();//入力データ省略分追加。
+      for(i=start;z_p.count_s_i(s_a)>i;i+=loop)                //***( 繰り返し )***
+        {z_p.add_s(s_char_name_a,z_p.at_s(s_a,i));              //***(1,char_name_a)***
+         if(!to_float_b(f_n,z_p.at_s(s_a,i+1))){add_err_v(0);continue;}
+         z_p.add_f(f_char_size_a,f_n.f);           //***(2,z_p.add_f(f_char_size_a)***
+         String s=z_p.at_s(s_a,i+2);
+         if(z_p.e2s_b(s,""))s=font_s;  //空白時はFONTの内容をセット。
+         else if(z_p.e2s_b(s=font_find_s(s),"")){z_p.err_s="FONT("+z_p.at_s(s_a,i+2)+") not found";add_err_v(0);continue;}
+         z_p.add_s(s_char_font_a,s);       //***(3,z_p.add_s(s_char_font_a)***
+         z_p.add_s(s_char_kind_a,z_p.at_s(s_a,i+3));            //***(4,z_p.add_s(s_char_kind_a)***
+        }
+     }
+   else if(z_p.e2s_b(cmd_s,"OFFSET"))
+      {if(!to_float_b(f_offset_a,1,2)){add_err_v(0);continue;}//***( offset_a )***//***( 繰り返し )***
+      } 
+   else if(z_p.e2s_b(cmd_s,"PAPER"))
+     {if(2!=z_p.count_s_i(s_a)&&3!=z_p.count_s_i(s_a)){form_layout_err_count();continue;}
+      paper_size_s=z_p.at_s(s_a,1);               //***(1,paper_size_s )***
+      if(3==z_p.count_s_i(s_a))paper_hv_s=z_p.at_s(s_a,2); //***(2,paper_hv_s )***
+     }
+   else if(z_p.e2s_b(cmd_s,"VERSION"))
+     {if(2!=z_p.count_s_i(s_a)){form_layout_err_count();continue;}
+      if(!to_int_b(j_n,z_p.at_s(s_a,1))){add_err_v(0);continue;}
+      if(z_p.version_n.VERSION_PRINT<j_n.i)
+        {err_s="";z_p.err_s="version "+z_p.to_i_s(z_p.version_n.VERSION_PRINT)+" < "+z_p.to_i_s(j_n.i)
+         +" Error";add_err_v(0);continue;
+        }//バージョン判定
+     }
+   else if(z_p.e2s_b(cmd_s,"IMAGE"))
+     {start=2;loop=4;sw_data=-2;//データ有り判定
+      add_space_data_v();//入力データ省略分追加。
+      for(i=start;i<z_p.count_s_i(s_a);i+=loop) 
+        {set_print_v(); //print_n作成。
+         if(!to_float_b(f_n,z_p.at_s(s_a,i))){add_err_v(0);continue;}
+         print_n.x=(f_n.f); //x
+         if(!to_float_b(f_n,z_p.at_s(s_a,i+1))){add_err_v(0);continue;}
+         print_n.y=(f_n.f); //y
+         if(!to_float_b(f_n,z_p.at_s(s_a,i+2))){add_err_v(0);continue;}
+         print_n.x2=(f_n.f); //x2
+         if(!to_float_b(f_n,z_p.at_s(s_a,i+3))){add_err_v(0);continue;}
+         print_n.y2=(f_n.f); //y2
+         z_p.add_p(p_char_a,print_n);//CHARデータ追加
+        }
+        for(i=1;z_p.count_s_i(s_a)>(i+1);i+=2)        //***( 文字の置き換え )***
+          {z_p.add_s(s_replace_a,z_p.at_s(s_a,i));
+           z_p.add_s(s_replace_a,z_p.at_s(s_a,i+1));
+          }
+     }
+   else  if(z_p.e2s_b(cmd_s,"REPLACE_V"))
+     {if(0!=(z_p.count_s_i(s_a)-1)%2){z_p.err_s="not even";add_err_v(0);continue;}
+      for(i=1;z_p.count_s_i(s_a)>(i+1);i+=2)        //***( 文字の置き換え )***
+        {z_p.add_s(s_replace_a,z_p.at_s(s_a,i));
+         z_p.add_s(s_replace_a,z_p.at_s(s_a,i+1));
+        }
+     }   
+   else if(z_p.e2s_b(cmd_s,"FONT"))
+     {if(2!=z_p.count_s_i(s_a)){z_p.err_s="FONT,(FONT Name)";add_err_v(0);continue;}
+      font_s=z_p.at_s(s_a,1);
+      if(z_p.e2s_b(font_s=font_find_s(font_s),"")){z_p.err_s="FONT("+z_p.at_s(s_a,1)+") not found";add_err_v(0);continue;}
+     }
+   else {z_p.err_s=z_p.upper_s(z_p.at_s(s_a,0))+" ?";add_err_v(0);continue;}
+  }//for(;;)
+occurs();
+if(0==z_p.count_f_i(f_offset_a)){z_p.add_f(f_offset_a,(float)0);z_p.add_f(f_offset_a,(float)0);}
+text_s=" VERSION("+z_p.to_i_s(z_p.version_n.VERSION_PRINT)+") PAPER("+paper_size_s+","+paper_hv_s+") DATA("
+       +z_p.to_i_s(data_max)+","+z_p.to_i_s(z_p.count_f_i(f_offset_a)/2)+")";
+
+data_max*=z_p.count_f_i(f_offset_a)/2;//オフセットの数分追加。
+read_n.read_close_v();
+//=========
+if(DATA_1!=control)read_data_b(start_cnt_n.i);else page_cnt=1;//DATAはtxt_fileを読まない。
+//JP sw_paint=1;if(PRINT_3==control&&0==sw_error)printer_b();//JAVAはプリンター印刷指示。
+//JJ repaint_v();
+return;
+}
+//**** (ボックス処理 )
+void box_v()
+{start=2;sw_data=-1;//データ無し
+add_space_data_v(); //入力データ省略分追加。
+if(-1==(j_n.i=z_p.index2as_i(s_line_name_a,z_p.at_s(s_a,1)))) //j_n.i=ライン番号
+  {z_p.err_s="Line name ("+z_p.at_s(s_a,1)+" not found";add_err_v(0);return;}
+for(i=start;i<z_p.count_s_i(s_a);i+=loop)
+  {
+   set_print_v(); //print_n作成。
+   print_n.index=j_n.i; // ライン番号　
+   if(!to_float_b(f_n,z_p.at_s(s_a,i))){add_err_v(0);continue;}
+   print_n.x=(f_n.f); //x
+   if(!to_float_b(f_n,z_p.at_s(s_a,i+1))){add_err_v(0);return;}
+   print_n.y=(f_n.f); //y 
+   if(!to_float_b(f_n,z_p.at_s(s_a,i+2))){add_err_v(0);return;}
+   if(z_p.e2s_b(cmd_s,"Y_LINE"))print_n.y2=(f_n.f); //x2
+   else                         print_n.x2=(f_n.f); //x2
+   if(3<loop)
+     {if(!to_float_b(f_n,z_p.at_s(s_a,i+3))){add_err_v(0);return;}
+      print_n.y2=(f_n.f); //y2
+     }
+   if(4<loop)
+     {if(!to_float_b(f_n,z_p.at_s(s_a,i+4))){add_err_v(0);return;}
+      print_n.etc1=(f_n.f); //etc1
+      if(!to_float_b(f_n,z_p.at_s(s_a,i+5))){add_err_v(0);return;}
+      print_n.etc2=(f_n.f); //etc2 
+     }
+   z_p.add_p(p_line_a,print_n);//LINEデータ追加
+   if(z_p.e3s_b(cmd_s,"X_LINE","Y_LINE"))
+     {for(i+=loop;i<z_p.count_s_i(s_a);i++)
+      if(!z_p.e2s_b(z_p.at_s(s_a,i),""))
+        {if(!to_float_b(f_n,z_p.at_s(s_a,i))){add_err_v(0);return;}
+         print_n=new ii_print_l(print_n);//LINEデータコピー
+         if(z_p.e2s_b(cmd_s,"Y_LINE"))print_n.x=(f_n.f); //x
+         else                         print_n.y=(f_n.f); //y2
+         z_p.add_p(p_line_a,print_n);//LINEデータ追加
+        }
+     }
+  }
+}          
+//****( 空白不足分追加）********
+void add_space_data_v()  
+{
+for(;z_p.count_s_i(s_a)<(start+loop)||((!z_p.e3s_b(cmd_s,"X_LINE","Y_LINE")&&0!=((z_p.count_s_i(s_a)-start)%loop)));)
+   z_p.add_s(s_a,""); //空白不足分追加
+if(-2==sw_data){if(z_p.e2s_b(z_p.at_s(s_a,1),""))sw_data=1;//データより情報をもらう。
+                else sw_data=0; //データ不要	
+               }
+if(1==sw_data)data_max++;//データ必要
+}
+//****( print_n作成 ）********
+void set_print_v()
+{print_n=new ii_print_l();print_n.data=sw_data;//print_n新規作成
+print_n.command_s=z_p.at_s(s_a,0); //コマンド　
+if(1==sw_data){sw_data=2;} //dataが1の時は2の継続にする。 
+if(0==sw_data)print_n.data_s=z_p.at_s(s_a,1);//データ設定。
+}
+//****( TEXT 追加 )*****
+void add_text_v(String si)
+{print_n=new ii_print_l();//CHARデータ準備
+print_n.command_s="TEXT";print_n.data_s=si;
+print_n.y=(float)(i*4);
+z_p.add_p(p_char_a,print_n);//CHARデータ追加
+}
+//*****( フォント名確認　)****************
+String font_find_s(String si)
+{for(int j=0;
+//HP         FontFamily_nx.families() .size()
+//SS         FontFamily_nx.Length
+//JJ         FontFamily_s.length
+                                 >j;j++)
+      if(z_p.e2s_b(si,z_p.upper_s(
+//HP         FontFamily_nx.families() .at(j)
+//SS         FontFamily_nx[j].Name
+//JJ         FontFamily_s[j]
+                                  )))return
+//HP         FontFamily_nx.families() .at(j);
+//SS         FontFamily_nx[j].Name;
+//JJ         FontFamily_s[j];
+return "";
+}
+//===============================================================================
+//===============================
+//===  データファイル読み込み ===
+//===============================
+public bool read_data_b(int start_i)
+{if(start_i==page_cnt)return true;
+if(-1==page_cnt||(start_i<page_cnt))//最初および前のデータが必要な時再OPEN。
+  {if(-1!=page_cnt)read_n.read_close_v();
+   if(!read_n.open_b(z_p.get_tmp_file_s(data_file_s),"")){err_s="データ[1]";add_err_v(0);return false;}
+   page_cnt=1;
+  }
+i=0;
+for(;;)
+  {if(!read_b()){err_s="データ[1]";add_err_v(0);return false;}
+   if(1==sw_data_end){err_s="データ[1]";z_p.err_s="Data Count Error";add_err_v(0);return false;}
+   if(page_cnt<start_i)//開始ページまで読み飛ばし。
+     {i+=z_p.count_sx_i(data_sx);
+      if(data_max>i)continue;
+      if(data_max<i){err_s="データ[1]";z_p.err_s="Page End data Count Error";add_err_v(0);return  false;}
+      page_cnt++;
+      i=0;continue;
+     }
+   break;
+  }//for(;;)
+return true;
+}
+//=( read_b )=============================================================
+bool read_b()
+{
+int rc;
+if(0==sw_data_end)//データ有り。
+   if(0!=(rc=read_n.read()))//データ読み込み
+      if(1==rc)sw_data_end=1;else return false;//データ終わり又はエラー。
+   else {data_sx=z_p.split_sx(read_n.read_data_s,'\t');read_data_cnt++;}//データ有り
+data_cnt=0;
+return true;
+}
+//JJ bool java_cmd_err_b()
+//JJ {
+//JJ iprint_dialog_l iprint_dialog_n=new iprint_dialog_l(this,"JAVA {"+cmd_s+"} BAD (はい->終了,いいえ->無視して続行)","IPRINT",0);
+//JJ return iprint_dialog_n.return_b;
+//JJ }
+
+//=( フォントの設定 new_font_n(...) )=======================================================
+Font new_font_n(String font_si,float size_fi,String kind_si)
+{
+//HP Font Font_nn(font_si,size_fi*mm_f);
+//HP if     (-1!=z_p.index2c_i(z_p.lower_s(kind_si),'b'))Font_nn.setBold(true);
+//HP else if(-1!=z_p.index2c_i(z_p.lower_s(kind_si),'i'))Font_nn.setItalic(true);
+//HP return Font_nn;
+//SJ return new Font(font_si,
+//SS    size_fi,(-1!=z_p.index2c_i(z_p.lower_s(kind_si),'b')?FontStyle.Bold  :FontStyle.Regular)
+//SS           |(-1!=z_p.index2c_i(z_p.lower_s(kind_si),'i')?FontStyle.Italic:FontStyle.Regular)
+//SS     ,GraphicsUnit.Millimeter);
+//JJ     (-1!=z_p.index2c_i(z_p.lower_s(kind_si),'b')?Font.BOLD   :Font.PLAIN)
+//JJ     |(-1!=z_p.index2c_i(z_p.lower_s(kind_si),'i')?Font.ITALIC:Font.PLAIN)
+//JJ     ,(int )(size_fi*mm_f));
+}
+//=( エラー行追加　add_err_v() )======================================
+void add_err_v(int ii)
+  {sw_error=1;
+   z_p.add_s(s_err_a,err_s+" "+z_p.err_s);
+//JP if(1==ii){sw_paint=1;repaint();}
+  }
+//=( csv_split_v(...)  CSV  文字列分解 )========================================================
+void csv_split_v(List<String> s_ai,String s_si)
+{
+int i,sta,sw=0;String out_s;z_p.clear_s_v(s_ai);
+for(sta=i=0;;i++)
+ {if(z_p.length(s_si)<=i||(','==z_p.at_s_c(s_si,i)&&0==sw))
+   {out_s=z_p.trim_s(z_p.substring3_s(s_si,sta,i-sta));
+    if(1<z_p.length(out_s)&&'"'==z_p.at_s_c(out_s,0)&&'"'==z_p.at_s_c(out_s,z_p.length(out_s)-1))
+      out_s=z_p.substring3_s(out_s,1,z_p.length(out_s)-2);
+    out_s=z_p.replace_s_s(out_s,"\"\"","\"");
+    z_p.add_s(s_ai,out_s);
+    if(z_p.length(s_si)<=i)break;
+    sta=i+1;
+    if(z_p.length(s_si)<=sta){z_p.add_s(s_ai,"");break;}
+    continue;
+   }
+  if('"'==z_p.at_s_c(s_si,i))if(0==sw)sw=1;else sw=0;
+ }
+}
+//=========( x_geta_f() )=================================================================
+public float x_geta_f()
+{
+if(1==sw_printer)
+  {return
+//HP 0;
+//SS 0;
+//JJ 0;
+  }
+return  
+//HP 0; 
+//SS 0;
+//JJ (this.getInsets().left+this.getInsets().right)/mm_f;
+}
+//=========( x_geta_f() )=================================================================
+public float y_geta_f()
+{
+if(1==sw_printer)
+  {return
+//HP 0;
+//SS 0;
+//JJ 0;
+  }
+return 
+//HP 0;
+//SS 0;
+//JJ (this.getInsets().top+this.getInsets().bottom)/mm_f;
+}
+//=( to_int_b(...) )========================================================
+bool to_int_b(ii_zz_l i_ni,String s_si)
+{if(z_p.e2s_b(s_si,"")){i_ni.i=0;return true;}
+i_ni.i=z_p.to_int_check(s_si,'-',0,1);
+if(!z_p.return_b)return false;
+return true;
+}
+//=( to_float_b(ii_zz_l,...) )========================================================
+bool to_float_b(ii_zz_l f_n,String s_si)
+{if(z_p.e2s_b(s_si,"")){f_n.f=0;return true;}
+f_n.f=(float)z_p.to_double_o(s_si,'-',0,1);
+if(!z_p.return_b)return false;
+return true;
+}
+//=( to_float_b(List,...) )========================================================
+bool to_float_b(List<float> f_ai,int i_ii,int count_ii)
+{ii_zz_l f_n=new ii_zz_l();
+if(0!=count_ii&&0!=(z_p.count_s_i(s_a)-i_ii)%count_ii)
+ {z_p.err_s="Count("+z_p.to_i_s(z_p.count_s_i(s_a))+")";return false;}
+for(i=i_ii;z_p.count_s_i(s_a)>i;i++)
+ {if(!to_float_b(f_n,z_p.at_s(s_a,i)))return false;z_p.add_f(f_ai,f_n.f);}
+return true;
+}
+//==( zero_float_f(...) )========================================================
+float zero_float_f(float f_fi){return (0>=f_fi?0.1f:f_fi);}
+//=( occurs() )==========================================
+void occurs()
+{if(z_p.count_i_i(i_occurs_a)>0)//繰り返し有り。
+  {max=z_p.count_p_i(p_line_a);//現在地まで実行
+   for(xx_f=yy_f=i=0;i<z_p.count_i_i(i_occurs_a);i++)
+      for(j_n.i=0;(int )z_p.at_i(i_occurs_a,i)>j_n.i;j_n.i++)//繰り返し数
+        {xx_f+=z_p.at_f(f_occurs_x_a,i);yy_f+=z_p.at_f(f_occurs_y_a,i);//オフセット数
+         for(k=line_occurs_start;k<max;k++)//OCCURS開始から現在まで順次実行
+           {print_n=new ii_print_l(z_p.at_p(p_line_a,k));
+            print_n.x+=xx_f;print_n.x2+=xx_f;
+            print_n.y+=yy_f;print_n.y2+=yy_f;
+            z_p.add_p(p_line_a,print_n);//LINEデータ追加
+           }
+        }
+   max=z_p.count_p_i(p_char_a);//現在地まで実行
+   for(xx_f=yy_f=0,i=0;z_p.count_i_i(i_occurs_a)>i;i++)
+      for(j_n.i=0;(int )z_p.at_i(i_occurs_a,i)>j_n.i;j_n.i++)//繰り返し数
+        {xx_f+=z_p.at_f(f_occurs_x_a,i);yy_f+=z_p.at_f(f_occurs_y_a,i);//オフセット数
+         for(k=char_occurs_start;k<max;k++)//OCCURS開始から現在まで順次実行
+           {print_n=new ii_print_l(z_p.at_p(p_char_a,k));
+            if(1==print_n.data)data_max++;//外部からデータをもらう。
+            print_n.x+=xx_f;print_n.x2+=xx_f;
+            print_n.y+=yy_f;print_n.y2+=yy_f;
+            z_p.add_p(p_char_a,print_n);//CHARデータ追加
+           }
+        }
+  }
+z_p.clear_i_v(i_occurs_a);z_p.clear_f_v(f_occurs_x_a);z_p.clear_f_v(f_occurs_y_a);
+}
+//=( form_layout_err_count() )===========================
+void form_layout_err_count()
+{z_p.err_s="Count("+z_p.to_i_s(z_p.count_s_i(s_a))+")";
+add_err_v(0);
+}
+//HP QPainter*  Graphics_n;
+//SS Graphics   Graphics_n= null ; 
+//JJ Graphics2D Graphics_n= null ;
+//=( printer_b(...) プリンターへの出力開始 )==========================================
+//HP int sw_media_size=0; 
+bool printer_b()
+{
+int sw=0;
+//SJ try{
+//HP QPrinter Printer_nn(QPrinter::ScreenResolution);//プリンター描画のためのペイントデバイス
+//SS err_s="PrintDocument()";
+//SS PrintDocument PrintDocument_n=new PrintDocument(); 
+//SS err_s="PrintDialog()";
+//SS PrintDialog PrintDialog_n=new PrintDialog();
+//SS PrintDialog_n.Document=PrintDocument_n;
+//SS PrintDocument_n.DocumentName=doc_s;
+//JJ err_s="HashPrintRequestAttributeSet()";
+//JJ PrintRequestAttributeSet PrintRequestAttributeSet_n=new HashPrintRequestAttributeSet();
+     if(!z_p.e2s_b(paper_size_s,""))
+       {String paper_sizes_s="";
+//HP    QPageSize MediaSizeName_n=media_size_n(paper_size_s);
+//HP    if(1==sw_media_size){sw=1;Printer_nn.setPageSize(MediaSizeName_n);}    
+//SS    foreach(PaperSize paper_size_n in PrintDocument_n.PrinterSettings.PaperSizes)
+//SS    if(0==String.Compare(paper_size_s,z_p.upper_s(paper_size_n.PaperName),true))
+//SS      {PrintDocument_n.DefaultPageSettings.PaperSize=paper_size_n;sw=1;break;}
+//SS    else paper_sizes_s+=z_p.upper_s(paper_size_n.PaperName)+"\r";
+//JJ    MediaSizeName MediaSizeName_n=media_size_n(paper_size_s);
+//JJ    if( null !=MediaSizeName_n){sw=1;PrintRequestAttributeSet_n.add(MediaSizeName_n);}    
+        if(0==sw){err_s="";z_p.err_s="PaperSize ("+paper_size_s+") not found"+"\r"+paper_sizes_s;add_err_v(0);
+                  return false;
+                 }
+       } 
+if(z_p.e2s_b(paper_hv_s,"1"))
+//HP Printer_nn.setPageOrientation(QPageLayout::Portrait);
+//SS PrintDocument_n.DefaultPageSettings.Landscape=false;
+//JJ PrintRequestAttributeSet_n.add(OrientationRequested.PORTRAIT);
+else if(z_p.e2s_b(paper_hv_s,"2"))
+//HP Printer_nn.setPageOrientation(QPageLayout::Landscape);
+//SS PrintDocument_n.DefaultPageSettings.Landscape=true;
+//JJ PrintRequestAttributeSet_n.add(OrientationRequested.LANDSCAPE);
+//HP QPrintDialog printDialog(&Printer_nn,this);//印刷するかどうかのダイアログ表示
+//HP if(printDialog.exec()!=QDialog::Accepted)return false;//ＯＫなら印刷
+sw_printer=1;
+//HP Graphics_n=new QPainter(&Printer_nn);
+//HP print_v(&Printer_nn);//印刷
+//SS DialogResult DialogResult_n=PrintDialog_n.ShowDialog();
+//SS if(DialogResult.OK==DialogResult_n)
+//SS   {err_s="PrintPageEventHandler(...)";
+//SS    PrintDocument_n.PrintPage+=new PrintPageEventHandler(print_v);//印刷
+//SS    err_s="Print()";
+//SS    PrintDocument_n.Print();
+//SS   }
+//JJ    err_s="getPrinterJob()";
+//JJ PrinterJob PrinterJob_n=PrinterJob.getPrinterJob();
+//JJ    err_s=".setPrintable(this)";
+//JJ PrinterJob_n.setPrintable(this);
+//JJ    err_s="lookupDefaultPrintService()";
+//JJ PrintService PrintService_n=PrintServiceLookup.lookupDefaultPrintService();
+//JJ    err_s="setPrintService(...)";
+//JJ if( null !=PrintService_n)PrinterJob_n.setPrintService(PrintService_n);
+//JJ PrintRequestAttributeSet_n.add(new MediaPrintableArea((float)0,(float)0,
+//JJ    Float.MAX_VALUE,Float.MAX_VALUE,MediaPrintableArea.INCH));
+//JJ    err_s="printDialog(...)";
+//JJ if(!PrinterJob_n.printDialog(PrintRequestAttributeSet_n))
+//JJ    err_s="print(...)";
+//JJ  else PrinterJob_n.print(PrintRequestAttributeSet_n);
+//SS if(0!=sw_error)return false;
+//SJ   }
+//SJ catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);add_err_v(0);return false;}
+//HP Graphics_n.end();
+//HP delete Graphics_n;
+sw_printer=0;  //プリンター終了
+return true;
+}
+//=====( print_v(),print プリンター印刷処理 )=======================================================
+//HP void print_v(QPrinter *Printer_ni)
+//SS void print_v(object o_ni,PrintPageEventArgs e_ni)
+//JJ public int print(Graphics Graphics_ni,PageFormat pf_n,int pageIndex_ii)
+//JJ throws PrinterException 
+{
+//SS Graphics_n=e_ni.Graphics; 
+//JJ Graphics_n=(Graphics2D)Graphics_ni; 
+//JJ mm_f=2.834643884f;//JAVAプリンターmm化対応。
+//JJ if(PRINT_3!=control){if(0!=pageIndex_ii)return Printable.NO_SUCH_PAGE;}//画面出は１ページのみ処理。
+//JJ else if(start_cnt_n.i+pageIndex_ii==page_cnt){if(0!=sw_data_end)return Printable.NO_SUCH_PAGE;}//終了。
+//JJ      else {sw_data_end=0;read_data_cnt=0;if(!read_data_b(start_cnt_n.i+pageIndex_ii))return Printable.NO_SUCH_PAGE;}//データ再読み込み。
+if(0!=data_cnt)
+  {err_s="";z_p.err_s="Page End data Count("+z_p.to_i_s(data_max)+") Error";add_err_v(0);
+   sw_error=1;sw_data_end=1;
+//SS e_ni.Cancel=true;
+  }
+else {if(!display_print_b(0,0,1))//印刷処理
+       {sw_error=1;sw_data_end=1;
+//SS    e_ni.Cancel=true;
+       }
+     
+else if(PRINT_3!=control){sw_data_end=1;}//画面出力は１個のみ。
+else    {page_cnt++;
+         if((0!=stop_cnt_n.i&&page_cnt>stop_cnt_n.i)||0==data_max)sw_data_end=1;
+        } 
+     }
+//HP if(0==sw_data_end)Printer_ni.newPage();
+//SS if(0!=sw_data_end)e_ni.HasMorePages=false;
+//SS else              e_ni.HasMorePages=true;
+//JJ return Printable.PAGE_EXISTS;    
+}
+public bool display_b()//画面に出力。
+{
+//JJ mm_f=4f;//JAVA画面mm化対応。
+return display_print_b(xOf_f,yOf_f,ritu_f);//プリント処理
+}
+//=( display_print_b(...) 画面出またはプリンターへ印刷開始  )=======================================================
+bool display_print_b(float xx_fi,float yy_fi,float ritu_fi)
+{int i;
+String exe_s=z_p.exe_name_s;
+//SS Graphics_n.PageUnit=GraphicsUnit.Millimeter;
+//SS i=z_p.last_index2c_i(z_p.exe_name_s,z_p.at_s_c(z_p.dir_s,0));
+//SS int j=z_p.last_index2c_i(z_p.exe_name_s,' ');
+//SS if(i<j)i=j;
+//SS if(0<i)exe_s=z_p.substring2_s(z_p.exe_name_s,i+1);
+//JJ exe_s="I"+z_p.to_i_s(z_p.version_n.VERSION1)+"JAVA"+z_p.dir_s+"iprint_l";
+//HP setWindowTitle(
+//SS Text=
+//JJ setTitle(
+          exe_s+text_s+" PAGE("+z_p.to_i_s(page_cnt)+")"
+//JP          )
+;
+if(sw_error!=0)//エラー時エラー内容出力。
+  {
+   if(0==sw_printer)
+     {z_p.fill_rect_v(Graphics_n,red_n,0,0,(int )(form_size+x_geta_f()),(int )(form_size+y_geta_f()));
+//JJ  Graphics_n.setColor(Color.black);
+     }
+   float x=10,y=10;
+   for(int iz=0;iz<z_p.count_s_i(s_err_a);iz++) 
+     {draw_string_v(z_p.at_s(s_err_a,iz),default_font_n,black_n,x+xx_fi,y+yy_fi,'H');
+      y+=font_height_f(default_font_n,"X");     
+     } 
+  return true;
+  }
+for(i=0;z_p.count_f_i(f_offset_a)>i;i+=2)//オフセット分繰り返し。
+ {if(1==sw_data_end&&((page_cnt-1)*z_p.count_f_i(f_offset_a)/2+i/2)==read_data_cnt) return true;//データ無は印刷せず。//VER11.0
+  if(!print_sub_b(i/2,xx_fi+z_p.at_f(f_offset_a,i),yy_fi+z_p.at_f(f_offset_a,i+1),ritu_fi))return false;//プリント処理
+ }
+if(PRINT_3!=control)keep_data_cnt=0; //キープデータ使用。
+return true;
+} 
+//=( print_sub_b(...) 描画処理 )==========================================================
+bool print_sub_b(int i_ii,float xx_fi,float yy_fi,float ritu_fi)
+{int j;String data_s="";float f_f;
+//***********( 線印刷 line_a )**************************************************
+for(int iz=0;iz<z_p.count_p_i(p_line_a);iz++)  //線印刷
+  {print_n=z_p.at_p(p_line_a,iz);//LINEデータセット
+   f_f=z_p.at_f(f_line_size_a,print_n.index)*ritu_fi;
+   if(0==f_f)f_f=0.1f;
+   pen_nn=new_pen_nn(f_f);
+   if(z_p.e2s_b(z_p.at_s(s_line_kind_a,print_n.index),"1"))//ダッシュ
+//HP   pen_nn.setStyle(Qt::DashLine);
+//SS   pen_nn.DashStyle=DashStyle.Dash;
+//JJ   pen_nn=new BasicStroke((float)(f_f*mm_f),BasicStroke.CAP_BUTT,BasicStroke.JOIN_BEVEL,(float)(f_f*mm_f)
+//JJ  ,(new float[]{(float)(f_f*mm_f*3),(float)(f_f*mm_f)}),0.0f);
+   else if(z_p.e2s_b(z_p.at_s(s_line_kind_a,print_n.index),"2"))//ドット
+//HP   pen_nn.setStyle(Qt::DotLine);
+//SS  pen_nn.DashStyle=DashStyle.Dot;
+//JJ  pen_nn=new BasicStroke((float)(f_f*mm_f),BasicStroke.CAP_BUTT,BasicStroke.JOIN_BEVEL,(float)(f_f*mm_f)
+//JJ  ,(new float[]{(float)(f_f*mm_f),(float)(f_f*mm_f)}),0.0f);
+   else if(z_p.e2s_b(z_p.at_s(s_line_kind_a,print_n.index),"3"))//ダッシュドット
+//HP   pen_nn.setStyle(Qt::DashDotLine);
+//SS  pen_nn.DashStyle=DashStyle.DashDot;
+//JJ  pen_nn=new BasicStroke((float)(f_f*mm_f),BasicStroke.CAP_BUTT,BasicStroke.JOIN_BEVEL,(float)(f_f*mm_f)
+//JJ  ,(new float[]{(float)(f_f*mm_f*3),(float)(f_f*mm_f),(float)(f_f*mm_f),(float)(f_f*mm_f)}),0.0f);
+   else if(z_p.e2s_b(z_p.at_s(s_line_kind_a,print_n.index),"4"))//ダッシュドットドット
+     {
+//HP   pen_nn.setStyle(Qt::DashDotDotLine);
+//SS  pen_nn.DashStyle=DashStyle.DashDotDot;
+//JJ  pen_nn=new BasicStroke((float)(f_f*mm_f),BasicStroke.CAP_BUTT,BasicStroke.JOIN_BEVEL,(float)(f_f*mm_f)
+//JJ  ,(new float[]{(float)(f_f*mm_f*3),(float)(f_f*mm_f),(float)(f_f*mm_f),(float)(f_f*mm_f)
+//JJ  ,(float)(f_f*mm_f),(float)(f_f*mm_f)}),0.0f);
+     }
+   x1_f=(xx_fi+print_n.x)*ritu_fi;
+   y1_f=(yy_fi+print_n.y)*ritu_fi;
+   x2_f=(xx_fi+print_n.x2)*ritu_fi;
+   y2_f=(yy_fi+print_n.y2)*ritu_fi;
+   if     (z_p.e2s_b(print_n.command_s,"X_LINE"))draw_line_v(pen_nn,x1_f,y1_f,x2_f,y1_f); //X_LINE
+   else if(z_p.e2s_b(print_n.command_s,"Y_LINE"))draw_line_v(pen_nn,x1_f,y1_f,x1_f,y2_f); //Y_LINE
+   else if(z_p.e2s_b(print_n.command_s,"ARC")) //Y_LINE
+           draw_arc_v(pen_nn,(x1_f<x2_f?x1_f:x2_f),(y1_f<y2_f?y1_f:y2_f)
+              ,(x1_f>x2_f?x1_f-x2_f:x2_f-x1_f),(y1_f>y2_f?y1_f-y2_f:y2_f-y1_f)
+              ,print_n.etc1,print_n.etc2);
+   else if(z_p.e2s_b(print_n.command_s,"BOX"))
+           draw_rect_v(pen_nn,(x1_f<x2_f?x1_f:x2_f),(y1_f<y2_f?y1_f:y2_f)
+           ,(x1_f>x2_f?x1_f-x2_f:x2_f-x1_f),(y1_f>y2_f?y1_f-y2_f:y2_f-y1_f));
+   else draw_line_v(pen_nn,x1_f,y1_f,x2_f,y2_f); //LINE
+  }
+//***********( 文字印刷 char_a )**************************************************
+String keep_s="";
+for(int iz=0;iz<z_p.count_p_i(p_char_a);iz++)//char_aの数だけ文字を印字。  
+  {print_n=z_p.at_p(p_char_a,iz);
+   if(0==print_n.data)data_s=change_s(print_n.data_s);//VER10//データ有り
+   else if(1==print_n.data)//データを貰う。
+     {if(-1==keep_data_cnt)//キープデータは未使用
+        {if(DATA_1==control){if(10==++test_data_no)test_data_no=0;data_s=z_p.to_i_s(test_data_no);}//テストデータは0から9を繰り返し。
+         else if(0==sw_data_end&&-1==page_max)
+           {data_s=data_sx[data_cnt];if(z_p.count_sx_i(data_sx)<=++data_cnt)read_b();
+           }
+         else data_s="";
+         if(DATA_1==control&&z_p.e2s_b(print_n.command_s,"IMAGE"))data_s="";//DATAのIMAGEは空白とする。
+         z_p.add_s(s_keep_data_a,data_s);  //データをキープ。　　  
+        }
+      else data_s=z_p.at_s(s_keep_data_a,keep_data_cnt++);//キープデータをセット。
+      keep_s=data_s;//処理中キープ分
+     }
+   else if(2==print_n.data)data_s=keep_s;//処理中キープデータを使う。　　
+      if(z_p.e3s_b(z_p.substring3_s(print_n.command_s,0,4),"TEXT","DATA"))
+        {float char_size_f=z_p.at_f(f_char_size_a,print_n.index);
+         int ind;
+         if(0.0==char_size_f)//文字サイズが０の時はデータが「サイズ:文字列」とみなし設定。
+            if(0<(ind=z_p.index2s_i(data_s,":")))if(to_float_b(f_n,z_p.substring3_s(data_s,0,ind)))
+              {char_size_f=f_n.f;//サイズセット。
+               data_s=z_p.substring2_s(data_s,ind+1);//サイズ情報削除
+              }
+         if(z_p.starts_with_b(print_n.command_s,"DATA_")
+            &&z_p.ends_with_b(print_n.command_s,"_V")) //縦印字文字変更判定。
+            for(ind=0;z_p.count_s_i(s_replace_a)>ind;ind+=2)
+                data_s=z_p.replace_s_s(data_s,z_p.at_s(s_replace_a,ind),z_p.at_s(s_replace_a,ind+1)); //縦印字文字変更。
+         if(0.0==char_size_f)char_size_f=1;//サイズ無は1に設定。
+         if(z_p.e4s_b(print_n.etc_s,"+","-",".")&&0<print_n.cnt)//数値印刷
+           {if(DATA_1==control)
+            data_s=z_p.pad_end_s(data_s,print_n.cnt-print_n.cnt/4,z_p.at_s_c(data_s,0));//テストデータは文字数分にする。
+            data_s=z_p.comma_s(data_s);//カンマを追加。
+            data_s=z_p.pad_start_s(data_s,print_n.cnt);//右詰めの為先頭に空白付加。
+           }
+         else if(z_p.e3s_b(print_n.etc_s,"R","Z")) //右詰め
+           {if(0!=print_n.cnt)data_s=z_p.pad_start_s(data_s,print_n.cnt);}
+         else if(z_p.e2s_b(print_n.etc_s,"D"))//日付けYYYY-MM-DD。
+           {if(DATA_1==control)data_s=z_p.pad_end_s(data_s,8,z_p.at_s_c(data_s,0));
+            if(z_p.length(data_s)==8)
+            data_s=z_p.substring3_s(data_s,0,4)+"-"+z_p.substring3_s(data_s,4,2)+"-"+z_p.substring3_s(data_s,6,2);
+           }
+         else if(z_p.e2s_b(print_n.etc_s,"Y"))//DD-MM-YYYY。
+           {if(DATA_1==control)data_s=z_p.pad_end_s(data_s,8,z_p.at_s_c(data_s,0));
+            if(z_p.length(data_s)==8)
+               data_s=z_p.substring3_s(data_s,6,2)+"-"+z_p.substring3_s(data_s,4,2)+"-"+z_p.substring3_s(data_s,0,4);
+           }
+         else if(DATA_1==control)data_s=z_p.pad_end_s(data_s,print_n.cnt,z_p.at_s_c(data_s,0));
+         if(z_p.e3s_b(print_n.etc_s,".","Z")) //.00 空白変換
+            for(j=z_p.length(data_s)-1;0<j;j--)
+                if('0'==z_p.at_s_c(data_s,j))continue;
+                else {if('.'==z_p.at_s_c(data_s,j))data_s=z_p.substring3_s(data_s,0,j);else break;}
+         font_n=new_font_n(z_p.at_s(s_char_font_a,print_n.index),char_size_f*ritu_fi,z_p.at_s(s_char_kind_a,print_n.index));
+         if(0<print_n.cnt)data_s=z_p.pad_end_s(data_s,print_n.cnt);
+         fix=(7<z_p.length(print_n.command_s)&&z_p.e2s_b(z_p.substring3_s(print_n.command_s,4,4),"_FIX")?1:0);//固定ピッチ判定。
+         if(1==fix){length=print_n.cnt;if(0==length)length=length_count(data_s);}//固定幅は文字長決定
+        if(z_p.ends_with_b(print_n.command_s,"_V"))//縦印刷     
+           draw_v_string_v(print_n.etc1*ritu_fi,data_s,font_n,Brushes.Black
+           ,(xx_fi+print_n.x)*ritu_fi,(yy_fi+print_n.y
+//HP            +char_size_f //HP y値補正(左下）
+                  )*ritu_fi);
+        else {draw_h_string_v(print_n.etc1*ritu_fi,data_s,font_n,Brushes.Black //横印刷
+              ,(xx_fi+print_n.x)*ritu_fi,(yy_fi+print_n.y
+//HP            +char_size_f //HP y値補正(左下）
+                )*ritu_fi);
+             }
+        }
+     else if(z_p.e2s_b(print_n.command_s,"CODE39")){if(!code39_b(xx_fi,yy_fi,ritu_fi,data_s))return false;}
+     else if(z_p.e2s_b(print_n.command_s,"JAN")){if(!jan_b(xx_fi,yy_fi,ritu_fi,data_s))return false;}
+     else if(z_p.e2s_b(print_n.command_s,"IMAGE")){if(!image_b(xx_fi,yy_fi,ritu_fi,data_s))return false;}
+  }
+return true;
+}
+//======( keydown_v(...) キーボード入力処理 )========================================================
+//HP public void keyPressEvent(QKeyEvent *e_ni)
+//SS void keydown_v(object o_ni,KeyEventArgs e_ni)
+//JJ public void keyPressed(KeyEvent e_ni)
+{
+if(PRINT_3==control&&0==sw_error)return;
+//HP int  keys_n=e_ni->key();
+//SS Keys keys_n=new Keys();keys_n=e_ni.KeyCode;
+//JJ Keys keys_n=e_ni.getKeyCode();
+//HP if(Qt::Key_Return==keys_n)keys_n=Qt::Key_Enter; //ReturnはEnterに統合。
+if(z_p.e2k_b(keys_n,Keys.Home)){ritu_f=1;xx_f=yOf_f=0;}
+else if(z_p.e2k_b(keys_n,Keys.End)){ritu_f=1;}
+else if(z_p.e2k_b(keys_n,Keys.Enter))
+       {keep_data_cnt=-1;z_p.clear_s_v(s_keep_data_a);//キープデータ未使用
+        if((1==sw_data_end||(0!=stop_cnt_n.i&&page_cnt==stop_cnt_n.i)||DATA_1==control)//データ終了又は停止ページになった
+           &&-1==page_max){page_max=page_cnt;page_cnt=(0==start_cnt_n.i?1:start_cnt_n.i);}//page_max設定。
+        else
+          {page_cnt++;
+           if(-1!=page_max&&page_max<page_cnt){page_cnt=(0==start_cnt_n.i?1:start_cnt_n.i);}
+          } 
+       }
+else if(z_p.e2k_b(keys_n,Keys.Up)){if(0>yOf_f)yOf_f+=(10/ritu_f);}
+else if(z_p.e2k_b(keys_n,Keys.Down)){yOf_f-=(10/ritu_f);}
+else if(z_p.e2k_b(keys_n,Keys.Left)){if(0>xOf_f)xOf_f+=(10/ritu_f);}
+else if(z_p.e2k_b(keys_n,Keys.Right)){xOf_f-=(10/ritu_f);}
+else if(z_p.e2k_b(keys_n,Keys.Insert)){ritu_f+=(float)0.1;}
+else if(z_p.e2k_b(keys_n,Keys.Delete)){if(ritu_f>0.3f)ritu_f-=(float)0.1;}
+else if(z_p.e2k_b(keys_n,Keys.Escape)){close_v();return;}//終了。
+else 
+  {char c=(char )
+//HP             e_ni->key();
+//SS             e_ni.KeyValue;
+//JJ             e_ni.getKeyCode();
+   if(z_p.e2c_b(z_p.to_upper_c(c),'P'))printer_b(); // 印刷
+   return;
+  }
+repaint_v();//再描画
+}
+//=( draw_rect_v(...) )=======================================================
+void draw_rect_v(Pen p_ni,float x_fi,float y_fi,float width_fi,float height_fi)
+{if(0==width_fi)width_fi=1;if(0==height_fi)height_fi=1;
+//HP Graphics_n.setPen(p_ni);
+//HP Graphics_n.drawRect(x_fi*mm_f+x_geta_f(),y_fi*mm_f+y_geta_f(),width_fi*mm_f,height_fi*mm_f);
+//SS Graphics_n.DrawRectangle(p_ni,x_fi,y_fi,width_fi,height_fi);
+//JJ Graphics_n.setStroke(p_ni);
+//JJ Graphics_n.drawRect((int )(x_fi*mm_f+x_geta_f()),(int )(y_fi*mm_f+y_geta_f()),(int )(width_fi*mm_f)
+//JJ ,(int )(height_fi*mm_f));
+}
+//=( draw_line_v(...) )=======================================================
+void draw_line_v(Pen p_ni,float x1_fi,float y1_fi,float x2_fi,float y2_fi)
+{
+//HP Graphics_n.setPen(p_ni);
+//HP Graphics_n.drawLine(x1_fi*mm_f+x_geta_f(),y1_fi*mm_f+y_geta_f(),x2_fi*mm_f+x_geta_f(),y2_fi*mm_f+y_geta_f());
+//SS Graphics_n.DrawLine(p_ni,x1_fi,y1_fi,x2_fi,y2_fi);
+//JJ Graphics_n.setStroke(p_ni);
+//JJ Graphics_n.draw(new java.awt.geom.Line2D.Double(x1_fi*mm_f+x_geta_f(),y1_fi*mm_f+y_geta_f(),x2_fi*mm_f+x_geta_f()
+//JJ ,y2_fi*mm_f+y_geta_f()));
+}
+//=( draw_arc_v(...) )=======================================================
+void draw_arc_v(Pen p_ni,float x_fi,float y_fi,float width_fi,float height_fi,float r1_fi,float r2_fi)
+{if(0==width_fi)width_fi=1;if(0==height_fi)height_fi=1;
+//HP Graphics_n.setPen(p_ni);
+//HP Graphics_n.drawArc(x_fi*mm_f+x_geta_f(),y_fi*mm_f+y_geta_f(),width_fi*mm_f,height_fi*mm_f,r1_fi,r2_fi);
+//SS Graphics_n.DrawArc(p_ni,x_fi,y_fi,width_fi,height_fi,r1_fi,r2_fi);
+//JJ Graphics_n.setStroke(p_ni);
+//JJ Graphics_n.drawArc((int )(x_fi*mm_f+x_geta_f()),(int )(y_fi*mm_f+y_geta_f()),(int )(width_fi*mm_f)
+//JJ ,(int )(height_fi*mm_f),(int )(0-r1_fi),(int )(0-r2_fi));
+}
+//=( draw_string_v(...) )=======================================================
+void draw_string_v(String si,Font Font_ni,Brush Brush_ni,float x_fi,float y_fi,char hv_c)
+{
+//HP Graphics_n.setFont(Font_ni);
+////HP Graphics_n.setBrush(Brush_ni);
+//HP   Graphics_n.drawText(x_fi*mm_f+x_geta_f(),y_fi*mm_f+y_geta_f(),si);
+//SS   Graphics_n.DrawString(si,Font_ni,Brush_ni,x_fi,y_fi,('H'==hv_c?h_stringformat_n:v_stringformat_n));
+//JJ   if('V'!=hv_c)
+//JJ     {Graphics_n.setFont(Font_ni);Graphics_n.setColor(Brush_ni);
+//JJ      Graphics_n.drawString(si,(int )(x_fi*mm_f+x_geta_f()+Font_ni.getSize()*0.2),
+//JJ      (int )(y_fi*mm_f+y_geta_f()+Font_ni.getSize()*0.95));
+//JJ     } 
+}
+//==( font_width_f(...) フォント横幅)=======================================================
+float font_width_f(Font f_nni,String si)
+{
+//HP return f_nni.pointSize()*(z_p.length(si)+(3==z_p.length(si)&&z_p.e3i_b(z_p.kind_code(z_p.at_s_c(si,1)),z_p.FULL_2,z_p.HIGH_SURROGATE_4)?1:0))/mm_f;
+//SS return (float)Graphics_n.MeasureString(si,f_nni).Width;
+//JJ Graphics_n.setFont(f_nni);
+//JJ FontMetrics fm_n=Graphics_n.getFontMetrics();
+//JJ return (float)(fm_n.stringWidth(si)/mm_f);
+}
+//==( font_height_f(...) フォント縦幅)=======================================================
+float font_height_f(Font f_nni,String si)
+{
+//HP return 2.5*f_nni.pointSize()*z_p.length(si)/mm_f;
+//SS return (float)Graphics_n.MeasureString(si,f_nni).Height;
+//JJ Graphics_n.setFont(f_nni);
+//JJ FontMetrics fm_n=Graphics_n.getFontMetrics();
+//JJ return (float)(fm_n.getHeight()/mm_f);
+}
+Pen new_pen_nn(float fi)
+{return 
+//HP QPen(black_n,fi*unix_mm_f);
+//SS new Pen(black_n,fi*unix_mm_f); 
+//JJ new BasicStroke((float)(fi*mm_f),BasicStroke.CAP_BUTT,BasicStroke.JOIN_BEVEL,(float)(fi*mm_f)); 
+}
+//========( draw_v_string_v(...) 縦文字印刷 )==========================================================
+public void draw_v_string_v(float high_fi,String s_si,Font Font_ni,Brush Brush_ni,float x_fi,float y_fi)
+{
+String s="";float y_keep_f=y_fi;
+int i;
+if(1==fix)length_f=(high_fi-y_fi)/length;//固定幅移動量計算。
+for(i=0;z_p.length(s_si)>i;i++)
+  {s=z_p.substring3_s(s_si,i,1);//１文字づつセット
+   if(z_p.e3i_b(z_p.kind_code(z_p.at_s_c(s_si,i)),z_p.HIGH_SURROGATE_4,z_p.LOW_SURROGATE_5)&&z_p.length(s_si)>(i+1))
+      s+=z_p.substring3_s(s_si,++i,1);//サロゲートペア２文字目
+   if(z_p.COMBINING_0==z_p.kind_code(z_p.at_s_c(s,0)))y_fi=y_keep_f;
+      draw_string_v(s,Font_ni,Brush_ni,x_fi,y_fi,'V');
+   y_keep_f=y_fi;
+   if(1==fix)y_fi+=length_f;
+   else 
+     {y_fi+=high_fi;
+      if(z_p.HALF_1==z_p.kind_code(z_p.at_s_c(s,0)))y_fi+=
+      font_width_f(Font_ni,"X"+s+"X")-font_width_f(Font_ni,"XX");
+      else y_fi+=font_height_f(Font_ni,s)*(float)0.9;
+     }
+  }
+}
+//========( draw_h_string_v(...) 横文字印刷 )==========================================================
+public void draw_h_string_v(float width_fi,String s_si,Font Font_ni,Brush Brush_ni,float x_fi,float y_fi)
+{
+String s="";float x_keep_f=x_fi;
+int i;
+if(1==fix)length_f=(width_fi-x_fi)/length;//固定幅移動量計算。
+for(i=0;i<z_p.length(s_si);i++)
+  {s=z_p.substring3_s(s_si,i,1);//１文字づつセット
+   if(z_p.e3i_b(z_p.kind_code(z_p.at_s_c(s_si,i)),z_p.HIGH_SURROGATE_4,z_p.LOW_SURROGATE_5)&&z_p.length(s_si)>(i+1))s+=z_p.substring3_s(s_si,++i,1);//サロゲートペア２文字目
+   if(z_p.COMBINING_0==z_p.kind_code(z_p.at_s_c(s,0)))x_fi=x_keep_f;
+   draw_string_v(s,Font_ni,Brush_ni,x_fi,y_fi,'H');
+   x_keep_f=x_fi;
+   if(1==fix)x_fi+=length_f;
+   else x_fi+=width_fi+font_width_f(Font_ni,"X"+s+"X")-font_width_f(Font_ni,"XX");
+  }
+}
+//( length_count(...) 文字長計算)==========================================================
+int length_count(String i_s)
+{int len=0;
+for(int i=0;i<z_p.length(i_s);i++)
+  {if(z_p.COMBINING_0==z_p.kind_code(z_p.at_s_c(i_s,i)))continue;
+   if(z_p.e3i_b(z_p.kind_code(z_p.at_s_c(i_s,i)),z_p.HIGH_SURROGATE_4,z_p.LOW_SURROGATE_5))i++;
+   len++;
+  }
+return len;
+}
+void repaint_v()//再描画
+{
+//SS Refresh();
+//JP repaint();
+}
+void close_v()//終了
+{
+//HP close();
+//SJ try{
+//SS Close();
+//JJ dispose();
+//SJ    }catch(Exception){}
+}
+void err_v()//エラー
+{z_p.beep_v();
+display_b();//エラーを画面に出。
+}
+//=( code39_b(...)  バーコード CODE39 印刷 )========================================================
+bool code39_b(float xx_fi,float yy_fi,float ritu_fi,String s_si)
+{
+int divi,rem;
+//if((z_p.length(s_si)>0&&('*'!=z_p.at_s_c(s_si,0))||'*'!=z_p.at_s_c(s_si,z_p.length(s_si)-1))) VER36.1
+if(z_p.length(s_si)>0&&('*'!=z_p.at_s_c(s_si,0)||'*'!=z_p.at_s_c(s_si,z_p.length(s_si)-1))) //VER36.1
+   s_si="*"+s_si+z_p.code39_s(s_si)+"*";
+short_space_f=short_bar_f=zero_float_f(print_n.etc1)*ritu_fi;
+short_bar2_f=short_bar_f/2;  
+short_bar3_f=short_bar_f-short_bar2_f;
+long_space_f=long_bar_f=short_space_f*(float)2.5f;
+long_bar2_f=long_bar_f/2;
+long_bar3_f=long_bar_f-long_bar2_f;
+z_p.clear_pe_v(pe_pen_a);
+z_p.add_pe(pe_pen_a,new_pen_nn(short_bar_f));
+z_p.add_pe(pe_pen_a,new_pen_nn(long_bar_f));
+x1_f=(print_n.x+xx_fi)*ritu_fi;
+y1_f=(print_n.y+yy_fi)*ritu_fi;
+y2_f=(print_n.y+zero_float_f(print_n.etc2)+yy_fi)*ritu_fi;
+pos_f=0;
+for(int iz=0;iz<z_p.length(s_si);iz++)
+ {char c=z_p.at_s_c(s_si,iz);
+  for(kk=0;z_p.length(code39_mozi_s)>kk&&c!=z_p.at_s_c(code39_mozi_s,kk);)kk++;
+  if(z_p.length(code39_mozi_s)<=kk)
+   {err_s="";z_p.err_s="code39 convert error ("+z_p.to_c_s(c)+")";add_err_v(0);return false;}
+  divi=kk/10;rem=kk%10;
+  if(4==divi){bb=0;ss=rem;}else{bb=rem+1;ss=divi+4;}
+  for(kk=0;kk<5;kk++)
+   {if(0==code39_bar_ixx[bb?,?kk]){x1_f+=pos_f+short_bar2_f;nxt_f=short_bar3_f;i=0;}
+    else                        {x1_f+=pos_f+long_bar2_f;nxt_f=long_bar3_f;i=1;}
+     draw_line_v(z_p.at_pe(pe_pen_a,i),x1_f,y1_f,x1_f,y2_f);
+    if(0==code39_space_ixx[ss?,?kk])pos_f=short_space_f+nxt_f;else pos_f=long_space_f+nxt_f;
+   }
+ }
+if(0==print_n.etc3)return true;
+x1_f=(print_n.x+print_n.x2+xx_fi)*ritu_fi;
+y1_f=(print_n.etc2+print_n.y+print_n.y2+yy_fi)*ritu_fi;
+   font_n=new_font_n(default_font_s,print_n.etc3*ritu_fi,"");
+   draw_h_string_v((float)0,s_si,font_n,Brushes.Black,x1_f,y1_f);
+return true;
+}
+//=( jan_b(...)  バーコード JAN 印刷 )========================================================
+bool jan_b(float xx_fi,float yy_fi,float ritu_fi,String s_si)
+{
+if(DATA_1==control)s_si=z_p.pad_end_s(s_si,7,z_p.at_s_c(s_si,0));
+if(z_p.e3i_b(z_p.length(s_si),12,7))s_si+=z_p.jan_s(s_si);
+if(13!=z_p.length(s_si)&&8!=z_p.length(s_si))
+  {err_s="";z_p.err_s="jan length 8 or 13 error ("+s_si+")";add_err_v(0);return false;}
+short_bar_f=(print_n.etc1*ritu_fi);
+z_p.clear_pe_v(pe_pen_a);z_p.add_pe(pe_pen_a,new_pen_nn((float)0));
+z_p.add_pe(pe_pen_a,new_pen_nn(short_bar_f));
+z_p.add_pe(pe_pen_a,new_pen_nn(short_bar_f*2));
+z_p.add_pe(pe_pen_a,new_pen_nn(short_bar_f*3));
+z_p.add_pe(pe_pen_a,new_pen_nn(short_bar_f*4));
+x1_f=(print_n.x+xx_fi)*ritu_fi;
+y1_f=(print_n.y+yy_fi)*ritu_fi;
+dd=jan_pt_no=0;
+for(;;)
+  {if(0==dd||(7==dd&&13==z_p.length(s_si))||(4==dd&&8==z_p.length(s_si))||z_p.length(s_si)==dd)
+     {y2_f=(print_n.y+print_n.etc2+yy_fi)*ritu_fi;
+      if(z_p.length(s_si)==dd)jan_e_fx[1]=x1_f;
+      if((7==dd&&13==z_p.length(s_si))||(4==dd&&8==z_p.length(s_si))){x1_f+=short_bar_f;jan_e_fx[0]=x1_f;}
+      x1_f+=short_bar_f/2;
+       draw_line_v(z_p.at_pe(pe_pen_a,1),x1_f,y1_f,x1_f,y2_f);
+
+      x1_f+=short_bar_f*2;
+     draw_line_v(z_p.at_pe(pe_pen_a,1),x1_f,y1_f,x1_f,y2_f);
+
+      x1_f+=short_bar_f-short_bar_f/2;
+      if((7==dd&&13==z_p.length(s_si))||(4==dd&&8==z_p.length(s_si))){jan_b_fx[1]=x1_f;x1_f+=short_bar_f;}
+     }
+   if(z_p.length(s_si)==dd)break;
+   y2_f=(print_n.y+zero_float_f(print_n.etc2)
+        -print_n.etc1*7.5f+yy_fi)*ritu_fi;
+   if((1==dd&&13==z_p.length(s_si))||0==dd)jan_b_fx[0]=x1_f;
+   if('0'>z_p.at_s_c(s_si,dd)||'9'<z_p.at_s_c(s_si,dd))
+     {err_s="";z_p.err_s="jan convert error txt ("+z_p.to_c_s(z_p.at_s_c(s_si,dd))+")";add_err_v(0);return false;}
+   i=z_p.to_int1s_i(z_p.substring3_s(s_si,dd,1));
+   if(0==dd&&13==z_p.length(s_si)){jan_pt_no=i;dd++;continue;}
+   if((7>dd&&13==z_p.length(s_si))||(4>dd&&8==z_p.length(s_si)))
+     {j_n.i=dd;if(13==z_p.length(s_si))j_n.i--;
+      if(1==jan_pt[jan_pt_no?,?j_n.i]){jan_0=0;jan_1=1;jan_2=2;jan_3=3;}
+      else                      {jan_0=3;jan_1=2;jan_2=1;jan_3=0;}
+      x1_f+=short_bar_f*jan_bar[i?,?jan_0]+short_bar_f*jan_bar[i?,?jan_1]/2;
+       draw_line_v(z_p.at_pe(pe_pen_a,jan_bar[i?,?jan_1]),x1_f,y1_f,x1_f,y2_f);
+
+      x1_f+=short_bar_f*jan_bar[i?,?jan_1]-short_bar_f*jan_bar[i?,?jan_1]/2
+       +short_bar_f*jan_bar[i?,?jan_2]+short_bar_f*jan_bar[i?,?jan_3]/2;
+     draw_line_v(z_p.at_pe(pe_pen_a,jan_bar[i?,?jan_3]),x1_f,y1_f,x1_f,y2_f);
+      x1_f+=short_bar_f*jan_bar[i?,?jan_3]-short_bar_f*jan_bar[i?,?jan_3]/2;
+     }
+   else
+     {x1_f+=short_bar_f*jan_bar[i?,?0]/2;
+       draw_line_v(z_p.at_pe(pe_pen_a,jan_bar[i?,?0]),x1_f,y1_f,x1_f,y2_f);
+      x1_f+=short_bar_f*jan_bar[i?,?0]-short_bar_f*jan_bar[i?,?0]/2
+         +short_bar_f*jan_bar[i?,?1]+short_bar_f*jan_bar[i?,?2]/2;
+       draw_line_v(z_p.at_pe(pe_pen_a,jan_bar[i?,?2]),x1_f,y1_f,x1_f,y2_f);
+
+      x1_f+=short_bar_f*jan_bar[i?,?2]-short_bar_f*jan_bar[i?,?2]/2
+              +short_bar_f*jan_bar[i?,?3];
+     }
+dd++;
+  }//for(;;)
+if(8==z_p.length(s_si)){jan_0=0;jan_1=4;}else{jan_0=1;jan_1=6;}
+xxx_f=(jan_e_fx[0]-jan_b_fx[0])/jan_1;yyy_f=xxx_f*2;
+if(0>=xxx_f)xxx_f=0.1f;
+if(0>=yyy_f)yyy_f=0.1f;
+font_n=new_font_n(default_font_s,yyy_f-yyy_f*0.025f,"");
+y1_f=(print_n.y+zero_float_f(print_n.etc2)+yy_fi)*ritu_fi-xxx_f;
+if(8!=z_p.length(s_si))
+  {x1_f=(print_n.x+xx_fi)*ritu_fi-xxx_f*1.25f;
+   draw_h_string_v((float)0,z_p.substring3_s(s_si,0,1),font_n,Brushes.Black,x1_f,y1_f);
+  }
+for(i=0;2>i;i++)
+ {x1_f=jan_b_fx[i]-xxx_f*0.25f;
+  draw_h_string_v((float)0,z_p.substring3_s(s_si,jan_0+jan_1*i,jan_1),font_n,Brushes.Black,x1_f,y1_f);
+ }
+return true;
+}
+//=( image_b(...)  イメージファイル 印刷 )========================================================
+bool image_b(float xx_fi,float yy_fi,float ritu_fi,String s_si)
+{
+s_si=z_p.get_tmp_file_s(s_si);
+if(z_p.e2s_b(s_si,""))return true;//空白は出力しない。
+//SS Image image_n= null ;
+//JJ java.awt.image.BufferedImage image_n= null ;
+ x1_f=(xx_fi+print_n.x)*ritu_fi;
+ y1_f=(yy_fi+print_n.y)*ritu_fi;
+ x2_f=(xx_fi+print_n.x2)*ritu_fi;
+ y2_f=(yy_fi+print_n.y2)*ritu_fi;
+if(0!=print_n.x)if(x1_f>x2_f){float f=x1_f;x1_f=x2_f;x2_f=f;};
+if(0!=print_n.y)if(y1_f>y2_f){float f=y1_f;y1_f=y2_f;y2_f=f;};
+//HP QImage image_nn(s_si);
+try{ 
+//SS image_n=Image.FromFile(s_si);
+//JJ  FileInputStream fis_n=new FileInputStream(s_si);
+//JJ  image_n=javax.imageio.ImageIO.read(fis_n);
+//JJ  fis_n.close();
+   }
+catch(Exception){err_s="";z_p.err_s="IMAGE FILE("+s_si+") NOT FOUND";add_err_v(0);return false;}
+if(0==print_n.x2&&0==print_n.y2)
+  {
+//HP image_nn.scaledToWidth(-1); 
+//HP image_nn.scaledToHeight(-1); 
+//HP Graphics_n.drawImage(x1_f,y1_f,image_nn);
+//SS Graphics_n.DrawImage(image_n,(int )x1_f,(int )y1_f);
+//JJ Graphics_n.drawImage(image_n,(int )(x1_f*mm_f+x_geta_f()),(int )(y1_f*mm_f+y_geta_f()),this);  
+  }
+//HP image_nn.scaledToWidth(x1_f*mm_f+x_geta_f()); 
+//HP image_nn.scaledToHeight(y1_f*mm_f+y_geta_f()); 
+//HP Graphics_n.drawImage(x1_f,y1_f,image_nn);
+//SS else Graphics_n.DrawImage(image_n,x1_f,y1_f,(x2_f-x1_f),(y2_f-y1_f));
+//JJ else Graphics_n.drawImage(image_n,(int )(x1_f*mm_f+x_geta_f()),(int )(y1_f*mm_f+y_geta_f())
+//JJ                   ,(int )((x2_f-x1_f)*mm_f),(int )((y2_f-y1_f)*mm_f),this);
+//SS image_n.Dispose();
+return true;
+}
+String change_s(String s)
+{if(z_p.e2s_b(s,"?_PAGE?"))return ""+page_cnt;
+ if(z_p.e2s_b(s,"?_TODAY?"))return today_s;
+return s;
+}
+//===============( media_size_n(...) 用紙サイズ確認 )========================================================
+//HP QPageSize     media_size_n(String s_si) 
+//JJ MediaSizeName media_size_n(String s_si)
+//JP {s_si=z_p.upper_s(s_si);
+//HP sw_media_size=1;
+//JP if(z_p.e2s_b(s_si,"A"))return 
+//HP    QPageSize(QPageSize::AnsiA);
+//JJ    MediaSizeName.A; 
+//JP if(z_p.e2s_b(s_si,"B"))return 
+//HP    QPageSize(QPageSize::AnsiB);
+//JJ    MediaSizeName.B;
+//JP if(z_p.e2s_b(s_si,"C"))return 
+//HP    QPageSize(QPageSize::AnsiC);
+//JJ    MediaSizeName.C; 
+//JP if(z_p.e2s_b(s_si,"D"))return 
+//HP    QPageSize(QPageSize::AnsiD);
+//JJ    MediaSizeName.D; 
+//JP if(z_p.e2s_b(s_si,"E"))return 
+//HP    QPageSize(QPageSize::AnsiD);
+//JJ    MediaSizeName.E; 
+//JP if(z_p.e2s_b(s_si,"EXECUTIVE"))return 
+//HP    QPageSize(QPageSize::ExecutiveStandard); 
+//JJ    MediaSizeName.EXECUTIVE; 
+//JP if(z_p.e2s_b(s_si,"FOLIO"))return
+//HP    QPageSize(QPageSize::Folio);  
+//JJ    MediaSizeName.FOLIO; 
+//JP if(z_p.e2s_b(s_si,"INVOICE"))return 
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSizeName.INVOICE; 
+//JP if(z_p.e3s_b(s_si,"ISO_A0","A0"))return 
+//HP    QPageSize(QPageSize::A0); 
+//JJ   MediaSizeName.ISO_A0; 
+//JP if(z_p.e3s_b(s_si,"ISO_A1","A1"))return 
+//HP    QPageSize(QPageSize::A1); 
+//JJ    MediaSizeName.ISO_A1; 
+//JP if(z_p.e3s_b(s_si,"ISO_A10","A10"))return 
+//HP    QPageSize(QPageSize::A10); 
+//JJ    MediaSizeName.ISO_A10; 
+//JP if(z_p.e3s_b(s_si,"ISO_A2","A2"))return 
+//HP    QPageSize(QPageSize::A2); 
+//JJ    MediaSizeName.ISO_A2; 
+//JP if(z_p.e3s_b(s_si,"ISO_A3","A3"))return
+//HP    QPageSize(QPageSize::A3); 
+//JJ    MediaSizeName.ISO_A3; 
+//JP if(z_p.e3s_b(s_si,"ISO_A4","A4"))return
+//HP    QPageSize(QPageSize::A4); 
+//JJ    MediaSizeName.ISO_A4; 
+//JP if(z_p.e3s_b(s_si,"ISO_A5","A5"))return
+//HP    QPageSize(QPageSize::A5); 
+//JJ    MediaSizeName.ISO_A5; 
+//JP if(z_p.e3s_b(s_si,"ISO_A6","A6"))return
+//HP    QPageSize(QPageSize::A6); 
+//JJ    MediaSizeName.ISO_A6; 
+//JP if(z_p.e3s_b(s_si,"ISO_A7","A7"))return
+//HP    QPageSize(QPageSize::A7); 
+//JJ    MediaSizeName.ISO_A7; 
+//JP if(z_p.e3s_b(s_si,"ISO_A8","A8"))return
+//HP    QPageSize(QPageSize::A8); 
+//JJ    MediaSizeName.ISO_A8; 
+//JP if(z_p.e3s_b(s_si,"ISO_A9","A9"))return
+//HP    QPageSize(QPageSize::A9); 
+//JJ    MediaSizeName.ISO_A9; 
+//JP if(z_p.e2s_b(s_si,"ISO_B0"))return
+//HP    QPageSize(QPageSize::B0); 
+//JJ    MediaSizeName.ISO_B0; 
+//JP if(z_p.e2s_b(s_si,"ISO_B1"))return
+//HP    QPageSize(QPageSize::B1); 
+//JJ    MediaSizeName.ISO_B1; 
+//JP if(z_p.e2s_b(s_si,"ISO_B10"))return
+//HP    QPageSize(QPageSize::B10); 
+//JJ    MediaSizeName.ISO_B10; 
+//JP if(z_p.e2s_b(s_si,"ISO_B2"))return
+//HP    QPageSize(QPageSize::B2); 
+//JJ    MediaSizeName.ISO_B2; 
+//JP if(z_p.e2s_b(s_si,"ISO_B3"))return
+//HP    QPageSize(QPageSize::B3); 
+//JJ    MediaSizeName.ISO_B3; 
+//JP if(z_p.e2s_b(s_si,"ISO_B4"))return
+//HP    QPageSize(QPageSize::B4); 
+//JJ    MediaSizeName.ISO_B4; 
+//JP if(z_p.e2s_b(s_si,"ISO_B5"))return
+//HP    QPageSize(QPageSize::B5); 
+//JJ    MediaSizeName.ISO_B5; 
+//JP if(z_p.e2s_b(s_si,"ISO_B6"))return
+//HP    QPageSize(QPageSize::B6); 
+//JJ    MediaSizeName.ISO_B6; 
+//JP if(z_p.e2s_b(s_si,"ISO_B7"))return
+//HP    QPageSize(QPageSize::B7); 
+//JJ    MediaSizeName.ISO_B7; 
+//JP if(z_p.e2s_b(s_si,"ISO_B8"))return
+//HP    QPageSize(QPageSize::B8); 
+//JJ    MediaSizeName.ISO_B8; 
+//JP if(z_p.e2s_b(s_si,"ISO_B9"))return
+//HP    QPageSize(QPageSize::B9); 
+//JJ    MediaSizeName.ISO_B9; 
+//JP if(z_p.e3s_b(s_si,"ISO_C0","C0"))return
+//HP    QPageSize(QPageSize::EnvelopeC0); 
+//JJ    MediaSizeName.ISO_C0; 
+//JP if(z_p.e3s_b(s_si,"ISO_C1","C1"))return
+//HP    QPageSize(QPageSize::EnvelopeC1); 
+//JJ    MediaSizeName.ISO_C1; 
+//JP if(z_p.e3s_b(s_si,"ISO_C2","C2"))return
+//HP    QPageSize(QPageSize::EnvelopeC2); 
+//JJ    MediaSizeName.ISO_C2; 
+//JP if(z_p.e3s_b(s_si,"ISO_C3","C3"))return
+//HP    QPageSize(QPageSize::EnvelopeC3); 
+//JJ    MediaSizeName.ISO_C3; 
+//JP if(z_p.e3s_b(s_si,"ISO_C4","C4"))return
+//HP    QPageSize(QPageSize::EnvelopeC4); 
+//JJ    MediaSizeName.ISO_C4; 
+//JP if(z_p.e3s_b(s_si,"ISO_C5","C5"))return
+//HP    QPageSize(QPageSize::EnvelopeC5); 
+//JJ    MediaSizeName.ISO_C5; 
+//JP if(z_p.e3s_b(s_si,"ISO_C6","C6"))return
+//HP    QPageSize(QPageSize::EnvelopeC6); 
+//JJ    MediaSizeName.ISO_C6; 
+//JP if(z_p.e2s_b(s_si,"ISO_DESIGNATED_LONG"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSizeName.ISO_DESIGNATED_LONG; 
+//JP if(z_p.e2s_b(s_si,"ITALY_ENVELOPE"))return
+//HP    QPageSize(QPageSize::EnvelopeItalian); 
+//JJ    MediaSizeName.ITALY_ENVELOPE; 
+//JP if(z_p.e3s_b(s_si,"JAPANESE_DOUBLE_POSTCARD","往復はがき"))return
+//HP    QPageSize(QPageSize::DoublePostcard);
+//JJ    MediaSizeName.JAPANESE_DOUBLE_POSTCARD; 
+//JP if(z_p.e3s_b(s_si,"JAPANESE_POSTCARD","はがき"))return
+//HP    QPageSize(QPageSize::Postcard);
+//JJ    MediaSizeName.JAPANESE_POSTCARD; 
+//JP if(z_p.e3s_b(s_si,"JIS_B0","B0"))return
+//HP    QPageSize(QPageSize::JisB0); 
+//JJ    MediaSizeName.JIS_B0; 
+//JP if(z_p.e3s_b(s_si,"JIS_B1","B1"))return
+//HP    QPageSize(QPageSize::JisB1); 
+//JJ    MediaSizeName.JIS_B1; 
+//JP if(z_p.e3s_b(s_si,"JIS_B10","B10"))return
+//HP    QPageSize(QPageSize::JisB10); 
+//JJ    MediaSizeName.JIS_B10; 
+//JP if(z_p.e3s_b(s_si,"JIS_B2","B2"))return
+//HP    QPageSize(QPageSize::JisB2); 
+//JJ    MediaSizeName.JIS_B2; 
+//JP if(z_p.e3s_b(s_si,"JIS_B3","B3"))return
+//HP    QPageSize(QPageSize::JisB3); 
+//JJ    MediaSizeName.JIS_B3; 
+//JP if(z_p.e3s_b(s_si,"JIS_B4","B4"))return
+//HP    QPageSize(QPageSize::JisB4); 
+//JJ    MediaSizeName.JIS_B4; 
+//JP if(z_p.e3s_b(s_si,"JIS_B5","B5"))return
+//HP    QPageSize(QPageSize::JisB5); 
+//JJ    MediaSizeName.JIS_B5; 
+//JP if(z_p.e3s_b(s_si,"JIS_B6","B6"))return
+//HP    QPageSize(QPageSize::JisB6); 
+//JJ    MediaSizeName.JIS_B6; 
+//JP if(z_p.e3s_b(s_si,"JIS_B7","B7"))return
+//HP    QPageSize(QPageSize::JisB7); 
+//JJ    MediaSizeName.JIS_B7; 
+//JP if(z_p.e3s_b(s_si,"JIS_B8","B8"))return
+//HP    QPageSize(QPageSize::JisB8); 
+//JJ    MediaSizeName.JIS_B8; 
+//JP if(z_p.e3s_b(s_si,"JIS_B9","B9"))return
+//HP    QPageSize(QPageSize::JisB9); 
+//JJ    MediaSizeName.JIS_B9; 
+//JP if(z_p.e2s_b(s_si,"LEDGER "))return
+//HP    QPageSize(QPageSize::Ledger); 
+//JJ    MediaSizeName.LEDGER; 
+//JP if(z_p.e2s_b(s_si,"MONARCH_ENVELOPE"))return
+//HP    QPageSize(QPageSize::EnvelopeMonarch);
+//JJ    MediaSizeName.MONARCH_ENVELOPE; 
+//JP if(z_p.e2s_b(s_si,"NA_10X13_ENVELOPE"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSizeName.NA_10X13_ENVELOPE; 
+//JP if(z_p.e2s_b(s_si,"NA_10X14_ENVELOPE"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSizeName.NA_10X14_ENVELOPE;
+//JP if(z_p.e2s_b(s_si,"NA_10X15_ENVELOPE"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSizeName.NA_10X15_ENVELOPE; 
+//JP if(z_p.e2s_b(s_si,"NA_5X7"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSizeName.NA_5X7; 
+//JP if(z_p.e2s_b(s_si,"NA_6X9_ENVELOPE"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSizeName.NA_6X9_ENVELOPE; 
+//JP if(z_p.e2s_b(s_si,"NA_7X9_ENVELOPE"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSizeName.NA_7X9_ENVELOPE; 
+//JP if(z_p.e2s_b(s_si,"NA_8X10"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSizeName.NA_8X10; 
+//JP if(z_p.e2s_b(s_si,"NA_9X11_ENVELOPE"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSizeName.NA_9X11_ENVELOPE; 
+//JP if(z_p.e2s_b(s_si,"NA_9X12_ENVELOPE"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSizeName.NA_9X12_ENVELOPE; 
+//JP if(z_p.e3s_b(s_si,"NA_LEGAL","LEGAL"))return
+//HP    QPageSize(QPageSize::Legal); 
+//JJ    MediaSizeName.NA_LEGAL; 
+//JP if(z_p.e3s_b(s_si,"NA_LETTER","LETTER"))return
+//HP    QPageSize(QPageSize::Letter);
+//JJ    MediaSizeName.NA_LETTER; 
+//JP if(z_p.e2s_b(s_si,"NA_NUMBER_10_ENVELOPE"))return
+//HP    QPageSize(QPageSize::Envelope10);
+//JJ    MediaSizeName.NA_NUMBER_10_ENVELOPE; 
+//JP if(z_p.e2s_b(s_si,"NA_NUMBER_11_ENVELOPE"))return
+//HP    QPageSize(QPageSize::Envelope11);
+//JJ    MediaSizeName.NA_NUMBER_11_ENVELOPE; 
+//JP if(z_p.e2s_b(s_si,"NA_NUMBER_12_ENVELOPE"))return
+//HP    QPageSize(QPageSize::Envelope12);
+//JJ    MediaSizeName.NA_NUMBER_12_ENVELOPE; 
+//JP if(z_p.e2s_b(s_si,"NA_NUMBER_14_ENVELOPE"))return
+//HP    QPageSize(QPageSize::Envelope14);
+//JJ    MediaSizeName.NA_NUMBER_14_ENVELOPE; 
+//JP if(z_p.e2s_b(s_si,"NA_NUMBER_9_ENVELOPE"))return
+//HP    QPageSize(QPageSize::Envelope9);
+//JJ    MediaSizeName.NA_NUMBER_9_ENVELOPE; 
+//JP if(z_p.e2s_b(s_si,"PERSONAL_ENVELOPE"))return
+//HP    QPageSize(QPageSize::EnvelopePersonal); 
+//JJ    MediaSizeName.PERSONAL_ENVELOPE; 
+//JP if(z_p.e2s_b(s_si,"QUARTO"))return
+//HP    QPageSize(QPageSize::Quarto); 
+//JJ    MediaSizeName.QUARTO; 
+//JP if(z_p.e2s_b(s_si,"TABLOID"))return
+//HP    QPageSize(QPageSize::Tabloid);
+//JJ    MediaSizeName.TABLOID; 
+//HP sw_media_size=1;
+//HP  return  QPageSize(QPageSize::Custom);
+//JJ return  null ;
+//JJ }
+//JJ    MediaSize media_size2_n(String s_si)
+//JJ {s_si=s_si.toUpperCase();
+//JP if(z_p.e3s_b(s_si,"CHOU_1","長型1号"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSize.JIS.CHOU_1; 
+//JP if(z_p.e3s_b(s_si,"CHOU_2","長型2号"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSize.JIS.CHOU_2; 
+//JP if(z_p.e3s_b(s_si,"CHOU_3","長型3号"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSize.JIS.CHOU_3; 
+//JP if(z_p.e3s_b(s_si,"CHOU_30","長型30号"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSize.JIS.CHOU_30; 
+//JP if(z_p.e3s_b(s_si,"CHOU_4","長型4号"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSize.JIS.CHOU_4; 
+//JP if(z_p.e3s_b(s_si,"CHOU_40","長型40号"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSize.JIS.CHOU_40; 
+//JP if(z_p.e3s_b(s_si,"KAKU_0","角型0号"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSize.JIS.KAKU_0; 
+//JP if(z_p.e3s_b(s_si,"KAKU_1","角型1号"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSize.JIS.KAKU_1; 
+//JP if(z_p.e3s_b(s_si,"KAKU_2","角型2号"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSize.JIS.KAKU_2; 
+//JP if(z_p.e3s_b(s_si,"KAKU_20","角型20号"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSize.JIS.KAKU_20; 
+//JP if(z_p.e3s_b(s_si,"KAKU_3","角型3号"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSize.JIS.KAKU_3; 
+//JP if(z_p.e3s_b(s_si,"KAKU_4","角型4号"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSize.JIS.KAKU_4; 
+//JP if(z_p.e3s_b(s_si,"KAKU_5","角型5号"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSize.JIS.KAKU_5; 
+//JP if(z_p.e3s_b(s_si,"KAKU_6","角型6号"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSize.JIS.KAKU_6; 
+//JP if(z_p.e3s_b(s_si,"KAKU_7","角型7号"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSize.JIS.KAKU_7; 
+//JP if(z_p.e3s_b(s_si,"KAKU_8","角型8号"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSize.JIS.KAKU_8; 
+//JP if(z_p.e3s_b(s_si,"KAKU_A4","角型A4号"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSize.JIS.KAKU_A4; 
+//JP if(z_p.e3s_b(s_si,"YOU_1","洋形1号"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSize.JIS.YOU_1; 
+//JP if(z_p.e3s_b(s_si,"YOU_2","洋形2号"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSize.JIS.YOU_2; 
+//JP if(z_p.e3s_b(s_si,"YOU_3","洋形3号"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSize.JIS.YOU_3; 
+//JP if(z_p.e3s_b(s_si,"YOU_4","洋形4号"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSize.JIS.YOU_4; 
+//JP if(z_p.e3s_b(s_si,"YOU_5","洋形5号"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSize.JIS.YOU_5; 
+//JP if(z_p.e3s_b(s_si,"YOU_6","洋形6号"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSize.JIS.YOU_6; 
+//JP if(z_p.e3s_b(s_si,"YOU_7","洋形7号"))return
+//HP    QPageSize(QPageSize::Custom); 
+//JJ    MediaSize.JIS.YOU_7; 
+//HP sw_media_size=0;
+//HP return  QPageSize(QPageSize::Custom); 
+//JJ return  null ;
+//JP }
+//SS protected override void OnClosed(EventArgs e){}
+//=======(e.t.c)=======================================================================
+//JJ public void keyTyped(KeyEvent e_ni){}
+//JJ public void keyReleased(KeyEvent e_ni){}
+//JJ public void mouseExitend(MouseEvent e_ni){}
+//JJ public void mouseEntered(MouseEvent e_ni){}
+//JJ public void mouseClicked(MouseEvent e_ni){}
+//JJ public void mousePressed(MouseEvent e_ni){}
+//JJ public void mouseExited(MouseEvent e_ni){}
+//======================================================================================================================
+//========( OnPaint,paint 画面描画 )====================================
+//======================================================================================================================
+//JJ }
+//JJ class iprint2_l extends Component
+//JJ {
+//JJ iprint_l iprint_p;ii_z_l z_n;
+//JJ public iprint2_l(ii_z_l z_ni,iprint_l iprint_ni)
+//JJ {iprint_p=iprint_ni;z_n=z_ni;
+//JJ }
+//HP void paintEvent(QPaintEvent *e_ni)
+//SS protected override void OnPaint(PaintEventArgs e_ni)
+//JJ public void paint(Graphics Graphics_ni)
+{
+//JP if(0==iprint_p.sw_paint)return; //準備中は無視。
+if(1==iprint_p.sw_printer)return; //プリント中は無視。
+//SS Graphics_n=e_ni.Graphics; 
+//JJ iprint_p.Graphics_n=(Graphics2D)Graphics_ni; 
+//JJ if(iprint_p.PRINT_3==iprint_p.control&&0==iprint_p.sw_error){iprint_p.close_v();return;} //JAVAは直接実行したので終了。
+//HP Graphics_n=new QPainter(this);
+for(;;)
+  {if(1==iprint_p.sw_continue)
+     {
+//HP  delete Graphics_n;
+      return;
+     }
+   if(1==iprint_p.sw_error)
+      {iprint_p.err_v();
+      }
+   if(1==iprint_p.sw_fin)
+     {iprint_p.read_n.read_close_v();
+      iprint_p.close_v();//終了
+//HP  delete Graphics_n;
+      return;
+     }
+   iprint_p.sw_continue=1;
+   if(0==iprint_p.sw_error&&0==iprint_p.sw_fin)
+     if(iprint_p.PRINT_3==iprint_p.control)
+       {if(!iprint_p.printer_b())iprint_p.sw_error=1;//プリンター印字
+        else iprint_p.sw_fin=1;iprint_p.sw_continue=0;continue;
+       }
+     else 
+       {if(!iprint_p.display_b())//画面出力
+           {iprint_p.sw_error=1;iprint_p.sw_continue=0;continue;}
+       } 
+   break;
+  } 
+iprint_p.sw_continue=0;
+//HP  delete Graphics_n;
+}
+}
+//JJ class iprint_dialog_l extends Dialog implements ActionListener
+//JJ {bool return_b=false;
+//JJ   Button Button_true_n,Button_false_n;
+//JJ   iprint_dialog_l(iprint_l iprint_pi,String message_s,String title_s,int error_i)
+//JJ   {super(iprint_pi,title_s,ModalityType.APPLICATION_MODAL);
+//JJ    setSize(200,300); 
+//JJ     TextArea TextArea_n=new TextArea(message_s,1,1,TextArea.SCROLLBARS_VERTICAL_ONLY);
+//JJ     TextArea_n.setEditable(false);
+//JJ     add(TextArea_n,BorderLayout.CENTER);
+//JJ     Panel Panel_n=new Panel();
+//JJ     Panel_n.add(Button_true_n=new Button(1==error_i?"OK":"Yes"));
+//JJ     Button_true_n.addActionListener(this);
+//JJ     Panel_n.add(Button_false_n=new Button(1==error_i?"Cancel":"No"));
+//JJ     Button_false_n.addActionListener(this);
+//JJ     add(Panel_n,BorderLayout.SOUTH);
+//JJ    setVisible(true);
+//JJ   }
+//JJ public void actionPerformed(ActionEvent e_i)
+//JJ {return_b=(Button_true_n==e_i.getSource()?true:false);
+//JJ  dispose();
+//JJ }
+//JJ }
+#endif

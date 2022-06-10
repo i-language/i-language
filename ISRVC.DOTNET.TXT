@@ -1,0 +1,127 @@
+// IXSRVC.CS service author nobumichi.harasawa 
+#if W
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.Linq;
+//SS using System.ServiceProcess;
+//SS using System.Threading;
+//SS using System.Threading.Tasks;
+//SS using Microsoft.Extensions.DependencyInjection;
+//SS using Microsoft.Extensions.Hosting;
+//SS using Microsoft.Extensions.Logging;
+//SS public class ServiceBaseLifeTime : ServiceBase, IHostLifetime
+//SS {
+//SS    private readonly TaskCompletionSource<object> _delayStart;
+//SS    private IHostApplicationLifetime ApplicationLifetime { get; }
+//SS    public ServiceBaseLifeTime(IHostApplicationLifetime    
+//SS    applicationLifetime)
+//SS    {
+//SS        _delayStart = new TaskCompletionSource<object>();
+//SS         ApplicationLifetime = applicationLifetime ?? throw new   
+//SS         ArgumentNullException(nameof(applicationLifetime));
+//SS    }
+//SS    public Task StopAsync(CancellationToken cancellationToken)
+//SS   {
+//SS       Stop();
+//SS       return Task.CompletedTask;
+//SS    }
+//SS    public Task WaitForStartAsync(CancellationToken cancellationToken)
+//SS   {
+//SS      cancellationToken.Register(() => _delayStart.TrySetCanceled());
+//SS      ApplicationLifetime.ApplicationStopping.Register(Stop);
+//SS // Otherwise this would block and prevent IHost.StartAsync from finishing. 
+//SS      new Thread(Run).Start();
+//SS      return _delayStart.Task;
+//SS   }
+//SS   private void Run()
+//SS   {
+//SS      try
+//SS      {
+//SS          Run(this); // This blocks until the service is stopped.
+//SS         _delayStart.TrySetException(new  
+//SS          InvalidOperationException("Stopped without starting"));
+//SS      }
+//SS      catch (Exception ex)
+//SS      {
+//SS         _delayStart.TrySetException(ex); 
+//SS      }
+//SS   }
+//SS   // Called by base.Run when the service is ready to start.
+//SS    protected override void OnStart(string[] args)
+//SS    {
+//SS     _delayStart.TrySetResult(null);
+//SS       base.OnStart(args);
+//SS    }
+//SS   // Called by base.Stop. This may be called multiple times by  service Stop, ApplicationStopping, and StopAsync.
+//SS   // That's OK because StopApplication uses a CancellationTokenSource and prevents any recursion.
+//SS    protected override void OnStop()
+//SS    {
+//SS     ApplicationLifetime.StopApplication();
+//SS         base.OnStop();
+//SS    }
+//SS    protected override void OnPause()
+//SS    {
+//SS         // Custom action on pause
+//SS         base.OnPause();
+//SS    }
+//SS    protected override void OnContinue()
+//SS    {
+//SS        // Custom action on continue
+//SS        base.OnContinue();
+//SS    }
+//SS }
+//SS public static class ServiceBaseLiveTimeHostExtension
+//SS {
+//SS       public static IHostBuilder UseServiceBaseLifetime(this   
+//SS       IHostBuilder hostBuilder)
+//SS       {
+//SS          return hostBuilder.ConfigureServices((hostContext,  
+//SS          services) => services.AddSingleton<IHostLifetime,  
+//SS          ServiceBaseLifeTime>());
+//SS       }
+//SS       public static Task RunAsServiceAsync(this IHostBuilder 
+//SS       hostBuilder, CancellationToken cancellationToken = default)
+//SS      {
+//SS          return 
+//SS          hostBuilder.UseServiceBaseLifetime().Build()
+//SS         .RunAsync(cancellationToken);
+//SS      }
+//SS }
+//SS public class isrvc_l : IHostedService, IDisposable
+//SS {
+//SS     public Task StartAsync(CancellationToken cancellationToken)
+//SS     {
+//SS ////         var text = "{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}, Testing write." + Environment.NewLine;
+//SS ////         File.WriteAllText(@"D:\Temp\Service.Write.txt", text);
+//SS          Console.WriteLine("[{nameof(isrvc_l)}] has been started.....");
+//SS          return Task.CompletedTask;
+//SS     }
+//SS     public Task StopAsync(CancellationToken cancellationToken)
+//SS     {
+//SS         //File.Delete(@"D:\Temp\Service.Write.txt");
+//SS         Console.WriteLine("[{nameof(isrvc_l)}] has been stopped.....");
+//SS         Thread.Sleep(1000);
+//SS         return Task.CompletedTask;
+//SS     }
+//SS static async Task Main(string[] args)
+//SS {
+//SS     // Run with console or service
+//SS     var asService = !(/*Debugger.IsAttached || */args.Contains("--console"));
+//SS     var builder = new HostBuilder()
+//SS     .ConfigureServices((hostContext, services) =>
+//SS     {
+//SS         services.AddHostedService<isrvc_l>();
+//SS     });
+//SS     builder.UseEnvironment(asService?Environments.Production:Environments.Development);
+//SS     if(asService)
+//SS     {
+//SS        await builder.RunAsServiceAsync();
+//SS     }
+//SS     else 
+//SS     {
+//SS        await builder.RunConsoleAsync();
+//SS     }
+//SS }
+//SS public void Dispose(){}
+//SS }
+#endif //W

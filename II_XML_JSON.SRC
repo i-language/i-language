@@ -1,0 +1,147 @@
+// II_XML_JSON.SRC XML及びJSONかから値を抜き出します。
+#if IMENU||ITIME //TEST
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//SS using System.Data.SqlClient;
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.Drawing;
+//SS using System.IO;
+//JJ import java.awt.*;
+//JJ import java.awt.event.*;
+//JJ import java.io.*;
+//JJ import java.math.*;
+//JJ import java.util.*;
+public class ii_xml_json_l
+{
+int NOT=0,KEY=1,KEY_CHK=2,KEY2=3,VALUE2=4,VALUE=5,VALUE_CHK=6,KEY_END=7;
+public List<String> s_xml_json_data_a=new List<String>();
+public List<int> i_xml_json_sw_a=new List<int>();
+public List<String> s_xml_json_name_a=new List<String>();
+public List<String> s_xml_json_name_org_a=new List<String>();
+public int xml_json=0;
+ii_z_l z_p;String xml_json_s="";int xml_json_cnt=0,xml_json_begin=0;
+String value_s="",key_s="",key_keep_s="",key2_s="",key_end_s="",key_end_keep_s="";
+int psw=0,skip_qute=0,sw_quote=0,level=0,now_level=-1,name_cnt=-1,name2_cnt=-1;
+public ii_xml_json_l(ii_z_l z_ni,String s_si,int xml_json_begin_ii)
+{z_p=z_ni;xml_json_s=s_si;xml_json_begin=xml_json_begin_ii;
+}
+public void xml_json_data_v(String si)
+{z_p.add_s(s_xml_json_data_a,"");z_p.add_s(s_xml_json_name_org_a,si);
+ z_p.add_s(s_xml_json_name_a,(1==xml_json_begin?"\"":"")+z_p.upper_s(z_p.substring2_s(si,z_p.index2c_i(si,'.')+1))+(1==xml_json_begin?"\"":""));
+ z_p.add_i(i_xml_json_sw_a,0);
+} 
+public void xml_json_continue_v(String s_si){xml_json_s=z_p.substring2_s(xml_json_s,xml_json_cnt)+s_si;xml_json_cnt=0;}
+public int xml_json_run()
+{char c=' ';
+if(1==xml_json)xml_json=0;//処理開始。
+if(0==z_p.count_s_i(s_xml_json_data_a)){z_p.err_s="data not found";return 1;}
+for(;xml_json_cnt<z_p.length(xml_json_s);xml_json_cnt++)
+  {c=z_p.at_s_c(xml_json_s,xml_json_cnt);
+   if(c=='\t')continue;//タブは無視。
+   if(0==xml_json_begin)// XML
+     {
+      if     ('"'==c) if(2!=sw_quote)sw_quote=(0==sw_quote?1:0);
+      else if('\''==c)if(1!=sw_quote)sw_quote=(0==sw_quote?2:0);
+      if(0==sw_quote)//引用符内で無い時処理
+        {if(KEY_CHK==psw){if(' '==c)continue;psw=VALUE;} 
+         if(VALUE_CHK==psw){if(' '==c)continue;else if('/'==c){if(0<level)level--;}else level++;if(1>level){psw=KEY_END;continue;}psw=VALUE;value_s+="<";} 
+         if('<'==c){if(NOT==psw){psw=KEY;continue;}else if(VALUE==psw){psw=VALUE_CHK;continue;}if(KEY==psw)continue;}
+         if(-1==now_level||now_level>=level)//まだ該当キーが見つからない時に処理。（見つかっている時は以下は値に含める）
+           {if(' '==c){if     (KEY==psw)   {if(key_b()){now_level=level=1;psw=KEY2;}else {psw=NOT;now_level=-1;}}
+                       else if(VALUE2==psw){value_b(name2_cnt);psw=KEY2;}
+                      }
+            else
+            if('='==c){if(KEY2==psw){key2_v();psw=VALUE2;}}
+            else
+            if('>'==c)if     (KEY==psw){if(key_b()){now_level=level=1;psw=KEY_CHK;}continue;}
+                      else if(VALUE2==psw){value_b(name2_cnt);psw=VALUE;continue;}
+                      else if(KEY_END==psw){psw=NOT;now_level=-1;if(key_end_b()){if(value_b(name_cnt)){xml_json_cnt++;return 0;}}//全て設定は終了。
+                                            else{z_p.err_s="not e <"+key_keep_s+">!=</"+key_end_keep_s+">";return 1;}
+                                            continue;
+                                           }//key の終了//         
+           }
+        }
+     }
+   else //JSON
+     {if(0==sw_quote&&' '==c)continue; //引用符内以外は空白は無視
+      if(1==skip_qute)skip_qute=0;else if('"'==c){sw_quote=(0==sw_quote?1:0);}//\"の付き以外引用符判定
+      if('\\'==c)skip_qute=1;//\記号発見（次の"はデータとみなす）
+      if(0==sw_quote)//引用符内で無い時処理
+        {if('{'==c||'['==c)level++;
+         if(-1==now_level||now_level>=level)
+           {if(':'==c)        {if(KEY==psw){psw=VALUE;if(key_b())now_level=level;else now_level=-1;}continue;}//key の終了
+            if(','==c||'}'==c){if(VALUE==psw){if('}'==c){psw=NOT;level--;}else psw=KEY;if(value_b(name_cnt)){xml_json_cnt++;return 0;}}continue;}//value の終了
+            if('{'==c){if(NOT==psw)psw=KEY;continue;}
+            if('['==c){if(VALUE==psw)if(-1==now_level)psw=NOT;} 
+           }
+         if('}'==c||']'==c)level--;
+        } 
+     }
+   if     (VALUE==psw||VALUE2==psw){value_s+=z_p.to_c_s(c);}
+   else if(KEY==psw){key_s  +=z_p.to_c_s(c);}
+   else if(KEY2==psw){key2_s+=z_p.to_c_s(c);}
+   else if(KEY_END==psw){key_end_s+=z_p.to_c_s(c);}
+  }
+vml_json_v();//xml_json設定
+return 0;  //正常処理中
+}
+bool key_end_b()
+{
+key_end_s=replace_s(key_end_s);key_end_keep_s=key_end_s;
+if(z_p.e2s_b(z_p.upper_s(key_keep_s),z_p.upper_s(key_end_s))){key_end_s="";return true;}
+key_end_s="";
+return false;
+}
+bool key_b()
+{
+key_s=replace_s(key_s);key_keep_s=key_s;;
+for(name_cnt=z_p.count_s_i(s_xml_json_name_a)-1;-1<name_cnt;name_cnt--)
+ if(z_p.e2s_b(z_p.upper_s(key_s),z_p.at_s(s_xml_json_name_a,name_cnt)))break;
+key_s="";
+return (-1==name_cnt?false:true);
+}
+void key2_v()
+{
+key2_s=replace_s(key2_s);
+for(name2_cnt=z_p.count_s_i(s_xml_json_name_a)-1;-1<name2_cnt;name2_cnt--)
+ if(z_p.e2s_b(z_p.upper_s(key_s),z_p.at_s(s_xml_json_name_a,name2_cnt)))break;
+key2_s="";
+}
+bool value_b(int name_cnt_ii)
+{if(-1<name_cnt_ii)
+  {if(z_p.starts_with_b(z_p.trim_s(value_s),"\"")&&z_p.ends_with_b(z_p.trim_s(value_s),"\""))
+     {value_s=z_p.substring3_s(z_p.trim_s(value_s),1,z_p.length(z_p.trim_s(value_s))-2);
+      value_s=replace_s(value_s);
+     }
+   else if(!((z_p.starts_with_b(z_p.trim_s(value_s),"<")&&z_p.ends_with_b(z_p.trim_s(value_s),">"))
+           ||(z_p.starts_with_b(z_p.trim_s(value_s),"{")&&z_p.ends_with_b(z_p.trim_s(value_s),"}"))))value_s=replace_s(value_s);
+   if(1==z_p.at_i(i_xml_json_sw_a,name_cnt_ii))
+         z_p.set_s_v(s_xml_json_data_a,name_cnt_ii,z_p.at_s(s_xml_json_data_a,name_cnt_ii)+","+value_s);
+    else
+      {z_p.set_s_v(s_xml_json_data_a,name_cnt_ii,value_s);
+       z_p.set_i_v(i_xml_json_sw_a,name_cnt_ii,1);
+       vml_json_v(); //xml_json設定
+       if(1==xml_json) //全て１はデータクリア。
+         for(int i=0;i<z_p.count_i_i(i_xml_json_sw_a);i++){z_p.set_i_v(i_xml_json_sw_a,i,0);}//データ全て有りswクリア
+      }
+  }
+value_s="";
+return (1==xml_json?true:false);//全て１は完了。
+}
+void vml_json_v()
+{int zero=0,one=0;
+for(int i=0;i<z_p.count_i_i(i_xml_json_sw_a);i++)
+   if(0==z_p.at_i(i_xml_json_sw_a,i))zero=1;else one=1;
+if     (0==one) xml_json=0;//全て0         
+else if(0==zero)xml_json=1;//全て１
+else            xml_json=2;//一部データ無
+}
+String replace_s(String si)
+{
+if(0==xml_json_begin)return z_p.replace_s_s(z_p.replace_s_s(z_p.replace_s_s(z_p.replace_s_s(z_p.replace_s_s(si,"&apos;","'"),"&quot;","\""),"&lt;","<"),"&gt;",">"),"&amp;","&");
+else return z_p.replace_s_s(z_p.replace_s_s(z_p.replace_s_s(si,"\\\"","\""),"\\/","/"),"\\\\","\\");
+}
+//HP public ~ii_xml_json_l(){delete s_xml_json_data_a,i_xml_json_sw_a,s_xml_json_name_a,s_xml_json_name_org_a;}
+}
+#endif

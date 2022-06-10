@@ -1,0 +1,8 @@
+D
+I:W:(1\NET USER )          itrdzzzz (2!)(3!)(4!\ADD /EXPIRES:NEVER /PASSWORDCHG:NO)
+I:U:(1\useradd -g db2users -d /home/I )itrdddd(2\)(3\ passwd )itrdddd//REAL(4\)
+L:(1\CREATE USER )      I_I28WO_R_D_ZZZZ(2\ IDENTIFIED BY ')REAL(3\')(4\)
+M:(1\EXEC SP_ADDLOGIN ')I_I28WM_R_D_ZZZZ(2\',')                     REAL(3\',')                 I_I28WM_R_M_ZZZZ(4\')
+O:(1\CREATE USER )      I_I28WO_R_D_ZZZZ(2\ IDENTIFIED BY ")         REAL(3\ " DEFAULT TABLESPACE )I_I28WO_R_M_ZZZZ(4\)
+P:(1\CREATE USER )      i_I28wp_r_d_zzzz(2\ WITH )XXX(3\ PASSWORD ')REAL(4\')  
+

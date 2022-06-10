@@ -1,0 +1,196 @@
+#!/bin/sh
+#REM (ZZZZZZBACKUP) BACKUP DATABASE & SYSTEM 
+#REM 1=i_ver 2=lang 3={TEST,REAL} 4=system 5=work /
+if test "$5" = "";then exit 0;fi
+i_exit=/home/I/I.$4/TMP_$3/$5.EXIT
+echo START ZZZZZZBACKUP > $i_exit
+i_home=/home/I
+i_ver=$1
+i_system=$4
+i_work=$5
+if test "$3" = "TEST" ;then echo !!!> $i_exit;exit 0;fi
+shift;shift;shift;shift;shift
+#REM shift(5) 1=db        2=server_name 3=date_time 4=drive2 5=drive14 6=path 
+#REM shift(5) 1=COPY_BACKUPT 2=path1 3=path2
+#REM shift(5) 1=ERASE_LOG 2=db        3=file1 4=file2
+#REM shift(5) 1=ERASE_DAT 2=path1     3=path2
+#REM shift(5) 1=DIR       2=path1     3=path2
+#REM shift(5) 1=MOVE_DAT  2=pathe  
+#REM shift(5) 1=SAVE  2=in_path 3=out_path 4=in_dir1 5=in_dir2
+tmp=$i_home/I.$i_system/TMP_REAL  
+tmp_file=$tmp/$1.TMP
+backup=I.BACKUP.$i_system.$1.$2.$3
+pt=$6
+i_add=
+#REM shift(5) 1=SAVE  2=in_path 3=out_path 4=in_dir1 5=in_dir2
+if test "$1" = "SAVE" ;then
+   if test "$3" = "" ;then
+      echo save_path is space > $i_exit
+    else
+      save_in=/$2/;save_out=$3/I-SAVE-${i_system}-$2
+      if test "$4" != "" ;then
+         save_in=$save_in$4/;save_out=${save_out}-$4
+      fi
+      if test "$5" != "" ;then
+         save_in=$save_in$5/;save_out=${save_out}-$5
+      fi
+      rsync -au -delete $save_in $save_out/ 2> $i_exit
+      if test "$?" = "0" ;then echo !!!> $i_exit;fi
+    fi
+    exit 0
+fi
+#REM shift(5) 1=COPY_BACKUP  2=path1 3=path2
+if test "$1" = "COPY_BACKUP" ;then
+    cp  /$2/I/BACKUP/$3 $i_home/TMP/  2> $i_exit
+   if test "$?" = "0" ;then echo !!!> $i_exit;fi
+   exit 0
+fi
+#REM shift(5) 1=ERASE_LOG 2=db  3=file1 4=file2
+if test "$1" = "ERASE_LOG" ;then
+   if test "$2" = "I" ;then i_add=_$i_system;fi 
+   rm -f /$3/I/BACKUP_LOG_$2$i_add/$4 2>$i_exit
+   if test "$?" = "0" ;then echo !!!> $i_exit;fi
+   exit 0
+fi
+#REM shift(5) 1=ERASE_DAT 2=path1 3=path2
+if test "$1" = "ERASE_DAT" ;then
+   rm -f /$2/I/BACKUP/I.BACKUP.$i_system.$3 2>$i_exit
+   if test "$?" = "0" ;then echo !!!> $i_exit;fi
+   exit 0
+fi
+#REM shift(5) 1=DIR  2=path1 3=path2
+if test "$1" = "DIR" ;then
+   ls -d /$2/$3/* > $tmp/$i_work.TXT
+#  if test "$?" = "0" ;then 
+   echo !!!> $i_exit
+#  ;fi
+   exit 0
+fi
+#REM shift(5) 1=MOVE_DAT  2=path
+if test "$1" = "MOVE_DAT" ;then mv -f $tmp/I.BACKUP.* /$2/I/BACKUP 2> $i_exit
+   if test "$?" = "0" ;then echo !!!> $i_exit;fi
+   exit 0
+fi
+#REM shift(5) 1=db 2=server_name 3=date_time 4=drive2 5=drive14 6=path 
+case $1 in
+D|I|L|M|O|P)
+#if test "$1" = "D" -o "$1" = "I"  -o "$1" = "L" -o "$1" = "O" -o "$1" = "P" ;then
+   i_backup=$tmp/$backup
+   if test ! -d $i_backup           ;then mkdir $i_backup;fi 
+   if test ! -d $i_backup/BACKUP_DAT;then mkdir $i_backup/BACKUP_DAT;fi 
+   if test ! -d $i_backup/I         ;then mkdir $i_backup/I;fi 
+   if test ! -d $i_backup/I/SHARE   ;then mkdir $i_backup/I/SHARE;fi 
+#  case $1 in
+#  L|D);;
+#  *)mkdir $i_backup/BACKUP_DAT
+#  esac
+#   for i in SHARE 
+#       do
+#       cp -r $i_home/$i  $i_backup/I 2> $i_exit
+#       if test "$?" != "0" ;then exit 0;fi
+#       done
+   for i in LINUX WINDOWS 
+       do
+       mkdir                         $i_backup/I/SHARE/$i 
+       cp  $i_home/SHARE/$i/SETUP_*  $i_backup/I/SHARE/$i 2> $i_exit
+       if test "$?" != "0" ;then exit 0;fi
+       done
+#   cp  $i_home/${i_ver}* $i_backup/I 2> $i_exit
+#   if test "$?" != "0" ;then exit 0;fi
+#   cp  $i_home/BIN$i_ver/* $i_backup/I/BIN$i_ver/ 2> $i_exit
+#   if test "$?" != "0" ;then exit 0;fi
+   i_backup_system=$i_backup/I/I.$i_system
+   if test ! -d $i_backup_system ;then mkdir $i_backup_system;fi 
+   for i in BAT DATA_REAL
+      do
+      mkdir                       $i_backup_system/$i
+      cp $i_home/I.$i_system/$i/* $i_backup_system/$i 2> $i_exit
+      if test "$?" != "0" ;then exit 0;fi
+      done
+#   for i in DATA_TEST TMP_TEST TMP_REAL
+#       do
+#          mkdir $i_backup_system/$i
+#       done
+#   for i in 1 2 3 4 5 6 7 8 9
+#       do
+#####  cp -r $i_home/I.$i_system/DATA_OLD${i}_REAL $i_backup_system 2> $i_exit
+#####  if test "$?" != "0" ;then exit 0;fi
+#         mkdir $i_backup_system/DATA_OLD${i}_REAL
+#       done
+   case $1 in
+      D|L|I). $i_home/I.$i_system/ZZZZZZPASSWORD
+             ;;
+   esac
+   case $1 in 
+      D)
+$pt/gbak -b -e -t -user SYSDBA -password $PASSWORD /$5/I/DATABASE_DAT_D/I_$i_system.FDB $i_backup/BACKUP_DAT/BACKUP_DAT_$i_system 2> $i_exit
+         ;;
+      I)i_add=_$i_system
+        ls -d /$4/I/BACKUP_LOG_I$i_add/*/I_$i_system/*/*/*/*.LOG > $tmp/$i_work.TXT
+        su - db2inst1 -c "db2 backup db I_$i_system user db2inst1 using $PASSWORD online to $i_backup/BACKUP_DAT include logs" > $i_exit
+         ;;
+      L)ls -d /$4/I/BACKUP_LOG_L/* > $tmp/$i_work.TXT
+        mysqldump -uI_ROOT -p$PASSWORD --flush-logs --master-data=2 --lock-all-tables --all-databases -x > $i_backup/BACKUP_DAT/BACKUP_DAT 2> $i_exit
+         ;;
+      M) chmod 666 /$4/I/BACKUP_DAT_M/I_${i_system}_R_*.DAT 
+         cp -r     /$4/I/BACKUP_DAT_M/I_${i_system}_R_*.DAT $i_backup/BACKUP_DAT 2>  $i_exit
+         if test "$?" != "0" ;then exit 0;fi
+         chmod 660 /$4/I/BACKUP_DAT_M/I_${i_system}_R_*.DAT 
+         chmod 666 /$5/I/BACKUP_DAT_M/I_${i_system}_T_*.DAT 
+         cp -r     /$5/I/BACKUP_DAT_M/I_${i_system}_T_*.DAT $i_backup/BACKUP_DAT 2>  $i_exit
+         if test "$?" != "0" ;then exit 0;fi
+         chmod 660 /$5/I/BACKUP_DAT_M/I_${i_system}_T_*.DAT 
+            chmod 666 /$4/I/BACKUP_LOG_M/I_${i_system}_R_*.LOG
+         ls /$4/I/BACKUP_LOG_M/I_${i_system}_R_*.LOG >/dev/null 2>&1 
+         if test "$?" = "0" ;then 
+            if test -d /$4/I/BACKUP_LOG_M/OLD;then  
+               cp -r /$4/I/BACKUP_LOG_M/I_${i_system}_R_*.LOG /$4/I/BACKUP_LOG_M/OLD 2>  $i_exit
+               if test "$?" != "0" ;then exit 0;fi
+               chmod 660 /$4/I/BACKUP_LOG_M/I_${i_system}_R_*.LOG
+            fi 
+        fi 
+        chmod 666 /$5/I/BACKUP_LOG_M/I_${i_system}_T_*.LOG
+        ls        /$5/I/BACKUP_LOG_M/I_${i_system}_T_*.LOG >/dev/null 2>&1 
+        if test "$?" = "0" ;then 
+           if test -d /$5/I/BACKUP_LOG_M/OLD;then   
+              cp -r /$5/I/BACKUP_LOG_M/I_${i_system}_T_*.LOG /$5/I/BACKUP_LOG_M/OLD 2>  $i_exit
+              if test "$?" != "0" ;then exit 0;fi
+              chmod 660 /$5/I/BACKUP_LOG_M/I_${i_system}_T_*.LOG
+           fi 
+        fi 
+         ;;
+      O)cp $pt    $i_backup/BACKUP_DAT 2> $i_exit
+         ;;
+#     P)sudo -u postgres pg_basebackup -D $i_backup/BACKUP_DAT 2> $i_exit
+      P)cp -r $pt/* $i_backup/BACKUP_DAT 2> $i_exit
+        if test "$?" != "0" ;then exit 0;fi
+        rm -R -f $i_backup/BACKUP_DAT/pg_xlog        2> $i_exit
+        if test "$?" != "0" ;then exit 0;fi
+        rm    -f $i_backup/BACKUP_DAT/postmaster.pid 2> $i_exit
+        if test "$?" != "0" ;then exit 0;fi
+         ;;
+    esac 
+    if test "$?" != "0" ;then exit 0;fi
+    if test "$1" != "D" -a "$1" != "M" ;then
+       if test -d  /$4/I/BACKUP_DAT_$1$i_add ;then
+          rm -R -f /$4/I/BACKUP_DAT_$1$i_add 2> $i_exit
+          if test "$?" != "0" ;then exit 0;fi
+       fi
+     fi
+     if test ! -d  /$4/I/BACKUP_DAT_$1$i_add ;then
+        mkdir      /$4/I/BACKUP_DAT_$1$i_add 2> $i_exit
+        if test "$?" != "0" ;then exit 0;fi
+      fi
+#    case $1 in
+#      O|P|I)cp -r $i_backup/BACKUP_DAT/*     /$4/I/BACKUP_DAT_$1$i_add 2> $i_exit;;
+#          *)cp    $i_backup/BACKUP_DAT$d_add /$4/I/BACKUP_DAT_$1       2> $i_exit;;
+#    esac  
+    cp -r $i_backup/BACKUP_DAT/*     /$4/I/BACKUP_DAT_$1$i_add 2> $i_exit
+    if test "$?" != "0" ;then exit 0;fi
+    chgrp i_group                    /$4/I/BACKUP_DAT_$1$i_add/* 2> $i_exit
+    if test "$?" != "0" ;then exit 0;fi
+    chmod -R 770                     /$4/I/BACKUP_DAT_$1$i_add/* 2> $i_exit
+    if test "$?" != "0" ;then exit 0;fi
+;;
+esac
+echo !!!> $i_exit

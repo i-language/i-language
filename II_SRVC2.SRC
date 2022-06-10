@@ -1,0 +1,148 @@
+#if ISRVC
+// II_SRVC2.SRC service author nobumichi.harasawa 
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//SS using System;
+//SS using System.Collections.Generic;
+////SS using System.Configuration.Install;
+//SS using System.ComponentModel;
+//SS using System.Data;
+//SS using System.Diagnostics;
+//SS using System.IO;
+//SS using System.Net;
+//SS using System.Net.Sockets;
+//SS using System.ServiceProcess;
+//SS using System.Threading;
+//SS using System.Text;
+
+//JJ import java.lang.*;
+//JJ import java.net.*;
+//JJ import java.io.*;
+//JJ import java.util.*;
+
+class ii_srvc2_l
+//JJ extends Thread 
+//HP :public
+//HP QThread
+{
+//HP Q_OBJECT
+//HP QTcpSocket* Socket_n= null ;
+//SJ Socket      Socket_n= null ;
+//HP GLbyte zero_y;
+//SJ byte   zero_y;
+//HP QByteArray put_yx,get_yx;
+//SJ byte[] put_yx,get_yx;
+int get_length,put_length=1;
+ii_z_l z_p;
+ii_socket_l socket_n;
+//SS public int sw_abort=0; //VER35.1
+//HP public ii_srvc2_l(QTcpSocket * Socket_ni,ii_z_l z_ni)
+//SJ public ii_srvc2_l(Socket Socket_ni,ii_z_l z_ni)
+{z_p=z_ni;
+Socket_n=Socket_ni;
+//SJ get_yx=new byte[1026];put_yx=new byte[1026];
+//HP zero_y=(GLbyte)'0';
+//SJ zero_y=(byte)'0';
+put_yx[0]=zero_y;
+socket_n=new ii_socket_l(z_p); 
+}
+//JJ DataInputStream  DataInputStream_n= null ;
+//JJ DataOutputStream DataOutputStream_n= null ;
+//SS public void go_v()
+//JP public void run()
+{String cmd_s="",path_s,file_s="",full_file_s,w_s;
+int rc=0,i,j;
+//HP sw_error=0;sw_event=0;
+//HP connect(Socket_n,SIGNAL(error(QAbstractSocket::SocketError)),this,SLOT(tcp_error_v()));  //エラー
+//HP connect(Socket_n,SIGNAL(readyRead()),this,SLOT(event_v())); //受信待ち準備
+//JJ try{DataInputStream_n =new DataInputStream (Socket_n.getInputStream());
+//JJ     DataOutputStream_n=new DataOutputStream(Socket_n.getOutputStream());
+//JJ    }catch(Exception){}
+for(;;)
+  {
+//SS if(0!=sw_abort)break; //VER35.1
+//SJ try{
+//HP     get_yx=Socket_n.read(1026);get_length=get_yx.size();//受信
+//SS     get_length=Socket_n.Receive(get_yx,1026,SocketFlags.None);//受信
+//JJ     get_length=DataInputStream_n.read(get_yx,0,1026);//受信
+//SJ    }catch(Exception e_ni){z_p.err_s="receive/"+z_p.message_s(e_ni);rc=1;break;}
+   w_s=z_p.to_utf8_s(get_yx,1,get_length-1);
+   if(z_p.length(w_s)<15){z_p.err_s="Password error(Length)";rc=-1;break;}//パスワードの長さエラー。
+   String hhmmss_s=z_p.substring3_s(z_p.date_time_s(z_p.date_time_now_s(),0),8,6);//現在時間設定。
+   int x=0;
+   for(x=0;10>x;x++) //秒の誤差を考慮し１０秒前まで判定。
+      if(z_p.e2s_b(z_p.substring3_s(w_s,0,15),z_p.password_n.pwd15_server_name_s(z_p.substring2_s(w_s,15)+hhmmss_s)))break;
+      else  hhmmss_s=z_p.before_one_sec_s(hhmmss_s); //１秒前を設定
+   if(10<=x){z_p.err_s="Password error";rc=-1;break;} //パスワード不一致エラー
+   w_s=z_p.substring2_s(w_s,16); //パスワード分切り捨て。
+   if(!z_p.dot_dot_check_b(w_s)){z_p.err_s="../ found";rc=-1;break;} // "../"が有る場合はエラーとする
+   if(zero_y!=get_yx[0]){z_p.err_s=z_p.substring2_s(w_s,1);rc=-1;break;} //受信先頭文字が0以外はエラー発生。
+   String[] split_sx=(z_p.split_sx(w_s,' ')); //パラメータスペースで分割
+   if(7>z_p.count_sx_i(split_sx)){z_p.err_s=z_p.substring2_s(w_s,1);rc=-1;break;} //パラメータ数７以下はエラー。
+   cmd_s=split_sx[0];path_s=split_sx[1];
+   z_p.lang_system_s=split_sx[3];z_p.test_s=split_sx[4];
+   z_p.system_s=split_sx[5];
+   String work_s=split_sx[6];//VER17
+   if(7<z_p.count_sx_i(split_sx))file_s=split_sx[7]; //各種パラメータ値設定。
+   if(!z_p.e2s_b(cmd_s,"SERVER_BAT"))
+     {//full_file_s=z_p.server_tmp_path_s()+z_p.dir_s+file_s;//TMPパス設定 //VER16.1
+      full_file_s=z_p.get_tmp_path_s(z_p.dir_s,"TIME")+file_s;//TMPパス設定 //VER16.1
+      if(z_p.e2s_b(cmd_s,"SERVER_GET")&&!z_p.e2s_b(path_s,"TMP")) //SERVER_GETでパスがTMP以外はパス名設定。
+         full_file_s=(z_p.starts_with_b(path_s,"SHARE")?z_p.server_i_file_path_s()+z_p.dir_s+path_s:z_p.server_file_path_s() //VER16.1
+         +z_p.dir_s+path_s+"_"+z_p.test_s)+z_p.dir_s+file_s; //VER16.1
+      if('U'==z_p.os_c)full_file_s=z_p.replace_c_s(full_file_s,'\\','/');//OSに合わせてファイル名のセパレータ文字変更。
+      else             full_file_s=z_p.replace_c_s(full_file_s,'/','\\');
+      if(z_p.e2s_b(cmd_s,"SERVER_GET"))
+        {rc=socket_n.read(
+//SP                      Socket_n
+//JJ                      DataInputStream_n,DataOutputStream_n
+                                                              ,full_file_s);break;
+        }//SERVER_GETファイル読み込み送信処理。
+//SJ  try{
+//HP      sw_event=0;Socket_n.write(put_yx);//送信 
+//HP      for(;0==sw_event&&0==sw_error;)z_p.sleep_v(1000);//完了待ち。
+//HP      if(0!=sw_error){rc=1;break;}//エラー有り。
+//SS      Socket_n.Send(put_yx,put_length,SocketFlags.None);
+//JJ      DataOutputStream_n.write(put_yx,0,put_length);
+//SJ     }catch(Exception e_ni){z_p.err_s="Send/"+z_p.message_s(e_ni);rc=1;break;}
+      rc=socket_n.write(
+//SP                    Socket_n
+//JJ                    DataInputStream_n,DataOutputStream_n
+                                                            ,full_file_s);//SERVER_PUT受信ファイル書き込み処理。
+      break;
+     }
+//====( SERVER_BAT )==============================================================
+   for(j=i=0;z_p.length(w_s)>i&&2>j;i++)if(' '==z_p.at_s_c(w_s,i))j++;
+   if(0!=(rc=z_p.server_bat(work_s,path_s+" "+z_p.substring2_s(w_s,i))))rc=-1;
+   break;
+  }//for(;;)
+//=====================( fin )==================================
+if(!(-1!=rc&&!z_p.e3s_b(cmd_s,"SERVER_PUT","SERVER_BAT")))
+  {if(-1==rc)
+    {String put_s="9"+z_p.err_s;
+     put_yx=z_p.to_utf8_yx(put_s);
+//SS put_length=put_yx.Length;
+//JJ put_length=put_yx.length;
+    }
+   try{
+//SS   Socket_n.Send(put_yx,put_length,SocketFlags.None);
+//JJ   DataOutputStream_n.write(put_yx,0,put_length);
+      }
+   catch(Exception e_ni){z_p.err_s="send2/"+z_p.message_s(e_ni);rc=1;}
+  }
+//SS Socket_n.Shutdown(SocketShutdown.Both);
+try{Socket_n.Close();}catch(Exception){}
+if(1==rc&&!z_p.e2s_b(z_p.err_s,""))z_p.srvc_log_file_v(9,z_p.err_s);
+return;
+}
+//HP int sw_error=0,sw_event=0,sw_connect=0;
+//HP String CLOSE_S="The remote host closed the connection";
+//HH private slots:
+//HP void tcp_error_v()
+//HP {z_p.err_s=Socket_n.errorString();
+//HP  sw_error=1;
+//HP }
+//HH private slots:
+//HP void event_v(){sw_event=1;}
+}
+#endif //SRVC||TEST

@@ -1,0 +1,101 @@
+// II_WRITE.SRC read class author nobumichi harasawa
+//#if IMENU||ITIME||IPRINT||IROOT||ISRVC||ISETUP||IPAPER||ICHART||ICHART2 //TEST
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//SS using System.Data.SqlClient;
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.Drawing;
+//SS using System.IO;
+//JJ import java.awt.*;
+//JJ import java.awt.event.*;
+//JJ import java.io.*;
+//JJ import java.math.*;
+//JJ import java.util.*;
+public class ii_write_l
+{
+//COPY $II_DIR
+//COPY $II_READ
+//COPY $II_SQL2
+//COPY $II_URL
+//COPY $II_ZIP
+//COPY *BEGIN
+String record_end_s; 
+readonly String LINUX_RECORD_END_S="\n";
+readonly String WINDOWS_RECORD_END_S="\r\n";
+
+ii_z_l write_z_p;
+public String write_file_s="",write_name_s="";
+//HP QFile            *write_FileStream_n= null ;QTextStream       *StreamWriter_n= null ;
+//SS FileStream        write_FileStream_n= null ;StreamWriter       StreamWriter_n= null ;
+//JJ FileOutputStream  write_FileStream_n= null ;OutputStreamWriter StreamWriter_n= null ;
+//----------------------------------------------
+public ?void? ii_write_l(ii_z_l z_ni){write_z_p=z_ni;}
+public bool write_b(String data_si)
+{if( null ==write_FileStream_n){write_z_p.err_s="not open write";return false;}
+////HP StreamWriter_n.writeString(data_si+record_end_s); 
+//HP *StreamWriter_n << data_si << record_end_s;  
+////HP if(WINDOWS_RECORD_END_S==record_end_s) *StreamWriter_n << '\r';  
+////HP *StreamWriter_n << '\n';  
+//JJ int iz=0;
+//SJ try{
+//SS StreamWriter_n.Write(data_si+record_end_s);
+//JJ data_si+=record_end_s;
+//JJ for(iz=0;iz<data_si.length();iz++)StreamWriter_n.write((int )data_si.charAt(iz));
+//SJ   } 
+//SJ catch(Exception e_ni)
+//SJ   {write_z_p.err_s=write_z_p.message_s(e_ni);write_close_v();return false;}
+return true;
+}
+//----------------------------------------------
+public bool open_b(String file_si,String append_si,String encoding_si)
+{String[] sx=write_z_p.split_sx(encoding_si,',');//レコード区切り設定分分割
+String in_end_s="";
+if(1<write_z_p.count_sx_i(sx)){encoding_si=write_z_p.trim_s(sx[0]);write_z_p.trim_s(write_z_p.upper_s(in_end_s=sx[1]));}//レコード区切り有りは設定。
+if( null !=write_FileStream_n){write_z_p.err_s="already open write";return false;}
+record_end_s=(((write_z_p.e2s_b(in_end_s,"")&&'W'!=write_z_p.os_c)||write_z_p.e2s_b(in_end_s,"U"))?LINUX_RECORD_END_S:WINDOWS_RECORD_END_S);
+write_file_s=file_si;
+//HP write_FileStream_n=new QFile(write_file_s);
+//HP if(!write_FileStream_n.open(QIODevice::WriteOnly
+//HP    |(write_z_p.e2s_b(append_si,"ADD")?QIODevice::Append:QIODevice::NotOpen)|(write_z_p.e2s_b(append_si,"OT")?QIODevice::Truncate:QIODevice::NotOpen)))
+//HP   {write_z_p.err_s="Open Write error";write_close_v();return false;} 
+//HP  StreamWriter_n=new QTextStream(write_FileStream_n);
+//HP  String s=write_z_p.encode_s(encoding_si);
+////HP  StreamWriter_n.setCodec(QTextCodec::codecForName(s.toUtf8()));
+/////HP  StreamWriter_n.setCodec(s.toUtf8()); //VER36.1
+//HP    StreamWriter_n.setEncoding(write_z_p.e2s_b(s,"UTF-8")?QStringConverter::Utf8:QStringConverter::System);//VER36.1
+
+//SS System.Text.Encoding encoding_n=write_z_p.encoding_n(encoding_si);//VER24.1
+//SS if( null ==encoding_n){write_z_p.err_s="Bad Encoding("+encoding_si+")";return false;}
+//SS try{write_FileStream_n=File.Open(write_file_s
+//SS     ,(write_z_p.e2s_b(append_si,"ADD")?FileMode.Append:write_z_p.e2s_b(append_si,"OT")?FileMode.Create:FileMode.CreateNew)
+//SS     ,FileAccess.Write,FileShare.Read);
+//SS     if(write_z_p.e2s_b(encoding_si,"")||write_z_p.e2s_b(encoding_si,"/")&&('W'!=write_z_p.os_c))StreamWriter_n=new StreamWriter(write_FileStream_n);
+//SS     else                                                                                        StreamWriter_n=new StreamWriter(write_FileStream_n,encoding_n);
+//SS    }
+//JJ try{if(write_z_p.e2s_b(append_si,""))
+//JJ       {File f_n=new File(write_file_s);
+//JJ        if(f_n.exists()){write_z_p.err_s="found file("+write_file_s+")";return false;}//ファイルが有る場合はエラーとする。
+//JJ       }
+//JJ     write_FileStream_n=new FileOutputStream(write_file_s,(write_z_p.e2s_b(append_si,"ADD")?true:false));
+//JJ     if(write_z_p.e2s_b(encoding_si,"/"))StreamWriter_n=
+//JJ          new OutputStreamWriter(write_FileStream_n);
+//JJ     else StreamWriter_n=
+//JJ          new OutputStreamWriter(write_FileStream_n,(write_z_p.e2s_b(encoding_si,"")?"UTF-8":encoding_si));
+//JJ    }
+//SJ catch(Exception e_ni){write_z_p.err_s=write_z_p.message_s(e_ni);write_close_v();return false;}
+return true;
+}
+//----------------------------------------------
+public void write_close_v()
+{
+//SJ try{if( null !=StreamWriter_n)StreamWriter_n.Close();}catch(Exception){}
+try{if( null !=write_FileStream_n)write_FileStream_n.Close();}catch(Exception){}
+//HP if( null !=StreamWriter_n)delete StreamWriter_n;
+//HP if( null !=write_FileStream_n)  delete write_FileStream_n;
+StreamWriter_n= null ;
+write_FileStream_n= null ;
+}
+//COPY *END
+}
+//#endif

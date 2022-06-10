@@ -1,0 +1,24 @@
+D:\HARASAWA>mkdir i-language
+D:\HARASAWA>cd i-language
+D:\HARASAWA\i-language>echo "# i-language" >> README.md
+D:\HARASAWA\i-language>git init
+Initialized empty Git repository in D:/HARASAWA/i-language/.git/
+D:\HARASAWA\i-language>git add README.md
+D:\HARASAWA\i-language>git config --global user.email "nobumichiharasawa@gmail.com"
+D:\HARASAWA\i-language>git config --global user.name "i-language"
+D:\HARASAWA\i-language>git commit -m "first commit"
+[master (root-commit) c717f70] first commit
+ 1 file changed, 1 insertion(+)
+ create mode 100644 README.md
+D:\HARASAWA\i-language>git branch -M main
+D:\HARASAWA\i-language>git remote add origin https://github.com/i-language/i-language.git
+D:\HARASAWA\i-language>git push -u origin main
+info: please complete authentication in your browser...
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 233 bytes | 233.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0
+To https://github.com/i-language/i-language.git
+ * [new branch]      main -> main
+branch 'main' set up to track 'origin/main'.
+D:\HARASAWA\i-language>

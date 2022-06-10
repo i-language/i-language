@@ -1,0 +1,1659 @@
+#if ICHART
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//PP #include "ichart.h"
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.Drawing;
+//SS using System.IO;
+//SS using System.Windows.Forms;
+//JJ import java.awt.*;
+//JJ import java.awt.event.*;
+//JJ import java.io.*;
+//JJ import java.math.*;
+//JJ import java.util.*;
+//SS using System.Windows.Forms.DataVisualization.Charting;
+public class ichart_l
+//HH :public
+//HH  QMainWindow
+//SS :Form
+{
+//SS static int width=660,height=442,sw_err=0,sereis_count=-1,ERR=5,height_max,width_max;
+//SS String cmd_org_s="",class_cmd_s="",cmd_s,class_s="",data_s="",data_enum_s="";
+//SS static ii_z_l z_n;static ii_z_l z_p;static int help=0;
+//SS static ii_write_l write_n;
+//SS static bool rc_b=true;
+//SS ii_read_l read_n;static ii_chart_l ii_chart_n;
+//SS static Chart chart_n;
+//SS [STAThreadAttribute]
+//HP int main(int arg_i,char** arg_cci)
+//SJ public static void Main(String[] arg_sxi)//プログラムがここから開始
+{
+z_n=new ii_z_l("ICHART");z_p=z_n; //各種関数用。
+List<String> s_arg_a=new List<String>(); 
+//HP for(int i=1;i<arg_i;i++)s_arg_a.push_back(QString::fromLocal8Bit(arg_cci[i]));
+//SJ for(int i=0;i<z_p.count_sx_i(arg_sxi);i++)z_p.add_s(s_arg_a,arg_sxi[i]);
+if(z_p.version_n.version_b(s_arg_a))return;//バージョン判定はファイル作成し終了。
+if(2==arg_sxi.Length&&z_p.e2s_b(arg_sxi[0],"SETTING")&&z_p.e2s_b(arg_sxi[1],"SETTING")||0==arg_sxi.Length)
+  {if(0==arg_sxi.Length)help=1;//ヘルプ指示
+   if(!help_setting_b())
+      {MessageBox.Show(z_p.err_s
+       ,"ICHART",MessageBoxButtons.OKCancel,MessageBoxIcon.Error
+       ,MessageBoxDefaultButton.Button2);
+      }//設定情報出力
+   return;
+  }
+Application.Run(new ichart_l(arg_sxi));//画面を出し処理開始。
+}
+public ichart_l(String[] arg_sxi)
+{
+popup_menu_v();//ポップアップメニュー設定
+try
+{
+                     height_max=  //デスクトップの縦幅。
+                SystemInformation.PrimaryMonitorMaximizedWindowSize.Height
+//JJ                 (int )GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getHeight()
+                     -50;
+                     width_max=  //デスクトップの横幅。
+                SystemInformation.PrimaryMonitorMaximizedWindowSize.Width
+//JJ                 (int )GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getWidth()
+                     -50;
+read_n=new ii_read_l(z_n);
+chart_n=new Chart();
+((System.ComponentModel.ISupportInitialize)(chart_n)).BeginInit();
+SuspendLayout();
+chart_n.ChartAreas.Add(new ChartArea("CHART_AREA"));//chart_area_n=chart_n.ChartAreas[0];//グラフ用。
+chart_n.ChartAreas[0].AxisX.Interval=1;//X軸を全て表示する。
+chart_n.ChartAreas[0].AxisX.Title="X.TITLE";
+chart_n.ChartAreas[0].AxisX2.Title="X2.TITLE";
+chart_n.ChartAreas[0].AxisY.Title="Y.TITLE";
+chart_n.ChartAreas[0].AxisY2.Title="Y2.TITLE";
+chart_n.Legends.Add(new Legend("LEGEND"));//データ用
+chart_n.Titles.Add(new Title("TITLE"));//タイトル表示用  //VER16.1
+this.Text=chart_n.Titles[0].Text="T.TEXT";
+chart_n.TabIndex=0;
+for(int i=0;arg_sxi.Length>i;i++)//argv分処理
+  {if(!read_n.open_b(z_p.get_tmp_file_s(arg_sxi[i]),"")){sw_err=ERR;break;}
+   for(;0==read_n.read();)//ファイル読み込み。
+     {if(0==i)//定義ファイル。
+        {read_n.read_data_s=z_p.trim_s(read_n.read_data_s); //前後の空白削除
+         if(z_p.starts_with_b(read_n.read_data_s,"*")||z_p.starts_with_b(read_n.read_data_s,"//"))continue;//コメントは無視。
+         int eq=z_p.index2s_i(read_n.read_data_s,"=");//=で分割(cmd_org_s)=(data_s)
+         int tab=z_p.index2c_i(read_n.read_data_s,'\t');//タブ確認
+         if(-1!=tab&&tab<eq)eq=-1;//タブ以降の=は無視。
+         cmd_org_s=(1>eq?"":z_p.trim_s(z_p.substring3_s(read_n.read_data_s,0,eq))); 
+         String[] sx=z_p.split_sx(z_p.upper_s(z_p.replace_s_s(z_p.trim_s(z_p.substring2_s(read_n.read_data_s,eq+1)),"_","")),';');//アンダーバーは無視し大文字化セミコロン以降は無視。
+         data_s=double_quote_cut_s(sx[0]);//２重引用符は無視(セミコロンより前を設定)。
+         data_enum_s=dot_s(data_s);//ドット区切りの最後のデータ。
+         z_p.err_s="("+data_s+")";//エラーコメント設定。
+         class_s="";class_cmd_s="";
+         if(0<eq)
+           {class_cmd_s=z_p.upper_s(z_p.replace_s_s(z_p.trim_s(cmd_org_s),"_",""));//アンダーバーは無視し大文字化。
+            class_cmd_v(class_cmd_s);//class_sとcmd_sを設定。
+            if(z_p.e2s_b(cmd_s,""))cmd_s="?";//コマンド無はエラー
+           }
+         if(z_p.e2s_b(data_s,""))continue; //空データは無視。
+         switch(class_s)
+           {
+            case "CHART":
+  //(消さない事)  C  全体(Chartクラス)に対する設定をします。
+            case "C"        :ni_chart_v(chart_n);break;                      //Chart関連処理。
+            case "CHARTAREA":
+  //(消さない事)  A エリア(ChartAtreクラス）に対する設定をします。
+            case "A"        :ni_chart_area_v(chart_n.ChartAreas[0]);break;   //ChartArea関連処理。
+            case "LEGEND"   :
+  //(消さない事)  L 凡例(Legendクラス）に対する設定をします。
+            case "L"        :ni_legend_v(chart_n.Legends[0]);break;           //Legend関連処理。
+            case "TITLE":
+  //(消さない事) T  タイトル(Titleクラス）に対する設定をします。
+            case "T":ni_title_v(chart_n.Titles[0]);break;            //Title関連処理。
+  //((消さない事) X X軸(Axisクラス）に対する設定をします。
+            case "X"        :ni_axis_v(chart_n.ChartAreas[0].AxisX);break;  //X軸関連処理。
+  //(消さない事)  X2 X2軸(Axisクラス）に対する設定をします。
+            case "X2"       :ni_axis_v(chart_n.ChartAreas[0].AxisX2);break; //X2軸関連処理。
+  //(消さない事)  Y Y軸(Axisクラス）に対する設定をします。
+            case "Y"        :ni_axis_v(chart_n.ChartAreas[0].AxisY);break;  //Y軸関連処理。
+  //(消さない事)   Y2 Y2軸(Axisクラス）に対する設定をします。
+            case "Y2"       :ni_axis_v(chart_n.ChartAreas[0].AxisY2);break; //Y2軸関連処理。
+  //(消さない事)  "" グラフ(Sereiseクラス）に対する設定をします。(ChartTypeが開始となります) 
+  /*(消さない事)   case ""       :ni_() グラフ関連処理。（HELPとSETTING用です、消さないで下さい。）*/
+            default:class_s="";cmd_s=class_cmd_s;break;//以外はcmd_sを戻して下で処理。
+           } 
+         if(ERR==sw_err)break;
+         if(!z_p.e2s_b(class_s,""))continue;//上で処理済。
+         if(z_p.e2s_b(cmd_s,"CHARTTYPE"))//新しいグラフ設定。
+           {chart_n.Series.Add(new Series());sereis_count++;  //Sereiesクラス追加。
+            chart_n.Series[sereis_count].ChartType=(SeriesChartType)Enum.Parse(typeof(SeriesChartType),data_enum_s,true);//ChartTypeを設定。
+            chart_n.Series[sereis_count].IsValueShownAsLabel=true;//ラベルにデータ ポイントの値を表
+            chart_n.Series[sereis_count].LegendText="LEGEND_TEXT";
+            continue;//処理済なのでcontinue
+           }
+         if(-1==sereis_count){z_p.err_s="ChartType= not found(before)";sw_err=ERR;break;}//CharType既に有り判定。
+         ni_series_v(chart_n.Series[sereis_count]);  //Sereis関連処理。
+         if(ERR==sw_err)break;
+        }
+    else // データ処理
+    if(sereis_count>=(i-1))//ChartType設定数以内は処理。
+      {DataPoint data_point_n=new DataPoint(); //グラフデータ設定
+       String[] sx=z_p.split_sx(read_n.read_data_s,'\t');//タブ区切り
+       double o=z_p.to_double_o(sx[0],'-',0,0);//X値設定。（１個の場合はY値）。
+       bool return_b=z_p.return_b;
+       if(1==sx.Length)data_point_n.SetValueY(to_double_o(sx[0]));//Yに設定。
+       else
+         {double[] ox=new double[sx.Length-1];
+          for(int j=1;sx.Length>j;j++)ox[j-1]=to_double_o(sx[j]);
+          if(return_b)data_point_n.XValue=o;           //X(double)に設定
+          else        data_point_n.SetValueXY(sx[0],o);//X(String)に設定
+          data_point_n.YValues=ox;                     //Yに設定
+         }
+         data_point_n.LegendText=sx[0];//凡例を設定(X)。　　　　　     
+         chart_n.Series[i-1].Points.Add(data_point_n);data_point_n= null ;//PointsにAdd
+      }
+     } 
+   read_n.read_close_v(); 
+   if(ERR==sw_err)break;
+  }
+/////////////////////////////////////////////////////////////////////////////////////////
+//chart_n.Location=new System.Drawing.Point(width/2, height/2);//グラフ位置設定
+chart_n.Size=new System.Drawing.Size(width,height);//グラフサイズ設定
+ClientSize=new System.Drawing.Size(width,height);//画面サイズ設定
+Controls.Add(chart_n);//グラフを画面に追加。
+Name="ICHART";
+((System.ComponentModel.ISupportInitialize)(chart_n)).EndInit();
+ResumeLayout(false);
+SetDesktopLocation(width_max-width,height_max-height);//右下に移動
+}
+catch(Exception e_ni){z_p.err_s=e_ni.Message+z_p.new_line_s()+z_p.err_s;sw_err=ERR;}
+if(ERR==sw_err)
+  {MessageBox.Show(z_p.err_s+z_p.new_line_s()+read_n.read_data_s
+  ,"ICHART",MessageBoxButtons.OKCancel,MessageBoxIcon.Error
+  ,MessageBoxDefaultButton.Button2);
+ // try{Close();}catch(Exception){}
+  }
+}
+//////////////////////////////////////////////////////
+///( ni_chart_v,C Chart )//////////////////////////////////////////////////
+void ni_chart_v(Chart ni) 
+{class_cmd_v(cmd_s);//class_sとcmd_sを設定。
+switch (class_s)
+   {
+//    case "HEIGHT":height=to_int();
+//                  if(height>height_max)height=height_max; //デスクトップの大きさ以下に変更。
+//                  break;   
+//    case "WIDTH":width=to_int();
+//                 if(width>width_max)width=width_max;   //デスクトップの大きさ以下に変更。
+//                 break;
+  //△// "AccessibilityObject": コントロールに割り当てられた AccessibleObject を取得します。 (Control から継承されます。) 
+  //     "AccessibleDefaultActionDescription": アクセシビリティ クライアント アプリケーションで使用されるコントロールの既定のアクションの説明を取得または設定します。 (Control から継承されます。) 
+    case "ACCESSIBLEDEFAULTACTIONDESCRIPTION":ni.AccessibleDefaultActionDescription=data_s;break;
+  //     "AccessibleDescription": ユーザー補助クライアント アプリケーションによって使用される、コントロールの説明を取得または設定します。 (Control から継承されます。) 
+    case "ACCESSIBLEDESCRIPTION":ni.AccessibleDescription=data_s;break;
+  //     "AccessibleName": ユーザー補助クライアント アプリケーションによって使用されるコントロールの名前を取得または設定します。 (Control から継承されます。) 
+    case "ACCESSIBLENAME":ni.AccessibleName=data_s;break;
+  //     "AccessibleRole": コントロールのアクセスできる役割を取得または設定します。 (Control から継承されます。) 
+    case "ACCESSIBLEROLE":ni.AccessibleRole=(AccessibleRole)Enum.Parse(typeof(AccessibleRole),data_enum_s,true);break; 
+  //     "AllowDrop": ユーザーがコントロールにドラッグしたデータを、そのコントロールが受け入れることができるかどうかを示す値を取得または設定します。 (Control から継承されます。) 
+    case "ALLOWDROP":ni.AllowDrop=bool_b();break;
+  ////   "Anchor": コントロールがバインドされるコンテナーの端を取得または設定し、親のサイズ変更時に、コントロールのサイズがどのように変化するかを決定します。 (Control から継承されます。) 
+  ////   "Annotations": グラフの注釈を格納するコレクションを取得または設定します。 
+  //     "AntiAliasing": テキストおよびグラフィックスを描画するときにアンチエイリアシングを使用するかどうかを決定する値を取得または設定します。 
+    case "ANTIALIASING":ni.AntiAliasing=(AntiAliasingStyles)Enum.Parse(typeof(AntiAliasingStyles),data_enum_s,true);break; 
+  //     "AutoScrollOffset": ScrollControlIntoView  でのこのコントロールのスクロール先を取得または設定します。 (Control から継承されます。) 
+    case "AUTOSCROLLOFFSET":ni.AutoScrollOffset=point_n();break; 
+  //△// "AutoSize": インフラストラクチャ。このクラスでは、このプロパティは使用されません。 (Control から継承されます。) 
+  //     "BackColor": Chart  オブジェクトの背景色を取得または設定します。 (Control.BackColor をオーバーライドします。) 
+    case "BACKCOLOR":ni.BackColor=color_n();break; 
+  //     "BackGradientStyle": Chart  コントロールの背景グラデーションの向きを取得または設定します。 グラデーションが使用されているかどうかも判断します。  
+    case "BACKGRADIENTSTYLE":ni.BackGradientStyle=(GradientStyle)Enum.Parse(typeof(GradientStyle),data_enum_s,true);break; 
+  //△// "BackgroundImage": BackgroundImage  プロパティは使用されません。 代わりに、BackImage プロパティを使用してください。  (Control.BackgroundImage をオーバーライドします。) 
+  //     "BackgroundImageLayout": ImageLayout  列挙体で定義される背景イメージのレイアウトを取得または設定します。 (Control から継承されます。) 
+    case "BACKGROUNDIMAGELAYOUT":ni.BackgroundImageLayout=(ImageLayout)Enum.Parse(typeof(ImageLayout),data_enum_s,true);break; 
+  //     "BackHatchStyle": Chart  コントロールのハッチング スタイルを取得または設定します。 
+    case "BACKHATCHSTYLE":ni.BackHatchStyle=(ChartHatchStyle)Enum.Parse(typeof(ChartHatchStyle),data_enum_s,true);break; 
+  //     "BackImage": Chart  コントロールの背景イメージを取得または設定します。 
+    case "BACKIMAGE":ni.BackImage=data_s;break;
+  //     "BackImageAlignment": Unscaled  描画モードに使用される背景イメージの配置を取得または設定します。 
+    case "BACKIMAGEALIGNMENT":ni.BackImageAlignment=(ChartImageAlignmentStyle)Enum.Parse(typeof(ChartImageAlignmentStyle),data_enum_s,true);break; 
+  //     "BackImageTransparentColor": 透明色として表示される Chart コントロールの色を取得または設定します。 
+    case "BACKIMAGETRANSPARENTCOLOR":ni.BackImageTransparentColor=color_n();break; 
+  //     "BackImageWrapMode Chart":  コントロールの背景イメージの描画モードを取得または設定します。 
+    case "BACKIMAGEWRAPMODE":ni.BackImageWrapMode=(ChartImageWrapMode)Enum.Parse(typeof(ChartImageWrapMode),data_enum_s,true);break; 
+  //     "BackSecondaryColor": グラフの背景の 2 番目の色を取得または設定します。 
+    case "BACKSECONDARYCOLOR":ni.BackSecondaryColor=color_n();break; 
+  ////   "BindingContext": コントロールの BindingContext を取得または設定します。 (Control から継承されます。) 
+  //     "BorderColor": インフラストラクチャ。グラフの境界線の色を取得または設定します。 
+    case "BORDERCOLOR":ni.BorderColor=color_n();break; 
+  //     "BorderDashStyle": 境界線のスタイルを取得または設定します。 
+    case "BORDERDASHSTYLE":ni.BorderDashStyle=(ChartDashStyle)Enum.Parse(typeof(ChartDashStyle),data_enum_s,true);break; 
+  //     "BorderlineColor": 境界線の色を取得または設定します。 
+    case "BORDERLINECOLOR":ni.BorderlineColor=color_n();break; 
+  //     "BorderlineDashStyle": 境界線のスタイルを取得または設定します。 
+    case "BORDERLINEDASHSTYLE":ni.BorderlineDashStyle=(ChartDashStyle)Enum.Parse(typeof(ChartDashStyle),data_enum_s,true);break; 
+  //     "BorderlineWidth": 境界線の幅を取得または設定します。 
+    case "BORDERLINEWIDTH":ni.BorderlineWidth=to_int();break; 
+  //     "BorderSkin": Chart  コントロールに境界線スキン機能を提供する BorderSkin オブジェクトを取得または設定します。 
+    case "BORDERSKIN":ni_border_skin_v(ni.BorderSkin);break;
+  //     "BorderWidth": インフラストラクチャ。グラフの境界線の幅を取得または設定します。 
+    case "BORDERWIDTH":ni.BorderWidth=to_int();break; 
+  //△// "Bottom": コントロールの下端とコンテナーのクライアント領域の上端の間の距離をピクセルで取得します。 (Control から継承されます。) 
+  //     "Bounds": クライアント以外の要素を含むコントロールの、親コントロールに対する相対的なサイズおよび位置をピクセル単位で取得または設定します。 (Control から継承されます。) 
+  //×//case "BOUNDS":ni.Bounds=to_int();break; 
+  //△// "BuildNumber": インフラストラクチャ。 Chart  コントロールのビルド番号を取得します。 
+  //△// "CanEnableIme": ImeMode  プロパティをアクティブな値に設定して、IME サポートを有効にできるかどうかを示す値を取得します。 (Control から継承されます。) 
+  //△// "CanFocus": コントロールがフォーカスを受け取ることができるかどうかを示す値を取得します。 (Control から継承されます。) 
+  //△// "CanRaiseEvents": コントロールでイベントが発生するかどうかを決定します。 (Control から継承されます。) 
+  //△// "CanSelect": コントロールを選択できるかどうかを示す値を取得します。 (Control から継承されます。) 
+  //     "Capture": コントロールがマウスをキャプチャしたかどうかを示す値を取得または設定します。 (Control から継承されます。) 
+    case "CAPTURE":ni.Capture=bool_b();break; 
+  //△// "CausesValidation": そのコントロールが原因で、フォーカスを受け取ると検証が必要なコントロールに対して、検証が実行されるかどうかを示す値を取得または設定します。 (Control から継承されます。) 
+  //△// "ChartAreas": ChartArea  オブジェクトを格納するために使用される読み取り専用の ChartAreaCollection オブジェクトを取得します。 
+  //△// "ClientRectangle": コントロールのクライアント領域を表す四角形を取得します。 (Control から継承されます。) 
+  //△// "ClientSize": コントロールのクライアント領域の高さと幅を取得または設定します。 (Control から継承されます。) 
+  //△// "CompanyName": コントロールを含んでいるアプリケーションの会社または作成者の名前を取得します。 (Control から継承されます。) 
+  //△// "Container": Component  を格納している IContainer を取得します。 (Component から継承されます。) 
+  //△// "ContainsFocus": コントロール、またはその子コントロールの 1 つに、現在入力フォーカスがあるかどうかを示す値を取得します。 (Control から継承されます。) 
+  //△// "ContextMenu": コントロールに関連付けられたショートカット メニューを取得または設定します。 (Control から継承されます。) 
+  //△// "ContextMenuStrip": このコントロールに関連付けられている ContextMenuStrip を取得または設定します。 (Control から継承されます。) 
+  //△// "Controls": コントロール内に格納されているコントロールのコレクションを取得します。 (Control から継承されます。) 
+  //△// "Created": コントロールが作成されているかどうかを示す値を取得します。 (Control から継承されます。) 
+  //△// "CreateParams": コントロール ハンドルが作成されるときに必要な作成パラメーターを取得します。 (Control から継承されます。) 
+  //△// "Cursor": マウス ポインターがコントロールの上にあるときに表示されるカーソルを取得または設定します。 (Control から継承されます。) 
+  //△// "DataBindings": コントロールのデータ連結を取得します。 (Control から継承されます。) 
+  //△// "DataManipulator": データを処理するメソッドおよびプロパティを提供する DataManipulator オブジェクトを取得します。 
+  //△// "DataSource Chart":  オブジェクトのデータ ソースを取得または設定します。 
+  //△// "DefaultCursor": コントロールの既定のカーソルを取得または設定します。 (Control から継承されます。) 
+  //△// "DefaultImeMode": コントロールがサポートしている既定の IME (Input Method Editor) モードを取得します。 (Control から継承されます。) 
+  //△// "DefaultMargin": コントロール間に既定で指定されている空白をピクセル単位で取得します。 (Control から継承されます。) 
+  //△// "DefaultMaximumSize": コントロールの既定の最大サイズとして指定されている長さおよび高さをピクセル単位で取得します。 (Control から継承されます。) 
+  //△// "DefaultMinimumSize": コントロールの既定の最小サイズとして指定されている長さおよび高さをピクセル単位で取得します。 (Control から継承されます。) 
+  //△// "DefaultPadding": コントロールの内容の内部間隔をピクセル単位で取得します。 (Control から継承されます。) 
+  //△// "DefaultSize": 既定のコントロール サイズを取得します。 (Control.DefaultSize をオーバーライドします。) 
+  //△// "DesignMode": Component  が現在デザイン モードかどうかを示す値を取得します。 (Component から継承されます。) 
+  //△// "DisplayRectangle": コントロールの表示領域を表す四角形を取得します。 (Control から継承されます。) 
+  //△// "Disposing": 基本 Control クラスが破棄処理中かどうかを示す値を取得します。 (Control から継承されます。) 
+  //     "Dock": コントロールの境界のうち、親コントロールにドッキングする境界を取得または設定します。また、コントロールのサイズが親コントロール内でどのように変化するかを決定します。 (Control から継承されます。) 
+    case "DOCK":ni.Dock=(DockStyle)Enum.Parse(typeof(DockStyle),data_enum_s,true);break; 
+  //     "DoubleBuffered": ちらつきを軽減または回避するために、2 次バッファーを使用してコントロールの表面を再描画するかどうかを示す値を取得または設定します。 (Control から継承されます。) 
+  //×//case "DOUBLEBUFFERED":ni.DoubleBuffered=bool_b();break; 
+  //△// "Enabled": コントロールがユーザーとの対話に応答できるかどうかを示す値を取得または設定します。 (Control から継承されます。) 
+  //△// "Events": Component  に結び付けられているイベント ハンドラーのリストを取得します。 (Component から継承されます。) 
+  //△// "Focused": コントロールに入力フォーカスがあるかどうかを示す値を取得します。 (Control から継承されます。) 
+  //△// "Font": インフラストラクチャ。コントロールのフォント プロパティを取得します。 
+    case "FONT":ni.Font=font_n();break; 
+  //     "FontHeight": コントロールのフォントの高さを取得または設定します。 (Control から継承されます。) 
+  //×//case "FONTHEIGHT":ni.FontHeight=to_int();break; 
+  //     "ForeColor": Chart  コントロールのテキストの色を取得または設定します。 (Control.ForeColor をオーバーライドします。) 
+    case "FORECOLOR":ni.ForeColor=color_n();break; 
+  //△// "Handle": コントロールのバインド先のウィンドウ ハンドルを取得します。 (Control から継承されます。) 
+  //△// "HasChildren": コントロールに 1 つ以上の子コントロールが格納されているかどうかを示す値を取得します。 (Control から継承されます。) 
+  //     "Height": コントロールの高さを取得または設定します。 (Control から継承されます。) 
+    case "HEIGHT":ni.Height=to_int();
+                  height=to_int();
+                  if(height>height_max)ni.Height=height=height_max; //デスクトップの大きさ以下に変更。
+                  break; 
+  //△// "Images": グラフの NamedImage オブジェクトを格納する NamedImagesCollection オブジェクトを取得します。 
+  //△// "ImeMode": コントロールの IME (Input Method Editor) モードを取得または設定します。 (Control から継承されます。) 
+  //△// "ImeModeBase": コントロールの IME モードを取得または設定します。 (Control から継承されます。) 
+  //△// "InvokeRequired": 呼び出し元がコントロールの作成されたスレッドと異なるスレッド上にあるため、コントロールに対してメソッドの呼び出しを実行するときに、呼び出し元で invoke メソッドを呼び出す必要があるかどうかを示す値を取得します。 (Control から継承されます。) 
+  //△// "IsAccessible": コントロールがユーザー補助アプリケーションに表示されるかどうかを示す値を取得または設定します。 (Control から継承されます。) 
+  //△// "IsDisposed": コントロールが破棄されているかどうかを示す値を取得します。 (Control から継承されます。) 
+  //△// "IsHandleCreated": コントロールにハンドルが関連付けられているかどうかを示す値を取得します。 (Control から継承されます。) 
+  //△// "IsMirrored": コントロールがミラー化されるかどうかを示す値を取得します。 (Control から継承されます。) 
+  //     "IsSoftShadows": 影の描画時に滑らかなグラデーションを適用するかどうかを示すフラグを取得または設定します。 
+    case "ISSOFTSHADOWS":ni.IsSoftShadows=bool_b();break; 
+  //△// "LayoutEngine": コントロールのレイアウト エンジンのキャッシュ インスタンスを取得します。 (Control から継承されます。) 
+  //     "Left": コントロールの左端とコンテナーのクライアント領域の左端の間の距離をピクセルで取得または設定します。 (Control から継承されます。) 
+    case "LEFT":ni.Left=to_int();break; 
+  //△// "Legends": Chart  コントロールによって使用されるすべての Legend オブジェクトを格納する LegendCollection を取得または設定します。 
+  //     "Location": コンテナーの左上隅に対する相対座標として、コントロールの左上隅の座標を取得または設定します。 (Control から継承されます。) 
+    case "LOCATION":ni.Location=point_n();break; 
+  //△// "Margin": コントロール間の空白を取得または設定します。 (Control から継承されます。) 
+  //     "MaximumSize": GetPreferredSize  が指定できる上限のサイズを取得または設定します。 (Control から継承されます。) 
+  //×//    case "MAXIMUMSIZE":ni.MaximumSize=size_n;break; 
+  //     "MinimumSize": GetPreferredSize  が指定できる下限のサイズを取得または設定します。 (Control から継承されます。) 
+  //×//    case "MINIMUMSIZE":ni.MinimumSize=size_n;break; 
+  //     "Name": コントロールの名前を取得または設定します。 (Control から継承されます。) 
+    case "NAME":ni.Name=data_s;break; 
+  //△// "Padding": コントロールの埋め込みを取得または設定します。 (Control から継承されます。) 
+  //     "Palette": Chart  コントロールのパレットを取得または設定します。
+    case "PALETTE":ni.Palette=(ChartColorPalette)Enum.Parse(typeof(ChartColorPalette),data_enum_s,true);break; 
+  //△// "PaletteCustomColors": カスタム パレット カラーの配列を取得または設定します。 
+  //△// "Parent": コントロールの親コンテナーを取得または設定します。 (Control から継承されます。) 
+  //△// "PreferredSize": コントロールが適合する四角形領域のサイズを取得します。 (Control から継承されます。) 
+  //△// "Printing": グラフの印刷に使用される読み取り専用の PrintingManager オブジェクトを取得します。 
+  //△// "ProductName": コントロールを格納しているアセンブリの製品名を取得します。 (Control から継承されます。) 
+  //△// "ProductVersion": コントロールを格納しているアセンブリのバージョンを取得します。 (Control から継承されます。) 
+  //△// "RecreatingHandle": コントロールが現在そのコントロールのハンドルを再作成中かどうかを示す値を取得します。 (Control から継承されます。) 
+  //△// "Region": コントロールに関連付けられたウィンドウ領域を取得または設定します。 (Control から継承されます。) 
+  //     "RenderingDpiX": インフラストラクチャ。 Chart  レンダラーの水平方向の解像度を取得または設定します。 
+    case "RENDERINGDPIX":ni.RenderingDpiX=to_double_o();break; 
+  //     "RenderingDpiY": Chart  レンダラーの垂直方向の解像度を取得または設定します。 
+    case "RENDERINGDPIY":ni.RenderingDpiY=to_double_o();break; 
+  //△// "RenderRightToLeft": 互換性のために残されています。このプロパティは使用されなくなりました。 (Control から継承されます。) 
+  //     "ResizeRedraw": サイズが変更されたときに、コントロールがコントロール自体を再描画するかどうかを示す値を取得または設定します。 (Control から継承されます。) 
+  //×//    case "RESIZEREDRAW":ni.ResizeRedraw=bool_b();break; 
+  //△// "Right": コントロールの右端とコンテナーのクライアント領域の左端の間の距離をピクセルで取得します。 (Control から継承されます。) 
+  //     "RightToLeft": コントロールの要素が、右から左へ表示されるフォントを使用するロケールをサポートするように配置されているかどうかを示す値を取得または設定します。 (Control から継承されます。) 
+    case "RIGHTTOLEFT":ni.RightToLeft=(RightToLeft)Enum.Parse(typeof(RightToLeft),data_enum_s,true);break; 
+  //△// "ScaleChildren": 子コントロールのスケーリングを決定する値を取得します。 (Control から継承されます。) 
+  //△// "Serializer": グラフのシリアル化に使用する ChartSerializer オブジェクトを取得します。 
+  //△// "Series Series":  オブジェクトを格納する SeriesCollection オブジェクトを取得します。 
+  //△// "ShowFocusCues": コントロールがフォーカスを示す四角形を表示する必要があるかどうかを示す値を取得します。 (Control から継承されます。) 
+  //△// "ShowKeyboardCues ユーザー インターフェイスがキーボード アクセラレータを表示または非表示にする適切な状態かどうかを示す値を取得します。 (Control から継承されます。) 
+  //△// "Site": コントロールのサイトを取得または設定します。 (Control から継承されます。) 
+  //     "Size": Chart  コントロールのサイズを取得または設定します。 
+    case "SIZE":ni.Size=size_n();break; 
+  //     "SuppressExceptions": 致命的でない例外を抑制するかどうかを指定するフラグを取得または設定します。 
+    case "SUPPRESSEXCEPTIONS":ni.SuppressExceptions=bool_b();break; 
+  //△// "TabIndex": コンテナー内のコントロールのタブ オーダーを取得または設定します。 (Control から継承されます。) 
+  //△// "TabStop": ユーザーが Tab キーで、このコントロールにフォーカスを移すことができるかどうかを示す値を取得または設定します。 (Control から継承されます。) 
+  //□// "Tag": コントロールに関するデータを格納するオブジェクトを取得または設定します。 (Control から継承されます。) 
+  //     "Text": このコントロールに関連付けられているテキストを取得または設定します。 (Control から継承されます。) 
+    case "TEXT":ni.Text=data_s;break; 
+  //     "TextAntiAliasingQuality": アンチエイリアシングをテキストに適用するときに使用する TextAntiAliasingQuality の種類を取得または設定します。
+    case "TEXTANTIALIASINGQUALITY":ni.TextAntiAliasingQuality=(TextAntiAliasingQuality)Enum.Parse(typeof(TextAntiAliasingQuality),data_enum_s,true);break; 
+  //〇// "Titles Chart":  コントロールによって使用されるすべての Title オブジェクトを格納するために使用される TitleCollection オブジェクトを取得または設定します。 
+  //     "Top コントロールの上端とコンテナーのクライアント領域の上端の間の距離をピクセル単位で取得または設定します。 (Control から継承されます。) 
+    case "TOP":ni.Top=to_int();break; 
+  //△// "TopLevelControl 別の Windows フォーム コントロールを親として持たない親コントロールを取得します。 一般的に、これは、コントロールを格納している、最も外側の Form です。  (Control から継承されます。) 
+  //△// "UseWaitCursor 現在のコントロールおよびすべての子コントロールに待機カーソルを使用するかどうかを示す値を取得または設定します。 (Control から継承されます。) 
+  //△// "Visible コントロールとそのすべての子コントロールが表示されているかどうかを示す値を取得または設定します。 (Control から継承されます。) 
+  //     "Width コントロールの幅を取得または設定します。 (Control から継承されます。) 
+    case "WIDTH":ni.Width=to_int();
+                 width=to_int(); 
+                 if(width>width_max){ni.Width=width=width_max;}   //デスクトップの大きさ以下に変更。
+                 break; 
+  //△// "WindowTarget インフラストラクチャ。このクラスでは、このプロパティは使用されません。 (Control から継承されます。) 
+    default:
+//            class_cmd_v(cmd_s);//class_sとcmd_sを設定。
+// 　　　 　　switch(class_s)
+//              {case  "BORDERSKIN":
+//               default:
+               err_cmd_v();break;
+//              }
+ //           break;
+   }
+}
+void ni_border_skin_v(BorderSkin ni)
+{class_cmd_v(cmd_s);//class_sとcmd_sを設定。
+ switch(class_s) 
+  {
+ //     "BackColor スキン フレームの背景色を取得または設定します。 
+   case "BACKCOLOR":ni.BackColor=color_n();break; 
+ //     "BackGradientStyle スキン フレームの背景のグラデーション スタイルを取得または設定します。 
+   case "BACKGRADIENTSTYLE":ni.BackGradientStyle=(GradientStyle)Enum.Parse(typeof(GradientStyle),data_enum_s,true);break; 
+ //     "BackHatchStyle スキン フレームの背景のハッチ スタイルを取得または設定します。
+   case "BACKHATCHSTYLE":ni.BackHatchStyle=(ChartHatchStyle)Enum.Parse(typeof(ChartHatchStyle),data_enum_s,true);break;
+ //     "BackImage スキン フレームの背景イメージを取得または設定します。 
+   case "BACKIMAGE":ni.BackImage=data_s;break;
+ //     "BackImageAlignment スキン フレームの背景イメージの配置を取得または設定します。
+   case "BACKIMAGEALIGNMENT":ni.BackImageAlignment=(ChartImageAlignmentStyle)Enum.Parse(typeof(ChartImageAlignmentStyle),data_enum_s,true);break; 
+ //     "BackImageTransparentColor 境界線スキン フレームの背景イメージが描画されるときに透明色で置き換えられる色を取得または設定します。
+   case "BACKIMAGETRANSPARENTCOLOR":ni.BackImageTransparentColor=color_n();break;
+ //     "BackImageWrapMode 境界線スキン フレームの背景イメージの描画モードを取得または設定します。
+   case "BACKIMAGEWRAPMODE":ni.BackImageWrapMode=(ChartImageWrapMode)Enum.Parse(typeof(ChartImageWrapMode),data_enum_s,true);break;
+ //     "BackSecondaryColor 境界線スキン フレームの第 2 背景色を取得または設定します。 
+   case "BACKSECONDARYCOLOR":ni.BackSecondaryColor=color_n();break;
+ //     "BorderColor スキン フレームの境界線の色を取得または設定します。
+   case "BORDERCOLOR":ni.BorderColor=color_n();break; 
+ //     "BorderDashStyle 境界線スキン フレームの境界線のスタイルを取得または設定します。 
+   case "BORDERDASHSTYLE":ni.BorderDashStyle=(ChartDashStyle)Enum.Parse(typeof(ChartDashStyle),data_enum_s,true);break;
+ //     "BorderWidth 境界線スキン フレームの境界線の幅を取得または設定します。 
+   case "BORDERWIDTH":ni.BorderWidth=to_int();break;
+ //     "PageColor 境界線スキンのページの色を取得または設定します。 
+   case "PAGECOLOR":ni.PageColor=color_n();break;
+ //     "SkinStyle 境界線スキンのスタイルを取得または設定します。
+   case "SKINSTYLE":ni.SkinStyle=(BorderSkinStyle)Enum.Parse(typeof(BorderSkinStyle),data_enum_s,true);break;
+ //□// "Tag このグラフ要素に関連付けられているオブジェクトを取得または設定します。 (ChartElement から継承されます。) 
+   default:err_cmd_v();break;
+  }
+}
+
+////////////////( A ChartArea )//////////////////////////////////
+void ni_chart_area_v(ChartArea ni) 
+{class_cmd_v(cmd_s);//class_sとcmd_sを設定。
+switch (class_s)
+  {
+  //     "AlignmentOrientation" グラフ エリアの配置方向を取得または設定します。 
+    case "ALIGNMENTORIENTATION":ni.AlignmentOrientation=(AreaAlignmentOrientations)Enum.Parse(typeof(AreaAlignmentOrientations),data_enum_s,true);break; 
+  //     "AlignmentStyle ChartArea  の配置スタイルを取得または設定します。 
+    case "ALIGNMENTSTYLE":ni.AlignmentStyle=(AreaAlignmentStyles)Enum.Parse(typeof(AreaAlignmentStyles),data_enum_s,true);break; 
+  //     "AlignWithChartArea このグラフ エリアを整列させる対象の ChartArea オブジェクトの名前を取得または設定します。 
+    case "ALIGNWITHCHARTAREA":ni.AlignWithChartArea=data_s;break; 
+  //     "Area3DStyle グラフ エリア内のすべての系列の 3 次元 (3D) を実装するために使用する ChartArea3DStyle オブジェクトを取得または設定します。 
+    case "AREA3DSTYLE":ni_chart_area_3d_style_v(ni.Area3DStyle);break;
+  //×// "Axes グラフ エリアのすべての軸を表す配列を取得または設定します。 
+  //     "AxisX 主軸の X 軸を表す Axis オブジェクトを取得または設定します。 
+    case "AXISX": ni_axis_v(ni.AxisX);break; //*(注意：解析回避のため": ni_"と空白を付けています）*
+  // "AxisX2 第 2 軸の X 軸を表す Axis オブジェクトを取得または設定します。 
+    case "AXISX2": ni_axis_v(ni.AxisX2);break;//*(注意：解析回避のため": ni_"と空白を付けています）*
+  //  "AxisY 主軸の Y 軸を表す Axis オブジェクトを取得または設定します。 
+    case "AXISY": ni_axis_v(ni.AxisY);break;//*(注意：解析回避のため": ni_"と空白を付けています）*
+  //     "AxisY2 第 2 軸の Y 軸を表す Axis オブジェクトを取得または設定します。 
+    case "AXISY2": ni_axis_v(ni.AxisX2);break; //*(注意：解析回避のため": ni_"と空白を付けています）*
+  //     "BackColor ChartArea  オブジェクトの背景色を取得または設定します。 
+    case "BACKCOLOR":ni.BackColor=color_n();break; 
+  //     "BackGradientStyle グラフ エリアの背景のグラデーションの方向を取得または設定します。また、グラデーションが使用されているかどうかを確認します。 
+    case "BACKGRADIENTSTYLE":ni.BackGradientStyle=(GradientStyle)Enum.Parse(typeof(GradientStyle),data_enum_s,true);break;
+  //     "BackHatchStyle ChartArea  オブジェクトのハッチング スタイルを取得または設定します。 
+    case "BACKHATCHSTYLE":ni.BackHatchStyle=(ChartHatchStyle)Enum.Parse(typeof(ChartHatchStyle),data_enum_s,true);break;
+  //     "BackImage ChartArea  オブジェクトの背景イメージを取得または設定します。 
+    case "BACKIMAGE":ni.BackImage=data_s;break;
+  //     "BackImageAlignment ChartArea  背景イメージの配置を取得または設定します。 
+    case "BACKIMAGEALIGNMENT":ni.BackImageAlignment=(ChartImageAlignmentStyle)Enum.Parse(typeof(ChartImageAlignmentStyle),data_enum_s,true);break;
+  //     "BackImageTransparentColor 透明色として描画される ChartArea オブジェクトの背景イメージの色を取得または設定します。 
+    case "BACKIMAGETRANSPARENTCOLOR":ni.BackImageTransparentColor=color_n(); break;
+  //     "BackImageWrapMode ChartArea  オブジェクトの背景イメージの描画モードを取得または設定します。 
+    case "BACKIMAGEWRAPMODE":ni.BackImageWrapMode=(ChartImageWrapMode)Enum.Parse(typeof(ChartImageWrapMode),data_enum_s,true);break;
+  //     "BackSecondaryColor ChartArea  オブジェクトの背景の 2 番目の色を取得または設定します。 
+    case "BACKSECONDARYCOLOR":ni.BackSecondaryColor=color_n();break; 
+  //     "BorderColor ChartArea  オブジェクトの境界線の色を取得または設定します。 
+    case "BORDERCOLOR":ni.BorderColor=color_n();break; 
+  //     "BorderDashStyle ChartArea  オブジェクトの境界線スタイルを取得または設定します。 
+    case "BORDERDASHSTYLE":ni.BorderDashStyle=(ChartDashStyle)Enum.Parse(typeof(ChartDashStyle),data_enum_s,true);break;
+  //     "BorderWidth ChartArea  オブジェクトの境界線の幅を取得または設定します。 
+    case "BORDERWIDTH":ni.BorderWidth=to_int();break; 
+  //     "CursorX カーソルと X 軸に沿った選択範囲に使用される Cursor オブジェクトを取得または設定します。 
+    case "CURSORX":ni_cursor_v(ni.CursorX);break;
+  //     "CursorY カーソルと Y 軸に沿った選択範囲に使用される Cursor オブジェクトを取得または設定します。 
+          case "CURSORY":ni_cursor_v(ni.CursorY);break;
+  //     "InnerPlotPosition グラフ エリア オブジェクトの内部プロット位置を定義する ElementPosition オブジェクトを取得または設定します。 
+    case "INNERPLOTPOSITION":ni_element_position_v(ni.InnerPlotPosition);break;
+  //     "IsSameFontSizeForAllAxes 関連するグラフ エリアの軸のラベルのサイズが同じかどうかを示すフラグを取得または設定します。 
+    case "ISSAMEFONTSIZEFORALLAXES":ni.IsSameFontSizeForAllAxes=bool_b();break;
+  //     "Name ChartArea  オブジェクトの一意の名前を取得または設定します。 (ChartNamedElement.Name をオーバーライドします。) 
+    case "NAME":ni.Name=data_s;break;
+  //     "Position Chart  内の ChartArea オブジェクトの位置を定義する ElementPosition オブジェクトを取得または設定します。 
+    case "POSITION":ni_element_position_v(ni.Position);break;
+  //     "ShadowColor ChartArea  オブジェクトの影色を取得または設定します。 
+    case "SHADOWCOLOR":ni.ShadowColor=color_n();break; 
+  //     "ShadowOffset ChartArea  オブジェクトの影のオフセット (ピクセル単位) を取得または設定します。 
+    case "SHADOWOFFSET":ni.ShadowOffset=to_int();break; 
+  //□// "Tag このグラフ要素に関連付けられているオブジェクトを取得または設定します。 (ChartElement から継承されます。) 
+  //     "Visible グラフ エリアが表示されているかどうかを示すフラグを取得または設定します。 
+    case "VISIBLE":ni.Visible=bool_b();break; 
+    default:
+//class_cmd_v(cmd_s);//class_sとcmd_sを設定。
+// 　　　 　　switch(class_s)
+//              {case "AXISX":                        axis_v(ni.AxisX);break;
+//               case "AXISX2":                       axis_v(ni.AxisX2);break;
+//               case "AXISY":                        axis_v(ni.AxisY);break;
+//               case "AXISY2":                       axis_v(ni.AxisX2);break;
+//               case "AREA3DSTYLE":   chart_area_3d_style_v(ni.Area3DStyle);break;
+//               case "CURSORX":                    cursor_v(ni.CursorX);break;
+//               case "CURSORY":                    cursor_v(ni.CursorY);break;
+//               case "INNERPLOTPOSITION":element_position_v(ni.InnerPlotPosition);break;
+//               case "POSITION":         element_position_v(ni.Position);break;
+//               default:
+                err_cmd_v();break;
+//              }
+//            break;
+  }
+}
+///( area_3d_style_v )//////////////////////////////
+void ni_chart_area_3d_style_v(ChartArea3DStyle ni) 
+{class_cmd_v(cmd_s);//class_sとcmd_sを設定。
+switch(class_s)//Area3DStyle関連処理。
+  {
+ //     "Enable3D グラフ エリアの 3D のオン/オフを切り替えるフラグを取得または設定します。 
+   case "ENABLE3D":ni.Enable3D=bool_b();break; 
+ //     "Inclination 3D グラフ エリアの水平軸を中心とする回転の角度を取得または設定します。 
+   case "INCLINATION":ni.Inclination=to_int();break; 
+ //   "IsClustered 横棒グラフまたは縦棒グラフのデータ系列がクラスター化される (つまり、別個の行に沿って表示される) かどうかを示すフラグを取得または設定します。 
+   case "ISCLUSTERED":ni.IsClustered=bool_b();break; 
+ //     "IsRightAngleAxes 等角投影を使用してグラフ エリアを表示するかどうかを示すフラグを取得または設定します。 
+   case "ISRIGHTANGLEAXES":ni.IsRightAngleAxes=bool_b();break; 
+ //     "LightStyle 3D グラフ エリアのライティングのスタイルを取得または設定します。 
+   case "LIGHTSTYLE":ni.LightStyle=(LightStyle)Enum.Parse(typeof(LightStyle),data_enum_s,true);break; 
+ //     "Perspective 3D グラフ エリアのパースペクティブの割合を取得または設定します。 
+   case "PERSPECTIVE":ni.Perspective=to_int();break; 
+ //     "PointDepth 3D グラフ エリアに表示されるデータ ポイントの深度を取得または設定します。 
+   case "POINTDEPTH":ni.PointDepth=to_int();break; 
+ //     "PointGapDepth 3D グラフ エリアの系列行間の距離を取得または設定します。 
+   case "POINTGAPDEPTH":ni.PointGapDepth=to_int();break; 
+ //     "Rotation 3D グラフ エリアの垂直軸を中心とする回転の角度を取得または設定します。 
+   case "ROTATION":ni.Rotation=to_int();break; 
+ //     "WallWidth 3D グラフ エリアに表示される壁面の幅を取得または設定します。 
+   case "WALLWIDTH":ni.WallWidth=to_int();break; 
+   default:err_cmd_v();break;
+  } 
+}
+void ni_cursor_v(System.Windows.Forms.DataVisualization.Charting.Cursor ni)
+{class_cmd_v(cmd_s);//class_sとcmd_sを設定。
+switch(class_s)
+   {
+  //     "AutoScroll 範囲の選択操作がグラフ エリアの境界を越えて行われた場合に、スクロールするかどうかを示すフラグを取得または設定します。 
+    case "AUTOSCROLL":ni.AutoScroll=bool_b();break; 
+  //     "AxisType カーソルのアタッチ先の軸の種類を取得または設定します。 
+    case "AXISTYPE":ni.AxisType=(AxisType)Enum.Parse(typeof(AxisType),data_enum_s,true);break;
+  //     "Interval カーソルの間隔を取得または設定します。 
+    case "INTERVAL":ni.Interval=to_double_o();break; 
+  //     "IntervalOffset ユーザーによって設定されたカーソルと範囲選択を描画できる位置に影響する間隔のオフセットを取得または設定します。 
+    case "INTERVALOFFSET":ni.IntervalOffset=to_double_o();break; 
+  //     "IntervalOffsetType 軸のカーソルと選択範囲の間隔のオフセットの種類を取得または設定します。 
+    case "INTERVALOFFSETTYPE":ni.IntervalOffsetType=(DateTimeIntervalType)Enum.Parse(typeof(DateTimeIntervalType),data_enum_s,true);break;
+  //     "IntervalType 軸のカーソルと選択範囲の間隔の種類を取得または設定します。 
+    case "INTERVALTYPE":ni.IntervalType=(DateTimeIntervalType)Enum.Parse(typeof(DateTimeIntervalType),data_enum_s,true);break;
+  //     "IsUserEnabled カーソルのユーザー インターフェイスを有効または無効にするフラグを取得または設定します。 
+    case "ISUSERENABLED":ni.IsUserEnabled=bool_b();break; 
+  //     "IsUserSelectionEnabled 範囲選択ユーザー インターフェイスを有効または無効にするフラグを取得または設定します。 
+    case "ISUSERSELECTIONENABLED":ni.IsUserSelectionEnabled=bool_b();break; 
+  //     "LineColor カーソルの線の色を取得または設定します。 
+    case "LINECOLOR":ni.LineColor=color_n();break; 
+  //     "LineDashStyle カーソルの線のスタイルを取得または設定します。
+    case "LINEDASHSTYLE":ni.LineDashStyle=(ChartDashStyle)Enum.Parse(typeof(DateTimeIntervalType),data_enum_s,true);break;
+  //     "LineWidth カーソルの線の幅をピクセル単位で取得または設定します。 
+    case "LINEWIDTH":ni.LineWidth=to_int();break; 
+  //     "Position カーソルの位置を取得または設定します。 
+    case "POSITION":ni.Position=to_double_o();break; 
+  //     "SelectionColor データ範囲を強調表示する半透明の色を取得または設定します。 
+    case "SELECTIONCOLOR":ni.SelectionColor=color_n();break; 
+  //     "SelectionEnd 範囲選択の終了位置を取得または設定します。 
+    case "SELECTIONEND":ni.SelectionEnd=to_double_o();break; 
+  //     "SelectionStart カーソルの選択範囲の開始位置を取得または設定します。 
+    case "SELECTIONSTART":ni.SelectionStart=to_double_o();break; 
+   }
+}
+///( element_position_v )////////////////////////////////////
+void ni_element_position_v(ElementPosition ni) 
+{class_cmd_v(cmd_s);//class_sとcmd_sを設定。
+switch(class_s)
+  { 
+ //     "Auto 適用できるグラフ要素が Chart コントロールによって自動的に配置されるかどうかを示す値を取得または設定します。 
+   case "AUTO":ni.Auto=bool_b();break; 
+ //△// "Bottom グラフ要素の下端の位置を相対座標で取得します。 
+ //     "Height グラフ要素の高さを取得または設定します。 
+   case "HEIGHT":ni.Height=to_float_f();break; 
+ //     "Right グラフ要素の右端の位置を相対座標で取得します。 
+ //△// "Size グラフ要素のサイズを取得します。 
+ //□// "Tag このグラフ要素に関連付けられているオブジェクトを取得または設定します。 (ChartElement から継承されます。) 
+ //     "Width グラフ要素の幅を取得または設定します。 
+   case "WIDTH":ni.Width=to_float_f();break; 
+ //     "X 適用できるグラフ要素の左上隅の相対 X 座標を取得または設定します。 
+   case "X":ni.X=to_float_f();break; 
+ //     "Y 適用できるグラフ要素の左上隅の相対 Y 座標を取得または設定します。 
+   case "Y":ni.Y=to_float_f();break; 
+   default:err_cmd_v();break;
+  }
+}
+
+void ni_title_v(Title ni)
+{class_cmd_v(cmd_s);//class_sとcmd_sを設定。
+switch(class_s)
+  {//     "Alignment タイトルの配置を取得または設定します。 
+   case "ALIGNMENT":ni.Alignment=(ContentAlignment)Enum.Parse(typeof(ContentAlignment),data_enum_s,true);break; 
+ //     "BackColor タイトルの背景色を取得または設定します。 
+   case "BACKCOLOR":ni.BackColor=color_n();break; 
+ //     "BackGradientStyle タイトルの背景グラデーションの向きを取得または設定します。 グラデーションが使用されているかどうかも判断します。  
+   case "BACKGRADIENTSTYLE":ni.BackGradientStyle=(GradientStyle)Enum.Parse(typeof(GradientStyle),data_enum_s,true);break; 
+ //     "BackHatchStyle タイトルのハッチング スタイルを取得または設定します。 
+   case "BACKHATCHSTYLE":ni.BackHatchStyle=(ChartHatchStyle)Enum.Parse(typeof(ChartHatchStyle),data_enum_s,true);break;
+ //     "BackImage タイトルの背景イメージを取得または設定します。
+   case "BACKIMAGE":ni.BackImage=data_s;break;
+ //     "BackImageAlignment タイトルの背景イメージの配置を取得または設定します。 
+   case "BACKIMAGEALIGNMENT":ni.BackImageAlignment=(ChartImageAlignmentStyle)Enum.Parse(typeof(ChartImageAlignmentStyle),data_enum_s,true);break; 
+ //     "BackImageTransparentColor 背景イメージが描画されるときに透明色として描画する色を取得または設定します。 
+   case "BACKIMAGETRANSPARENTCOLOR":ni.BackImageTransparentColor=color_n();break;
+ //     "BackImageWrapMode タイトルの背景イメージの描画モードを取得または設定します。 
+   case "BACKIMAGEWRAPMODE":ni.BackImageWrapMode=(ChartImageWrapMode)Enum.Parse(typeof(ChartImageWrapMode),data_enum_s,true);break;
+ //     "BackSecondaryColor タイトルの背景の 2 番目の色を取得または設定します。 
+   case "BACKSECONDARYCOLOR":ni.BackSecondaryColor=color_n();break;
+ //     "BorderColor タイトルの境界線の色を取得または設定します。
+   case "BORDERCOLOR":ni.BorderColor=color_n();break; 
+ //     "BorderDashStyle タイトルの境界線スタイルを取得または設定します。
+   case "BORDERDASHSTYLE":ni.BorderDashStyle=(ChartDashStyle)Enum.Parse(typeof(ChartDashStyle),data_enum_s,true);break;
+ //     "BorderWidth タイトルの境界線の幅を取得または設定します。 
+   case "BORDERWIDTH":ni.BorderWidth=to_int();break;
+ //     "DockedToChartArea タイトルのドッキング先の ChartArea の名前を取得または設定します。 
+   case "DOCKEDTOCHARTAREA":ni.DockedToChartArea=data_s;break; 
+ //     "Docking タイトルのドッキング先を決定する値を取得または設定します。
+   case "DOCKING":ni.Docking=(Docking)Enum.Parse(typeof(Docking),data_enum_s,true);break; 
+ //     "DockingOffset ドッキングされたタイトルの位置の正または負のオフセットを取得または設定します。 
+   case "DOCKINGOFFSET":ni.DockingOffset=to_int();break;
+ //     "Font タイトルのフォントを取得または設定します。 
+   case "FONT":ni.Font=font_n();break; 
+ //     "ForeColor タイトルのテキストの色を取得または設定します。 
+   case "FORECOLOR":ni.ForeColor=color_n();break; 
+ //     "IsDockedInsideChartArea タイトルを ChartArea オブジェクト内でドッキングするかどうかを指定するフラグを取得または設定します。 
+   case "ISDOCKEDINSIDECHARTAREA":ni.IsDockedInsideChartArea=bool_b();break;
+ //     "Name Title  オブジェクトの一意の名前を取得または設定します。 (ChartNamedElement.Name をオーバーライドします。) 
+   case "NAME":ni.Name=data_s;break; 
+ //     "Position タイトルの位置の取得または設定に使用できる ElementPosition オブジェクトを取得または設定します。 
+   case "POSITION":ni_element_position_v(ni.Position);break;
+ //     "ShadowColor タイトルの影色を取得または設定します。 
+   case "SHADOWCOLOR":ni.ShadowColor=color_n();break; 
+ //     "ShadowOffset タイトルの影のオフセット (ピクセル単位) を取得または設定します。 
+   case "SHADOWOFFSET":ni.ShadowOffset=to_int();break; 
+ //□// "Tag このグラフ要素に関連付けられているオブジェクトを取得または設定します。 (ChartElement から継承されます。) 
+ //     "Text タイトルのテキストを取得または設定します。 
+   case "TEXT":ni.Text=data_s;this.Text=data_s;break;  //This.Textにも設定。 
+ //     "TextOrientation タイトルのテキストの向きを取得または設定します。 
+   case "TEXTORIENTATION":ni.TextOrientation=(TextOrientation)Enum.Parse(typeof(TextOrientation),data_enum_s,true);break; 
+ //     "TextStyle タイトルのテキストのスタイルを取得または設定します。 
+   case "TEXTSTYLE":ni.TextStyle=(TextStyle)Enum.Parse(typeof(TextStyle),data_enum_s,true);break; 
+ //     "ToolTip タイトルのツールヒントを取得または設定します。
+   case "TOOLTIP":ni.ToolTip=data_s;break; 
+ //     "Visible タイトルの可視性フラグを取得または設定します。
+   case "VISIBLE":ni.Visible=bool_b();break; 
+   default:
+//switch(class_s)
+//              {case  "POSITION":element_position_v(ni.Position);break;
+//               default:
+                err_cmd_v();break;
+//              }
+//           break;
+  }
+}
+
+///( legend_V() )///////////////////////////////////////////////////////////////////
+void ni_legend_v(Legend ni)
+{class_cmd_v(cmd_s);//class_sとcmd_sを設定。
+switch(class_s)
+   {
+//       "Alignment 凡例の配置を取得または設定します。 
+    case "ALIGNMENT":ni.Alignment=(StringAlignment)Enum.Parse(typeof(StringAlignment),data_enum_s,true);break; 
+  //     "AutoFitMinFontSize 凡例のテキストの自動調整アルゴリズムで使用できる最小のフォント サイズを取得または設定します。 
+    case "AUTOFITMINFONTSIZE":ni.AutoFitMinFontSize=to_int();break;
+  //     "BackColor 凡例の背景色を取得または設定します。 
+    case "BACKCOLOR":ni.BackColor=color_n();break;
+  //     "BackGradientStyle 凡例の背景グラデーションの向きを取得または設定します。 グラデーションが使用されているかどうかも判断します。  
+    case "BACKGRADIENTSTYLE":ni.BackGradientStyle=(GradientStyle)Enum.Parse(typeof(GradientStyle),data_enum_s,true);break; 
+  //     "BackHatchStyle 凡例のハッチング スタイルを取得または設定します。 
+    case "BACKHATCHSTYLE":ni.BackHatchStyle=(ChartHatchStyle)Enum.Parse(typeof(ChartHatchStyle),data_enum_s,true);break; 
+  //     "BackImage 凡例の背景イメージを取得または設定します。 
+    case "BACKIMAGE":ni.BackImage=data_s;break;
+  //     "BackImageAlignment Unscaled  描画モードに使用される背景イメージの配置を取得または設定します。 
+    case "BACKIMAGEALIGNMENT":ni.BackImageAlignment=(ChartImageAlignmentStyle)Enum.Parse(typeof(ChartImageAlignmentStyle),data_enum_s,true);break;
+  //     "BackImageTransparentColor 背景イメージが描画されるときに透明色で置き換えられる色を取得または設定します。 
+    case "BACKIMAGETRANSPARENTCOLOR":ni.BackImageTransparentColor=color_n();break;
+  //     "BackImageWrapMode 凡例の背景イメージの描画モードを取得または設定します。 
+    case "BACKIMAGEWRAPMODE":ni.BackImageWrapMode=(ChartImageWrapMode)Enum.Parse(typeof(ChartImageWrapMode),data_enum_s,true);break;
+  //     "BackSecondaryColor 凡例の背景の 2 番目の色を取得または設定します。 
+    case "BACKSECONDARYCOLOR":ni.BackSecondaryColor=color_n();break;
+  //     "BorderColor 凡例の境界線の色を取得または設定します。
+    case "BORDERCOLOR":ni.BorderColor=color_n();break; 
+  //     "BorderDashStyle 凡例の境界線スタイルを取得または設定します。 
+    case "BORDERDASHSTYLE":ni.BorderDashStyle=(ChartDashStyle)Enum.Parse(typeof(ChartDashStyle),data_enum_s,true);break; 
+  //     "BorderWidth 凡例の境界線の幅を取得または設定します。 
+    case "BORDERWIDTH":ni.BorderWidth=to_int();break; 
+  //△// "CellColumns 凡例のセル列のコレクションを含む LegendCellColumnCollection オブジェクトを取得します。 
+  //△// "CustomItems カスタムの凡例項目に使用される T[:LegendItemsCollection] オブジェクトを取得します。 
+  //     "DockedToChartArea 凡例のドッキング先の ChartArea の名前を取得または設定します。 
+    case "DOCKEDTOCHARTAREA":ni.DockedToChartArea=data_s;break; 
+  //     "Docking 凡例をドッキングするかどうかを決定する値を取得または設定します。 
+    case "DOCKING":ni.Docking=(Docking)Enum.Parse(typeof(Docking),data_enum_s,true);break; 
+  //     "Enabled 凡例が有効かどうかを示す値を取得または設定します。 
+    case "ENABLED":ni.Enabled=bool_b();break;
+  //     "Font 凡例のフォント プロパティの設定に使用する Font オブジェクトを取得または設定します。 
+    case "FONT":ni.Font=font_n();break; 
+  //     "ForeColor 凡例のテキストの色を取得または設定します。 
+    case "FORECOLOR":ni.ForeColor=color_n();break; 
+  //     "HeaderSeparator 凡例の見出しに表示する区切り記号の種類を取得または設定します。 
+    case "HEADERSEPARATOR":ni.HeaderSeparator=(LegendSeparatorStyle)Enum.Parse(typeof(LegendSeparatorStyle),data_enum_s,true);break; 
+  //     "HeaderSeparatorColor 凡例の見出しの区切り記号の色を取得または設定します。 
+    case "HEADERSEPARATORCOLOR":ni.HeaderSeparatorColor=color_n();break; 
+  //     "InsideChartArea 凡例の描画先であるグラフ エリアの名前を取得または設定します。 
+    case "INSIDECHARTAREA":ni.InsideChartArea=data_s;break; 
+  //     "InterlacedRows 凡例の行をインターレース背景色で描画するかどうかを示すフラグを取得または設定します。 
+    case "INTERLACEDROWS":ni.InterlacedRows=bool_b();break;
+  //     "InterlacedRowsColor 凡例のインターレース行の背景色を取得または設定します。 
+    case "INTERLACEDROWSCOLOR":ni.InterlacedRowsColor=color_n();break; 
+  //     "IsDockedInsideChartArea 凡例をグラフ エリアの内側にドッキングするか、外側にドッキングするかを示すフラグを取得または設定します。 
+    case "ISDOCKEDINSIDECHARTAREA":ni.IsDockedInsideChartArea=bool_b();break;
+  //     "IsEquallySpacedItems すべての凡例項目を等間隔で配置するかどうかを示すフラグを取得または設定します。 
+    case "ISEQUALLYSPACEDITEMS":ni.IsEquallySpacedItems=bool_b();break;
+  //     "IsTextAutoFit 凡例のテキストのサイズが自動的に設定されるかどうかを示すフラグを取得または設定します。 
+    case "ISTEXTAUTOFIT":ni.IsTextAutoFit=bool_b();break;
+  //     "ItemColumnSeparator 凡例のテーブル列に表示する区切り記号の種類を取得または設定します。
+    case "ITEMCOLUMNSEPARATOR":ni.ItemColumnSeparator=(LegendSeparatorStyle)Enum.Parse(typeof(LegendSeparatorStyle),data_enum_s,true);break; 
+  //     "ItemColumnSeparatorColor 凡例のテーブル列の区切り記号の色を取得または設定します。 
+    case "ITEMCOLUMNSEPARATORCOLOR":ni.ItemColumnSeparatorColor=color_n();break; 
+  //     "ItemColumnSpacing 凡例のテーブル列の間隔を取得または設定します。 
+    case "ITEMCOLUMNSPACING":ni.ItemColumnSpacing=to_int();break; 
+  //     "LegendItemOrder 凡例項目を表示する順序を指定する値を取得または設定します。 このプロパティは、グラフの系列に自動的に追加された凡例項目にのみ影響します。カスタムの凡例項目には影響しません。  
+    case "LEGENDITEMORDER":ni.LegendItemOrder=(LegendItemOrder)Enum.Parse(typeof(LegendItemOrder),data_enum_s,true);break; 
+  //     "LegendStyle 凡例のスタイルを取得または設定します。 
+    case "LEGENDSTYLE":ni.LegendStyle=(LegendStyle)Enum.Parse(typeof(LegendStyle),data_enum_s,true);break; 
+  //     "MaximumAutoSize グラフ エリアの割合として示される、凡例の最大サイズを取得または設定します。 この値は自動レイアウト アルゴリズムで使用されます。  
+    case "MAXIMUMAUTOSIZE":ni.MaximumAutoSize=to_float_f();break; 
+  //     "Name 凡例の名前を取得または設定します。 (ChartNamedElement.Name をオーバーライドします。) 
+    case "NAME":ni.Name=data_s;break; 
+  //     "Position 凡例の位置の取得または設定に使用できる ElementPosition オブジェクトを取得または設定します。 
+    case  "POSITION":ni_element_position_v(ni.Position);break;
+  //     "ShadowColor 凡例の影色を取得または設定します。 
+    case "SHADOWCOLOR":ni.ShadowColor=color_n();break; 
+  //     "ShadowOffset 凡例の影のオフセット (ピクセル単位) を取得または設定します。 
+    case "SHADOWOFFSET":ni.ShadowOffset=to_int();break; 
+  //     "TableStyle 凡例のテーブルのスタイルを取得または設定します。 
+    case "TABLESTYLE":ni.TableStyle=(LegendTableStyle)Enum.Parse(typeof(LegendTableStyle),data_enum_s,true);break; 
+  //□// "Tag このグラフ要素に関連付けられているオブジェクトを取得または設定します。 (ChartElement から継承されます。) 
+  //     "TextWrapThreshold テキストを折り返す前に凡例に連続して表示できる文字数を取得または設定します。 
+    case "TEXTWRAPTHRESHOLD":ni.TextWrapThreshold=to_int();break; 
+  //     "Title 凡例のタイトルのテキストを取得または設定します。 
+    case "TITLE":ni.Title=data_s;break; 
+  //     "TitleAlignment 凡例のタイトルの配置を取得または設定します。 
+    case "TITLEALIGNMENT":ni.TitleAlignment=(StringAlignment)Enum.Parse(typeof(StringAlignment),data_enum_s,true);break; 
+  //     "TitleBackColor 凡例のタイトルの背景色を取得または設定します。 
+    case "TITLEBACKCOLOR":ni.TitleBackColor=color_n();break; 
+  //     "TitleFont 凡例のタイトルのフォントを取得または設定します。 
+    case "TITLEFONT":ni.TitleFont=font_n();break; 
+  //     "TitleForeColor 凡例のタイトルのテキストの色を取得または設定します。 
+    case "TITLEFORECOLOR":ni.TitleForeColor=color_n();break; 
+  //     "TitleSeparator 凡例のタイトルに表示する区切り記号の種類を取得または設定します。 
+    case "TITLESEPARATOR":ni.TitleSeparator=(LegendSeparatorStyle)Enum.Parse(typeof(LegendSeparatorStyle),data_enum_s,true);break; 
+  //     "TitleSeparatorColor 凡例のタイトルの区切り記号の色を取得または設定します。 
+    case "TITLESEPARATORCOLOR":ni.TitleSeparatorColor=color_n();break; 
+    default:
+//class_cmd_v(cmd_s);//class_sとcmd_sを設定。
+ //  　　 　　switch(class_s)
+ //             {case  "POSITION":element_position_v(ni.Position);break;
+ //              default:
+             err_cmd_v();break;
+ //             }
+ //           break;
+   }
+}
+//////////( Axis )//////////////////////////////////
+void ni_axis_v(Axis ni)
+{class_cmd_v(cmd_s);//class_sとcmd_sを設定。
+switch(class_s)
+  {
+ //     "ArrowStyle 2D 軸の矢印のスタイルを取得または設定します。このスタイルは 3D グラフ エリアには適用されません。 
+   case "ARROWSTYLE":ni.ArrowStyle=(AxisArrowStyle)Enum.Parse(typeof(AxisArrowStyle),data_enum_s,true);break; 
+ //△// "AxisName インフラストラクチャ。軸の名前 (X、Y、X2、または Y2) を取得します。 
+ //     "Crossing 軸が関連付けられている軸と交差する位置を取得または設定します。 
+   case "CROSSING":ni.Crossing=to_double_o();break; 
+ //△// "CustomLabels CustomLabel  オブジェクトを格納するために使用される CustomLabelsCollection オブジェクトを取得します。 
+ //     "Enabled 軸が有効かどうかを示す値を取得または設定します。 
+   case "ENABLED":ni.Enabled=(AxisEnabled)Enum.Parse(typeof(AxisEnabled),data_enum_s,true);break; 
+ //     "InterlacedColor インターレースされた背景の縞模様の色を取得または設定します。 
+   case "INTERLACEDCOLOR":ni.InterlacedColor=color_n();break; 
+ //     "Interval 軸の間隔を取得または設定します。 
+   case "INTERVAL":ni.Interval=to_int();break; 
+ //     "IntervalAutoMode 軸上に固定数の間隔を使用するか、間隔の数を軸のサイズに応じて決めるかを指定するフラグを取得または設定します。 
+   case "INTERVALAUTOMODE":ni.IntervalAutoMode=(IntervalAutoMode)Enum.Parse(typeof(IntervalAutoMode),data_enum_s,true);break; 
+ //     "IntervalOffset 軸の間隔のオフセットを取得または設定します。 
+   case "INTERVALOFFSET":ni.IntervalOffset=to_double_o();break; 
+ //     "IntervalOffsetType 軸の間隔のオフセットの種類を取得または設定します。 
+   case "INTERVALOFFSETTYPE":ni.IntervalOffsetType=(DateTimeIntervalType)Enum.Parse(typeof(DateTimeIntervalType),data_enum_s,true);break; 
+ //     "IntervalType 軸の間隔の種類を取得または設定します。
+   case "INTERVALTYPE":ni.IntervalType=(DateTimeIntervalType)Enum.Parse(typeof(DateTimeIntervalType),data_enum_s,true);break; 
+ //     "IsInterlaced インターレースされた背景の縞模様が軸に表示されるかどうかを示すフラグを取得または設定します。 
+   case "ISINTERLACED":ni.IsInterlaced=bool_b();break; 
+ //     "IsLabelAutoFit 軸ラベルのサイズを自動調整するかどうかを示すフラグを取得または設定します。 
+   case "ISLABELAUTOFIT":ni.IsLabelAutoFit=bool_b();break; 
+ //     "IsLogarithmic 軸が対数であるかどうかを示すフラグを取得または設定します。 対数グラフでは、0 または負のデータ値を使用できません。  
+   case "ISLOGARITHMIC":ni.IsLogarithmic=bool_b();break; 
+ //     "IsMarginVisible 軸にマージンを追加するかどうかを指定するフラグを取得または設定します。 
+   case "ISMARGINVISIBLE":ni.IsMarginVisible=bool_b();break; 
+ //     "IsMarksNextToAxis 軸の交差するポイントが変更されたときに目盛りおよび軸ラベルが軸と一緒に移動するかどうかを指定するフラグを取得または設定します。 
+   case "ISMARKSNEXTTOAXIS":ni.IsMarksNextToAxis=bool_b();break; 
+ //     "IsReversed 軸を反転するかどうかを示すフラグを取得または設定します。 
+   case "ISREVERSED":ni.IsReversed=bool_b();break; 
+ //     "IsStartedFromZero すべてのデータ ポイント値が正の値であるときに軸の最小値を自動的に 0 に設定するかどうかを示すフラグを取得または設定します。 負のデータ ポイント値が存在する場合、データ ポイントの最小値が使用されます。  
+   case "ISSTARTEDFROMZERO":ni.IsStartedFromZero=bool_b();break; 
+ //     "LabelAutoFitMaxFontSize ラベルの自動調整アルゴリズムで使用できる最大のフォント サイズを取得または設定します。 
+   case "LABELAUTOFITMAXFONTSIZE":ni.LabelAutoFitMaxFontSize=to_int();break; 
+ //     "LabelAutoFitMinFontSize ラベルの自動調整アルゴリズムで使用できる最小のフォント サイズを取得または設定します。 
+   case "LABELAUTOFITMINFONTSIZE":ni.LabelAutoFitMinFontSize=to_int();break; 
+ //     "LabelAutoFitStyle 軸に沿ったラベルの調整を可能にするために許容されるラベルの変更を取得または設定します。 
+   case "LABELAUTOFITSTYLE":ni.LabelAutoFitStyle=(LabelAutoFitStyles)Enum.Parse(typeof(LabelAutoFitStyles),data_enum_s,true);break; 
+ //     "LabelStyle 軸の LabelStyle プロパティを取得または設定します。 
+   case "LABELSTYLE":ni_label_style_v(ni.LabelStyle);break;
+ //     "LineColor 軸の線の色を取得または設定します。 
+   case "LINECOLOR":ni.LineColor=color_n();break; 
+ //     "LineDashStyle 軸の線スタイルを取得または設定します。 
+   case "LINEDASHSTYLE":ni.LineDashStyle=(ChartDashStyle)Enum.Parse(typeof(ChartDashStyle),data_enum_s,true);break; 
+ //     "LineWidth 軸の線の幅 (ピクセル単位) を取得または設定します。 
+   case "LINEWIDTH":ni.LineWidth=to_int();break; 
+ //     "LogarithmBase 対数軸の対数の底の値を取得または設定します。 
+   case "LOGARITHMBASE":ni.LogarithmBase=to_double_o();break; 
+ //     "MajorGrid 軸のグリッド線のプロパティの設定に使用される Grid オブジェクトを取得または設定します。 
+   case "MAJORGRID":ni_grid_v(ni.MajorGrid);break;
+ //     "MajorTickMark 軸の目盛りのプロパティの設定に使用される TickMark オブジェクトを取得または設定します。 
+   case "MAJORTICKMARK":ni_tick_mark_v(ni.MajorTickMark);break;
+ //     "Maximum 軸の最大値を取得または設定します。 
+   case "MAXIMUM":ni.Maximum=to_double_o();break; 
+ //     "MaximumAutoSize グラフ エリアの割合として示される、軸の最大サイズを取得または設定します。 この値は自動レイアウト アルゴリズムで使用されます。  
+   case "MAXIMUMAUTOSIZE":ni.MaximumAutoSize=to_float_f();break; 
+ //     "Minimum 軸の最小値を取得または設定します。 
+   case "MINIMUM":ni.Minimum=to_double_o();break; 
+ //     "MinorGrid 軸の補助グリッド線の属性の指定に使用される Grid オブジェクトを取得または設定します。 
+   case "MINORGRID":ni_grid_v(ni.MinorGrid);break;
+ //     "MinorTickMark 軸の補助目盛りのプロパティの設定に使用される TickMark オブジェクトを取得または設定します。 
+   case "MINORTICKMARK":ni_tick_mark_v(ni.MinorTickMark);break;
+ //     "Name 軸の名前を取得または設定します。 (ChartNamedElement.Name をオーバーライドします。) 
+   case "NAME":ni.Name=data_s;break; 
+ //     "ScaleBreakStyle 軸のスケール区切りのスタイルを取得または設定します。 
+   case "SCALEBREAKSTYLE":ni_axis_scale_break_style_v(ni.ScaleBreakStyle);break; 
+ //     "ScaleView 軸のビューを取得または設定します。 
+   case "SCALEVIEW":ni_axis_scale_view_v(ni.ScaleView);break; 
+ //     "ScrollBar 軸のスクロール バーを取得または設定します。 
+   case "SCROLLBAR":ni_axis_scroll_bar_v(ni.ScrollBar);break; 
+ //△// "StripLines StripLinesCollection  コレクション オブジェクトを取得します。 
+ //□// "Tag このグラフ要素に関連付けられているオブジェクトを取得または設定します。 (ChartElement から継承されます。) 
+ //     "TextOrientation 軸のタイトルのテキストの向きを取得または設定します。 
+   case "TEXTORIENTATION":ni.TextOrientation=(TextOrientation)Enum.Parse(typeof(TextOrientation),data_enum_s,true);break; 
+ //     "Title 軸のタイトルを取得または設定します。 
+   case "TITLE":ni.Title=data_s;break; 
+ //     "TitleAlignment 軸のタイトルの配置を取得または設定します。
+   case "TITLEALIGNMENT":ni.TitleAlignment=(StringAlignment)Enum.Parse(typeof(StringAlignment),data_enum_s,true);break; 
+ //     "TitleFont 軸のタイトルのフォント プロパティを取得または設定します。 
+   case "TITLEFONT":ni.TitleFont=font_n();break; 
+ //     "TitleForeColor 軸のタイトルのテキストの色を取得または設定します。 
+   case "TITLEFORECOLOR":ni.TitleForeColor=color_n();break; 
+ //     "ToolTip 軸に使用されるツールヒントを取得または設定します。 
+   case "TOOLTIP":ni.ToolTip=data_s;break; 
+   default:
+//        class_cmd_v(cmd_s);//class_sとcmd_sを設定。
+//        switch(class_s)
+//          {case "LABELSTYLE":                label_style_v(ni.LabelStyle);break;
+//           case "MAJORGRID":                        grid_v(ni.MajorGrid);break;
+//           case "MINORGRID":                        grid_v(ni.MinorGrid);break;
+//           case "MAJORTICKMARK":               tick_mark_v(ni.MajorTickMark);break;
+//           case "MINORTICKMARK":               tick_mark_v(ni.MinorTickMark);break;
+//           case "SCALEBREAKSTYLE":axis_scale_break_style_v(ni.ScaleBreakStyle);break; 
+//           case "SCALEVIEW":             axis_scale_view_v(ni.ScaleView);break; 
+//           case "SCROLLBAR":             axis_scroll_bar_v(ni.ScrollBar);break; 
+//           default:
+            err_cmd_v();break;
+//          } 
+//        break;
+  }
+}
+///( grid_v)/////////////////////////////////
+void ni_grid_v(Grid ni)
+{class_cmd_v(cmd_s);//class_sとcmd_sを設定。 
+switch(class_s)
+   {
+  //     "Enabled グリッド線または補助グリッド線が有効かどうかを示すフラグを取得または設定します。 
+    case "ENABLED":ni.Enabled=bool_b();break; 
+  //     "Interval グリッド線間または補助グリッド線間の間隔を取得または設定します。 
+    case "INTERVAL":ni.Interval=to_int();break; 
+  //     "IntervalOffset グリッド線のオフセットを取得または設定します。 
+    case "INTERVALOFFSET":ni.IntervalOffset=to_double_o();break; 
+  //     "IntervalOffsetType グリッド線および補助グリッド線の間隔のオフセットの種類を取得または設定します。 
+    case "INTERVALOFFSETTYPE":ni.IntervalOffsetType=(DateTimeIntervalType)Enum.Parse(typeof(DateTimeIntervalType),data_enum_s,true);break;
+  //     "IntervalType グリッド線または補助グリッド線の間隔の種類を取得または設定します。 
+    case "INTERVALTYPE":ni.IntervalType=(DateTimeIntervalType)Enum.Parse(typeof(DateTimeIntervalType),data_enum_s,true);break;
+  //     "LineColor グリッド線の色を取得または設定します。 
+    case "LINECOLOR":ni.LineColor=color_n();break; 
+  //     "LineDashStyle グリッド線のスタイルを取得または設定します。 
+    case "LINEDASHSTYLE":ni.LineDashStyle=(ChartDashStyle)Enum.Parse(typeof(ChartDashStyle),data_enum_s,true);break;
+  //     "LineWidth グリッド線および補助グリッド線の幅を取得または設定します。 
+    case "LINEWIDTH":ni.LineWidth=to_int();break; 
+    default:err_cmd_v();break;
+   }
+}
+///( tick_mark_v )//////////////////////////////
+void ni_tick_mark_v(TickMark ni)
+{class_cmd_v(cmd_s);//class_sとcmd_sを設定。 
+
+switch(class_s)
+   {
+  //     "Enabled グリッド線または補助グリッド線が有効かどうかを示すフラグを取得または設定します。 (Grid から継承されます。) 
+    case "ENABLED":ni.Enabled=bool_b();break; 
+  //     "Interval グリッド線間または補助グリッド線間の間隔を取得または設定します。 (Grid から継承されます。) 
+    case "INTERVAL":ni.Interval=to_int();break; 
+  //     "IntervalOffset グリッド線のオフセットを取得または設定します。 (Grid から継承されます。) 
+    case "INTERVALOFFSET":ni.IntervalOffset=to_double_o();break; 
+  //     "IntervalOffsetType グリッド線および補助グリッド線の間隔のオフセットの種類を取得または設定します。 (Grid から継承されます。) 
+    case "INTERVALOFFSETTYPE":ni.IntervalOffsetType=(DateTimeIntervalType)Enum.Parse(typeof(DateTimeIntervalType),data_enum_s,true);break;
+  //     "IntervalType グリッド線または補助グリッド線の間隔の種類を取得または設定します。 (Grid から継承されます。) 
+    case "INTERVALTYPE":ni.IntervalType=(DateTimeIntervalType)Enum.Parse(typeof(DateTimeIntervalType),data_enum_s,true);break;
+  //     "LineColor グリッド線の色を取得または設定します。 (Grid から継承されます。) 
+    case "LINECOLOR":ni.LineColor=color_n();break; 
+  //     "LineDashStyle グリッド線のスタイルを取得または設定します。 (Grid から継承されます。) 
+    case "LINEDASHSTYLE":ni.LineDashStyle=(ChartDashStyle)Enum.Parse(typeof(ChartDashStyle),data_enum_s,true);break;
+  //     "LineWidth グリッド線および補助グリッド線の幅を取得または設定します。 (Grid から継承されます。) 
+    case "LINEWIDTH":ni.LineWidth=to_int();break; 
+  //     "Size 目盛りの長さを取得または設定します。 長さは、軸に応じて、グラフ イメージの高さまたは幅の割合を表す単位で示されます。  
+    case "SIZE":ni.Size=to_float_f();break; 
+  //     "TickMarkStyle 目盛りスタイルを取得または設定します。 
+    case "TICKMARKSTYLE":ni.TickMarkStyle=(TickMarkStyle)Enum.Parse(typeof(TickMarkStyle),data_enum_s,true);break;
+    default:err_cmd_v();break;
+   }
+}
+///( label_style_v )/////////////////////////////////////////////////////////////
+void ni_label_style_v(LabelStyle ni)
+{class_cmd_v(cmd_s);//class_sとcmd_sを設定。
+switch(class_s)
+   {
+  //     "Angle フォントが描画される角度を表す値を取得または設定します。 
+    case "ANGLE":ni.Angle=to_int();break; 
+  //     "Enabled ラベルが有効かどうかを示すフラグを取得または設定します。 
+    case "ENABLED":ni.Enabled=bool_b();break; 
+  //     "Font ラベルのフォントを取得または設定します。 
+    case "FONT":ni.Font=font_n();break; 
+  //     "ForeColor ラベルの色を取得または設定します。 
+    case "FORECOLOR":ni.ForeColor=color_n();break; 
+  //     "Format ラベル テキストの書式指定文字列を取得または設定します。 
+    case "FORMAT":ni.Format=data_s;break; 
+  //     "Interval ラベル間隔のサイズを取得または設定します。 
+    case "INTERVAL":ni.Interval=to_double_o();break; 
+  //     "IntervalOffset ラベル間隔のオフセットを取得または設定します。 
+    case "INTERVALOFFSET":ni.IntervalOffset=to_double_o();break; 
+  //     "IntervalOffsetType ラベル間隔のオフセットの単位を取得または設定します。 
+    case "INTERVALOFFSETTYPE":ni.IntervalOffsetType=(DateTimeIntervalType)Enum.Parse(typeof(DateTimeIntervalType),data_enum_s,true);break; 
+  //     "IntervalType ラベル間隔のサイズの単位を取得または設定します。 
+    case "INTERVALTYPE":ni.IntervalType=(DateTimeIntervalType)Enum.Parse(typeof(DateTimeIntervalType),data_enum_s,true);break; 
+  //     "IsEndLabelVisible ラベルが軸の両端に表示されるかどうかを示すフラグを取得または設定します。 
+    case "ISENDLABELVISIBLE":ni.IsEndLabelVisible=bool_b();break; 
+  //     "IsStaggered オフセット付きでラベルが表示されるかどうかを示すフラグを取得または設定します。 
+    case "ISSTAGGERED":ni.IsStaggered=bool_b();break; 
+  //□// "Tag このグラフ要素に関連付けられているオブジェクトを取得または設定します。 (ChartElement から継承されます。) 
+  //     "TruncatedLabels ラベルが切り捨て可能かどうかを示すフラグを取得または設定します。 
+    case "TRUNCATEDLABELS":ni.TruncatedLabels=bool_b();break; 
+    default:err_cmd_v();break;
+   }
+}
+///( label_style_v )/////////////////////////////////////////////////////////////
+void ni_axis_scroll_bar_v(AxisScrollBar ni)
+{class_cmd_v(cmd_s);//class_sとcmd_sを設定。
+switch(class_s)
+   {
+  //△// "Axis スクロール バーを使用する Axis オブジェクトを取得します。 
+  //     "BackColor スクロール バーの背景色を取得または設定します。 
+    case "BACKCOLOR":ni.BackColor=color_n();break; 
+  //     "ButtonColor スクロール バー ボタンの色を取得または設定します。 
+    case "BUTTONCOLOR":ni.ButtonColor=color_n();break; 
+  //     "ButtonStyle スクロール バー ボタンのスタイルを取得または設定します。 
+    case "BUTTONSTYLE":ni.ButtonStyle=(ScrollBarButtonStyles)Enum.Parse(typeof(ScrollBarButtonStyles),data_enum_s,true);break; 
+  //△// "ChartArea このスクロール バーが含まれるグラフ エリアを取得します。 
+  //     "Enabled スクロール バーが有効かどうかを示すフラグを取得または設定します。 
+    case "ENABLED":ni.Enabled=bool_b();break;
+  //     "IsPositionedInside スクロール バーがグラフ エリアの内側または外側に配置されているかどうかを示すフラグを取得または設定します。 
+    case "ISPOSITIONEDINSIDE":ni.IsPositionedInside=bool_b();break;
+  //△// "IsVisible スクロール バーが表示されるかどうかを示すフラグを取得します。 
+  //     "LineColor スクロール バーの線の色を取得または設定します。 
+    case "LINECOLOR":ni.LineColor=color_n();break; 
+  //     "Size スクロール バーの幅をピクセル単位で取得または設定します。 
+    case "SIZE":ni.Size=to_double_o();break;
+    default:err_cmd_v();break;
+   }
+}
+void ni_axis_scale_break_style_v(AxisScaleBreakStyle ni)
+{class_cmd_v(cmd_s);//class_sとcmd_sを設定。
+switch(class_s)
+   {
+  //     "BreakLineStyle スケール区切りを描画するために使用される区切り線のスタイルを取得または設定します。 
+    case "BREAKLINESTYLE":ni.BreakLineStyle=(BreakLineStyle)Enum.Parse(typeof(BreakLineStyle),data_enum_s,true);break; 
+  //     "CollapsibleSpaceThreshold スケール区切りが描画されるグラフ上の空間のしきい値を取得または設定します。 
+    case "COLLAPSIBLESPACETHRESHOLD":ni.CollapsibleSpaceThreshold=to_int();break; 
+  //     "Enabled スケール区切りが有効かどうかを示すフラグを取得または設定します。 
+    case "ENABLED":ni.Enabled=bool_b();break; 
+  //     "LineColor スケール区切り線の色を取得または設定します。 
+    case "LINECOLOR":ni.LineColor=color_n();break; 
+  //     "LineDashStyle スケール区切り線のスタイルを取得または設定します。 
+    case "LINEDASHSTYLE":ni.LineDashStyle=(ChartDashStyle)Enum.Parse(typeof(ChartDashStyle),data_enum_s,true);break; 
+  //     "LineWidth スケール区切り線の幅を取得または設定します。 
+    case "LINEWIDTH":ni.LineWidth=to_int();break; 
+  //     "MaxNumberOfBreaks グラフに表示されるスケール区切りの最大数を取得または設定します。 
+    case "MAXNUMBEROFBREAKS":ni.MaxNumberOfBreaks=to_int();break; 
+  //     "Spacing スケール区切りの線間の間隔を取得または設定します。 間隔は Y 軸の割合として表されます。  
+    case "SPACING":ni.Spacing=to_double_o();break; 
+  //     "StartFromZero スケール区切りを 0 から開始するかどうかを示す StartFromZero 列挙値を取得または設定します。 
+    case "STARTFROMZERO":ni.StartFromZero=(StartFromZero)Enum.Parse(typeof(StartFromZero),data_enum_s,true);break; 
+    default:err_cmd_v();break;
+   }
+}
+///( axis_scale_view_v )//////////////////////////////////////
+void ni_axis_scale_view_v(AxisScaleView ni)
+{class_cmd_v(cmd_s);//class_sとcmd_sを設定。
+switch(class_s)
+  {
+  //△// "IsZoomed 軸を拡大表示するかどうかを示すフラグを取得します。 
+  //     "MinSize AxisScaleView  オブジェクトの最小サイズを取得または設定します。 
+    case "MINSIZE":ni.MinSize=to_double_o();break; 
+  //     "MinSizeType MinSize  プロパティの単位を取得または設定します。
+    case "MINSIZETYPE":ni.MinSizeType=(DateTimeIntervalType)Enum.Parse(typeof(DateTimeIntervalType),data_enum_s,true);break; 
+  //     "Position スケール ビューの位置を取得または設定します。 
+    case "POSITION":ni.Position=to_double_o();break; 
+  //     "Size スケール ビューのサイズを取得または設定します。 
+    case "SIZE":ni.Size=to_double_o();break; 
+  //     "SizeType Size  プロパティの単位を取得または設定します。 
+    case "SIZETYPE":ni.SizeType=(DateTimeIntervalType)Enum.Parse(typeof(DateTimeIntervalType),data_enum_s,true);break; 
+  //     "SmallScrollMinSize 小さいスクロールの最小サイズを取得または設定します。 小さいスクロールのサイズが設定されていない場合にのみ使用されます。  
+    case "SMALLSCROLLMINSIZE":ni.SmallScrollMinSize=to_double_o();break; 
+  //     "SmallScrollMinSizeType SmallScrollMinSize  プロパティの単位を取得または設定します。 
+    case "SMALLSCROLLMINSIZETYPE":ni.SmallScrollMinSizeType=(DateTimeIntervalType)Enum.Parse(typeof(DateTimeIntervalType),data_enum_s,true);break; 
+  //     "SmallScrollSize 小さいスクロールのサイズを取得または設定します。 
+    case "SMALLSCROLLSIZE":ni.SmallScrollSize=to_double_o();break; 
+  //     "SmallScrollSizeType SmallScrollMinSize  プロパティの単位を取得または設定します。 
+    case "SMALLSCROLLSIZETYPE":ni.SmallScrollSizeType=(DateTimeIntervalType)Enum.Parse(typeof(DateTimeIntervalType),data_enum_s,true);break; 
+  //△// "ViewMaximum データ ビューの軸の最大値を取得します。 
+  //△// "ViewMinimum データ ビューの軸の最小値を取得します。 
+  //     "Zoomable ズーム用のユーザー インターフェイスが有効かどうかを示すフラグを取得または設定します 
+    case "ZOOMABLE":ni.Zoomable=bool_b();break; 
+    default:err_cmd_v();break;
+  }
+}
+
+///( sereies_v() )//////////////////////////////////////////////////////////////////)
+void ni_series_v(Series ni)
+{class_cmd_v(cmd_s);//class_sとcmd_sを設定。
+switch (class_s)
+  {//case "":DataPoint data_point_n=new DataPoint(); //グラフデータ設定
+   //  String[] sx=z_p.split_sx(data_s,'\t');//タブ区切り
+   //  if     (1==sx.Length)data_point_n.SetValueY(to_int(sx[0]));//Yを設定。
+   //  else if(2==sx.Length)data_point_n.SetValueXY(sx[1],to_int(sx[0]));
+   //  else
+   //    {double[] ox=new double[sx.Length-2];
+   //     for(int j=0;(sx.Length-1)>j;j++)ox[j]=to_double_o(sx[j]);
+   //     data_point_n.SetValueXY(sx[sx.Length-1],ox);//X,Yを設定
+   //    }
+   //    data_point_n.LegendText=sx[sx.Length-1];//凡例を設定。　　　　　     
+   //    ni.Points.Add(data_point_n);data_point_n= null ;
+   //  break;
+ //(消さない事) "ChartType   系列のグラフの種類を取得または設定します。 
+ /*(消さない事)"CHARTTYPE":ni.ChartType=(SeriesChartType)Enum.Parse(; *(注意)*：ChartTypeをhelpとSettingに設定用です。消さないで下さい。*/
+
+ //     "AxisLabel 系列の軸ラベルのテキストを取得または設定します。 (DataPointCustomProperties.AxisLabel をオーバーライドします。) 
+   case "AXISLABEL":ni.AxisLabel=data_s;break;
+ //     "BackGradientStyle           背景のグラデーション スタイルを取得または設定します。 
+   case "BACKGRADIENTSTYLE":ni.BackGradientStyle=(GradientStyle)Enum.Parse(typeof(GradientStyle),data_enum_s,true);break;
+ //     "BackHatchStyle   背景のハッチング スタイルを取得または設定します。 
+   case "BACKHATCHSTYLE":ni.BackHatchStyle=(ChartHatchStyle)Enum.Parse(typeof(ChartHatchStyle),data_enum_s,true);break;
+ //     "BackImage   データ ポイントの背景イメージを取得または設定します。 
+   case "BACKIMAGE":ni.BackImage=data_s;break;
+ //     "BackImageAlignment   Unscaled  描画モードに使用される背景イメージの配置を取得または設定します。 
+   case "BACKIMAGEALIGNMENT":ni.BackImageAlignment=(ChartImageAlignmentStyle)Enum.Parse(typeof(ChartImageAlignmentStyle),data_enum_s,true);break; 
+ //     "BackImageTransparentColor   背景イメージが描画されるときに透明色で置き換えられる色を取得または設定します。 
+   case "BACKIMAGETRANSPARENTCOLOR":ni.BackImageTransparentColor=color_n();break;
+ //     "BackImageWrapMode   背景イメージの描画モードを取得または設定します。 
+   case "BACKIMAGEWRAPMODE":ni.BackImageWrapMode=(ChartImageWrapMode)Enum.Parse(typeof(ChartImageWrapMode),data_enum_s,true);break;
+ //     "BackSecondaryColor   背景の 2 番目の色を取得または設定します。 
+   case "BACKSECONDARYCOLOR":ni.BackSecondaryColor=color_n();break;
+ //     "BorderColor   データ ポイントの境界線の色を取得または設定します。 
+   case "BORDERCOLOR":ni.BorderColor=color_n();break;
+ //     "BorderDashStyle   データ ポイントの境界線スタイルを取得または設定します。 
+   case "BORDERDASHSTYLE":ni.BorderDashStyle=(ChartDashStyle)Enum.Parse(typeof(ChartDashStyle),data_enum_s,true);break;
+ //     "BorderWidth   データ ポイントの境界線の幅を取得または設定します。
+   case "BORDERWIDTH":ni.BorderWidth=to_int();break;
+ //     "ChartArea   データ系列を描画するために使用される ChartArea オブジェクトの名前を取得または設定します (存在する場合)。 
+   case "CHARTAREA":ni.ChartArea=data_s;break;
+ //〇// "ChartType   系列のグラフの種類を取得または設定します。 
+ //     "ChartTypeName   系列を描画するために使用されるグラフの種類の名前を取得または設定します。 
+   case "CHARTTYPENAME":ni.ChartTypeName=data_s;break;
+ //     "Color" データ ポイントの色を取得または設定します。 
+   case "COLOR":ni.Color=color_n();break;//色設定
+ //     "CustomProperties   データ ポイントのカスタム プロパティを取得または設定します。 カスタム プロパティは、AttrName1=Value1、AttrName2=Value2 という書式で指定できます。  
+   case "CUSTOMPROPERTIES":ni.CustomProperties=data_s;break;
+ //×// "CustomPropertiesExtended   データ ポイントの拡張カスタム プロパティを取得または設定します。 拡張カスタム プロパティは、AttrName1=Value1、AttrName2=Value2 という書式で指定できます。  
+ //case "CUSTOMPROPERTIESEXTENDED":ni.CustomPropertiesExtended=data_s;break;
+ //     "EmptyPointStyle   空としてマークされるポイントの描画スタイルを取得または設定します。 
+   case "EMPTYPOINTSTYLE":ni_data_point_custom_properties_v(ni.EmptyPointStyle);break;
+ //     "Enabled" 表示されたグラフ上に系列が表示されるかどうかを示すフラグを取得または設定します。 
+   case "ENABLED":ni.Enabled=bool_b();break;
+ //     "Font" データ ポイントのフォントを取得または設定します。
+   case "FONT":font_n();break;
+ //     "IsValueShownAsLabel ラベルにデータ ポイントの値を表示するかどうかを示すフラグを取得または設定します。 
+   case "ISVALUESHOWNASLABEL":ni.IsValueShownAsLabel=bool_b();break; 
+ //     "IsVisibleInLegend 凡例に項目を表示するかどうかを示すフラグを取得または設定します。 
+   case "ISVISIBLEINLEGEND":ni.IsVisibleInLegend=bool_b();break;  
+ //     "IsXValueIndexed データ ポイントのインデックスが X 値に使用されるかどうかを示すフラグを取得または設定します。 
+   case "ISXVALUEINDEXED":ni.IsXValueIndexed=bool_b();break; 
+ //△// "Item[Int32] インデックス内の位置を使用して、DataPointCustomProperties オブジェクトを取得します。 
+ //□// "Item[String] 名前を使用して、DataPointCustomProperties オブジェクトを取得または設定します。 
+ //     "Label データ ポイント ラベルのテキストを取得または設定します。 
+   case "LABEL":ni.Label=data_s;break; 
+ //     "LabelAngle データ ポイント ラベルの角度を取得または設定します。
+   case "LABELANGLE":ni.LabelAngle=to_int();break;  
+ //     "LabelBackColor   データ ポイント ラベルの背景色を取得または設定します。 
+   case "LABELBACKCOLOR":ni.LabelBackColor=color_n();break;
+ //     "LabelBorderColor   データ ポイント ラベルの境界線の色を取得または設定します。 
+   case "LABELBORDERCOLOR":ni.LabelBorderColor=color_n();break;
+ //     "LabelBorderDashStyle   ラベルの境界線スタイルを取得または設定します。 
+   case "LABELBORDERDASHSTYLE" :ni.LabelBorderDashStyle=(ChartDashStyle)Enum.Parse(typeof(ChartDashStyle),data_enum_s,true);break;
+ //     "LabelBorderWidth   ラベルの境界線の幅を取得または設定します。
+   case "LABELBORDERWIDTH":ni.LabelBorderWidth=to_int();break;
+ //     "LabelForeColor   ラベルのテキストの色を取得または設定します。 
+   case "LABELFORECOLOR":ni.LabelForeColor=color_n();break; 
+ //     "LabelFormat   データ ポイント ラベルの書式を取得または設定します。 
+   case "LABELFORMAT":ni.LabelFormat=data_s;break; 
+ //     "LabelToolTip   データ ポイント ラベルのツールヒントを取得または設定します。 
+   case "LABELTOOLTIP":ni.LabelToolTip=data_s;break; 
+ //     "Legend   Legend  オブジェクトに関連付けられた系列の名前を取得または設定します。 
+   case "LEGEND":ni.Legend=data_s;break; 
+ //     "LegendText  凡例項目のテキストを取得または設定します。 
+   case "LEGENDTEXT":ni.LegendText=data_s;break; 
+ //     "LegendToolTip   凡例項目のツールヒントを取得または設定します。 
+   case "LEGENDTOOLTIP":ni.LegendToolTip=data_s;break; 
+ //     "MarkerBorderColor   マーカーの境界線の色を取得または設定します。 
+   case "MARKERBORDERCOLOR":ni.MarkerBorderColor=color_n();break;//
+ //     "MarkerBorderWidth   マーカーの境界線の幅を取得または設定します。 
+   case "MARKERBORDERWIDTH":ni.MarkerBorderWidth=to_int();break;
+ //     "MarkerColor マーカーの色を取得または設定します。 
+   case "MARKERCOLOR":ni.MarkerColor=color_n();break;
+ //     "MarkerImage   マーカー イメージを取得または設定します。 
+   case "MARKERIMAGE":ni.MarkerImage=data_s;break;
+ //     "MarkerImageTransparentColor   マーカー イメージが描画されるときに透明色で置き換えられる色を取得または設定します。 
+   case "MARKERIMAGETRANSPARENTCOLOR":ni.MarkerImageTransparentColor=color_n();break;
+ //     "MarkerSize マーカーのサイズを取得または設定します。 
+   case "MARKERSIZE" :ni.MarkerSize=to_int();break;
+ //     "MarkerStep データ ポイントのマーカーを表示する頻度を決定する値を取得または設定します。 
+   case "MARKERSTEP" :ni.MarkerStep=to_int();break;
+ //     "MarkerStyle マーカー スタイルを取得または設定します。 
+   case "MARKERSTYLE" :ni.MarkerStyle=(MarkerStyle)Enum.Parse(typeof(MarkerStyle),data_enum_s,true);break;
+ //     "Name":   Series　オブジェクトの一意の名前を取得または設定します。 (ChartNamedElement.Name をオーバーライドします。) 
+   case "NAME" :ni.Name=data_s;break;
+ //     "Palette    Series オブジェクトのカラー パレットを取得または設定します。 
+   case "PALETTE":ni.Palette=(ChartColorPalette)Enum.Parse(typeof(ChartColorPalette),data_enum_s,true);break;
+ //△// "Points   データ ポイントのコレクションを取得します。 
+ //     "ShadowColor   系列の影色を取得または設定します。 
+   case "SHADOWCOLOR":ni.ShadowColor=color_n();break;
+ //     "ShadowOffset   系列の影のオフセット (ピクセル単位) を取得または設定します。 
+   case "SHADOWOFFSET" :ni.ShadowOffset=to_int();break;
+ //      "SmartLabelStyle   スマート ラベルのスタイルを取得または設定します。 
+   case  "SMARTLABELSTYLE":ni_smart_label_style_v(ni.SmartLabelStyle);break;
+ //□// "Tag   このグラフ要素に関連付けられているオブジェクトを取得または設定します。 (ChartElement から継承されます。) 
+ //     "ToolTip   ツールヒントを取得または設定します。 
+   case "TOOLTIP" :ni.ToolTip=data_s;break;
+ //     "XAxisType   系列の X 軸の種類を取得または設定します。 
+   case "XAXISTYPE":ni.XAxisType=(AxisType)Enum.Parse(typeof(AxisType),data_enum_s,true);break;
+ //     "XValueMember   系列の X 値にデータをバインドするために使用されるグラフのデータ ソースのメンバーを取得または設定します。 
+   case "XVALUEMEMBER" :ni.XValueMember=data_s;break;
+ //     "XValueType   X 軸に沿ってプロットされる値の型を取得または設定します。 
+   case "XVALUETYPE":ni.XValueType=(ChartValueType)Enum.Parse(typeof(ChartValueType),data_enum_s,true);break;
+ //     "YAxisType   系列の Y 軸の種類を取得または設定します。 
+   case "YAXISTYPE":ni.YAxisType=(AxisType)Enum.Parse(typeof(AxisType),data_enum_s,true);break;
+ //     "YValueMembers   系列の Y 値にデータをバインドするために使用されるグラフのデータ ソースのメンバー列を取得または設定します。 
+   case "YVALUEMEMBERS":ni.YValueMembers=data_s;break;
+ //     "YValuesPerPoint   Series  の DataPoint オブジェクトで許可されている Y 値の最大数を取得または設定します。 
+   case "YVALUESPERPOINT":ni.YValuesPerPoint=to_int();break;
+ //     "YValueType   系列に格納されるデータ ポイントの Y 値のデータ型を取得または設定します。 
+   case "YVALUETYPE":ni.YValueType=(ChartValueType)Enum.Parse(typeof(ChartValueType),data_enum_s,true);break;   
+ //    ["MaxPixelPointWidth"] 最大のデータ ポイントの幅をピクセル単位で指定します。( ["MaxPixelPointWidth"]="文字列")
+   case "MAXPIXELPOINTWIDTH":ni["MaxPixelPointWidth"]=data_s;break;  
+ //    ["MinPixelPointWidth"] 最小のデータ ポイントの幅をピクセル単位で指定します。(["MinPixelPointWidth"]="文字列") 
+   case "MINPIXELPOINTWIDTH":ni["MinPixelPointWidth"]=data_s;break;   
+ //    ["PointWidth"] データ ポイントの幅をピクセル単位で指定します。 (["PointWidth"]="文字列")　
+   case "POINTWIDTH":ni["PointWidth"]=data_s;break;
+   default:
+//class_cmd_v(cmd_s);//class_sとcmd_sを設定。
+//  　　 　　switch(class_s)
+//             {case  "SMARTLABELSTYLE":           smart_label_style_v(ni.SmartLabelStyle);break;
+//              case  "EMPTYPOINTSTYLE":data_point_custom_properties_v(ni.EmptyPointStyle);break;
+//              default:
+           err_cmd_v();break;
+//             }
+//           break;
+  }
+
+}
+/////( dot_s() )/////////////////////////////////////////////////////////////////////////////
+String dot_s(String si){String[] sx=z_p.split_sx(double_quote_cut_s(si),'.');return sx[sx.Length-1];}//ドット区切りの最後のデータ。
+/////( double_quote_cut_s )/////////////////////////////////////////////////////////////////////////////
+String double_quote_cut_s(String si)
+{String s=z_p.trim_s(si);
+return (1<s.Length&&'"'==s[0]&&'"'==s[s.Length-1]?z_p.substring3_s(s,1,s.Length-2):s); 
+}
+///( class_cmd_v )/////////////////////////////////////////////////
+void class_cmd_v(String cmd_si)
+{
+//int j=z_p.index(cmd_si,'.');
+//cmd_s=cmd_si;
+//if(-1!=j){class_s=(0==j?"":z_p.trim_s(z_p.substring3_s(cmd_si,0,j)));cmd_s=z_p.trim_s(z_p.substring3_s(cmd_si,j+1));}
+//else     {class_s="";cmd_s=cmd_si;}
+int j=z_p.index2c_i(cmd_si,'.');
+if(-1==j){class_s=cmd_si;cmd_s="";}
+else     {class_s=z_p.substring3_s(cmd_si,0,j);cmd_s=z_p.substring2_s(cmd_si,j+1);}
+
+}
+///( data_point_custom_properties_v )/////////////////////////////////////////////////
+void ni_data_point_custom_properties_v(DataPointCustomProperties ni)
+{class_cmd_v(cmd_s);//class_sとcmd_sを設定。
+switch(class_s)
+  {
+  //     "AxisLabel データ ポイント、系列、または空のポイントの X 軸のラベルのテキストを取得または設定します。 このプロパティは、関連する Axis オブジェクトにカスタム ラベルが指定されていない場合にのみ使用されます。  
+    case "AXISLABEL":ni.AxisLabel=data_s;break;
+  //     "BackGradientStyle 背景のグラデーション スタイルを取得または設定します。 
+    case "BACKGRADIENTSTYLE":ni.BackGradientStyle=(GradientStyle)Enum.Parse(typeof(GradientStyle),data_enum_s,true);break;
+  //     "BackHatchStyle 背景のハッチング スタイルを取得または設定します。 
+    case "BACKHATCHSTYLE":ni.BackHatchStyle=(ChartHatchStyle)Enum.Parse(typeof(ChartHatchStyle),data_enum_s,true);break;
+  //     "BackImage データ ポイントの背景イメージを取得または設定します。
+    case "BACKIMAGE":ni.BackImage=data_s;break;
+  //     "BackImageAlignment Unscaled  描画モードに使用される背景イメージの配置を取得または設定します。 
+    case "BACKIMAGEALIGNMENT":ni.BackImageAlignment=(ChartImageAlignmentStyle)Enum.Parse(typeof(ChartImageAlignmentStyle),data_enum_s,true);break; 
+  //     "BackImageTransparentColor 背景イメージが描画されるときに透明色で置き換えられる色を取得または設定します。 
+    case "BACKIMAGETRANSPARENTCOLOR":ni.BackImageTransparentColor=color_n();break;
+  //     "BackImageWrapMode 背景イメージの描画モードを取得または設定します。 
+    case "BACKIMAGEWRAPMODE":ni.BackImageWrapMode=(ChartImageWrapMode)Enum.Parse(typeof(ChartImageWrapMode),data_enum_s,true);break;
+  //     "BackSecondaryColor 背景の 2 番目の色を取得または設定します。 
+    case "BACKSECONDARYCOLOR":ni.BackSecondaryColor=color_n();break;
+  //     "BorderColor データ ポイントの境界線の色を取得または設定します。 
+    case "BORDERCOLOR":ni.BorderColor=color_n();break; 
+  //     "BorderDashStyle データ ポイントの境界線スタイルを取得または設定します。 
+    case "BORDERDASHSTYLE":ni.BorderDashStyle=(ChartDashStyle)Enum.Parse(typeof(ChartDashStyle),data_enum_s,true);break; 
+  //     "BorderWidth データ ポイントの境界線の幅を取得または設定します。 
+    case "BORDERWIDTH":ni.BorderWidth=to_int();break;
+  //     "Color データ ポイントの色を取得または設定します。 
+    case "COLOR":ni.Color=color_n();break;
+  //     "CustomProperties データ ポイントのカスタム プロパティを取得または設定します。 カスタム プロパティは、AttrName1=Value1、AttrName2=Value2 という書式で指定できます。  
+    case "CUSTOMPROPERTIES":ni.CustomProperties=data_s;break;
+  //×// "CustomPropertiesExtended データ ポイントの拡張カスタム プロパティを取得または設定します。 拡張カスタム プロパティは、AttrName1=Value1、AttrName2=Value2 という書式で指定できます。  
+  //case "CUSTOMPROPERTIESEXTENDED":ni.CustomPropertiesExtended=data_s;break;
+  //     "Font データ ポイントのフォントを取得または設定します。 
+    case "FONT":ni.Font=font_n();break; 
+  //     "IsValueShownAsLabel ラベルにデータ ポイントの値を表示するかどうかを示すフラグを取得または設定します。 
+    case "ISVALUESHOWNASLABEL":ni.IsValueShownAsLabel=bool_b();break; 
+  //     "IsVisibleInLegend 凡例に項目を表示するかどうかを示すフラグを取得または設定します。 
+    case "ISVISIBLEINLEGEND":ni.IsVisibleInLegend=bool_b();break; 
+  //□// "Item[Int32] インデックス内の位置を使用して、DataPointCustomProperties オブジェクトを取得します。 
+  //□// "Item[String] 名前を使用して、DataPointCustomProperties オブジェクトを取得または設定します。 
+  //     "Label データ ポイント ラベルのテキストを取得または設定します。 
+    case "LABEL":ni.Label=data_s;break;
+  //     "LabelAngle データ ポイント ラベルの角度を取得または設定します。 
+    case "LABELANGLE":ni.LabelAngle=to_int();break; 
+  //     "LabelBackColor データ ポイント ラベルの背景色を取得または設定します。 
+    case "LABELBACKCOLOR":ni.LabelBackColor=color_n();break;
+  //     "LabelBorderColor データ ポイント ラベルの境界線の色を取得または設定します。 
+    case "LABELBORDERCOLOR":ni.LabelBorderColor=color_n();break;
+  //     "LabelBorderDashStyle ラベルの境界線スタイルを取得または設定します。 
+    case "LABELBORDERDASHSTYLE":ni.LabelBorderDashStyle=(ChartDashStyle)Enum.Parse(typeof(ChartDashStyle),data_enum_s,true);break; 
+  //     "LabelBorderWidth ラベルの境界線の幅を取得または設定します。 
+    case "LABELBORDERWIDTH":ni.LabelBorderWidth=to_int();break;
+  //     "LabelForeColor ラベルのテキストの色を取得または設定します。 
+    case "LABELFORECOLOR":ni.LabelForeColor=color_n();break;
+  //     "LabelFormat データ ポイント ラベルの書式を取得または設定します。 
+    case "LABELFORMAT":ni.LabelFormat=data_s;break;
+  //     "LabelToolTip データ ポイント ラベルのツールヒントを取得または設定します。 
+    case "LABELTOOLTIP":ni.LabelToolTip=data_s;break;
+  //     "LegendText 凡例項目のテキストを取得または設定します。 
+    case "LEGENDTEXT":ni.LegendText=data_s;break;
+  //     "LegendToolTip 凡例項目のツールヒントを取得または設定します。 
+    case "LEGENDTOOLTIP":ni.LegendToolTip=data_s;break;
+  //     "MarkerBorderColor マーカーの境界線の色を取得または設定します。 
+    case "MARKERBORDERCOLOR":ni.MarkerBorderColor=color_n();break;
+  //     "MarkerBorderWidth マーカーの境界線の幅を取得または設定します。 
+    case "MARKERBORDERWIDTH":ni.MarkerBorderWidth=to_int();break; 
+  //     "MarkerColor マーカーの色を取得または設定します。 
+    case "MARKERCOLOR":ni.MarkerColor=color_n();break;
+  //     "MarkerImage マーカー イメージを取得または設定します。 
+    case "MARKERIMAGE":ni.MarkerImage=data_s;break;
+  //     "MarkerImageTransparentColor マーカー イメージが描画されるときに透明色で置き換えられる色を取得または設定します。 
+    case "MARKERIMAGETRANSPARENTCOLOR":ni.MarkerImageTransparentColor=color_n();break;
+  //     "MarkerSize マーカーのサイズを取得または設定します。 
+    case "MARKERSIZE":ni.MarkerSize=to_int();break; 
+  //     "MarkerStyle マーカー スタイルを取得または設定します。
+    case "MARKERSTYLE":ni.MarkerStyle=(MarkerStyle)Enum.Parse(typeof(MarkerStyle),data_enum_s,true);break; 
+  //     "Name グラフ要素の名前を取得または設定します。 (ChartNamedElement から継承されます。) 
+    case "NAME":ni.Name=data_s;break;
+  //□// "Tag このグラフ要素に関連付けられているオブジェクトを取得または設定します。 (ChartElement から継承されます。) 
+  //     "ToolTip ツールヒントを取得または設定します。 
+    case "TOOLTIP":ni.ToolTip=data_s;break;
+   default:err_cmd_v();break;
+  }
+}
+void ni_smart_label_style_v(SmartLabelStyle ni)
+{class_cmd_v(cmd_s);//class_sとcmd_sを設定。
+switch(class_s)
+   {
+  //     "AllowOutsidePlotArea SmartLabelStyle  オブジェクトをプロット エリアの外部に描画できるかどうかを示すフラグを取得または設定します。 
+    case "ALLOWOUTSIDEPLOTAREA":ni.AllowOutsidePlotArea=(LabelOutsidePlotAreaStyle)Enum.Parse(typeof(LabelOutsidePlotAreaStyle),data_enum_s,true);break;
+  //     "CalloutBackColor ラベルの吹き出しの背景色を取得または設定します。 
+    case "CALLOUTBACKCOLOR":ni.CalloutBackColor=color_n();break;
+  //     "CalloutLineAnchorCapStyle ラベルの引き出し線のアンカー キャップのスタイルを取得または設定します。 
+    case "CALLOUTLINEANCHORCAPSTYLE":ni.CalloutLineAnchorCapStyle=(LineAnchorCapStyle)Enum.Parse(typeof(LineAnchorCapStyle),data_enum_s,true);break; 
+  //     "CalloutLineColor ラベルの引き出し線の色を取得または設定します。 
+    case "CALLOUTLINECOLOR":ni.CalloutLineColor=color_n();break;
+  //     "CalloutLineDashStyle ラベルの引き出し線のスタイルを取得または設定します。 
+    case "CALLOUTLINEDASHSTYLE":ni.CalloutLineDashStyle=(ChartDashStyle)Enum.Parse(typeof(ChartDashStyle),data_enum_s,true);break; 
+  //     "CalloutLineWidth ラベルの引き出し線の幅を取得または設定します。 
+    case "CALLOUTLINEWIDTH":ni.CalloutLineWidth=to_int();break; 
+  //     "CalloutStyle 再配置された SmartLabelStyle オブジェクトの吹き出しスタイルを取得または設定します。 
+    case "CALLOUTSTYLE":ni.CalloutStyle=(LabelCalloutStyle)Enum.Parse(typeof(LabelCalloutStyle),data_enum_s,true);break; 
+  //     "Enabled SmartLabelStyle  アルゴリズムを有効にするかどうかを示すフラグを取得または設定します。 
+    case "ENABLED":ni.Enabled=bool_b();break; 
+  //     "IsMarkerOverlappingAllowed データ ポイントのラベルがポイント マーカーに重なるのを許可するかどうかを指定するフラグを取得または設定します。 
+    case "ISMARKEROVERLAPPINGALLOWED":ni.IsMarkerOverlappingAllowed=bool_b();break; 
+  //     "IsOverlappedHidden 再配置できない重なったラベルを非表示にするかどうかを示すフラグを取得または設定します。 
+    case "ISOVERLAPPEDHIDDEN":ni.IsOverlappedHidden=bool_b();break; 
+  //     "MaxMovingDistance 重なった SmartLabelStyle オブジェクトをマーカーから移動できる最長距離をピクセル単位で取得または設定します。 
+    case "MAXMOVINGDISTANCE":ni.MaxMovingDistance=to_double_o();break; 
+  //     "MinMovingDistance 重なった SmartLabelStyle オブジェクトをマーカーから移動できる最短距離をピクセル単位で取得または設定します。 
+    case "MINMOVINGDISTANCE":ni.MinMovingDistance=to_double_o();break; 
+  //     "MovingDirection 重なった SmartLabelStyle オブジェクトを移動できる方向を取得または設定します。 
+    case "MOVINGDIRECTION":ni.MovingDirection=(LabelAlignmentStyles)Enum.Parse(typeof(LabelAlignmentStyles),data_enum_s,true);break; 
+    default:err_cmd_v();break;
+   }
+}
+//SizeF size_f()
+//  {String[] sx=z_p.split_sx(data_s,',');
+//   return new SizeF((float)to_double_o(sx[0]),(float)(2>sx.Length?0.0:to_double_o(sx[1])));
+//  }
+///( err_cmd_v)//////////////////////////////////////////
+void err_cmd_v(){sw_err=ERR;z_p.err_s="CMD:"+cmd_org_s+"("+class_s+")";}
+Size size_n(){return new Size(point_n());}
+Point point_n()
+{String[] sx=z_p.split_sx(data_s,',');
+ return new Point(to_int(z_p.trim_s(sx[0])),(2>sx.Length?0:to_int(z_p.trim_s(sx[1]))));
+}
+Font font_n()
+{String[] sx=z_p.split_sx(data_s,',');
+if     (3>sx.Length) return new Font(double_quote_cut_s(sx[0]),(2>sx.Length?12:to_int(z_p.trim_s(sx[1]))));
+else if(3==sx.Length)return new Font(double_quote_cut_s(sx[0]),to_int(z_p.trim_s(sx[1]))
+,(FontStyle)Enum.Parse(typeof(FontStyle),dot_s(sx[2]),true));
+else if(4==sx.Length)return new Font(double_quote_cut_s(sx[0]),to_int(z_p.trim_s(sx[1]))
+,(FontStyle)Enum.Parse(typeof(FontStyle),dot_s(sx[2]),true)|(FontStyle)Enum.Parse(typeof(FontStyle),dot_s(sx[3]),true));
+else return new Font(double_quote_cut_s(sx[0]),to_int(z_p.trim_s(sx[1]))
+,(FontStyle)Enum.Parse(typeof(FontStyle),dot_s(sx[2]),true)|(FontStyle)Enum.Parse(typeof(FontStyle),dot_s(sx[3]),true)
+|(FontStyle)Enum.Parse(typeof(FontStyle),dot_s(sx[4]),true));
+}
+bool bool_b(){if(z_p.e3s_b(z_p.upper_s(data_s),"TRUE","1"))return true;else return false;}
+Color color_n()
+{String[] sx=z_p.split_sx(data_s,',');
+if     (1==sx.Length)return Color.FromKnownColor((KnownColor)Enum.Parse(typeof(KnownColor),dot_s(sx[0]),true));
+else if(2==sx.Length)return Color.FromArgb(to_int(z_p.trim_s(sx[0])),Color.FromKnownColor((KnownColor)Enum.Parse(typeof(KnownColor),dot_s(sx[1]),true)));
+else if(3==sx.Length)return Color.FromArgb(to_int(z_p.trim_s(sx[0])),to_int(z_p.trim_s(sx[1])),to_int(z_p.trim_s(sx[2])));
+else return Color.FromArgb(to_int(z_p.trim_s(sx[0])),to_int(z_p.trim_s(sx[1])),to_int(z_p.trim_s(sx[2])),to_int(z_p.trim_s(sx[3])));
+}
+float to_float_f(){return (float)to_double_o(data_s);}
+double to_double_o(){return to_double_o(data_s);}
+double to_double_o(String s_si)
+{if(z_p.e2s_b(s_si,"")){return 0.0;}
+double o=z_p.to_double_o(s_si,'-',0,0);
+if(!z_p.return_b){z_p.err_s=s_si+" not double";sw_err=ERR;}
+return o;
+}
+int to_int(){return to_int(data_s);}
+int to_int(String s_si)
+{if(z_p.e2s_b(s_si,"")){return 0;}
+int i=z_p.to_int_check(s_si,'-',0,0);
+if(!z_p.return_b){z_p.err_s=s_si+" not int";sw_err=ERR;}
+return i;
+}
+//=( popup_menu_v() )==========================================
+////SS ContextMenu popup_menu_n= null ; //VER33
+//SS ContextMenuStrip popup_menu_n= null ; //VER33
+//JJ PopupMenu  popup_menu_n= null ;
+void popup_menu_v()//印刷のポップアップメニュー表示
+{
+////SS popup_menu_n=new ContextMenu(); //VER33
+//SS popup_menu_n=new ContextMenuStrip(); //VER33
+////SS popup_menu_n.MenuItems.Add(new MenuItem("Print",print_print_vn)); //VER33
+//SS popup_menu_n.Items.Add("Print",null,print_print_vn); //VER33
+////SS ContextMenu=popup_menu_n; //VER33
+//SS ContextMenuStrip=popup_menu_n; //VER33
+//JJ popup_menu_n=new PopupMenu("PRINT");
+//JJ iprint_popup_menu_l print_print2_vn=new iprint_popup_menu_l(this); 
+//JJ MenuItem ji_n=new MenuItem("Print");
+//JJ ji_n.addActionListener(print_print2_vn);popup_menu_n.add(ji_n);
+//JJ add(popup_menu_n);
+}
+//SS void print_print_vn(Object o_ni,EventArgs e_ni)//印刷準備処理
+{
+//chart_n.Printing.PageSetup();
+//chart_n.Printing.PrintPreview();
+//chart_n.Printing.Print(true);
+//SS System.Drawing.Printing.PrintDocument PrintDocument_n=new System.Drawing.Printing.PrintDocument(); 
+//SS PrintDialog PrintDialog_n=new PrintDialog();
+//SS PrintDialog_n.Document=PrintDocument_n;
+//SS PrintDocument_n.DocumentName=Text;
+//SS DialogResult DialogResult_n=PrintDialog_n.ShowDialog();//印刷ダイアログ表示
+//SS if(DialogResult.OK==DialogResult_n)//OK時のみ印刷
+//SS   {PrintDocument_n.PrintPage+=new System.Drawing.Printing.PrintPageEventHandler(print_v);//印刷イベント設定
+//SS    PrintDocument_n.Print();//印刷開始
+//SS   }
+}
+private void print_v(object sender,System.Drawing.Printing.PrintPageEventArgs ppe_ni)//印刷
+{Rectangle r_n=new Rectangle(0,0,width,height); //印刷の大きさ指定
+ chart_n.Printing.PrintPaint(ppe_ni.Graphics,r_n); //実際に印刷
+}
+private static bool help_setting_b()
+{
+write_n=new ii_write_l(z_n);
+if(!write_n.open_b(z_p.get_tmp_file_s(1==help?"ICHART.HTML":"SETTING_ICHART.TXT"),"OT",""))return false;
+ii_chart_n=new ii_chart_l(z_n,write_n,help);//追加別処理
+if(1==help)
+  {if(!write_n.write_b("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>ICHARTW4.EXEの説明</title></head><body>"))return false;
+//*************************************************************************
+   w_v("  ICHARTW4.EXEの説明");
+   w_v("  グラフを画面に出すプログラムです。");
+   w_v("◎コマンドラインの指定方法で４種類の動きをします。");
+   w_v("〇ICHARTW4.EXE 定義ファイル １個目のデータファイル　[２個目のデータファイル ...]");
+   w_v("〇ICHARTW4.EXE VERSION VERSION　---バージョン情報を作業ファイルに出力します。（VERSION_ICHART.TXT）");
+   w_v("〇ICHARTW4.EXE SETTING SETTING  ---設定一覧を作業ファイルに出力します。（SETTING_ICHART.TXT）");
+   w_v("〇ICHARTW4.EXE --- ヘルプをHTMLで画面に出します。（ICHART.HTML)");
+   w_v("☆説明の中の[..]内は省略可で、(a,b,..)内はどれか１個を選択する意味です。");
+   w_v("☆設定は「名前=設定値; 備考」とします。");
+   w_v("☆設定の順番は全体の設定後にChartType=でグラフ設定の開始となり、グラフの設定とグラフ値を続けます。");
+   w_v("☆名前と設定値は大文字小文字を区別しません、また、アンダーバーは無視し、両端に二重引用符が有る場合も無視します。");
+   w_v("☆画面上で右ボタン「print」をクリックで紙に印刷出来ます。");
+   w_v("◎全体の設定を最初にします(C.,A.,T.,L.,X.,X2.,Y.,Y2.で始まります。");
+   w_v("◎次にデータ関連の設定をします、全体以外で始まる物全てです、CHART_TYLPEから設定します。");
+   w_v("◎データファイルにデータをタブ区切りで設定します。CHART_TYLPEを複数指定して、複数のチャートを画面に出す事も出来ます。");
+   w_v("〇X値{タブ}Y値[{タブ}Y2値{タブ}...]");
+   w_v("◎設定値の種類。（名前毎に使用する設定値が決まっています。）");
+   w_v("〇STRING --- 文字列");
+   w_v("〇BOOL --- 論理値(TRUE,FALSE)");
+   w_v("〇INT --- 整数値");
+   w_v("〇DOUBLE --- 小数値");
+   w_v("〇FLOAT --- 小数値");
+   w_v("〇POINT --- 整数値,整数値");
+   w_v("〇SIZE --- 整数値,整数値");
+   w_v("〇種類 --- (列挙型から選びます）");
+   w_v("〇COLOR/1 --- 色名称");
+   w_v("〇COLOR/2 ---アルファ値(0～255),色名称");
+   w_v("〇COLOR/3 --- 赤(0～255),緑(0～255),青(0～255)");
+   w_v("〇COLOR/4 --- アルファ値(0～255),赤(0～255),緑(0～255),青(0～255)");
+   w_v("〇FONT/1--フォント名");
+   w_v("〇FONT/2--フォント名,サイズ(ポイント数)");
+   w_v("〇FONT/3--フォント名,サイズ(ポイント数),(FontStyle)");
+   w_v("〇FONT/4--フォント名,サイズ(ポイント数),(FontStyle),(FontStyle)");
+   w_v("◎下記が設定出来る一覧です。");
+  }
+if(!rc_b)return false;
+if(!(rc_b=ii_chart_n.go_b()))return false;//サブルーチン側処理
+else
+/////////////////////////( Color )//////////////////////////////////////////
+  {foreach (System.Reflection.PropertyInfo pi_n in typeof(Color).GetProperties(System.Reflection.BindingFlags.Public|System.Reflection.BindingFlags.Static))
+     {Color color_n=(Color)pi_n.GetValue( null , null );
+      ii_chart_n.w_enum_v("Color",color_n.Name);
+     }  
+////////////////////////( CUSTOM_PROPERTIES )/////////////////////////////////////
+   custom_properties_v();
+////////////////////////( Font )/////////////////////////////////////
+   FontFamily[] FontFamily_nx; FontFamily_nx=FontFamily.Families;//フォントファミリーセット
+   for(int j=0;j<
+//SS           FontFamily_nx.Length
+//JJ           FontFamily_s.length
+                                    ;j++)
+     {String s=
+//SS  FontFamily_nx[j].Name;
+//JJ  FontFamily_s[j];
+      ii_chart_n.w_enum_v("Font",s);
+     }
+  } 
+if(1==help)if(!write_n.write_b("<body></html>"))return false;
+write_n.write_close_v();
+if(rc_b)if(1==help)z_p.process(z_p.get_tmp_file_s("ICHART.HTML"),"","",false);
+return rc_b;
+}
+/////////////////////////////////////////////////////////////////////////////////
+public static void w_v(String s_si){if(!write_n.write_b((1==help?"<br>":"")+s_si))rc_b=false;}//引数１個
+private System.ComponentModel.IContainer components_n = null ;
+protected override void Dispose(bool disposing)
+{if (disposing && (components_n != null ))components_n.Dispose();
+ base.Dispose(disposing);
+}
+static void custom_properties_v(String si) 
+{ii_chart_n.w_enum_v("CustomProperties",si);
+           
+}
+static void custom_properties_v() 
+{
+ custom_properties_v("3DLabelLineSize");  
+//Specifies the 3D label line size as a percentage of the default size.
+custom_properties_v("AreaDrawingStyle");  
+//Specifies the plot area shape in Radar and Polar charts.
+custom_properties_v("BarLabelStyle");  
+//Specifies the placement of the data point label.
+custom_properties_v("BoxPlotPercentile");  
+//Specifies the percentile value of the box of the Box Plot chart.
+custom_properties_v("BoxPlotSeries");  
+//Specifies the name of the series to be used as the data source for the Box Plot chart.
+custom_properties_v("BoxPlotShowAverage");  
+//Specifies whether to display the average value for the Box Plot chart.
+custom_properties_v("BoxPlotShowMedian");  
+//Specifies whether to display the median value for the Box Plot chart.
+custom_properties_v("BoxPlotShowUnusualValues");  
+//Specifies whether the unusual values value for the Box Plot chart will be shown.
+custom_properties_v("BoxPlotWhiskerPercentile");  
+//Specifies the percentile value of the whiskers of the Box Plot chart. 
+custom_properties_v("BoxSize");  
+//Specifies the box size in the Renko or Point and Figure charts.
+custom_properties_v("BubbleMaxSize");  
+//Specifies the maximum size of the bubble radius as a percentage of the chart area size.
+custom_properties_v("BubbleMinSize");  
+//Specifies the minimum size of the bubble radius as a percentage of the chart area size.
+custom_properties_v("BubbleScaleMax");  
+//Specifies the maximum bubble size, which is a percentage of the chart area that is set by BubbleMaxSize.
+custom_properties_v("BubbleScaleMin");  
+//Specifies the minimum bubble size, which is a percentage of the chart area that is set by BubbleMinSize.
+custom_properties_v("BubbleUseSizeForLabel");  
+//Specifies whether to use the bubble size as the data point label.
+custom_properties_v("CalloutLineColor");  
+//Specifies the line color of the callout for the data point labels of Funnel or Pyramid charts.
+custom_properties_v("CircularLabelStyle");  
+//Specifies the text orientation of the axis labels in Radar and Polar charts.
+custom_properties_v("CollectedColor");  
+//Specifies the color of the collected pie or doughnut slice.
+custom_properties_v("CollectedLabel");  
+//Specifies the label of the collected pie slice.
+custom_properties_v("CollectedLegendText");  
+//Specifies the legend text for the collected pie slice.
+custom_properties_v("CollectedSliceExploded");  
+//Specifies whether the collected pie slice will be shown as exploded.
+custom_properties_v("CollectedThreshold");  
+//Specifies the threshold value for collecting small pie slices.
+custom_properties_v("CollectedThresholdUsePercent");  
+//Specifies whether to use the collected threshold value as a percentage.
+custom_properties_v("CollectedToolTip");  
+//Specifies the tooltip text of the collected pie slice.
+custom_properties_v("DoughnutRadius");  
+//Specifies the radius of the doughnut portion in the Doughnut chart.
+custom_properties_v("DrawingStyle");  
+//Specifies the drawing style of data points.
+custom_properties_v("DrawSideBySide");  
+//Specifies whether series of the same chart type are drawn next to each other instead of overlapping each other.
+custom_properties_v("EmptyPointValue");  
+//Specifies the value to be used for empty points.
+custom_properties_v("ErrorBarCenterMarkerStyle");  
+//Specifies the appearance of the marker at the center value of the error bar.
+custom_properties_v("ErrorBarSeries");  
+//Specifies the name of the series to be used as the data source for the Error Bar chart calculations.
+custom_properties_v("ErrorBarStyle");  
+//Specifies the visibility of the upper and lower error values.
+custom_properties_v("ErrorBarType");  
+//Specifies how the upper and lower error values are calculated for the center values of the ErrorBarSeries.
+custom_properties_v("Exploded");  
+//Specifies whether the Pie or Doughnut data point is exploded.
+custom_properties_v("Funnel3DDrawingStyle");  
+//Specifies the 3D drawing style of the Funnel chart type.
+custom_properties_v("Funnel3DRotationAngle");  
+//Specifies the 3D rotation angle of the Funnel chart type.
+custom_properties_v("FunnelInsideLabelAlignment");  
+//Specifies the data point label placement of the Funnel chart type when the FunnelLabelStyle is set to Inside.
+custom_properties_v("FunnelLabelStyle");  
+//Specifies the data point label style of the Funnel chart type.
+custom_properties_v("FunnelMinPointHeight");  
+//Specifies the minimum height of a data point in the Funnel chart, measured in relative coordinates.
+custom_properties_v("FunnelNeckHeight");  
+//Specifies the neck height of the Funnel chart type.
+custom_properties_v("FunnelNeckWidth");  
+///Specifies the neck width of the Funnel chart type.
+custom_properties_v("FunnelOutsideLabelPlacement");  
+//Placement of the data point label in the Funnel chart when FunnelLabelStyle is set to Outside or OutsideInColumn.
+custom_properties_v("FunnelPointGap");  
+//Specifies the gap size between the points of a Funnel chart, measured in relative coordinates.
+custom_properties_v("FunnelStyle");  
+//Specifies the style of the Funnel chart type.
+custom_properties_v("LabelsHorizontalLineSize");  
+//Specifies the size of the horizontal segment of the callout line.
+custom_properties_v("LabelsRadialLineSize");  
+//Specifies the size of the radial segment of the callout line.
+custom_properties_v("LabelStyle");  
+//Specifies the label position of the data point.
+custom_properties_v("LabelValueType");  
+//Specifies the Y value to use as the data point label.
+custom_properties_v("LineTension");  
+//Specifies the line tension for the drawing of curves between data points.
+custom_properties_v("MaxPixelPointWidth");  
+//Specifies the maximum width of the data point in pixels.
+custom_properties_v("MinimumRelativePieSize");  
+//Specifies the minimum pie or doughnut size.
+custom_properties_v("MinPixelPointWidth");  
+//Specifies the minimum data point width in pixels.
+custom_properties_v("NumberOfLinesInBreak");  
+//Specifies the number of lines to use in a Three Line Break chart.
+custom_properties_v("OpenCloseStyle");  
+//Specifies the marker style for open and close values.
+custom_properties_v("PieDrawingStyle");  
+//Specifies the drawing style of the data points.
+custom_properties_v("PieLabelStyle");  
+//Specifies the label style of the data points.
+custom_properties_v("PieLineColor");  
+//Specifies the color of the radial and horizontal segments of the callout lines.
+custom_properties_v("PieStartAngle");  
+//Specifies the angle of the data point in the Pie or Doughnut chart.
+custom_properties_v("PixelPointDepth");  
+//Specifies the 3D series depth in pixels.
+custom_properties_v("PixelPointGapDepth");  
+//Specifies the 3D gap depth in pixels.
+custom_properties_v("PixelPointWidth");  
+//Specifies the data point width in pixels.
+custom_properties_v("PointWidth");  
+//Specifies the relative data point width.
+custom_properties_v("PolarDrawingStyle");  
+//Specifies the drawing style of the Polar chart type.
+custom_properties_v("PriceDownColor");  
+//Specifies the data point color to use to indicate a decreasing trend.
+custom_properties_v("PriceUpColor");  
+//Specifies the data point color that indicates an increasing trend.
+custom_properties_v("ProportionalSymbols");  
+//Specifies whether the Point and Figure chart should draw the X and O values proportionally.
+custom_properties_v("Pyramid3DDrawingStyle");  
+//Specifies the 3D drawing style of the Pyramid chart type.
+custom_properties_v("Pyramid3DRotationAngle");  
+//Specifies the 3D rotation angle of the Pyramid chart.
+custom_properties_v("PyramidInsideLabelAlignment");  
+//Specifies the placement of the data point labels in the Pyramid chart when they are placed inside the pyramid.
+custom_properties_v("PyramidLabelStyle");  
+//Specifies the style of data point labels in the Pyramid chart.
+custom_properties_v("PyramidMinPointHeight");  
+//Specifies the minimum height of a data point measured in relative coordinates.
+custom_properties_v("PyramidOutsideLabelPlacement");  
+//Specifies the placement of the data point labels in the Pyramid chart when the labels are placed outside the pyramid.
+custom_properties_v("PyramidPointGap");  
+//Specifies the gap size between the data points, measured in relative coordinates.
+custom_properties_v("PyramidValueType");  
+//Specifies whether the data point value represents a linear height or the surface of the segment.
+custom_properties_v("RadarDrawingStyle");  
+//Specifies the drawing style of the Radar chart.
+custom_properties_v("ReversalAmount");  
+//Specifies the reversal amount for the chart.
+custom_properties_v("ShowMarkerLines");  
+//Specifies whether marker lines are displayed when rendered in 3D.
+custom_properties_v("ShowOpenClose");  
+//Specifies whether markers for open and close prices are displayed.
+custom_properties_v("StackedGroupName");  
+//Specifies the name of the stacked group.
+custom_properties_v("UsedYValue");  
+//Specifies the index of the Y value to use to plot the Kagi, Renko, or Three Line Break chart, with the first Y value at index 0.
+custom_properties_v("UsedYValueHigh");  
+//Specifies the index of the Y value to use for the high price in the Point and Figure chart, with the first Y value at index 0.
+custom_properties_v("UsedYValueLow");  
+//Specifies the index of the Y value to use for the low price in the Point and Figure chart, with the first Y value at index 0.
+}
+public static void class_clear_v()
+{//class_a.Clear();//class_a クリアー
+////SS protected override void Dispose(bool disposing) 
+////JJ void exit_v()
+//{try{
+////SS     base.Dispose(disposing);//自身の終了処理。
+////JJ System.exit(0);
+//}catch (Exception){};
+}
+}
+#endif

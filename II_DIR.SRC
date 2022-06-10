@@ -1,0 +1,86 @@
+// II_DIR.SRC file class author nobumichi harasawa
+//ファイル 一覧 クラス
+#if IMENU||ITIME||ISRVC||ISETUP
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//SS using System.Data.SqlClient;
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.Drawing;
+//SS using System.IO;
+//JJ import java.awt.*;
+//JJ import java.awt.event.*;
+//JJ import java.io.*;
+//JJ import java.math.*;
+//JJ import java.util.*;
+public class ii_dir_l
+{
+//COPY *START
+ii_z_l dir_z_p;int sw=0,cnt=0,dir=0;char dir_file_c;
+//HP QDir dir_nn;
+//HP QFileInfoList fil_nn;
+//SS String[] dir_file_sx;
+//JJ File[] File_nx;java.text.SimpleDateFormat sdf_n=new java.text.SimpleDateFormat("yyyyMMddHHmmssSSS",Locale.JAPAN);
+public String dir_file_s="",last_write_time_s="";
+//----------------------------------------------
+public ii_dir_l(ii_z_l z_ni){dir_z_p=z_ni;}
+//----------------------------------------------
+public bool next_b()
+{
+//HP for(;;cnt++)
+//HP   {if(0==sw||cnt>=fil_nn.size()){close_v();return false;}
+//HP    QFileInfo fi_nn=fil_nn.at(cnt);
+//HP    if('F'==dir_file_c){if(!fi_nn.isFile())continue;}
+//HP    else               {if(!fi_nn.isDir())continue;}
+//HP    dir_file_s=dir_z_p.substring2_s(fi_nn.fileName(),dir);
+//HP    last_write_time_s=dir_z_p.date_time_s(fi_nn.lastModified(),0);
+//HP    break;
+//HP   }
+//SS if(0==sw||cnt>=dir_z_p.count_sx_i(dir_file_sx)){close_v();return false;}
+//SS dir_file_s=dir_z_p.substring2_s(dir_file_sx[cnt],dir);
+//SS last_write_time_s=dir_z_p.date_time_s(Directory.GetLastWriteTime(dir_file_sx[cnt]),0);
+//JJ for(;;cnt++)
+//JJ   {if(0==sw||cnt>=File_nx.length){close_v();return false;}
+//JJ    if('F'==dir_file_c){if(!File_nx[cnt].isFile())continue;}
+//JJ    else               {if(!File_nx[cnt].isDirectory())continue;}
+//JJ    dir_file_s=File_nx[cnt].getName();
+//JJ    last_write_time_s=sdf_n.format(File_nx[cnt].lastModified()); //VER28.1      
+//JJ    break;
+//JJ   } 
+cnt++;
+return true;
+}
+//----------------------------------------------
+public bool open_b(String dir_si,char dir_file_ci)
+{dir_file_c=dir_file_ci;
+close_v();
+if(0==dir_z_p.length(dir_si)||dir_z_p.at_s_c(dir_z_p.dir_s,0)!=dir_z_p.at_s_c(dir_si,dir_z_p.length(dir_si)-1))dir_si=dir_si+dir_z_p.dir_s;
+dir=dir_z_p.length(dir_si);
+//HP dir_nn=QDir(dir_si);
+//HP fil_nn=dir_nn.entryInfoList();
+try{
+//SS if('F'==dir_file_c)dir_file_sx=Directory.GetFiles      (dir_si,"*");
+//SS else               dir_file_sx=Directory.GetDirectories(dir_si,"*");
+//JJ File f_n=new File(dir_si);
+//JJ if(!f_n.isDirectory()){dir_z_p.err_s="not directory";return false;}
+//JJ File_nx=f_n.listFiles();
+   }
+   catch  (Exception e_ni){dir_z_p.err_s=dir_z_p.message_s(e_ni);return false;}
+sw=1;
+return true;
+}
+//==============================================
+public void close_v()
+{if(0!=sw)
+   {cnt=0;sw=0;dir=0;
+//SS  dir_file_sx.Initialize();
+    dir_file_s="";last_write_time_s="";
+   }
+}
+//COPY *END
+//COPY $II_READ
+//COPY $II_SQL2
+//COPY $II_URL
+//COPY $II_WRITE
+}
+#endif //MENU||TIME||SRVC||SETUP

@@ -1,0 +1,783 @@
+// II_KEYBOARD.SRC keyboard class author nobumichi harasawa
+//キーボード クラス
+#if IMENU
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//SS using System.Data.SqlClient;
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.IO;
+#if XAMARIN
+//SS using Xamarin.Forms;
+////SS using System.Drawing.Common;
+////SS using Windows.UI.Xaml;
+////SS using Windows.UI.Xaml.Controls;
+////SS using Windows.UI.Xaml.Controls.Primitives;
+////SS using Windows.UI.Xaml.Data;
+////SS using Windows.UI.Xaml.Input;
+////SS using Windows.UI.Xaml.Media;
+////SS using Windows.UI.Xaml.Navigation;
+#else
+//SS using System.Windows.Forms;
+//SS using System.Drawing;
+#endif
+//JJ import java.awt.*;
+//JJ import java.awt.event.*;
+//JJ import java.io.*;
+//JJ import java.math.*;
+//JJ import java.util.*;
+public class ii_keyboard_l
+{
+//COPY $II_DIR
+//COPY $II_READ
+//COPY $II_SQL2
+//COPY $II_URL
+ii_z_l z_p;ii_z_mt_l z_mt_p;ii_data_l data_p= null ;
+bool sw_insert_b=false;
+// unicode=ユニコード文字入力位置
+// form=表示文字入力位置 
+int line=0,column=0,form=0,form_length=0,unicode=0,form_old,key_copy_start=-1,key_copy_form=0,sw_err=0;
+List<char> c_key_a=new List<char>();
+List<char> c_w_a=new List<char>();
+String type_s;
+//SJ decimal w_d;
+double w_o;String w_s;
+char[]  today_c8=new char[8]; //(C++対抗空白２個)//
+char surrogate_c=' ';
+public int sw_surrogate=0;
+void display_v()
+{z_p.t_v(z_p.KE,"display_v(");
+z_mt_p.program_p.paint_list_n.add_v(z_p.set_display_s(data_p.type2_c,z_p.to_ca_s(c_key_a))
+,line,column,data_p.length0,data_p.font_s,data_p.Font_n,data_p.Brush_n);
+//HP if(0==z_p.sw_on_paint)z_mt_p.imenu_p.repaint();  //再表示 
+z_p.t_v(z_p.KE,"display_v)");
+}
+void key_from_w_v()
+{
+//HP    z_p.to_ca_v(c_key_a,c_w_a);
+//SJ    c_key_a=z_p.to_ca_ca(c_w_a);
+} 
+void w_from_key_v()
+{
+//HP    z_p.to_ca_v(c_w_a,c_key_a);
+//SJ    c_w_a=z_p.to_ca_ca(c_key_a);
+} 
+//----------------------------------------------
+//=====( 自動入力 sw_ii:1=先頭より)=====
+public void auto_v(int sw_ii,String s_si)
+{z_p.t_v(z_p.KE,"auto_v("+s_si);
+if(1==sw_ii) //先頭から入力
+   {z_p.clear_c_v(c_w_a);
+    key_from_w_v();
+    form_old=form_length=form=unicode=0;
+   }
+if(z_p.e2s_b(type_s,"J"))s_si=z_p.full_size_s(s_si);//半角を全角に変換
+for(int iz=0;iz<z_p.length(s_si);iz++)
+     {char c=z_p.at_s_c(s_si,iz);
+      if('R'==data_p.type2_c)    //タイプ2='R'は大文字、小文字反転 (autoは反転の反転でそのまま) VER15.1
+        {if     (z_p.is_lower_b(c))c=z_p.to_upper_c(c);  
+         else if(z_p.is_upper_b(c))c=z_p.to_lower_c(c);  
+        }
+      if(2!=key_press_v((c<' '?'?':c)))break;
+     } //空白以下は'?'に置き換え入力。
+         w_from_key_v();
+                          
+if(1==sw_ii)
+  {keyboard_ok_v();form_old=form_length=form=unicode=0;}
+display_v();
+}
+//----------------------------------------------
+bool check_change_type_all_b()
+{z_p.t_v(z_p.KE,"check_change_type_all_b(");
+int i;ii_zz_l ww_c_n=new ii_zz_l();
+ if(1<z_p.length(type_s))
+    for(i=0;i<z_p.count_c_i(c_w_a);i++)
+      {ww_c_n.c=z_p.at_c(c_w_a,i);if(0!=check_key_s(ww_c_n,get_type_s(i),i,data_p))return false;z_p.set_c_v(c_w_a,i,ww_c_n.c);}
+//HP delete ww_c_n;
+return true;
+}
+//----------------------------------------------
+//***( 長さ判定 )***
+bool check_length_b()
+{z_p.t_v(z_p.KE,"check_length_b(");
+int i,len,start;
+w_s=z_p.to_ca_s(c_w_a);
+if(z_p.form_length(w_s)>data_p.length0){z_p.t_v(z_p.KE,"check_length_b)1");return false;}  //表示長がオーバー
+if(z_p.e3s_b(type_s,"-","+"))
+  {if(z_p.e2s_b(w_s,"")){z_p.t_v(z_p.KE,"check_length_b)2");return true;}
+   if(z_p.ends_with_b(w_s,".")||z_p.ends_with_b(w_s,"-"))w_s+="0";//ゼロを付加し数値化
+//HP w_o=z_p.to_double_o(w_s,'-',0,0);//数値に変換
+//SJ w_d=z_p.to_decimal_d(w_s,'-',z_p.decimal_d(0),0);//数値に変換
+   if(!z_p.return_b){z_p.t_v(z_p.KE,"check_length_b)3");return false;}//数値変換不可
+//HP   w_s=z_p.to_o_s(w_o);//文字に戻す。
+//SJ   w_s=z_p.to_d_s(w_d);//文字に戻す。
+   i=z_p.index2c_i(w_s,'.'); //小数点位置判定
+   if(0!=data_p.length2)
+     if(-1!=i)if(data_p.length2<(z_p.length(w_s)-i-1)){z_p.t_v(z_p.KE,"check_length_b)4");return false;} //小数部アンダーフロー
+   if(-1==i)len=z_p.length(w_s);else len=i;
+   if(z_p.starts_with_b(w_s,"-")){len--;start=1;}else start=0;
+   if(len>(data_p.length1-data_p.length2)) //整数部オーバーフロー 
+    {if(0!=(data_p.length1-data_p.length2)){z_p.t_v(z_p.KE,"check_length_b)5");return false;}//全小数部以外は無条件でNG
+     if(!z_p.e2s_b(z_p.substring3_s(w_s,start,len),"0")){z_p.t_v(z_p.KE,"check_length_b)6");return false;}       //全小数部は整数部"0"以外はNG
+    }
+    z_p.t_v(z_p.KE,"check_length_b)7");
+   return true;
+  }
+else if(z_p.length(w_s)>data_p.length1){z_p.t_v(z_p.KE,"check_length_b)8");return false;} //物理長がオーバー（結合文字がある場合オーバーの危険あり）
+z_p.t_v(z_p.KE,"check_length_b)9");
+return true;
+}
+//----------------------------------------------
+char get_type_s(int i_ii){return (i_ii<z_p.length(type_s)?z_p.at_s_c(type_s,i_ii):z_p.at_s_c(type_s,z_p.length(type_s)-1));}
+//----------------------------------------------
+//***************************************************************************************
+//=====( 文字キー入力 return 0=自動スキップ終了,1=自動スキップ無終了,2=継続,-1=error )=====
+//***************************************************************************************
+public int key_press_v(char c_ci)
+{z_p.t_v(z_p.KE,"key_press_v(");
+int u=0;
+if(1==sw_err){z_mt_p.program_p.display_msg_v(1);sw_err=0;}//エラー表示クリア。
+int kind_new=z_p.kind_code(c_ci);
+int rc=2,w_unicode=unicode,w_form=form,i;
+if(0==sw_surrogate)if(z_p.HIGH_SURROGATE_4==kind_new)// サロゲートペア1文字目発見。
+  {surrogate_c=c_ci;sw_surrogate=1;{z_p.t_v(z_p.KE,"key_press_v)1");return rc;}}// サロゲートペア1文字目保管終了。
+int sw=9;//NG
+ii_zz_l ww_c_n=new ii_zz_l();ww_c_n.c=c_ci;
+for(;;)
+  {if(1==sw_surrogate)if(z_p.LOW_SURROGATE_5!=kind_new)break;// サロゲートペア２文字目ではない。
+   if(-1!=key_copy_start){display_v();key_copy_start=-1;}
+   if(0!=check_key_s(ww_c_n,get_type_s(w_unicode),w_unicode,data_p))break;//文字種類判定
+   w_from_key_v();
+
+   if(sw_insert_b&&0!=form_old) //挿入指示中
+     {z_p.insert_c_v(c_w_a,w_unicode,ww_c_n.c); //入力文字挿入
+      //サロゲート１文字目挿入（同じ場所に挿入なのでww_c_n.cの前に挿入される）
+      if(1==sw_surrogate)z_p.insert_c_v(c_w_a,w_unicode,surrogate_c); 
+      if(!check_length_b())break;
+      w_form+=z_p.form_length(ww_c_n.c);
+      w_unicode++;if(1==sw_surrogate)w_unicode++;
+      sw=5;break;//retry;
+     }
+   if(z_p.COMBINING_0==kind_new) //入力結合文字判定。
+     {if(0==w_unicode)break; //先頭には結合文字置けず。
+      if(w_unicode>=z_p.count_c_i(c_w_a))z_p.add_c(c_w_a,ww_c_n.c); //最後に追加。
+      else 
+        {z_p.insert_c_v(c_w_a,w_unicode,ww_c_n.c); //現在位置直前に挿入。
+         if(z_p.count_c_i(c_w_a)>data_p.length0) //データ長オーバー
+          {i=w_unicode+1;//次の文字位置（前の現在位置）
+           //元サロケートペア１文字削除（全２文字削除）
+           if(z_p.e3i_b(z_p.kind_code(z_p.at_c(c_w_a,i)),z_p.HIGH_SURROGATE_4,z_p.LOW_SURROGATE_5))z_p.remove_c_v(c_w_a,i++);
+           if(i<z_p.count_c_i(c_w_a))z_p.remove_c_v(c_w_a,i++);//１文字削除
+           for(;i<z_p.count_c_i(c_w_a);i++)if(z_p.COMBINING_0==z_p.kind_code(z_p.at_c(c_w_a,i)))
+                                z_p.remove_c_v(c_w_a,i);else break; //結合文字削除 
+          }
+        }
+      String s="";//Size size=new Size(); 
+      i=w_unicode;  //追加した位置
+      for(;-1<i;i--){s=z_p.at_c(c_w_a,i)+s;if(z_p.COMBINING_0!=z_p.kind_code(z_p.at_c(c_w_a,i)))break;}//結合文字以外まで戻る。
+      if(z_p.e3i_b(z_p.kind_code(z_p.at_c(c_w_a,i)),z_p.HIGH_SURROGATE_4,z_p.LOW_SURROGATE_5))break; //サロゲート文字には結合文字は不可。
+      //表示長が大きくなった場合は結合出来ずの判定。
+      if(z_mt_p.font_width(s)>z_mt_p.font_width(z_p.substring3_s(s,1,1)))break;
+      sw=0;break; //OK;
+     }//if
+   if(w_unicode>=z_p.count_c_i(c_w_a)) //最後の位置
+     {if(1==sw_surrogate)z_p.add_c(c_w_a,surrogate_c);//最後にサロゲート１文字目追加
+      z_p.add_c(c_w_a,ww_c_n.c);//入力文字追加（またはサロゲート2文字目）
+      sw=0;break; //OK;
+     }
+   u=unicode;
+   int kind_old=z_p.kind_code(z_p.at_c(c_w_a,u));//元２文字目種類設定
+   if(z_p.e3i_b(kind_old,z_p.COMBINING_0,z_p.KANA_3))kind_old=z_p.HALF_1;//元２文字目種類変更（文字数化）
+   int kind_old2=-1;//元２文字目無し
+   for(;;)if((u+1)<z_p.count_c_i(c_w_a))
+            {kind_old2=z_p.kind_code(z_p.at_c(c_w_a,u+1));//元２文字目種類設定
+             if(z_p.COMBINING_0==kind_old2)z_p.remove_c_v(c_w_a,u+1);else break;//元２文字目結合文字は削除
+            }
+          else {kind_old2=-1;break;}//元２文字目無くなった。
+   if(z_p.KANA_3==kind_old2)kind_old2=z_p.HALF_1;
+   z_p.set_c_v(c_w_a,u++,(z_p.e3i_b(kind_new,z_p.HIGH_SURROGATE_4,z_p.LOW_SURROGATE_5)?surrogate_c:ww_c_n.c));//一文字目転送
+   //*****( 入力半角 )*****
+   if(z_p.HALF_1==kind_new)//入力半角
+     {if(z_p.HALF_1==kind_old){sw=1;break;}//check(sw=1)元半角
+      if(z_p.FULL_2==kind_old) //元全角
+        {if(-1==kind_old2){sw=1;break;} //chk(sw=1)元２文字目なし
+         z_p.insert_c_v(c_w_a,u++,' '); //空白追加(全角->半角+空白）
+         sw=1;break;//chk(sw=1)
+        }
+      z_p.set_c_v(c_w_a,u,' '); //空白転送（サロゲート->半角+空白）
+      sw=0;break;//OK(sw=0)
+     }
+   //*****( 入力全角 )*****
+   if(z_p.FULL_2==kind_new) //入力全角
+     {if(z_p.HALF_1==kind_old)  //元半角
+        {if(-1==kind_old2){sw=1;break;} //元２文字目なし
+         if(z_p.HALF_1==kind_old2) //元２文字目半角
+           {z_p.remove_c_v(c_w_a,u);sw=1;break;} //削除（半角+半角->全角＋削除）
+         z_p.set_c_v(c_w_a,u++,' '); //2文字目空白転送
+         if(z_p.FULL_2==kind_old2){sw=1;break;} //元２文字目全角
+         z_p.remove_c_v(c_w_a,u); //削除(半角+サロゲート->全角+空白+削除)
+         sw=0;break;//OK(sw=0)
+        }
+      if(z_p.FULL_2==kind_old){sw=1;break;} //元全角(全角->全角)
+      z_p.remove_c_v(c_w_a,u); //削除(サロゲート->全角+削除)
+      sw=0;break;//OK(sw=0)
+     }
+   //*****( 入力サロゲートペア )*****
+   if(z_p.HALF_1==kind_old)  //元半角
+     {if(-1==kind_old2) //元２文字目なし
+        {z_p.add_c(c_w_a,ww_c_n.c);sw=1;break;} //２文字目追加
+      z_p.set_c_v(c_w_a,u++,ww_c_n.c);// 入力２文字目転送
+      if(z_p.HALF_1==kind_old2){sw=1;break;} //元２文字目半角
+      if(z_p.FULL_2==kind_old2)//元２文字目全角
+        {if(u==z_p.count_c_i(c_w_a)){sw=1;break;}//３文字目なし
+         z_p.insert_c_v(c_w_a,u++,' '); //空白追加（半角+全角->サロゲート+空白）
+         sw=1;break;//chk(sw=0)
+        }
+      z_p.set_c_v(c_w_a,u,' '); //空白転送(半角+サロゲート->サロゲート+空白)
+      sw=0;break;//OK(sw=0)
+     }
+   if(z_p.FULL_2==kind_old)  //元全角
+     {if(-1==kind_old2) //元２文字目なし
+        {z_p.add_c(c_w_a,ww_c_n.c);sw=1;break;} //２文字目追加
+      z_p.insert_c_v(c_w_a,u++,ww_c_n.c);// 挿入（全角->サロゲート（２文字目挿入））
+      sw=1;break;
+     }
+   z_p.set_c_v(c_w_a,u,ww_c_n.c); // サロゲート->サロゲート
+   sw=0;break;//OK(sw=0)
+  }//for 
+if(1==sw)//chk(sw=1)
+  {for(;u<z_p.count_c_i(c_w_a);) //結合文字単独分削除
+     if(z_p.COMBINING_0==z_p.kind_code(z_p.at_c(c_w_a,u)))z_p.remove_c_v(c_w_a,u);else break; 
+  }
+if(1==sw||0==sw)//chk,ok
+  {if(!check_length_b())sw=9;//長さ判定。
+   else
+     if((w_form+z_p.form_length(ww_c_n.c))<data_p.length0)
+       {w_unicode+=sw_surrogate+1;
+        w_form+=z_p.form_length(ww_c_n.c);
+        rc=2;
+       }
+     else
+       {if(!fin_check_b(c_w_a))sw=9; //文字最終確認
+        else
+          {if('/'==((ii_data_l )z_p.at_da(z_mt_p.program_p.da_now_ap,z_mt_p.program_p.now_cnt)).mark2_c //Enter以外の終了認めず。
+           &&z_p.e4s_b(z_mt_p.program_p.now_kind_s,"DATA","JUDGE","SET")){rc=1;sw=5;}//retry(5)
+           else {keyboard_ok_v();rc=0;}
+          }
+       }
+  }
+if(9!=sw)
+  {form_length+=z_p.form_length(ww_c_n.c)-form_old;
+   key_from_w_v();
+   form=w_form;unicode=w_unicode;
+   display_v();
+   sw_surrogate=0;
+  }
+else 
+  {z_p.beep_v();
+   display_err();
+   sw_surrogate=0;
+   rc=-1;
+  }
+//HP delete ww_c_n;
+z_p.t_v(z_p.KE,"key_press_v)2");
+return rc;
+}
+void display_err()
+{if(z_p.SW_OFF_0==z_mt_p.sw_err)z_mt_p.sw_err=z_p.SW_ERROR_5;
+if(z_p.e2s_b(z_p.err_s,""))z_p.err_s="*(input)*";
+if(z_p.SW_ERROR_5==z_mt_p.sw_err)
+ {z_mt_p.program_p.display_msg_v(1);//エラー表示。
+  z_mt_p.sw_err=z_p.SW_OFF_0;z_p.err_s="";//エラークリアー
+  sw_err=1;//エラー表示したスイッチ。
+ }
+}
+//----------------------------------------------
+//****( 文字判定 )*****
+public int check_key_s(ii_zz_l c_ni,char type_ci,int i_ii,ii_data_l data_ni)
+{z_p.t_v(z_p.KE,"check_key_s(");
+int sw=9;//NG
+for(;;)
+  {if('R'==data_ni.type2_c)    //タイプ2='R'は大文字、小文字に反転  VER15.1
+     {if     (z_p.is_lower_b(c_ni.c))c_ni.c=z_p.to_upper_c(c_ni.c);  
+      else if(z_p.is_upper_b(c_ni.c))c_ni.c=z_p.to_lower_c(c_ni.c);  
+     }
+   if('X'==data_ni.type2_c&&z_p.e3c_b(c_ni.c,'{','}'))break;
+   if('I'==data_ni.type2_c&&z_p.e5c_b(c_ni.c,'I','O','i','o'))break;
+   if('!'==type_ci){sw=0;break;}
+   if(z_p.HALF_1==z_p.kind_code(c_ni.c))//半角
+     {if('J'==type_ci)
+       {if((char )0X21<=c_ni.c&&(char )0X7E>=c_ni.c)     //VER 36.1
+          {c_ni.c=(char )(z_p.to_c_i(c_ni.c)+0XFEE0);{sw=0;break;}
+          }//半角を全角に変換 
+        else break;
+       }
+     }
+   else
+    if(z_p.KANA_3!=z_p.kind_code(c_ni.c))//全角
+       {if('J'==type_ci){sw=0;break;}
+        if(!z_p.e2s_b(z_p.lang_s,"EN"))
+          {if(z_p.find_char_b(type_ci,"*/")){sw=0;break;}
+           if(z_p.FULL_2==z_p.kind_code(c_ni.c))if(z_p.find_char_b(type_ci,"N:")){sw=0;break;}
+          }
+        if((char )0XFF01<=c_ni.c&&(char )0XFF5E>=c_ni.c)c_ni.c=(char )(z_p.to_c_i(c_ni.c)-0XFEE0);//全角を半角に変換 //VER36.1
+        else break;
+       } 
+     else if('K'==data_ni.type2_c){sw=0;break;}else break; //カナ
+     if(':'==type_ci){if(z_p.find_char_b(c_ni.c," \\/:*?\"<>|'"))break;else {sw=0;break;}}
+     if(z_p.is_digit_b(c_ni.c)) //数字
+       {if(0==i_ii&&z_p.find_char_b(type_ci,"MN"))break;
+        if('Z'==type_ci)break;
+        sw=0;break;
+       }
+   if(z_p.find_char_b(type_ci,"9DT"))break;//数字のみ
+   if('.'==c_ni.c)
+     {if(z_p.find_char_b(type_ci,"+-")){if(0!=data_ni.length2){sw=0;break;}else break;} 
+      if('F'==type_ci){sw=0;break;}
+     }
+   if('-'==c_ni.c)
+     {if('-'==type_ci){if(0==i_ii){sw=0;break;}else break;}
+      if('+'==type_ci)break;
+      if('F'==type_ci){sw=0;break;}
+     }
+   if('E'==z_p.to_upper_c(c_ni.c)||'+'==c_ni.c)if('F'==type_ci){sw=0;break;}
+   if(z_p.find_char_b(type_ci,"+-F"))break;//数値
+   if(z_p.is_letter_b(c_ni.c))//英字
+     {if(z_p.is_lower_b(c_ni.c))//小文字判定
+        if(z_p.find_char_b(type_ci,"!")||z_p.e4c_b(data_ni.type2_c,'L','R','#')){sw=0;break;}  //VER15.1でRを追加。//VER20.1で#を追加
+      if(z_p.find_char_b(type_ci," ABCHIMNSUVZ/*#"))
+         {sw=0;
+          c_ni.c=z_p.to_upper_c(c_ni.c);  //英大文字変換
+         }
+      break;
+     }
+   if(z_p.find_char_b(type_ci,"AZ"))break;
+   if(z_p.find_char_b(type_ci," SU")){if(z_p.find_char_b(c_ni.c,"]`~{}"))break;}//汎用機互換
+   if(z_p.find_char_b(type_ci,"MN")){if('_'==c_ni.c&&0!=i_ii){sw=0;break;}else break;}
+   if('C'==type_ci){if('-'==c_ni.c){sw=0;break;}else break;}  
+   if('B'==type_ci){if(z_p.find_char_b(c_ni.c,"-. $/+%")){sw=0;break;}else break;}
+   if('I'==type_ci){if(z_p.find_char_b(c_ni.c," \\/:*?\"<>|'"))break;}
+   if(' '==c_ni.c){if(z_p.find_char_b(type_ci,"UV"))break;}
+   sw=0;break;  
+  }
+if(0==sw)
+  {if(!z_p.e2s_b(data_p.input_s,""))//INPUT=処理
+    {z_p.input_c=c_ni.c;//_INPUTへ文字転送。
+     z_mt_p.program_p.section_n.section("INPUT",data_p,0);//INPUT=実行。
+     if(z_p.SW_ERROR_5==z_mt_p.sw_err){z_p.t_v(z_p.KE,"check_key_s)1");return 1;}//エラー有り。
+     else                             {z_p.t_v(z_p.KE,"check_key_s)2");return 0;}//エラー無し。
+    }
+   else {z_p.t_v(z_p.KE,"check_key_s)3");return 0;} 
+  }
+if(z_p.SW_OFF_0==z_mt_p.sw_err){z_mt_p.sw_err=z_p.SW_ERROR_5;z_p.err_s=z_p.to_c_s(c_ni.c)+" *(input)*";}
+z_p.t_v(z_p.KE,"check_key_s)4");
+return 1;
+}
+//----------------------------------------------
+//***************************************************************************************
+//=====(特殊キー入力)=================================================================
+//***************************************************************************************
+public int key_down_v(Keys Keys_ni,bool shift_bi,bool control_bi)
+{z_p.t_v(z_p.KE,"key_down_v(");
+if(1==sw_err){z_mt_p.program_p.display_msg_v(1);sw_err=0;}//エラー表示クリア。
+if((Keys.Right!=Keys_ni&&Keys.Left!=Keys_ni&&Keys.End!=Keys_ni)||(true!=shift_bi))
+    if(-1!=key_copy_start){display_v();key_copy_start=-1;}
+int sw=0,sw_delete=0; //OK
+Keys k=Keys_ni;
+if(z_p.e3k_b(k,Keys.Back,Keys.Delete))
+  {if(z_p.e2k_b(k,Keys.Back))//バックスペース
+     {if(0!=unicode)
+        {if(false!=control_bi)
+           {if(!(z_p.find_char_b(get_type_s(unicode),"MN")&&                                  //VER36.1
+                z_p.count_c_i(c_w_a)>unicode&&('_'==z_p.at_c(c_w_a,unicode)||z_p.is_digit_b(z_p.at_c(c_w_a,unicode)))))     //VER36.1
+              {w_from_key_v();
+               z_p.remove_range_c_v(c_w_a,0,unicode);
+               if(check_length_b()&&check_change_type_all_b()) 
+                 {
+                  key_from_w_v();
+                  form_length=z_p.form_length(z_p.to_ca_s(c_w_a));
+                  form=unicode=0;
+                  display_v();
+                 }
+              }
+           } 
+         else  
+           {unicode--;
+            if(0<unicode)
+              {if(z_p.COMBINING_0==z_p.kind_code(z_p.at_c(c_key_a,unicode)))
+                 {unicode--;for(;;){if(0<unicode&&z_p.COMBINING_0==z_p.kind_code(z_p.at_c(c_key_a,unicode)))unicode--;else break;}}
+               if(z_p.LOW_SURROGATE_5==z_p.kind_code(z_p.at_c(c_key_a,unicode)))unicode--;
+              }
+            form-=z_p.form_length(z_p.at_c(c_key_a,unicode));
+////      if(z_p.e3i_b(z_p.kind_code(z_p.at_c(c_key_a,unicode)),z_p.HIGH_SURROGATE_4,z_p.LOW_SURROGATE_5)){if(0<unicode)unicode--;}
+            sw_delete=1;
+           }
+        }
+     } 
+   if(z_p.e2k_b(k,Keys.Delete)||1==sw_delete)
+     {if(0!=form_old)
+        {if(!z_p.find_char_b(get_type_s(unicode),"MN")//先頭位置数字か'_'はエラーとする
+//         ||(!((0==unicode&&z_p.count_c_i(c_w_a)>1&&('_'==z_p.at_c(c_w_a,1)))||z_p.is_digit_b(z_p.at_c(c_w_a,1))))) //VER32.1
+           ||(!((0==unicode&&(z_p.count_c_i(c_w_a)>1&&('_'==z_p.at_c(c_w_a,1)||z_p.is_digit_b(z_p.at_c(c_w_a,1)))))))) //VER32.1
+           {
+            w_from_key_v();
+            if(false==control_bi)
+              {if(z_p.e3i_b(z_p.kind_code(z_p.at_c(c_w_a,unicode)),z_p.HIGH_SURROGATE_4,z_p.LOW_SURROGATE_5))z_p.remove_c_v(c_w_a,unicode);//サロゲートペア削除
+               z_p.remove_c_v(c_w_a,unicode);//削除
+               for(;;){if(unicode<z_p.count_c_i(c_w_a)&&z_p.COMBINING_0==z_p.kind_code(z_p.at_c(c_w_a,unicode)))
+                          z_p.remove_c_v(c_w_a,unicode);else break;
+                      } //結文字削除
+               form_length-=form_old;
+              }
+            else
+              {z_p.remove_range_c_v(c_w_a,unicode,z_p.count_c_i(c_w_a)-unicode);//現在位置以降全て削除
+               form_length=z_p.form_length(z_p.to_ca_s(c_w_a));
+              }
+            if(check_length_b()&&check_change_type_all_b()) 
+              {
+               key_from_w_v();
+               display_v();
+              } 
+           } 
+        }
+     }
+  }
+else if(z_p.e2k_b(k,Keys.Left))
+  {if(0==unicode){sw=1;}
+   else
+     {unicode--;
+      if(z_p.e3i_b(z_p.kind_code(z_p.at_c(c_key_a,unicode)),z_p.HIGH_SURROGATE_4,z_p.LOW_SURROGATE_5))if(0<unicode)unicode--;//サロゲートペア移動
+      for(;;){if(0<unicode&&z_p.COMBINING_0==z_p.kind_code(z_p.at_c(c_key_a,unicode)))unicode--;else break;}//結合文字移動
+      form-=z_p.form_length(z_p.at_c(c_key_a,unicode));
+      if(true==shift_bi)key_copy_v(0); 
+     }
+  }
+else if(z_p.e2k_b(k,Keys.Right))
+  {if(0==form_old||(form+form_old)>=data_p.length0)//未入力の位置か最後の位置判定
+     {if(false==shift_bi)sw=1;    //{sw=1;break;}//Sift無しは終了
+     }
+   else
+     {if(true==shift_bi) //Shift+右矢印
+        {if(-1==key_copy_start){key_copy_start=unicode;key_copy_form=form;}}
+      if(z_p.e3i_b(z_p.kind_code(z_p.at_c(c_key_a,unicode)),z_p.HIGH_SURROGATE_4,z_p.LOW_SURROGATE_5))unicode++;//サロゲートペア右移動
+      form+=form_old;unicode++;//右移動
+      for(;;)
+        {if(unicode<z_p.count_c_i(c_key_a)&&z_p.COMBINING_0==z_p.kind_code(z_p.at_c(c_key_a,unicode)))unicode++;
+         else break;//結合文字右移動
+        } 
+      if(true==shift_bi)key_copy_v(0); //シフトを押していたらコピーする。
+     }
+  }
+else if(z_p.e2k_b(k,Keys.Insert))
+  {if(!sw_insert_b)sw_insert_b=true;else sw_insert_b=false;//インサート情報は記憶
+  }
+else if(z_p.e3k_b(k,Keys.PageDown,Keys.PageUp)){}
+else if(z_p.e2k_b(k,Keys.Home))
+  {if(z_p.e2s_b(z_mt_p.program_p.now_kind_s,"START"))sw=1;    //{sw=1;break;}
+   else 
+     {if(!(0==z_p.count_c_i(c_key_a)||0==unicode))
+         unicode=form=0;//先頭に移動
+     }
+  }
+else if(z_p.e2k_b(k,Keys.End))//最後に移動
+  {if(z_p.e2s_b(z_mt_p.program_p.now_kind_s,"START"))sw=1;//{sw=1;break;}
+   else
+     {if(0!=z_p.count_c_i(c_key_a))
+        {if(true==shift_bi) //Shift+End
+            if(-1==key_copy_start){key_copy_start=unicode;key_copy_form=form;}
+         unicode=z_p.count_c_i(c_key_a)-1;
+         form=z_p.form_length(z_p.to_ca_s(c_key_a),unicode);
+         if((form+z_p.form_length(z_p.at_c(c_key_a,unicode)))<data_p.length0)
+           {form+=z_p.form_length(z_p.at_c(c_key_a,unicode));unicode++;}  
+         if(true==shift_bi)key_copy_v(1);//シフトを押していたらコピーする。 
+        }
+     }
+  }
+else sw=1;
+if(1!=sw)return 1; 
+w_from_key_v();
+if(Keys_ni==Keys.Left||Keys_ni==Keys.Escape||Keys_ni==Keys.Up||(Keys_ni==Keys.Tab&&true==shift_bi))
+  {if(z_p.e4s_b(type_s,"D","T","E")&&!z_p.e2s_b(z_p.date_ymd_s,"Y")&&7<z_p.count_c_i(c_key_a))//日付けを戻す
+     {z_p.set_c_v(c_w_a,0,z_p.at_c(c_key_a,4));z_p.set_c_v(c_w_a,1,z_p.at_c(c_key_a,5));
+      z_p.set_c_v(c_w_a,2,z_p.at_c(c_key_a,6));z_p.set_c_v(c_w_a,3,z_p.at_c(c_key_a,7));
+      if(z_p.e2s_b(z_p.date_ymd_s,"D")){z_p.set_c_v(c_w_a,4,z_p.at_c(c_key_a,2));
+                                        z_p.set_c_v(c_w_a,5,z_p.at_c(c_key_a,3));
+                                        z_p.set_c_v(c_w_a,6,z_p.at_c(c_key_a,0));
+                                        z_p.set_c_v(c_w_a,7,z_p.at_c(c_key_a,1));
+                                       }
+      else                 {z_p.set_c_v(c_w_a,4,z_p.at_c(c_key_a,0));z_p.set_c_v(c_w_a,5,z_p.at_c(c_key_a,1));
+                            z_p.set_c_v(c_w_a,6,z_p.at_c(c_key_a,2));z_p.set_c_v(c_w_a,7,z_p.at_c(c_key_a,3));
+                           }
+     } 
+   keyboard_ok_v();
+   return 0;
+  }
+if(('/'==((ii_data_l )z_p.at_da(z_mt_p.program_p.da_now_ap,z_mt_p.program_p.now_cnt)).mark2_c //'/'==mark2_cの時は「Enter]以外NG
+   &&z_p.e4s_b(z_mt_p.program_p.now_kind_s,"DATA","JUDGE","SET"))
+   &&Keys_ni!=Keys.Enter)
+  {z_p.beep_v();
+   display_err();
+   return 1;
+  }
+if(fin_check_b(c_w_a))
+  {keyboard_ok_v();
+   return 0;
+  }
+z_p.beep_v();
+display_err();
+return 1;
+}
+//----------------------------------------------
+void keyboard_ok_v()
+{z_p.t_v(z_p.KE,"keyboard_ok_v(");
+data_p.data_s=z_p.to_ca_s(c_w_a);
+caret_v(0);z_mt_p.sw_keyboard=0;//キーボード入力終了。
+//z_p.console_write_v("key/end/sw_keyboad=0");
+z_p.t_v(z_p.KE2,"z_mt_p.sw_keyboard=0;keyboard_ok_v()");
+}
+//----------------------------------------------
+bool fin_check_b(List<char> c_a_ai)
+{z_p.t_v(z_p.KE,"fin_check_b(");
+int i,j,len;
+String s=""; //,w_s; //VER 23.1
+len=z_p.length(z_p.to_ca_s(c_a_ai));
+if(z_p.e3s_b(type_s,"-","+"))//ゼロ削除
+  {j=z_p.index2ac_i(c_a_ai,'.');
+   if(-1==j)j=z_p.count_c_i(c_a_ai);
+   j--;
+   for(i=0;j>i;i++)
+     {if('-'==z_p.at_c(c_a_ai,i))continue;
+      else
+       {if('0'==z_p.at_c(c_a_ai,i)){z_p.remove_c_v(c_a_ai,i);i--;j--;}
+        else break; 
+       } 
+     }
+   if(-1!=z_p.index2ac_i(c_a_ai,'.'))
+   for(i=z_p.count_c_i(c_a_ai)-1;0<=i;i--)
+     {if('0'==z_p.at_c(c_a_ai,i))z_p.remove_c_v(c_a_ai,i);else break;} 
+   if(0<z_p.count_c_i(c_a_ai)){if('.'==z_p.at_c(c_a_ai,z_p.count_c_i(c_a_ai)-1))z_p.remove_c_v(c_a_ai,z_p.count_c_i(c_a_ai)-1);}
+   len=z_p.length(z_p.to_ca_s(c_a_ai));
+  }
+int sw=9; //NG
+for(;;)
+ {if(z_p.e2s_b(type_s,"-")&&0<len&&'-'==z_p.at_c(c_a_ai,0))
+    {for(int iz=0;iz<z_p.count_c_i(c_a_ai);iz++){char c=z_p.at_c(c_a_ai,iz);if('1'<=c&&'9'>=c){sw=0;break;}}//OK 
+     if(0==sw)break;//OK
+     return false;  //マイナスゼロ判定
+    }
+  if(z_p.e2s_b(type_s,"+"))for(int iz=0;iz<z_p.count_c_i(c_a_ai);iz++)if('-'==z_p.at_c(c_a_ai,iz))return false; //マイナス有り判定 
+  if(z_p.e2s_b(type_s,"F"))
+    {s=z_p.to_ca_s(c_a_ai);
+     if(z_p.e2s_b(s,""))return true; 
+     w_o=z_p.to_double_o(s,'-',0,0);
+     if(!z_p.return_b)return false;
+     s=z_p.to_o_s(w_o);
+     if(z_p.length(s)>data_p.length0)return false;
+     return true;
+    }
+  sw=0;break;
+ }
+if(data_p.length2>len&&!z_p.e7s_b(type_s,"+","-","F","D","T","E"))return false; //入力文字数不足エラー/VER23.1("D","T","E")追加
+if(!z_p.e4s_b(type_s,"D","T","E"))return true; //日付け情報以外OK
+return date_time_b(len,c_a_ai);//VER23.1
+}
+bool date_time_b(int len_i,List<char> c_a_ai)
+{z_p.t_v(z_p.KE,"date_time_b(");
+//**************( 日付特殊処理 ********************
+int i=0,y=-1,a=-1,m=-1,d=-1;
+String s="",w_s;
+if(z_p.e2s_b(type_s,"D")||(17>data_p.length1&&z_p.e2s_b(type_s,"E")))//DATE処理
+  {if(!z_p.e5i_b(len_i,0,2,4,8))return false;//文字数判定 
+   s=z_mt_p.sql_n.sql_date_s();//８文字以下の時は今日の日付けを不足分に使う。
+  }
+else//DATETIME処理
+  {if(!z_p.e8i_b(len_i,0,2,4,8,12,14,17))return false;//文字数判定 
+   s=z_mt_p.sql_n.sql_time_s();
+  }
+if(0==len_i)
+ {if(z_p.e3s_b(type_s,"D","T"))if(0==data_p.length2)return true; //空値 設定
+  z_p.clear_c_v(c_a_ai);
+  //入力無現在地設定(date_timeは????????235959999チェック）
+  for(i=0;z_p.length(s)>i;i++)z_p.add_c(c_a_ai,z_p.at_s_c(s,i));
+ }
+else
+  {y=a=m=d=-1;
+   for(i=0;8>i;i++)today_c8[i]=z_p.at_s_c(s,i);//今日の年月日を初期値に設定。
+   if(2==len_i)d=0;
+   else if(4==len_i){if(!z_p.e2s_b(z_p.date_ymd_s,"D")){m=0;d=2;}//MMDD
+                     else                              {d=0;m=2;}//DDMM
+                    }
+   else if(6==len_i){if     (z_p.e2s_b(z_p.date_ymd_s,"Y")){a=0;m=2;d=4;}//YYMMDD
+                     else if(z_p.e2s_b(z_p.date_ymd_s,"M")){m=0;d=2;a=4;} //MMDDYY
+                     else                                  {d=0;m=2;a=4;} //DDMMYY
+                    }
+   else if(8<=len_i){if     (z_p.e2s_b(z_p.date_ymd_s,"Y")){y=0;a=2;m=4;d=6;} //YYYYMMDD
+                     else if(z_p.e2s_b(z_p.date_ymd_s,"M")){m=0;d=2;y=4;a=6;} //MMDDYYYY
+                     else                                    {d=0;m=2;y=4;a=6;} //DDMMYYYY
+                    } 
+   if(-1!=y)for(i=0;2>i;i++)today_c8[i]=z_p.at_c(c_a_ai,y++);
+   if(-1!=a)for(i=2;4>i;i++)today_c8[i]=z_p.at_c(c_a_ai,a++);
+   if(-1!=m)for(i=4;6>i;i++)today_c8[i]=z_p.at_c(c_a_ai,m++);
+   if(-1!=d)for(i=6;8>i;i++)today_c8[i]=z_p.at_c(c_a_ai,d++);
+   w_s=z_p.to_cx_s(today_c8,8);
+   if(!z_p.e2s_b(w_s,z_p.date_good_s(w_s,0)))return false;//年月日有効か判定
+   for(i=0;8>i;i++)if(z_p.count_c_i(c_a_ai)>i)z_p.set_c_v(c_a_ai,i,today_c8[i]);else z_p.add_c(c_a_ai,today_c8[i]);//年月日を置き換え
+  }
+if(z_p.e2s_b(type_s,"T")||(16<data_p.length1&&z_p.e2s_b(type_s,"E")))
+  {for(i=z_p.count_c_i(c_a_ai);17>i;i++)z_p.add_c(c_a_ai,'0');//時間不足分追加
+   w_s=z_p.to_ca_s(c_a_ai);
+   if(!z_p.e2s_b(w_s,z_p.date_time_good_s(w_s)))return false;//年月日時分秒ミリ秒に有効か判定
+  }
+return true;
+}
+public void caret_set_v()
+{z_p.t_v(z_p.KE,"caret_set_v(");
+if(0!=z_mt_p.sw_keyboard||z_p.SW_OFF_0!=z_mt_p.sw_on_keyboard)
+   {caret_v();z_mt_p.sw_on_keyboard=z_p.SW_OFF_0;z_mt_p.sw_keyboard=1;
+ //   z_p.console_write_v("in/sw_keyboard=1");
+    z_p.t_v(z_p.KE2,"z_mt_p.sw_on_keyboard=0;caret_set_v()");
+    z_p.t_v(z_p.KE2,"z_mt_p.sw_keyboard=1;caret_set_v()");
+   }//キーボード入力可
+z_p.t_v(z_p.KE,"caret_set_v)");
+}
+//----------------------------------------------
+//***=( カレット )*****
+public void caret_v()
+{caret_v((z_p.FOCUS_OFF_M1!=z_mt_p.sw_focus)
+    &&(z_p.SW_OFF_0!=z_mt_p.sw_on_keyboard||0!=z_mt_p.sw_keyboard)?z_p.SW_ON_1:z_p.SW_OFF_0);
+}
+//----------------------------------------------
+public void caret_v(int on_ii)
+{z_p.t_v(z_p.KE,"caret_v(");
+if(0==z_mt_p.sw_keyboard&&z_p.SW_OFF_0==z_mt_p.sw_on_keyboard){z_p.t_v(z_p.KE,"caret_v)1");return;}
+String s;int i;
+ii_zz_l ww_x_n=new ii_zz_l();
+ii_zz_l ww_y_n=new ii_zz_l();
+ww_x_n.i=column+form;ww_y_n.i=line;
+if(!z_mt_p.program_p.scroll_set_b(ww_x_n,ww_y_n))
+  {
+//HP delete ww_x_n;delete ww_y_n;
+   z_p.t_v(z_p.KE,"caret_v)2");
+   return;
+  }
+if(z_p.count_c_i(c_key_a)>unicode)
+  {s=z_p.to_c_s(z_p.at_c(c_key_a,unicode));
+   if(z_p.e3i_b(z_p.kind_code(z_p.at_c(c_key_a,unicode)),z_p.HIGH_SURROGATE_4,z_p.LOW_SURROGATE_5)
+     &&z_p.count_c_i(c_key_a)>(unicode+1))s+=z_p.at_c(c_key_a,unicode+1);
+   else {for(i=unicode+1;;i++)if(i<z_p.count_c_i(c_key_a)&&z_p.COMBINING_0==z_p.kind_code(z_p.at_c(c_key_a,i)))
+                                s+=z_p.at_c(c_key_a,i);else break;  
+        }
+   form_old=z_p.form_length(z_p.at_s_c(s,0));
+  }
+else {s=" ";form_old=0;};
+//*****（入力位置黒又は灰色背景で文字は白で表示)*****
+try{
+if( null != data_p)
+   z_mt_p.text_renderer_b(z_p.Graphics_n,z_p.set_display_s(data_p.type2_c,s),ww_x_n.i,ww_y_n.i,data_p.Font_n
+      ,(1==on_ii?Color.White:Color.Black)
+      ,(1==on_ii?z_p.Brush_nx[(sw_insert_b?z_p.DARKGRAY:z_p.BLACK)]:data_p.Brush_n),0,0,0);
+   }
+catch(Exception){};
+//HP if(0==z_p.sw_on_paint)z_mt_p.imenu_p.repaint();  //再表示
+//HP delete ww_x_n;delete ww_y_n;
+z_p.t_v(z_p.KE,"caret_v)3");
+}
+//----------------------------------------------
+public bool end_position_b()
+{z_p.t_v(z_p.KE,"end_position_b(");
+if(((form+form_old)>=data_p.length0||0==form_old))return true;else return false;
+}
+public int get_unicode(){return unicode;}
+public int caret_line(){return line;}
+public int caret_column(){return column;}
+public int caret_column_end_b(){return column+data_p.length0;}
+public int caret_column_form(){return column+form;}
+public int caret_length(){return z_p.count_c_i(c_key_a)>unicode?z_p.form_length(z_p.to_c_s(z_p.at_c(c_key_a,unicode))):1;}
+//----------------------------------------------
+//*****( キー入力開始 )*****
+public void keyboard_v(ii_data_l data_ni,int line_ii,int column_ii,int sw_caret_keep_ii,String kind_si)
+{z_p.t_v(z_p.KE,"keyboard_v(");
+key_copy_start=-1;
+line=line_ii+data_ni.line;column=column_ii+data_ni.column;data_p=data_ni;sw_insert_b=false;
+type_s=(z_p.e3s_b(data_p.type1_s," ","")?(z_p.e2s_b(kind_si,"SET")?"/":"S"):data_p.type1_s);
+set_key_s(data_p.data_s,0,sw_caret_keep_ii);
+if(z_p.e6s_b(type_s,"+","-","D","T","E"))display_v();
+z_mt_p.sw_on_keyboard=z_p.SW_ON_1;caret_v();
+z_p.t_v(z_p.KE2,"z_mt_p.sw_on_keyboard=1;keyboard_v()");
+if(!z_p.e2s_b(z_p.lang_s,"EN")&&z_p.find_char_b(z_p.at_s_c(type_s,0),"*J"))z_mt_p.on_ime_v();
+else z_mt_p.off_ime_v();
+z_p.t_v(z_p.KE,"keyboard_v)");
+}
+//----------------------------------------------
+//*****( 設定済文字の公開 )*****
+public String get_key_s()
+{z_p.t_v(z_p.KE,"get_key_s(");
+if(z_p.e4s_b(type_s,"D","T","E")) //VER23.1
+   {
+    List<char> c_a=new List<char>();
+//HP  z_p.to_ca_v(c_a,c_key_a);
+//SJ  c_a=z_p.to_ca_ca(c_key_a);
+    date_time_b(z_p.length(z_p.to_ca_s(c_a)),c_a); 
+    String ss=z_p.to_ca_s(c_a);
+    z_p.t_v(z_p.KE,"get_key_s)");
+    return ss;
+   } 
+else {String ss=z_p.to_ca_s(c_key_a);z_p.t_v(z_p.KE,"get_key_s)");return ss;}
+}
+//----------------------------------------------
+//*****( 入力文字設定 )*****
+public void set_key_s(String s_si,int unicode_ii,int sw_caret_keep_ii)
+{z_p.t_v(z_p.KE,"set_key_s(");
+int i,a,b;
+z_p.clear_c_v(c_key_a);
+if(!z_p.e4s_b(type_s,"D","T","E")||z_p.e2s_b(z_p.date_ymd_s,"Y")||8>z_p.length(s_si))
+  for(i=0;z_p.length(s_si)>i&&data_p.length0>i;i++)z_p.add_c(c_key_a,z_p.at_s_c(s_si,i));
+else
+  {if(z_p.e2s_b(z_p.date_ymd_s,"M")){a=4;b=6;} //YYYYMMDD->MMDDYYYY
+   else                   {a=6;b=4;} //YYYYMMDD->DDMMYYYY
+   for(i=0;2>i;i++)z_p.add_c(c_key_a,z_p.at_s_c(s_si,a++));
+   for(i=0;2>i;i++)z_p.add_c(c_key_a,z_p.at_s_c(s_si,b++));
+   for(i=0;4>i;i++)z_p.add_c(c_key_a,z_p.at_s_c(s_si,i));
+   if(z_p.e3s_b(type_s,"T","E")&&8<z_p.length(s_si))
+      for(i=8;z_p.length(s_si)>i&&data_p.length0>i;i++)z_p.add_c(c_key_a,z_p.at_s_c(s_si,i));
+  }
+w_from_key_v();
+if(z_p.SW_OFF_0==sw_caret_keep_ii)
+  {form_length=z_p.form_length(s_si);
+   unicode=unicode_ii;
+   if(0==unicode)form=0;else form=z_p.form_length(s_si,unicode);
+  }
+z_p.t_v(z_p.KE,"set_key_s)");
+}
+//----------------------------------------------
+//*****( 初期化 )*****
+public ii_keyboard_l(ii_z_l z_ni,ii_z_mt_l z_mt_ni)
+  {z_p=z_ni;z_mt_p=z_mt_ni;
+w_from_key_v();
+  }
+//----------------------------------------------
+public void key_copy_v(int i_ii)//文字をクリップボードにコピーする
+{z_p.t_v(z_p.KE,"key_copy_v(");
+int l,i;
+String w_s;
+if(-1==key_copy_start||key_copy_start>=(unicode+i_ii))return;//現在位置が開始位置より左の場合は無視。
+for(w_s="",l=0,i=key_copy_start;i<(unicode+i_ii)&&i<z_p.count_c_i(c_key_a);i++)
+      {w_s+=z_p.at_c(c_key_a,i);l+=z_p.form_length(z_p.at_c(c_key_a,i));}//コピー文字列抜き出し。
+if(z_p.e2s_b(w_s,""))return;//コピー文字無しは終了。
+if(!z_mt_p.text_renderer_b(z_p.Graphics_n,w_s,column+key_copy_form,line,data_p.Font_n,Color.Black
+    ,z_p.Brush_n('D'),0,0,0))return;//コピー文字の背景を灰色にする。
+z_p.set_clipboard_v(w_s);//クリップボードにコピー
+return;
+}
+//----------------------------------------------
+public void ctrl_c_v()//Cntl+cで先頭から現在位置までクリップボードにコピーする。
+{z_p.t_v(z_p.KE,"ctrl_c_v(");
+int i,l;String w_s;
+for(w_s="",l=0,i=unicode;i<z_p.count_c_i(c_key_a);i++)
+   {w_s+=z_p.at_c(c_key_a,i);l+=z_p.form_length(z_p.at_c(c_key_a,i));}//先頭から現在位置まで抜き出し。
+z_p.set_clipboard_v(w_s);//クリップボードにコピー
+return;
+}
+//COPY $II_WRITE
+}
+#endif

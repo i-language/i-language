@@ -1,0 +1,2 @@
+program=not
+=zip{?#dir?};

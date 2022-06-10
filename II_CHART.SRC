@@ -1,0 +1,558 @@
+//*(注意)*このファイルはICHART2のプログラムで作られます。
+#if ICHART
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//PP #include "ichart.h"
+//SS using System.Windows.Forms.DataVisualization.Charting;
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.Drawing;
+//SS using System.IO;
+//SS using System.Windows.Forms;
+//JJ import java.awt.*;
+//JJ import java.awt.event.*;
+//JJ import java.io.*;
+//JJ import java.math.*;
+//JJ import java.util.*;
+public class ii_chart_l
+{static String class_s,no_s;static int help;static ii_z_l z_p;static ii_write_l write_n;static bool rc_b=true;
+public ii_chart_l(ii_z_l z_ni,ii_write_l write_ni,int help_i)
+{z_p=z_ni;write_n=write_ni;help=help_i;}
+public bool go_b()
+{class_s="$";no_s="1";//最上位設定の為。
+w_v("$","C","C",".","全体(Chartクラス)に対する設定をします。");
+w_v("$","A","A",".","エリア(ChartAtreクラス）に対する設定をします。");
+w_v("$","L","L",".","凡例(Legendクラス）に対する設定をします。");
+w_v("$","T","T",".","タイトル(Titleクラス）に対する設定をします。");
+w_v("$","X","X",".","X軸(Axisクラス）に対する設定をします。");
+w_v("$","X2","X",".","X2軸(Axisクラス）に対する設定をします。");
+w_v("$","Y","X",".","Y軸(Axisクラス）に対する設定をします。");
+w_v("$","Y2","X",".","Y2軸(Axisクラス）に対する設定をします。");
+w_v("$","","",".","グラフ(Sereiseクラス）に対する設定をします。(ChartTypeが開始となります)");
+no_s="2";class_s="C";
+w_help_v("〇C.名前---全体(Chartクラス)に対する設定をします。");
+w_v("C","ACCESSIBLE_DEFAULT_ACTION_DESCRIPTION","STRING","","アクセシビリティクライアントアプリケーションで使用されるコントロールの既定のアクションの説明を設定します。(Controlから継承されます。)");
+w_v("C","ACCESSIBLE_DESCRIPTION","STRING","","ユーザー補助クライアントアプリケーションによって使用される、コントロールの説明を設定します。(Controlから継承されます。)");
+w_v("C","ACCESSIBLE_NAME","STRING","","ユーザー補助クライアントアプリケーションによって使用されるコントロールの名前を設定します。(Controlから継承されます。)");
+w_v("C","ACCESSIBLE_ROLE","ACCESSIBLE_ROLE","#","コントロールのアクセスできる役割を設定します。(Controlから継承されます。)");
+w_v("C","ALLOW_DROP","BOOL","","ユーザーがコントロールにドラッグしたデータを、そのコントロールが受け入れることができるかどうかを示す値を設定します。(Controlから継承されます。)");
+w_v("C","ANTI_ALIASING","ANTI_ALIASING_STYLES","#","テキストおよびグラフィックスを描画するときにアンチエイリアシングを使用するかどうかを決定する値を設定します。");
+w_v("C","AUTO_SCROLL_OFFSET","POINT","","ScrollControlIntoViewでのこのコントロールのスクロール先を設定します。(Controlから継承されます。)");
+w_v("C","BACK_COLOR","COLOR","","Chartオブジェクトの背景色を設定します。(Control.BackColorをオーバーライドします。)");
+w_v("C","BACK_GRADIENT_STYLE","GRADIENT_STYLE","#","Chartコントロールの背景グラデーションの向きを設定します。グラデーションが使用されているかどうかも判断します。");
+w_v("C","BACKGROUND_IMAGE_LAYOUT","IMAGE_LAYOUT","#","ImageLayout列挙体で定義される背景イメージのレイアウトを設定します。(Controlから継承されます。)");
+w_v("C","BACK_HATCH_STYLE","CHART_HATCH_STYLE","#","Chartコントロールのハッチングスタイルを設定します。");
+w_v("C","BACK_IMAGE","STRING","","Chartコントロールの背景イメージを設定します。");
+w_v("C","BACK_IMAGE_ALIGNMENT","CHART_IMAGE_ALIGNMENT_STYLE","#","Unscaled描画モードに使用される背景イメージの配置を設定します。");
+w_v("C","BACK_IMAGE_TRANSPARENT_COLOR","COLOR","","透明色として表示されるChartコントロールの色を設定します。");
+w_v("C","BACK_IMAGE_WRAP_MODE","CHART_IMAGE_WRAP_MODE","#","Chart\":コントロールの背景イメージの描画モードを設定します。");
+w_v("C","BACK_SECONDARY_COLOR","COLOR","","グラフの背景の2番目の色を設定します。");
+w_v("C","BORDER_COLOR","COLOR","","インフラストラクチャ。グラフの境界線の色を設定します。");
+w_v("C","BORDER_DASH_STYLE","CHART_DASH_STYLE","#","境界線のスタイルを設定します。");
+w_v("C","BORDERLINE_COLOR","COLOR","","境界線の色を設定します。");
+w_v("C","BORDERLINE_DASH_STYLE","CHART_DASH_STYLE","#","境界線のスタイルを設定します。");
+w_v("C","BORDERLINE_WIDTH","INT","","境界線の幅を設定します。");
+w_v("C","BORDER_SKIN","BORDER_SKIN",".","Chartコントロールに境界線スキン機能を提供するBorderSkinオブジェクトを設定します。");
+w_v("C","BORDER_WIDTH","INT","","インフラストラクチャ。グラフの境界線の幅を設定します。");
+w_v("C","CAPTURE","BOOL","","コントロールがマウスをキャプチャしたかどうかを示す値を設定します。(Controlから継承されます。)");
+w_v("C","DOCK","DOCK_STYLE","#","コントロールの境界のうち、親コントロールにドッキングする境界を設定します。また、コントロールのサイズが親コントロール内でどのように変化するかを決定します。(Controlから継承されます。)");
+w_v("C","FONT","FONT","","インフラストラクチャ。コントロールのフォントプロパティを取得します。");
+w_v("C","FORE_COLOR","COLOR","","Chartコントロールのテキストの色を設定します。(Control.ForeColorをオーバーライドします。)");
+w_v("C","HEIGHT","INT","","コントロールの高さを設定します。(Controlから継承されます。)");
+w_v("C","IS_SOFT_SHADOWS","BOOL","","影の描画時に滑らかなグラデーションを適用するかどうかを示すフラグを設定します。");
+w_v("C","LEFT","INT","","コントロールの左端とコンテナーのクライアント領域の左端の間の距離をピクセルで設定します。(Controlから継承されます。)");
+w_v("C","LOCATION","POINT","","コンテナーの左上隅に対する相対座標として、コントロールの左上隅の座標を設定します。(Controlから継承されます。)");
+w_v("C","NAME","STRING","","コントロールの名前を設定します。(Controlから継承されます。)");
+w_v("C","PALETTE","CHART_COLOR_PALETTE","#","Chartコントロールのパレットを設定します。");
+w_v("C","RENDERING_DPI_X","DOUBLE","","インフラストラクチャ。Chartレンダラーの水平方向の解像度を設定します。");
+w_v("C","RENDERING_DPI_Y","DOUBLE","","Chartレンダラーの垂直方向の解像度を設定します。");
+w_v("C","RIGHT_TO_LEFT","RIGHT_TO_LEFT","#","コントロールの要素が、右から左へ表示されるフォントを使用するロケールをサポートするように配置されているかどうかを示す値を設定します。(Controlから継承されます。)");
+w_v("C","SIZE","SIZE","","Chartコントロールのサイズを設定します。");
+w_v("C","SUPPRESS_EXCEPTIONS","BOOL","","致命的でない例外を抑制するかどうかを指定するフラグを設定します。");
+w_v("C","TEXT","STRING","","このコントロールに関連付けられているテキストを設定します。(Controlから継承されます。)");
+w_v("C","TEXT_ANTI_ALIASING_QUALITY","TEXT_ANTI_ALIASING_QUALITY","#","アンチエイリアシングをテキストに適用するときに使用するTextAntiAliasingQualityの種類を設定します。");
+w_v("C","TOP","INT","","コントロールの上端とコンテナーのクライアント領域の上端の間の距離をピクセル単位で設定します。(Controlから継承されます。)");
+w_v("C","WIDTH","INT","","コントロールの幅を設定します。(Controlから継承されます。)");
+no_s="3";class_s="BORDER_SKIN";
+w_v("C.BORDER_SKIN","BACK_COLOR","COLOR","","スキンフレームの背景色を設定します。");
+w_v("C.BORDER_SKIN","BACK_GRADIENT_STYLE","GRADIENT_STYLE","#","スキンフレームの背景のグラデーションスタイルを設定します。");
+w_v("C.BORDER_SKIN","BACK_HATCH_STYLE","CHART_HATCH_STYLE","#","スキンフレームの背景のハッチスタイルを設定します。");
+w_v("C.BORDER_SKIN","BACK_IMAGE","STRING","","スキンフレームの背景イメージを設定します。");
+w_v("C.BORDER_SKIN","BACK_IMAGE_ALIGNMENT","CHART_IMAGE_ALIGNMENT_STYLE","#","スキンフレームの背景イメージの配置を設定します。");
+w_v("C.BORDER_SKIN","BACK_IMAGE_TRANSPARENT_COLOR","COLOR","","境界線スキンフレームの背景イメージが描画されるときに透明色で置き換えられる色を設定します。");
+w_v("C.BORDER_SKIN","BACK_IMAGE_WRAP_MODE","CHART_IMAGE_WRAP_MODE","#","境界線スキンフレームの背景イメージの描画モードを設定します。");
+w_v("C.BORDER_SKIN","BACK_SECONDARY_COLOR","COLOR","","境界線スキンフレームの第2背景色を設定します。");
+w_v("C.BORDER_SKIN","BORDER_COLOR","COLOR","","スキンフレームの境界線の色を設定します。");
+w_v("C.BORDER_SKIN","BORDER_DASH_STYLE","CHART_DASH_STYLE","#","境界線スキンフレームの境界線のスタイルを設定します。");
+w_v("C.BORDER_SKIN","BORDER_WIDTH","INT","","境界線スキンフレームの境界線の幅を設定します。");
+w_v("C.BORDER_SKIN","PAGE_COLOR","COLOR","","境界線スキンのページの色を設定します。");
+w_v("C.BORDER_SKIN","SKIN_STYLE","BORDER_SKIN_STYLE","#","境界線スキンのスタイルを設定します。");
+no_s="2";class_s="A";
+w_help_v("〇A.名前---エリア(ChartAtreクラス）に対する設定をします。");
+w_v("A","ALIGNMENT_ORIENTATION","AREA_ALIGNMENT_ORIENTATIONS","#","グラフエリアの配置方向を設定します。");
+w_v("A","ALIGNMENT_STYLE","AREA_ALIGNMENT_STYLES","#","ChartAreaの配置スタイルを設定します。");
+w_v("A","ALIGN_WITH_CHART_AREA","STRING","","このグラフエリアを整列させる対象のChartAreaオブジェクトの名前を設定します。");
+w_v("A","AREA_3D_STYLE","AREA_3D_STYLE",".","グラフエリア内のすべての系列の3次元(3D)を実装するために使用するChartArea3DStyleオブジェクトを設定します。");
+w_v("A","BACK_COLOR","COLOR","","ChartAreaオブジェクトの背景色を設定します。");
+w_v("A","BACK_GRADIENT_STYLE","GRADIENT_STYLE","#","グラフエリアの背景のグラデーションの方向を設定します。また、グラデーションが使用されているかどうかを確認します。");
+w_v("A","BACK_HATCH_STYLE","CHART_HATCH_STYLE","#","ChartAreaオブジェクトのハッチングスタイルを設定します。");
+w_v("A","BACK_IMAGE","STRING","","ChartAreaオブジェクトの背景イメージを設定します。");
+w_v("A","BACK_IMAGE_ALIGNMENT","CHART_IMAGE_ALIGNMENT_STYLE","#","ChartArea背景イメージの配置を設定します。");
+w_v("A","BACK_IMAGE_TRANSPARENT_COLOR","COLOR","","透明色として描画されるChartAreaオブジェクトの背景イメージの色を設定します。");
+w_v("A","BACK_IMAGE_WRAP_MODE","CHART_IMAGE_WRAP_MODE","#","ChartAreaオブジェクトの背景イメージの描画モードを設定します。");
+w_v("A","BACK_SECONDARY_COLOR","COLOR","","ChartAreaオブジェクトの背景の2番目の色を設定します。");
+w_v("A","BORDER_COLOR","COLOR","","ChartAreaオブジェクトの境界線の色を設定します。");
+w_v("A","BORDER_DASH_STYLE","CHART_DASH_STYLE","#","ChartAreaオブジェクトの境界線スタイルを設定します。");
+w_v("A","BORDER_WIDTH","INT","","ChartAreaオブジェクトの境界線の幅を設定します。");
+w_v("A","CURSOR_X","CURSOR_X",".","カーソルとX軸に沿った選択範囲に使用されるCursorオブジェクトを設定します。");
+w_v("A","CURSOR_Y","CURSOR_X",".","カーソルとY軸に沿った選択範囲に使用されるCursorオブジェクトを設定します。");
+w_v("A","INNER_PLOT_POSITION","POSITION",".","グラフエリアオブジェクトの内部プロット位置を定義するElementPositionオブジェクトを設定します。");
+w_v("A","IS_SAME_FONT_SIZE_FOR_ALL_AXES","BOOL","","関連するグラフエリアの軸のラベルのサイズが同じかどうかを示すフラグを設定します。");
+w_v("A","NAME","STRING","","ChartAreaオブジェクトの一意の名前を設定します。(ChartNamedElement.Nameをオーバーライドします。)");
+w_v("A","POSITION","POSITION",".","Chart内のChartAreaオブジェクトの位置を定義するElementPositionオブジェクトを設定します。");
+w_v("A","SHADOW_COLOR","COLOR","","ChartAreaオブジェクトの影色を設定します。");
+w_v("A","SHADOW_OFFSET","INT","","ChartAreaオブジェクトの影のオフセット(ピクセル単位)を設定します。");
+w_v("A","VISIBLE","BOOL","","グラフエリアが表示されているかどうかを示すフラグを設定します。");
+no_s="3";class_s="AREA_3D_STYLE";
+w_v("A.AREA_3D_STYLE","ENABLE_3D","BOOL","","グラフエリアの3Dのオン/オフを切り替えるフラグを設定します。");
+w_v("A.AREA_3D_STYLE","INCLINATION","INT","","3Dグラフエリアの水平軸を中心とする回転の角度を設定します。");
+w_v("A.AREA_3D_STYLE","IS_CLUSTERED","BOOL","","横棒グラフまたは縦棒グラフのデータ系列がクラスター化される(つまり、別個の行に沿って表示される)かどうかを示すフラグを設定します。");
+w_v("A.AREA_3D_STYLE","IS_RIGHT_ANGLE_AXES","BOOL","","等角投影を使用してグラフエリアを表示するかどうかを示すフラグを設定します。");
+w_v("A.AREA_3D_STYLE","LIGHT_STYLE","LIGHT_STYLE","#","3Dグラフエリアのライティングのスタイルを設定します。");
+w_v("A.AREA_3D_STYLE","PERSPECTIVE","INT","","3Dグラフエリアのパースペクティブの割合を設定します。");
+w_v("A.AREA_3D_STYLE","POINT_DEPTH","INT","","3Dグラフエリアに表示されるデータポイントの深度を設定します。");
+w_v("A.AREA_3D_STYLE","POINT_GAP_DEPTH","INT","","3Dグラフエリアの系列行間の距離を設定します。");
+w_v("A.AREA_3D_STYLE","ROTATION","INT","","3Dグラフエリアの垂直軸を中心とする回転の角度を設定します。");
+w_v("A.AREA_3D_STYLE","WALL_WIDTH","INT","","3Dグラフエリアに表示される壁面の幅を設定します。");
+no_s="3";class_s="CURSOR_X";
+w_v("A.(CURSOR_X,CURSOR_Y)","AUTO_SCROLL","BOOL","","範囲の選択操作がグラフエリアの境界を越えて行われた場合に、スクロールするかどうかを示すフラグを設定します。");
+w_v("A.(CURSOR_X,CURSOR_Y)","AXIS_TYPE","AXIS_TYPE","#","カーソルのアタッチ先の軸の種類を設定します。");
+w_v("A.(CURSOR_X,CURSOR_Y)","INTERVAL","DOUBLE","","カーソルの間隔を設定します。");
+w_v("A.(CURSOR_X,CURSOR_Y)","INTERVAL_OFFSET","DOUBLE","","ユーザーによって設定されたカーソルと範囲選択を描画できる位置に影響する間隔のオフセットを設定します。");
+w_v("A.(CURSOR_X,CURSOR_Y)","INTERVAL_OFFSET_TYPE","DATE_TIME_INTERVAL_TYPE","#","軸のカーソルと選択範囲の間隔のオフセットの種類を設定します。");
+w_v("A.(CURSOR_X,CURSOR_Y)","INTERVAL_TYPE","DATE_TIME_INTERVAL_TYPE","#","軸のカーソルと選択範囲の間隔の種類を設定します。");
+w_v("A.(CURSOR_X,CURSOR_Y)","IS_USER_ENABLED","BOOL","","カーソルのユーザーインターフェイスを有効または無効にするフラグを設定します。");
+w_v("A.(CURSOR_X,CURSOR_Y)","IS_USER_SELECTION_ENABLED","BOOL","","範囲選択ユーザーインターフェイスを有効または無効にするフラグを設定します。");
+w_v("A.(CURSOR_X,CURSOR_Y)","LINE_COLOR","COLOR","","カーソルの線の色を設定します。");
+w_v("A.(CURSOR_X,CURSOR_Y)","LINE_DASH_STYLE","CHART_DASH_STYLE","#","カーソルの線のスタイルを設定します。");
+w_v("A.(CURSOR_X,CURSOR_Y)","LINE_WIDTH","INT","","カーソルの線の幅をピクセル単位で設定します。");
+w_v("A.(CURSOR_X,CURSOR_Y)","POSITION","DOUBLE","","カーソルの位置を設定します。");
+w_v("A.(CURSOR_X,CURSOR_Y)","SELECTION_COLOR","COLOR","","データ範囲を強調表示する半透明の色を設定します。");
+w_v("A.(CURSOR_X,CURSOR_Y)","SELECTION_END","DOUBLE","","範囲選択の終了位置を設定します。");
+w_v("A.(CURSOR_X,CURSOR_Y)","SELECTION_START","DOUBLE","","カーソルの選択範囲の開始位置を設定します。");
+no_s="3";class_s="POSITION";
+w_v("((A,L,T).POSITION,A.INNER_PLOT_POSITION)","AUTO","BOOL","","適用できるグラフ要素がChartコントロールによって自動的に配置されるかどうかを示す値を設定します。");
+w_v("((A,L,T).POSITION,A.INNER_PLOT_POSITION)","HEIGHT","FLOAT","","グラフ要素の高さを設定します。");
+w_v("((A,L,T).POSITION,A.INNER_PLOT_POSITION)","WIDTH","FLOAT","","グラフ要素の幅を設定します。");
+w_v("((A,L,T).POSITION,A.INNER_PLOT_POSITION)","X","FLOAT","","適用できるグラフ要素の左上隅の相対X座標を設定します。");
+w_v("((A,L,T).POSITION,A.INNER_PLOT_POSITION)","Y","FLOAT","","適用できるグラフ要素の左上隅の相対Y座標を設定します。");
+no_s="2";class_s="T";
+w_help_v("〇T.名前---タイトル(Titleクラス）に対する設定をします。");
+w_v("T","ALIGNMENT","CONTENT_ALIGNMENT","#","タイトルの配置を設定します。");
+w_v("T","BACK_COLOR","COLOR","","タイトルの背景色を設定します。");
+w_v("T","BACK_GRADIENT_STYLE","GRADIENT_STYLE","#","タイトルの背景グラデーションの向きを設定します。グラデーションが使用されているかどうかも判断します。");
+w_v("T","BACK_HATCH_STYLE","CHART_HATCH_STYLE","#","タイトルのハッチングスタイルを設定します。");
+w_v("T","BACK_IMAGE","STRING","","タイトルの背景イメージを設定します。");
+w_v("T","BACK_IMAGE_ALIGNMENT","CHART_IMAGE_ALIGNMENT_STYLE","#","タイトルの背景イメージの配置を設定します。");
+w_v("T","BACK_IMAGE_TRANSPARENT_COLOR","COLOR","","背景イメージが描画されるときに透明色として描画する色を設定します。");
+w_v("T","BACK_IMAGE_WRAP_MODE","CHART_IMAGE_WRAP_MODE","#","タイトルの背景イメージの描画モードを設定します。");
+w_v("T","BACK_SECONDARY_COLOR","COLOR","","タイトルの背景の2番目の色を設定します。");
+w_v("T","BORDER_COLOR","COLOR","","タイトルの境界線の色を設定します。");
+w_v("T","BORDER_DASH_STYLE","CHART_DASH_STYLE","#","タイトルの境界線スタイルを設定します。");
+w_v("T","BORDER_WIDTH","INT","","タイトルの境界線の幅を設定します。");
+w_v("T","DOCKED_TO_CHART_AREA","STRING","","タイトルのドッキング先のChartAreaの名前を設定します。");
+w_v("T","DOCKING","DOCKING","#","タイトルのドッキング先を決定する値を設定します。");
+w_v("T","DOCKING_OFFSET","INT","","ドッキングされたタイトルの位置の正または負のオフセットを設定します。");
+w_v("T","FONT","FONT","","タイトルのフォントを設定します。");
+w_v("T","FORE_COLOR","COLOR","","タイトルのテキストの色を設定します。");
+w_v("T","IS_DOCKED_INSIDE_CHART_AREA","BOOL","","タイトルをChartAreaオブジェクト内でドッキングするかどうかを指定するフラグを設定します。");
+w_v("T","NAME","STRING","","Titleオブジェクトの一意の名前を設定します。(ChartNamedElement.Nameをオーバーライドします。)");
+w_v("T","POSITION","POSITION",".","タイトルの位置の設定に使用できるElementPositionオブジェクトを設定します。");
+w_v("T","SHADOW_COLOR","COLOR","","タイトルの影色を設定します。");
+w_v("T","SHADOW_OFFSET","INT","","タイトルの影のオフセット(ピクセル単位)を設定します。");
+w_v("T","TEXT","STRING","","タイトルのテキストを設定します。");
+w_v("T","TEXT_ORIENTATION","TEXT_ORIENTATION","#","タイトルのテキストの向きを設定します。");
+w_v("T","TEXT_STYLE","TEXT_STYLE","#","タイトルのテキストのスタイルを設定します。");
+w_v("T","TOOL_TIP","STRING","","タイトルのツールヒントを設定します。");
+w_v("T","VISIBLE","BOOL","","タイトルの可視性フラグを設定します。");
+no_s="2";class_s="L";
+w_help_v("〇L.名前---凡例(Legendクラス）に対する設定をします。");
+w_v("L","ALIGNMENT","STRING_ALIGNMENT","#","凡例の配置を設定します。");
+w_v("L","AUTO_FIT_MIN_FONT_SIZE","INT","","凡例のテキストの自動調整アルゴリズムで使用できる最小のフォントサイズを設定します。");
+w_v("L","BACK_COLOR","COLOR","","凡例の背景色を設定します。");
+w_v("L","BACK_GRADIENT_STYLE","GRADIENT_STYLE","#","凡例の背景グラデーションの向きを設定します。グラデーションが使用されているかどうかも判断します。");
+w_v("L","BACK_HATCH_STYLE","CHART_HATCH_STYLE","#","凡例のハッチングスタイルを設定します。");
+w_v("L","BACK_IMAGE","STRING","","凡例の背景イメージを設定します。");
+w_v("L","BACK_IMAGE_ALIGNMENT","CHART_IMAGE_ALIGNMENT_STYLE","#","Unscaled描画モードに使用される背景イメージの配置を設定します。");
+w_v("L","BACK_IMAGE_TRANSPARENT_COLOR","COLOR","","背景イメージが描画されるときに透明色で置き換えられる色を設定します。");
+w_v("L","BACK_IMAGE_WRAP_MODE","CHART_IMAGE_WRAP_MODE","#","凡例の背景イメージの描画モードを設定します。");
+w_v("L","BACK_SECONDARY_COLOR","COLOR","","凡例の背景の2番目の色を設定します。");
+w_v("L","BORDER_COLOR","COLOR","","凡例の境界線の色を設定します。");
+w_v("L","BORDER_DASH_STYLE","CHART_DASH_STYLE","#","凡例の境界線スタイルを設定します。");
+w_v("L","BORDER_WIDTH","INT","","凡例の境界線の幅を設定します。");
+w_v("L","DOCKED_TO_CHART_AREA","STRING","","凡例のドッキング先のChartAreaの名前を設定します。");
+w_v("L","DOCKING","DOCKING","#","凡例をドッキングするかどうかを決定する値を設定します。");
+w_v("L","ENABLED","BOOL","","凡例が有効かどうかを示す値を設定します。");
+w_v("L","FONT","FONT","","凡例のフォントプロパティの設定に使用するFontオブジェクトを設定します。");
+w_v("L","FORE_COLOR","COLOR","","凡例のテキストの色を設定します。");
+w_v("L","HEADER_SEPARATOR","LEGEND_SEPARATOR_STYLE","#","凡例の見出しに表示する区切り記号の種類を設定します。");
+w_v("L","HEADER_SEPARATOR_COLOR","COLOR","","凡例の見出しの区切り記号の色を設定します。");
+w_v("L","INSIDE_CHART_AREA","STRING","","凡例の描画先であるグラフエリアの名前を設定します。");
+w_v("L","INTERLACED_ROWS","BOOL","","凡例の行をインターレース背景色で描画するかどうかを示すフラグを設定します。");
+w_v("L","INTERLACED_ROWS_COLOR","COLOR","","凡例のインターレース行の背景色を設定します。");
+w_v("L","IS_DOCKED_INSIDE_CHART_AREA","BOOL","","凡例をグラフエリアの内側にドッキングするか、外側にドッキングするかを示すフラグを設定します。");
+w_v("L","IS_EQUALLY_SPACED_ITEMS","BOOL","","すべての凡例項目を等間隔で配置するかどうかを示すフラグを設定します。");
+w_v("L","IS_TEXT_AUTO_FIT","BOOL","","凡例のテキストのサイズが自動的に設定されるかどうかを示すフラグを設定します。");
+w_v("L","ITEM_COLUMN_SEPARATOR","LEGEND_SEPARATOR_STYLE","#","凡例のテーブル列に表示する区切り記号の種類を設定します。");
+w_v("L","ITEM_COLUMN_SEPARATOR_COLOR","COLOR","","凡例のテーブル列の区切り記号の色を設定します。");
+w_v("L","ITEM_COLUMN_SPACING","INT","","凡例のテーブル列の間隔を設定します。");
+w_v("L","LEGEND_ITEM_ORDER","LEGEND_ITEM_ORDER","#","凡例項目を表示する順序を指定する値を設定します。このプロパティは、グラフの系列に自動的に追加された凡例項目にのみ影響します。カスタムの凡例項目には影響しません。");
+w_v("L","LEGEND_STYLE","LEGEND_STYLE","#","凡例のスタイルを設定します。");
+w_v("L","MAXIMUM_AUTO_SIZE","FLOAT","","グラフエリアの割合として示される、凡例の最大サイズを設定します。この値は自動レイアウトアルゴリズムで使用されます。");
+w_v("L","NAME","STRING","","凡例の名前を設定します。(ChartNamedElement.Nameをオーバーライドします。)");
+w_v("L","POSITION","POSITION",".","凡例の位置の設定に使用できるElementPositionオブジェクトを設定します。");
+w_v("L","SHADOW_COLOR","COLOR","","凡例の影色を設定します。");
+w_v("L","SHADOW_OFFSET","INT","","凡例の影のオフセット(ピクセル単位)を設定します。");
+w_v("L","TABLE_STYLE","LEGEND_TABLE_STYLE","#","凡例のテーブルのスタイルを設定します。");
+w_v("L","TEXT_WRAP_THRESHOLD","INT","","テキストを折り返す前に凡例に連続して表示できる文字数を設定します。");
+w_v("L","TITLE","STRING","","凡例のタイトルのテキストを設定します。");
+w_v("L","TITLE_ALIGNMENT","STRING_ALIGNMENT","#","凡例のタイトルの配置を設定します。");
+w_v("L","TITLE_BACK_COLOR","COLOR","","凡例のタイトルの背景色を設定します。");
+w_v("L","TITLE_FONT","FONT","","凡例のタイトルのフォントを設定します。");
+w_v("L","TITLE_FORE_COLOR","COLOR","","凡例のタイトルのテキストの色を設定します。");
+w_v("L","TITLE_SEPARATOR","LEGEND_SEPARATOR_STYLE","#","凡例のタイトルに表示する区切り記号の種類を設定します。");
+w_v("L","TITLE_SEPARATOR_COLOR","COLOR","","凡例のタイトルの区切り記号の色を設定します。");
+no_s="2";class_s="X";
+w_help_v("〇(X,X2,Y,Y2).名前---軸(Axisクラス）に対する設定をします。");
+w_v("(X,X2,Y,Y2)","ARROW_STYLE","AXIS_ARROW_STYLE","#","2D軸の矢印のスタイルを設定します。このスタイルは3Dグラフエリアには適用されません。");
+w_v("(X,X2,Y,Y2)","CROSSING","DOUBLE","","軸が関連付けられている軸と交差する位置を設定します。");
+w_v("(X,X2,Y,Y2)","ENABLED","AXIS_ENABLED","#","軸が有効かどうかを示す値を設定します。");
+w_v("(X,X2,Y,Y2)","INTERLACED_COLOR","COLOR","","インターレースされた背景の縞模様の色を設定します。");
+w_v("(X,X2,Y,Y2)","INTERVAL","INT","","軸の間隔を設定します。");
+w_v("(X,X2,Y,Y2)","INTERVAL_AUTO_MODE","INTERVAL_AUTO_MODE","#","軸上に固定数の間隔を使用するか、間隔の数を軸のサイズに応じて決めるかを指定するフラグを設定します。");
+w_v("(X,X2,Y,Y2)","INTERVAL_OFFSET","DOUBLE","","軸の間隔のオフセットを設定します。");
+w_v("(X,X2,Y,Y2)","INTERVAL_OFFSET_TYPE","DATE_TIME_INTERVAL_TYPE","#","軸の間隔のオフセットの種類を設定します。");
+w_v("(X,X2,Y,Y2)","INTERVAL_TYPE","DATE_TIME_INTERVAL_TYPE","#","軸の間隔の種類を設定します。");
+w_v("(X,X2,Y,Y2)","IS_INTERLACED","BOOL","","インターレースされた背景の縞模様が軸に表示されるかどうかを示すフラグを設定します。");
+w_v("(X,X2,Y,Y2)","IS_LABEL_AUTO_FIT","BOOL","","軸ラベルのサイズを自動調整するかどうかを示すフラグを設定します。");
+w_v("(X,X2,Y,Y2)","IS_LOGARITHMIC","BOOL","","軸が対数であるかどうかを示すフラグを設定します。対数グラフでは、0または負のデータ値を使用できません。");
+w_v("(X,X2,Y,Y2)","IS_MARGIN_VISIBLE","BOOL","","軸にマージンを追加するかどうかを指定するフラグを設定します。");
+w_v("(X,X2,Y,Y2)","IS_MARKS_NEXT_TO_AXIS","BOOL","","軸の交差するポイントが変更されたときに目盛りおよび軸ラベルが軸と一緒に移動するかどうかを指定するフラグを設定します。");
+w_v("(X,X2,Y,Y2)","IS_REVERSED","BOOL","","軸を反転するかどうかを示すフラグを設定します。");
+w_v("(X,X2,Y,Y2)","IS_STARTED_FROM_ZERO","BOOL","","すべてのデータポイント値が正の値であるときに軸の最小値を自動的に0に設定するかどうかを示すフラグを設定します。負のデータポイント値が存在する場合、データポイントの最小値が使用されます。");
+w_v("(X,X2,Y,Y2)","LABEL_AUTO_FIT_MAX_FONT_SIZE","INT","","ラベルの自動調整アルゴリズムで使用できる最大のフォントサイズを設定します。");
+w_v("(X,X2,Y,Y2)","LABEL_AUTO_FIT_MIN_FONT_SIZE","INT","","ラベルの自動調整アルゴリズムで使用できる最小のフォントサイズを設定します。");
+w_v("(X,X2,Y,Y2)","LABEL_AUTO_FIT_STYLE","LABEL_AUTO_FIT_STYLES","#","軸に沿ったラベルの調整を可能にするために許容されるラベルの変更を設定します。");
+w_v("(X,X2,Y,Y2)","LABEL_STYLE","LABEL_STYLE",".","軸のLabelStyleプロパティを設定します。");
+w_v("(X,X2,Y,Y2)","LINE_COLOR","COLOR","","軸の線の色を設定します。");
+w_v("(X,X2,Y,Y2)","LINE_DASH_STYLE","CHART_DASH_STYLE","#","軸の線スタイルを設定します。");
+w_v("(X,X2,Y,Y2)","LINE_WIDTH","INT","","軸の線の幅(ピクセル単位)を設定します。");
+w_v("(X,X2,Y,Y2)","LOGARITHM_BASE","DOUBLE","","対数軸の対数の底の値を設定します。");
+w_v("(X,X2,Y,Y2)","MAJOR_GRID","MAJOR_GRID",".","軸のグリッド線のプロパティの設定に使用されるGridオブジェクトを設定します。");
+w_v("(X,X2,Y,Y2)","MAJOR_TICK_MARK","MAJOR_TICK_MARK",".","軸の目盛りのプロパティの設定に使用されるTickMarkオブジェクトを設定します。");
+w_v("(X,X2,Y,Y2)","MAXIMUM","DOUBLE","","軸の最大値を設定します。");
+w_v("(X,X2,Y,Y2)","MAXIMUM_AUTO_SIZE","FLOAT","","グラフエリアの割合として示される、軸の最大サイズを設定します。この値は自動レイアウトアルゴリズムで使用されます。");
+w_v("(X,X2,Y,Y2)","MINIMUM","DOUBLE","","軸の最小値を設定します。");
+w_v("(X,X2,Y,Y2)","MINOR_GRID","MAJOR_GRIDK",".","軸の補助グリッド線の属性の指定に使用されるGridオブジェクトを設定します。");
+w_v("(X,X2,Y,Y2)","MINOR_TICK_MARK","MAJOR_TICK_MARK",".","軸の補助目盛りのプロパティの設定に使用されるTickMarkオブジェクトを設定します。");
+w_v("(X,X2,Y,Y2)","NAME","STRING","","軸の名前を設定します。(ChartNamedElement.Nameをオーバーライドします。)");
+w_v("(X,X2,Y,Y2)","SCALE_BREAK_STYLE","SCALE_BREAK_STYLE",".","軸のスケール区切りのスタイルを設定します。");
+w_v("(X,X2,Y,Y2)","SCALE_VIEW","SCALE_VIEW",".","軸のビューを設定します。");
+w_v("(X,X2,Y,Y2)","SCROLL_BAR","SCROLL_BAR",".","軸のスクロールバーを設定します。");
+w_v("(X,X2,Y,Y2)","TEXT_ORIENTATION","TEXT_ORIENTATION","#","軸のタイトルのテキストの向きを設定します。");
+w_v("(X,X2,Y,Y2)","TITLE","STRING","","軸のタイトルを設定します。");
+w_v("(X,X2,Y,Y2)","TITLE_ALIGNMENT","STRING_ALIGNMENT","#","軸のタイトルの配置を設定します。");
+w_v("(X,X2,Y,Y2)","TITLE_FONT","FONT","","軸のタイトルのフォントプロパティを設定します。");
+w_v("(X,X2,Y,Y2)","TITLE_FORE_COLOR","COLOR","","軸のタイトルのテキストの色を設定します。");
+w_v("(X,X2,Y,Y2)","TOOL_TIP","STRING","","軸に使用されるツールヒントを設定します。");
+no_s="3";class_s="MAJOR_GRID";
+w_v("(X,X2,Y,Y2).(MAJOR_GRID,MINOR_GRID)","ENABLED","BOOL","","グリッド線または補助グリッド線が有効かどうかを示すフラグを設定します。");
+w_v("(X,X2,Y,Y2).(MAJOR_GRID,MINOR_GRID)","INTERVAL","INT","","グリッド線間または補助グリッド線間の間隔を設定します。");
+w_v("(X,X2,Y,Y2).(MAJOR_GRID,MINOR_GRID)","INTERVAL_OFFSET","DOUBLE","","グリッド線のオフセットを設定します。");
+w_v("(X,X2,Y,Y2).(MAJOR_GRID,MINOR_GRID)","INTERVAL_OFFSET_TYPE","DATE_TIME_INTERVAL_TYPE","#","グリッド線および補助グリッド線の間隔のオフセットの種類を設定します。");
+w_v("(X,X2,Y,Y2).(MAJOR_GRID,MINOR_GRID)","INTERVAL_TYPE","DATE_TIME_INTERVAL_TYPE","#","グリッド線または補助グリッド線の間隔の種類を設定します。");
+w_v("(X,X2,Y,Y2).(MAJOR_GRID,MINOR_GRID)","LINE_COLOR","COLOR","","グリッド線の色を設定します。");
+w_v("(X,X2,Y,Y2).(MAJOR_GRID,MINOR_GRID)","LINE_DASH_STYLE","CHART_DASH_STYLE","#","グリッド線のスタイルを設定します。");
+w_v("(X,X2,Y,Y2).(MAJOR_GRID,MINOR_GRID)","LINE_WIDTH","INT","","グリッド線および補助グリッド線の幅を設定します。");
+no_s="3";class_s="MAJOR_TICK_MARK";
+w_v("(X,X2,Y,Y2).(MAJOR_TICK_MARK,MINOR_TICK_MARK)","ENABLED","BOOL","","グリッド線または補助グリッド線が有効かどうかを示すフラグを設定します。(Gridから継承されます。)");
+w_v("(X,X2,Y,Y2).(MAJOR_TICK_MARK,MINOR_TICK_MARK)","INTERVAL","INT","","グリッド線間または補助グリッド線間の間隔を設定します。(Gridから継承されます。)");
+w_v("(X,X2,Y,Y2).(MAJOR_TICK_MARK,MINOR_TICK_MARK)","INTERVAL_OFFSET","DOUBLE","","グリッド線のオフセットを設定します。(Gridから継承されます。)");
+w_v("(X,X2,Y,Y2).(MAJOR_TICK_MARK,MINOR_TICK_MARK)","INTERVAL_OFFSET_TYPE","DATE_TIME_INTERVAL_TYPE","#","グリッド線および補助グリッド線の間隔のオフセットの種類を設定します。(Gridから継承されます。)");
+w_v("(X,X2,Y,Y2).(MAJOR_TICK_MARK,MINOR_TICK_MARK)","INTERVAL_TYPE","DATE_TIME_INTERVAL_TYPE","#","グリッド線または補助グリッド線の間隔の種類を設定します。(Gridから継承されます。)");
+w_v("(X,X2,Y,Y2).(MAJOR_TICK_MARK,MINOR_TICK_MARK)","LINE_COLOR","COLOR","","グリッド線の色を設定します。(Gridから継承されます。)");
+w_v("(X,X2,Y,Y2).(MAJOR_TICK_MARK,MINOR_TICK_MARK)","LINE_DASH_STYLE","CHART_DASH_STYLE","#","グリッド線のスタイルを設定します。(Gridから継承されます。)");
+w_v("(X,X2,Y,Y2).(MAJOR_TICK_MARK,MINOR_TICK_MARK)","LINE_WIDTH","INT","","グリッド線および補助グリッド線の幅を設定します。(Gridから継承されます。)");
+w_v("(X,X2,Y,Y2).(MAJOR_TICK_MARK,MINOR_TICK_MARK)","SIZE","FLOAT","","目盛りの長さを設定します。長さは、軸に応じて、グラフイメージの高さまたは幅の割合を表す単位で示されます。");
+w_v("(X,X2,Y,Y2).(MAJOR_TICK_MARK,MINOR_TICK_MARK)","TICK_MARK_STYLE","TICK_MARK_STYLE","#","目盛りスタイルを設定します。");
+no_s="3";class_s="LABEL_STYLE";
+w_v("(X,X2,Y,Y2).LABEL_STYLE","ANGLE","INT","","フォントが描画される角度を表す値を設定します。");
+w_v("(X,X2,Y,Y2).LABEL_STYLE","ENABLED","BOOL","","ラベルが有効かどうかを示すフラグを設定します。");
+w_v("(X,X2,Y,Y2).LABEL_STYLE","FONT","FONT","","ラベルのフォントを設定します。");
+w_v("(X,X2,Y,Y2).LABEL_STYLE","FORE_COLOR","COLOR","","ラベルの色を設定します。");
+w_v("(X,X2,Y,Y2).LABEL_STYLE","FORMAT","STRING","","ラベルテキストの書式指定文字列を設定します。");
+w_v("(X,X2,Y,Y2).LABEL_STYLE","INTERVAL","DOUBLE","","ラベル間隔のサイズを設定します。");
+w_v("(X,X2,Y,Y2).LABEL_STYLE","INTERVAL_OFFSET","DOUBLE","","ラベル間隔のオフセットを設定します。");
+w_v("(X,X2,Y,Y2).LABEL_STYLE","INTERVAL_OFFSET_TYPE","DATE_TIME_INTERVAL_TYPE","#","ラベル間隔のオフセットの単位を設定します。");
+w_v("(X,X2,Y,Y2).LABEL_STYLE","INTERVAL_TYPE","DATE_TIME_INTERVAL_TYPE","#","ラベル間隔のサイズの単位を設定します。");
+w_v("(X,X2,Y,Y2).LABEL_STYLE","IS_END_LABEL_VISIBLE","BOOL","","ラベルが軸の両端に表示されるかどうかを示すフラグを設定します。");
+w_v("(X,X2,Y,Y2).LABEL_STYLE","IS_STAGGERED","BOOL","","オフセット付きでラベルが表示されるかどうかを示すフラグを設定します。");
+w_v("(X,X2,Y,Y2).LABEL_STYLE","TRUNCATED_LABELS","BOOL","","ラベルが切り捨て可能かどうかを示すフラグを設定します。");
+no_s="3";class_s="SCROLL_BAR";
+w_v("(X,X2,Y,Y2).SCROLL_BAR","BACK_COLOR","COLOR","","スクロールバーの背景色を設定します。");
+w_v("(X,X2,Y,Y2).SCROLL_BAR","BUTTON_COLOR","COLOR","","スクロールバーボタンの色を設定します。");
+w_v("(X,X2,Y,Y2).SCROLL_BAR","BUTTON_STYLE","SCROLL_BAR_BUTTON_STYLES","#","スクロールバーボタンのスタイルを設定します。");
+w_v("(X,X2,Y,Y2).SCROLL_BAR","ENABLED","BOOL","","スクロールバーが有効かどうかを示すフラグを設定します。");
+w_v("(X,X2,Y,Y2).SCROLL_BAR","IS_POSITIONED_INSIDE","BOOL","","スクロールバーがグラフエリアの内側または外側に配置されているかどうかを示すフラグを設定します。");
+w_v("(X,X2,Y,Y2).SCROLL_BAR","LINE_COLOR","COLOR","","スクロールバーの線の色を設定します。");
+w_v("(X,X2,Y,Y2).SCROLL_BAR","SIZE","DOUBLE","","スクロールバーの幅をピクセル単位で設定します。");
+no_s="3";class_s="SCALE_BREAK_STYLE";
+w_v("(X,X2,Y,Y2).SCALE_BREAK_STYLE","BREAK_LINE_STYLE","BREAK_LINE_STYLE","#","スケール区切りを描画するために使用される区切り線のスタイルを設定します。");
+w_v("(X,X2,Y,Y2).SCALE_BREAK_STYLE","COLLAPSIBLE_SPACE_THRESHOLD","INT","","スケール区切りが描画されるグラフ上の空間のしきい値を設定します。");
+w_v("(X,X2,Y,Y2).SCALE_BREAK_STYLE","ENABLED","BOOL","","スケール区切りが有効かどうかを示すフラグを設定します。");
+w_v("(X,X2,Y,Y2).SCALE_BREAK_STYLE","LINE_COLOR","COLOR","","スケール区切り線の色を設定します。");
+w_v("(X,X2,Y,Y2).SCALE_BREAK_STYLE","LINE_DASH_STYLE","CHART_DASH_STYLE","#","スケール区切り線のスタイルを設定します。");
+w_v("(X,X2,Y,Y2).SCALE_BREAK_STYLE","LINE_WIDTH","INT","","スケール区切り線の幅を設定します。");
+w_v("(X,X2,Y,Y2).SCALE_BREAK_STYLE","MAX_NUMBER_OF_BREAKS","INT","","グラフに表示されるスケール区切りの最大数を設定します。");
+w_v("(X,X2,Y,Y2).SCALE_BREAK_STYLE","SPACING","DOUBLE","","スケール区切りの線間の間隔を設定します。間隔はY軸の割合として表されます。");
+w_v("(X,X2,Y,Y2).SCALE_BREAK_STYLE","START_FROM_ZERO","START_FROM_ZERO","#","スケール区切りを0から開始するかどうかを示すStartFromZero列挙値を設定します。");
+no_s="3";class_s="SCALE_VIEW";
+w_v("(X,X2,Y,Y2).SCALE_VIEW","MIN_SIZE","DOUBLE","","AxisScaleViewオブジェクトの最小サイズを設定します。");
+w_v("(X,X2,Y,Y2).SCALE_VIEW","MIN_SIZE_TYPE","DATE_TIME_INTERVAL_TYPE","#","MinSizeプロパティの単位を設定します。");
+w_v("(X,X2,Y,Y2).SCALE_VIEW","POSITION","DOUBLE","","スケールビューの位置を設定します。");
+w_v("(X,X2,Y,Y2).SCALE_VIEW","SIZE","DOUBLE","","スケールビューのサイズを設定します。");
+w_v("(X,X2,Y,Y2).SCALE_VIEW","SIZE_TYPE","DATE_TIME_INTERVAL_TYPE","#","Sizeプロパティの単位を設定します。");
+w_v("(X,X2,Y,Y2).SCALE_VIEW","SMALL_SCROLL_MIN_SIZE","DOUBLE","","小さいスクロールの最小サイズを設定します。小さいスクロールのサイズが設定されていない場合にのみ使用されます。");
+w_v("(X,X2,Y,Y2).SCALE_VIEW","SMALL_SCROLL_MIN_SIZE_TYPE","DATE_TIME_INTERVAL_TYPE","#","SmallScrollMinSizeプロパティの単位を設定します。");
+w_v("(X,X2,Y,Y2).SCALE_VIEW","SMALL_SCROLL_SIZE","DOUBLE","","小さいスクロールのサイズを設定します。");
+w_v("(X,X2,Y,Y2).SCALE_VIEW","SMALL_SCROLL_SIZE_TYPE","DATE_TIME_INTERVAL_TYPE","#","SmallScrollMinSizeプロパティの単位を設定します。");
+w_v("(X,X2,Y,Y2).SCALE_VIEW","ZOOMABLE","BOOL","","ズーム用のユーザーインターフェイスが有効かどうかを示すフラグを設定します");
+no_s="2";class_s="";
+w_help_v("〇.名前---グラフの設定をします。(ChartTypeが開始となります)");
+w_v("","CHART_TYPE","SERIES_CHART_TYPE","#","系列のグラフの種類を設定します。");
+w_v("","AXIS_LABEL","STRING","","系列の軸ラベルのテキストを設定します。(DataPointCustomProperties.AxisLabelをオーバーライドします。)");
+w_v("","BACK_GRADIENT_STYLE","GRADIENT_STYLE","#","背景のグラデーションスタイルを設定します。");
+w_v("","BACK_HATCH_STYLE","CHART_HATCH_STYLE","#","背景のハッチングスタイルを設定します。");
+w_v("","BACK_IMAGE","STRING","","データポイントの背景イメージを設定します。");
+w_v("","BACK_IMAGE_ALIGNMENT","CHART_IMAGE_ALIGNMENT_STYLE","#","Unscaled描画モードに使用される背景イメージの配置を設定します。");
+w_v("","BACK_IMAGE_TRANSPARENT_COLOR","COLOR","","背景イメージが描画されるときに透明色で置き換えられる色を設定します。");
+w_v("","BACK_IMAGE_WRAP_MODE","CHART_IMAGE_WRAP_MODE","#","背景イメージの描画モードを設定します。");
+w_v("","BACK_SECONDARY_COLOR","COLOR","","背景の2番目の色を設定します。");
+w_v("","BORDER_COLOR","COLOR","","データポイントの境界線の色を設定します。");
+w_v("","BORDER_DASH_STYLE","CHART_DASH_STYLE","#","データポイントの境界線スタイルを設定します。");
+w_v("","BORDER_WIDTH","INT","","データポイントの境界線の幅を設定します。");
+w_v("","CHART_AREA","STRING","","データ系列を描画するために使用されるChartAreaオブジェクトの名前を設定します(存在する場合)。");
+w_v("","CHART_TYPE_NAME","STRING","","系列を描画するために使用されるグラフの種類の名前を設定します。");
+w_v("","COLOR","COLOR","","データポイントの色を設定します。");
+w_v("","CUSTOM_PROPERTIES","STRING","","データポイントのカスタムプロパティを設定します。カスタムプロパティは、AttrName1=Value1、AttrName2=Value2という書式で指定できます。");
+w_v("","EMPTY_POINT_STYLE","EMPTY_POINT_STYLE",".","空としてマークされるポイントの描画スタイルを設定します。");
+w_v("","ENABLED","BOOL","","表示されたグラフ上に系列が表示されるかどうかを示すフラグを設定します。");
+w_v("","IS_VALUE_SHOWN_AS_LABEL","BOOL","","ラベルにデータポイントの値を表示するかどうかを示すフラグを設定します。");
+w_v("","IS_VISIBLE_IN_LEGEND","BOOL","","凡例に項目を表示するかどうかを示すフラグを設定します。");
+w_v("","IS_X_VALUE_INDEXED","BOOL","","データポイントのインデックスがX値に使用されるかどうかを示すフラグを設定します。");
+w_v("","LABEL","STRING","","データポイントラベルのテキストを設定します。");
+w_v("","LABEL_ANGLE","INT","","データポイントラベルの角度を設定します。");
+w_v("","LABEL_BACK_COLOR","COLOR","","データポイントラベルの背景色を設定します。");
+w_v("","LABEL_BORDER_COLOR","COLOR","","データポイントラベルの境界線の色を設定します。");
+w_v("","LABEL_BORDER_DASH_STYLE","CHART_DASH_STYLE","#","ラベルの境界線スタイルを設定します。");
+w_v("","LABEL_BORDER_WIDTH","INT","","ラベルの境界線の幅を設定します。");
+w_v("","LABEL_FORE_COLOR","COLOR","","ラベルのテキストの色を設定します。");
+w_v("","LABEL_FORMAT","STRING","","データポイントラベルの書式を設定します。");
+w_v("","LABEL_TOOL_TIP","STRING","","データポイントラベルのツールヒントを設定します。");
+w_v("","LEGEND","STRING","","Legendオブジェクトに関連付けられた系列の名前を設定します。");
+w_v("","LEGEND_TEXT","STRING","","凡例項目のテキストを設定します。");
+w_v("","LEGEND_TOOL_TIP","STRING","","凡例項目のツールヒントを設定します。");
+w_v("","MARKER_BORDER_COLOR","COLOR","","マーカーの境界線の色を設定します。");
+w_v("","MARKER_BORDER_WIDTH","INT","","マーカーの境界線の幅を設定します。");
+w_v("","MARKER_COLOR","COLOR","","マーカーの色を設定します。");
+w_v("","MARKER_IMAGE","STRING","","マーカーイメージを設定します。");
+w_v("","MARKER_IMAGE_TRANSPARENT_COLOR","COLOR","","マーカーイメージが描画されるときに透明色で置き換えられる色を設定します。");
+w_v("","MARKER_SIZE","INT","","マーカーのサイズを設定します。");
+w_v("","MARKER_STEP","INT","","データポイントのマーカーを表示する頻度を決定する値を設定します。");
+w_v("","MARKER_STYLE","MARKER_STYLE","#","マーカースタイルを設定します。");
+w_v("","NAME","STRING","","Series　オブジェクトの一意の名前を設定します。(ChartNamedElement.Nameをオーバーライドします。)");
+w_v("","PALETTE","CHART_COLOR_PALETTE","#","Seriesオブジェクトのカラーパレットを設定します。");
+w_v("","SHADOW_COLOR","COLOR","","系列の影色を設定します。");
+w_v("","SHADOW_OFFSET","INT","","系列の影のオフセット(ピクセル単位)を設定します。");
+w_v("","SMART_LABEL_STYLE","SMART_LABEL_STYLE",".","スマートラベルのスタイルを設定します。");
+w_v("","TOOL_TIP","STRING","","ツールヒントを設定します。");
+w_v("","X_AXIS_TYPE","AXIS_TYPE","#","系列のX軸の種類を設定します。");
+w_v("","X_VALUE_MEMBER","STRING","","系列のX値にデータをバインドするために使用されるグラフのデータソースのメンバーを設定します。");
+w_v("","X_VALUE_TYPE","CHART_VALUE_TYPE","#","X軸に沿ってプロットされる値の型を設定します。");
+w_v("","Y_AXIS_TYPE","AXIS_TYPE","#","系列のY軸の種類を設定します。");
+w_v("","Y_VALUE_MEMBERS","STRING","","系列のY値にデータをバインドするために使用されるグラフのデータソースのメンバー列を設定します。");
+w_v("","Y_VALUES_PER_POINT","INT","","SeriesのDataPointオブジェクトで許可されているY値の最大数を設定します。");
+w_v("","Y_VALUE_TYPE","CHART_VALUE_TYPE","#","系列に格納されるデータポイントのY値のデータ型を設定します。");
+w_v("","MAX_PIXEL_POINT_WIDTH","INT","[","最大のデータポイントの幅をピクセル単位で指定します。([\"MaxPixelPointWidth\"]=\"文字列\")");
+w_v("","MIN_PIXEL_POINT_WIDTH","INT","[","最小のデータポイントの幅をピクセル単位で指定します。([\"MinPixelPointWidth\"]=\"文字列\")");
+w_v("","POINT_WIDTH","INT","[","データポイントの幅をピクセル単位で指定します。([\"PointWidth\"]=\"文字列\")　");
+no_s="3";class_s="EMPTY_POINT_STYLE";
+w_v("EMPTY_POINT_STYLE","AXIS_LABEL","STRING","","データポイント、系列、または空のポイントのX軸のラベルのテキストを設定します。このプロパティは、関連するAxisオブジェクトにカスタムラベルが指定されていない場合にのみ使用されます。");
+w_v("EMPTY_POINT_STYLE","BACK_GRADIENT_STYLE","GRADIENT_STYLE","#","背景のグラデーションスタイルを設定します。");
+w_v("EMPTY_POINT_STYLE","BACK_HATCH_STYLE","CHART_HATCH_STYLE","#","背景のハッチングスタイルを設定します。");
+w_v("EMPTY_POINT_STYLE","BACK_IMAGE","STRING","","データポイントの背景イメージを設定します。");
+w_v("EMPTY_POINT_STYLE","BACK_IMAGE_ALIGNMENT","CHART_IMAGE_ALIGNMENT_STYLE","#","Unscaled描画モードに使用される背景イメージの配置を設定します。");
+w_v("EMPTY_POINT_STYLE","BACK_IMAGE_TRANSPARENT_COLOR","COLOR","","背景イメージが描画されるときに透明色で置き換えられる色を設定します。");
+w_v("EMPTY_POINT_STYLE","BACK_IMAGE_WRAP_MODE","CHART_IMAGE_WRAP_MODE","#","背景イメージの描画モードを設定します。");
+w_v("EMPTY_POINT_STYLE","BACK_SECONDARY_COLOR","COLOR","","背景の2番目の色を設定します。");
+w_v("EMPTY_POINT_STYLE","BORDER_COLOR","COLOR","","データポイントの境界線の色を設定します。");
+w_v("EMPTY_POINT_STYLE","BORDER_DASH_STYLE","CHART_DASH_STYLE","#","データポイントの境界線スタイルを設定します。");
+w_v("EMPTY_POINT_STYLE","BORDER_WIDTH","INT","","データポイントの境界線の幅を設定します。");
+w_v("EMPTY_POINT_STYLE","COLOR","COLOR","","データポイントの色を設定します。");
+w_v("EMPTY_POINT_STYLE","CUSTOM_PROPERTIES","STRING","","データポイントのカスタムプロパティを設定します。カスタムプロパティは、AttrName1=Value1、AttrName2=Value2という書式で指定できます。");
+w_v("EMPTY_POINT_STYLE","FONT","FONT","","データポイントのフォントを設定します。");
+w_v("EMPTY_POINT_STYLE","IS_VALUE_SHOWN_AS_LABEL","BOOL","","ラベルにデータポイントの値を表示するかどうかを示すフラグを設定します。");
+w_v("EMPTY_POINT_STYLE","IS_VISIBLE_IN_LEGEND","BOOL","","凡例に項目を表示するかどうかを示すフラグを設定します。");
+w_v("EMPTY_POINT_STYLE","LABEL","STRING","","データポイントラベルのテキストを設定します。");
+w_v("EMPTY_POINT_STYLE","LABEL_ANGLE","INT","","データポイントラベルの角度を設定します。");
+w_v("EMPTY_POINT_STYLE","LABEL_BACK_COLOR","COLOR","","データポイントラベルの背景色を設定します。");
+w_v("EMPTY_POINT_STYLE","LABEL_BORDER_COLOR","COLOR","","データポイントラベルの境界線の色を設定します。");
+w_v("EMPTY_POINT_STYLE","LABEL_BORDER_DASH_STYLE","CHART_DASH_STYLE","#","ラベルの境界線スタイルを設定します。");
+w_v("EMPTY_POINT_STYLE","LABEL_BORDER_WIDTH","INT","","ラベルの境界線の幅を設定します。");
+w_v("EMPTY_POINT_STYLE","LABEL_FORE_COLOR","COLOR","","ラベルのテキストの色を設定します。");
+w_v("EMPTY_POINT_STYLE","LABEL_FORMAT","STRING","","データポイントラベルの書式を設定します。");
+w_v("EMPTY_POINT_STYLE","LABEL_TOOL_TIP","STRING","","データポイントラベルのツールヒントを設定します。");
+w_v("EMPTY_POINT_STYLE","LEGEND_TEXT","STRING","","凡例項目のテキストを設定します。");
+w_v("EMPTY_POINT_STYLE","LEGEND_TOOL_TIP","STRING","","凡例項目のツールヒントを設定します。");
+w_v("EMPTY_POINT_STYLE","MARKER_BORDER_COLOR","COLOR","","マーカーの境界線の色を設定します。");
+w_v("EMPTY_POINT_STYLE","MARKER_BORDER_WIDTH","INT","","マーカーの境界線の幅を設定します。");
+w_v("EMPTY_POINT_STYLE","MARKER_COLOR","COLOR","","マーカーの色を設定します。");
+w_v("EMPTY_POINT_STYLE","MARKER_IMAGE","STRING","","マーカーイメージを設定します。");
+w_v("EMPTY_POINT_STYLE","MARKER_IMAGE_TRANSPARENT_COLOR","COLOR","","マーカーイメージが描画されるときに透明色で置き換えられる色を設定します。");
+w_v("EMPTY_POINT_STYLE","MARKER_SIZE","INT","","マーカーのサイズを設定します。");
+w_v("EMPTY_POINT_STYLE","MARKER_STYLE","MARKER_STYLE","#","マーカースタイルを設定します。");
+w_v("EMPTY_POINT_STYLE","NAME","STRING","","グラフ要素の名前を設定します。(ChartNamedElementから継承されます。)");
+w_v("EMPTY_POINT_STYLE","TOOL_TIP","STRING","","ツールヒントを設定します。");
+no_s="3";class_s="SMART_LABEL_STYLE";
+w_v("SMART_LABEL_STYLE","ALLOW_OUTSIDE_PLOT_AREA","LABEL_OUTSIDE_PLOT_AREA_STYLE","#","SmartLabelStyleオブジェクトをプロットエリアの外部に描画できるかどうかを示すフラグを設定します。");
+w_v("SMART_LABEL_STYLE","CALLOUT_BACK_COLOR","COLOR","","ラベルの吹き出しの背景色を設定します。");
+w_v("SMART_LABEL_STYLE","CALLOUT_LINE_ANCHOR_CAP_STYLE","LINE_ANCHOR_CAP_STYLE","#","ラベルの引き出し線のアンカーキャップのスタイルを設定します。");
+w_v("SMART_LABEL_STYLE","CALLOUT_LINE_COLOR","COLOR","","ラベルの引き出し線の色を設定します。");
+w_v("SMART_LABEL_STYLE","CALLOUT_LINE_DASH_STYLE","CHART_DASH_STYLE","#","ラベルの引き出し線のスタイルを設定します。");
+w_v("SMART_LABEL_STYLE","CALLOUT_LINE_WIDTH","INT","","ラベルの引き出し線の幅を設定します。");
+w_v("SMART_LABEL_STYLE","CALLOUT_STYLE","LABEL_CALLOUT_STYLE","#","再配置されたSmartLabelStyleオブジェクトの吹き出しスタイルを設定します。");
+w_v("SMART_LABEL_STYLE","ENABLED","BOOL","","SmartLabelStyleアルゴリズムを有効にするかどうかを示すフラグを設定します。");
+w_v("SMART_LABEL_STYLE","IS_MARKER_OVERLAPPING_ALLOWED","BOOL","","データポイントのラベルがポイントマーカーに重なるのを許可するかどうかを指定するフラグを設定します。");
+w_v("SMART_LABEL_STYLE","IS_OVERLAPPED_HIDDEN","BOOL","","再配置できない重なったラベルを非表示にするかどうかを示すフラグを設定します。");
+w_v("SMART_LABEL_STYLE","MAX_MOVING_DISTANCE","DOUBLE","","重なったSmartLabelStyleオブジェクトをマーカーから移動できる最長距離をピクセル単位で設定します。");
+w_v("SMART_LABEL_STYLE","MIN_MOVING_DISTANCE","DOUBLE","","重なったSmartLabelStyleオブジェクトをマーカーから移動できる最短距離をピクセル単位で設定します。");
+w_v("SMART_LABEL_STYLE","MOVING_DIRECTION","LABEL_ALIGNMENT_STYLES","#","重なったSmartLabelStyleオブジェクトを移動できる方向を設定します。");
+foreach (AccessibleRole enum_n in Enum.GetValues(typeof(AccessibleRole)))
+   w_enum_v("AccessibleRole",enum_n.ToString());
+foreach (AntiAliasingStyles enum_n in Enum.GetValues(typeof(AntiAliasingStyles)))
+   w_enum_v("AntiAliasingStyles",enum_n.ToString());
+foreach (AreaAlignmentOrientations enum_n in Enum.GetValues(typeof(AreaAlignmentOrientations)))
+   w_enum_v("AreaAlignmentOrientations",enum_n.ToString());
+foreach (AreaAlignmentStyles enum_n in Enum.GetValues(typeof(AreaAlignmentStyles)))
+   w_enum_v("AreaAlignmentStyles",enum_n.ToString());
+foreach (AxisArrowStyle enum_n in Enum.GetValues(typeof(AxisArrowStyle)))
+   w_enum_v("AxisArrowStyle",enum_n.ToString());
+foreach (AxisEnabled enum_n in Enum.GetValues(typeof(AxisEnabled)))
+   w_enum_v("AxisEnabled",enum_n.ToString());
+foreach (AxisType enum_n in Enum.GetValues(typeof(AxisType)))
+   w_enum_v("AxisType",enum_n.ToString());
+foreach (BorderSkinStyle enum_n in Enum.GetValues(typeof(BorderSkinStyle)))
+   w_enum_v("BorderSkinStyle",enum_n.ToString());
+foreach (BreakLineStyle enum_n in Enum.GetValues(typeof(BreakLineStyle)))
+   w_enum_v("BreakLineStyle",enum_n.ToString());
+foreach (ChartColorPalette enum_n in Enum.GetValues(typeof(ChartColorPalette)))
+   w_enum_v("ChartColorPalette",enum_n.ToString());
+foreach (ChartDashStyle enum_n in Enum.GetValues(typeof(ChartDashStyle)))
+   w_enum_v("ChartDashStyle",enum_n.ToString());
+foreach (ChartHatchStyle enum_n in Enum.GetValues(typeof(ChartHatchStyle)))
+   w_enum_v("ChartHatchStyle",enum_n.ToString());
+foreach (ChartImageAlignmentStyle enum_n in Enum.GetValues(typeof(ChartImageAlignmentStyle)))
+   w_enum_v("ChartImageAlignmentStyle",enum_n.ToString());
+foreach (ChartImageWrapMode enum_n in Enum.GetValues(typeof(ChartImageWrapMode)))
+   w_enum_v("ChartImageWrapMode",enum_n.ToString());
+foreach (ChartValueType enum_n in Enum.GetValues(typeof(ChartValueType)))
+   w_enum_v("ChartValueType",enum_n.ToString());
+foreach (ContentAlignment enum_n in Enum.GetValues(typeof(ContentAlignment)))
+   w_enum_v("ContentAlignment",enum_n.ToString());
+foreach (DateTimeIntervalType enum_n in Enum.GetValues(typeof(DateTimeIntervalType)))
+   w_enum_v("DateTimeIntervalType",enum_n.ToString());
+foreach (Docking enum_n in Enum.GetValues(typeof(Docking)))
+   w_enum_v("Docking",enum_n.ToString());
+foreach (DockStyle enum_n in Enum.GetValues(typeof(DockStyle)))
+   w_enum_v("DockStyle",enum_n.ToString());
+foreach (FontStyle enum_n in Enum.GetValues(typeof(FontStyle)))
+   w_enum_v("FontStyle",enum_n.ToString());
+foreach (GradientStyle enum_n in Enum.GetValues(typeof(GradientStyle)))
+   w_enum_v("GradientStyle",enum_n.ToString());
+foreach (ImageLayout enum_n in Enum.GetValues(typeof(ImageLayout)))
+   w_enum_v("ImageLayout",enum_n.ToString());
+foreach (IntervalAutoMode enum_n in Enum.GetValues(typeof(IntervalAutoMode)))
+   w_enum_v("IntervalAutoMode",enum_n.ToString());
+foreach (LabelAlignmentStyles enum_n in Enum.GetValues(typeof(LabelAlignmentStyles)))
+   w_enum_v("LabelAlignmentStyles",enum_n.ToString());
+foreach (LabelAutoFitStyles enum_n in Enum.GetValues(typeof(LabelAutoFitStyles)))
+   w_enum_v("LabelAutoFitStyles",enum_n.ToString());
+foreach (LabelCalloutStyle enum_n in Enum.GetValues(typeof(LabelCalloutStyle)))
+   w_enum_v("LabelCalloutStyle",enum_n.ToString());
+foreach (LabelOutsidePlotAreaStyle enum_n in Enum.GetValues(typeof(LabelOutsidePlotAreaStyle)))
+   w_enum_v("LabelOutsidePlotAreaStyle",enum_n.ToString());
+foreach (LegendItemOrder enum_n in Enum.GetValues(typeof(LegendItemOrder)))
+   w_enum_v("LegendItemOrder",enum_n.ToString());
+foreach (LegendSeparatorStyle enum_n in Enum.GetValues(typeof(LegendSeparatorStyle)))
+   w_enum_v("LegendSeparatorStyle",enum_n.ToString());
+foreach (LegendStyle enum_n in Enum.GetValues(typeof(LegendStyle)))
+   w_enum_v("LegendStyle",enum_n.ToString());
+foreach (LegendTableStyle enum_n in Enum.GetValues(typeof(LegendTableStyle)))
+   w_enum_v("LegendTableStyle",enum_n.ToString());
+foreach (LightStyle enum_n in Enum.GetValues(typeof(LightStyle)))
+   w_enum_v("LightStyle",enum_n.ToString());
+foreach (LineAnchorCapStyle enum_n in Enum.GetValues(typeof(LineAnchorCapStyle)))
+   w_enum_v("LineAnchorCapStyle",enum_n.ToString());
+foreach (MarkerStyle enum_n in Enum.GetValues(typeof(MarkerStyle)))
+   w_enum_v("MarkerStyle",enum_n.ToString());
+foreach (RightToLeft enum_n in Enum.GetValues(typeof(RightToLeft)))
+   w_enum_v("RightToLeft",enum_n.ToString());
+foreach (ScrollBarButtonStyles enum_n in Enum.GetValues(typeof(ScrollBarButtonStyles)))
+   w_enum_v("ScrollBarButtonStyles",enum_n.ToString());
+foreach (SeriesChartType enum_n in Enum.GetValues(typeof(SeriesChartType)))
+   w_enum_v("SeriesChartType",enum_n.ToString());
+foreach (StartFromZero enum_n in Enum.GetValues(typeof(StartFromZero)))
+   w_enum_v("StartFromZero",enum_n.ToString());
+foreach (StringAlignment enum_n in Enum.GetValues(typeof(StringAlignment)))
+   w_enum_v("StringAlignment",enum_n.ToString());
+foreach (TextAntiAliasingQuality enum_n in Enum.GetValues(typeof(TextAntiAliasingQuality)))
+   w_enum_v("TextAntiAliasingQuality",enum_n.ToString());
+foreach (TextOrientation enum_n in Enum.GetValues(typeof(TextOrientation)))
+   w_enum_v("TextOrientation",enum_n.ToString());
+foreach (TextStyle enum_n in Enum.GetValues(typeof(TextStyle)))
+   w_enum_v("TextStyle",enum_n.ToString());
+foreach (TickMarkStyle enum_n in Enum.GetValues(typeof(TickMarkStyle)))
+   w_enum_v("TickMarkStyle",enum_n.ToString());
+return rc_b;
+}
+public void w_enum_v(String s1_si,String s2_si)
+{w_v((1==help?"":"4\t")+upper_name_s(s1_si)+(1==help?"の種類:":"\t")+(z_p.e3s_b(z_p.upper_s(s1_si),"FONT","CUSTOMPROPERTIES")?s2_si:upper_name_s(s2_si))+(1==help?"":"\t\t\t"));
+}
+public void w_v(String s1_si,String s2_si,String s3_si,String s4_si,String s5_si)//引数5個
+{if(1==help)w_v(" "+("$"==s1_si?"〇"+s2_si:(""==s1_si?"":s1_si+".")+s2_si+("."==s4_si?".":"=")+s3_si)+("#"==s4_si?"の種類":"")+" ----- "+s5_si);
+ else{w_v(no_s+"\t"+class_s+"\t"+s2_si+"\t"+s3_si+"\t"+s4_si+"\t"+s5_si);}
+}
+public static void w_v(String s1_si,String s2_si,String s3_si)//引数3個
+{if(1==help)return;
+if(z_p.e2s_b(s1_si,""))
+  {if(3>z_p.length(s2_si)){write_n.write_b("1\t"+s2_si+"\t\t\t\t"+s3_si);no_s="2";}
+   else                   {write_n.write_b("2\t"+s2_si+"\t\t\t\t"+s3_si);no_s="3";}
+  }
+else                      {write_n.write_b("2\t"+s1_si+"\t"+s2_si+"\t\t\t"+s3_si);no_s="3";}
+}
+public static void w_help_v(String s_si)   {if(1==help)w_v(s_si);}
+public static void w_setting_v(String s_si){if(0==help)w_v(s_si);}
+public static void w_v(String s_si){if(!write_n.write_b((1==help?"<br>":"")+s_si))rc_b=true;}//引数１個
+public static String upper_name_s(String si)
+  {String s="";
+   for(int i=0;z_p.length(si)>i;i++)
+     {if(0<i)//１文字目はそのまま
+        {if(z_p.e2s_b(z_p.substring3_s(si,i,2),"3D")){s+="_3D";i++;continue;}
+         if('A'<=si[i]&&'Z'>=si[i])s+='_';
+        }
+      s+=z_p.upper_s(""+si[i]);
+     }
+   return s;
+  }
+}
+#endif

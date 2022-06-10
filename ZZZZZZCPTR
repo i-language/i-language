@@ -1,0 +1,43 @@
+#!/bin/sh
+#@echo OFF
+#REM (ZZZZZZCPTR) TEST TO REAL DATA COPY OR DIR
+#REM 1=iv 2=sys_lang 3={TEST,REAL} 4=system 5=work / 6={DIR,COPY} 7=msg_file 8=copy_file
+umask 0000
+if test "$5" = "";then exit 0;fi
+i_exit=/home/I/I.$4/TMP_$3/$5.EXIT
+echo START ZZZZZZETC > $i_exit
+tmp=/home/I/I.$4/TMP_$3
+if test "$6" = "DIR";then
+   ls -l /home/I/I.$4/DATA_TEST/*.* | sort > $tmp/$7_TEST.TXT
+   ls -l /home/I/I.$4/DATA_REAL/*.* | sort > $tmp/$7_REAL.TXT
+#  exit 0
+fi
+if test "$6" = "COPY";then 
+   if test "$8" = "";then echo paramater "<" 3 > $i_exit;exit 0;fi
+   if test "$3" = "TEST";then echo !!! > $i_exit;exit 0;fi
+   if test -f  /home/I/I.$4/DATA_OLD9_REAL/$8;then
+           rm  /home/I/I.$4/DATA_OLD9_REAL/$8;fi  
+   if test -f  /home/I/I.$4/DATA_OLD8_REAL/$8;then
+            mv /home/I/I.$4/DATA_OLD8_REAL/$8 /home/I/I.$4/DATA_OLD9_REAL/$8;fi 
+   if test -f  /home/I/I.$4/DATA_OLD7_REAL/$8;then
+            mv /home/I/I.$4/DATA_OLD7_REAL/$8 /home/I/I.$4/DATA_OLD8_REAL/$8;fi 
+   if test -f  /home/I/I.$4/DATA_OLD6_REAL/$8;then
+            mv /home/I/I.$4/DATA_OLD6_REAL/$8 /home/I/I.$4/DATA_OLD7_REAL/$8;fi 
+   if test -f  /home/I/I.$4/DATA_OLD5_REAL/$8;then
+            mv /home/I/I.$4/DATA_OLD5_REAL/$8 /home/I/I.$4/DATA_OLD6_REAL/$8;fi 
+   if test -f  /home/I/I.$4/DATA_OLD4_REAL/$8;then
+            mv /home/I/I.$4/DATA_OLD4_REAL/$8 /home/I/I.$4/DATA_OLD5_REAL/$8;fi 
+   if test -f  /home/I/I.$4/DATA_OLD3_REAL/$8;then
+            mv /home/I/I.$4/DATA_OLD3_REAL/$8 /home/I/I.$4/DATA_OLD4_REAL/$8;fi 
+   if test -f  /home/I/I.$4/DATA_OLD2_REAL/$8;then
+            mv /home/I/I.$4/DATA_OLD2_REAL/$8 /home/I/I.$4/DATA_OLD3_REAL/$8;fi 
+   if test -f  /home/I/I.$4/DATA_OLD1_REAL/$8;then
+            mv /home/I/I.$4/DATA_OLD1_REAL/$8 /home/I/I.$4/DATA_OLD2_REAL/$8;fi
+   if test -f  /home/I/FILE/$4.I/DATA_REAL/$8;then
+            cp /home/I/FILE/$4.I/DATA_REAL/$8 /home/I/I.$4/DATA_OLD1_REAL/$8; 2> $tmp/$7
+            if test ! $?=0;then exit 0;fi
+            fi
+   cp /home/I/I.$4/DATA_TEST/$8 /home/I/I.$4/DATA_REAL/$8 2> $i_exit
+   if test ! $?=0;then exit 0;fi
+fi
+echo !!! > $i_exit
