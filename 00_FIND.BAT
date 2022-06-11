@@ -1,3 +1,3 @@
 @echo off
-find "LINUX" *.* > __FIND.TMP 
+find "CLIENT" *.* > __FIND.TMP 
 start notepad __FIND.TMP

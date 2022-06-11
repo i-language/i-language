@@ -1,9 +1,8 @@
 #!/bin/sh
-II_VER=I37
-if test ! -d ${II_VER}_SRC ;then
-  echo ${II_VER}_SRC DIR NOT FOUND
+if test ! -d i-language ;then
+  echo i-language DIR NOT FOUND
   read R 
   exit
 fi
-cd ${II_VER}_SRC  
+cd i-language  
 sh SETUP.SH EN MONO

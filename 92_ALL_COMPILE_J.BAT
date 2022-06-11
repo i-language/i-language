@@ -2,7 +2,7 @@
 IF "%I_VER%"=="" CALL C_BEGIN.BAT
 rem PureJavaComm--------------------------------------------------
 rem SET purejavacomm=C:\purejavacomm-master\bin\purejavacomm.jar
-SET purejavacomm=..\%I_VER%_DOWNLOAD\purejavacomm.jar
+SET purejavacomm=..\i-download\purejavacomm.jar
 :B1
 if not exist %purejavacomm% echo %purejavacomm% not found&pause&goto B1
 %I_XCOPYF%  %purejavacomm% %I_TMP%\
@@ -22,7 +22,7 @@ del iroot_l.class
 rem %I_JAR% cvf ..\%I_VER%_BIN\SERVER_WD\ISETUP.jar *.class >NUL 
 rem del isetup_l.class
 %I_JAR% cvf ..\%I_VER%_BIN\JAVA\IJAVA.jar  *.class >NUL    
-rem %I_XCOPYF%  ..\%I_VER%_DOWNLOAD\*.ja? ..\%I_VER%_BIN\JAVA
+rem %I_XCOPYF%  ..\i-download\*.ja? ..\%I_VER%_BIN\JAVA
 CD ..\%I_VER%_SRC
 REM ================
 rem goto fin
@@ -36,7 +36,7 @@ rem :fin
 if NOT "%1"=="" GOTO fin2
 if "%I_SET_ZIP_SW%"=="YES" goto SKIP_SET_ZIP
 %I_XCOPYF% ..\%I_VER%_BIN\JAVA\IJAVA.j* %I_BIN%
-rem %I_XCOPYF% ..\%I_VER%_DOWNLOAD\sqljdbc42.ja?      %I_BIN%
+rem %I_XCOPYF% ..\i-download\sqljdbc42.ja?      %I_BIN%
 :SKIP_SET_ZIP
 rem %I_XCOPYD% ..\%I_VER%_BIN\JAVA\IJAVA.j* ..\..\linux\BIN%I_VER% 
 rem del /q ..\%I_VER%_WORK\*.*

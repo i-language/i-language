@@ -7,8 +7,8 @@ I_TMP=${I_HOME}/TMP
 umask 0000
 if test "$2" = "JAVA";then
 #      do
-      if test ! -f ../${I_VER}_DOWNLOAD/purejavacomm.jar;then echo ../${I_VER}_DOWNLOAD/purejavacomm.jar FILE NOT FOUND;read w;exit 9;fi
-      if test ! -f ../${I_VER}_DOWNLOAD/jna.jar         ;then echo ../${I_VER}_DOWNLOAD/jna.jar FILE NOT FOUND;read w;exit 9;fi
+      if test ! -f ../i-download/purejavacomm.jar;then echo ../i-download/purejavacomm.jar FILE NOT FOUND;read w;exit 9;fi
+      if test ! -f ../i-download/jna.jar         ;then echo ../i-download/jna.jar FILE NOT FOUND;read w;exit 9;fi
 #      done
 fi
 if test "$1" = "";then echo "$1" is NULL ERROR;read w;exit 9;fi
@@ -34,8 +34,8 @@ cp I_LANG??U.TXT $I_BIN
 if test "$2" = "JAVA";then
 #      do
       cp ../${I_VER}_BIN/JAVA/*.*              $I_BIN
-      cp ../${I_VER}_DOWNLOAD/purejavacomm.jar $I_BIN
-      cp ../${I_VER}_DOWNLOAD/jna.jar          $I_BIN
+      cp ../i-download/purejavacomm.jar $I_BIN
+      cp ../i-download/jna.jar          $I_BIN
 #      done
 else
 #      do

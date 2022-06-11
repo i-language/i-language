@@ -7,9 +7,9 @@ using System.Text;
 class ISOURCE
 {
 //static String dll1_s="D:\\HARASAWA\\I\\"; 
-static String dll1_s="..\\"; 
-static String dll2_s="_DOWNLOAD\\"; 
-static String dll_s="..\\IXX_DOWNLOAD\\"; 
+//static String dll1_s="..\\"; 
+//static String dll2_s="_DOWNLOAD\\"; 
+//static String dll_s="..\\IXX_DOWNLOAD\\"; 
 static String define_s=";M;I;L;O;P;D;F;H";
 
 static String[] file_sx,name_sx;
@@ -37,7 +37,8 @@ iver_s=arg_sxi[0];net_s=arg_sxi[1];if(arg_sxi.Length>2)define_s=arg_sxi[2];
 //net_s=iver_s.Substring(2);
 dir_in_s="..\\"+iver_s+"_SRC";
 dir_out_s="..\\"+iver_s+"_WORK";
-dll_s=dll1_s+iver_s+dll2_s;
+//dll_s=dll1_s+iver_s+dll2_s;
+dll_s="..\\i-download";
 //if(arg_sxi.Length>1)define_s=arg_sxi[1];
 //if(arg_sxi.Length>2)obfuscate_s=arg_sxi[2]; //VER35 ソースの追加中止。
 //PACKAGE

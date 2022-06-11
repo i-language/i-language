@@ -48,22 +48,22 @@ REM ********( 不要ファイルを削除 )*************************
 IF EXIST *~     ERASE *~>NUL 
 IF EXIST *.TMP  ERASE *.TMP >NUL
 REM ********( インストール環境作成 )**************************
-IF NOT EXIST  ..\%I_VER%_ZIP MKDIR ..\%I_VER%_ZIP
+REM IF NOT EXIST  ..\%I_VER%_ZIP MKDIR ..\%I_VER%_ZIP
 SET I_ZIP=%I_VER%_%I_VER2RUN%_SETUP
 SET I_TMP_ZIP=%I_TMP%\%I_ZIP%
 IF EXIST %I_TMP_ZIP% RMDIR /S /Q %I_TMP_ZIP%
 MKDIR    %I_TMP_ZIP%
-%I_XCOPYF% /Q ..\%I_VER%_DOWNLOAD\*.jar              %I_TMP_ZIP%\%I_VER%_DOWNLOAD
-%I_XCOPYF% /Q ..\%I_VER%_DOWNLOAD\Obfuscar.Console.* %I_TMP_ZIP%\%I_VER%_DOWNLOAD
-%I_XCOPYD% /Q ..\%I_VER%_SRC                         %I_TMP_ZIP%\%I_VER%_SRC 
-%I_XCOPYD% /Q ..\%I_VER%_BIN                         %I_TMP_ZIP%\%I_VER%_BIN 
-%I_XCOPYF% /Q ..\%I_VER%_SRC\SETUP_JA*.*             %I_TMP_ZIP% 
-%I_XCOPYF% /Q ..\%I_VER%_SRC\VERSIONUP_JA*.*         %I_TMP_ZIP% 
-%I_XCOPYF% /Q ..\%I_VER%_SRC\ALTER_PASSWORD_JA*.*    %I_TMP_ZIP% 
+%I_XCOPYF% /Q ..\i-download\*.jar                %I_TMP_ZIP%\i-download
+%I_XCOPYF% /Q ..\i-download\Obfuscar.Console.*   %I_TMP_ZIP%\i-download
+%I_XCOPYF% /Q ..\i-language\*.*                  %I_TMP_ZIP%\%i-language 
+%I_XCOPYD% /Q ..\%I_VER%_BIN                     %I_TMP_ZIP%\%I_VER%_BIN 
+%I_XCOPYF% /Q ..\i-language\SETUP_JA*.*          %I_TMP_ZIP% 
+%I_XCOPYF% /Q ..\i-language\VERSIONUP_JA*.*      %I_TMP_ZIP% 
+%I_XCOPYF% /Q ..\i-language\ALTER_PASSWORD_JA*.* %I_TMP_ZIP% 
 REM ********( 難読化ファイル削除 )**************************
-IF EXIST %I_TMP_ZIP%\%I_VER%_SRC\II_OBFUSCATE.OBFUSCATE            ERASE /Q %I_TMP_ZIP%\%I_VER%_SRC\II_OBFUSCATE.OBFUSCATE
+IF EXIST %I_TMP_ZIP%\i-language\II_OBFUSCATE.OBFUSCATE            ERASE /Q %I_TMP_ZIP%\i-language\II_OBFUSCATE.OBFUSCATE
 REM ********( buildファイル削除 )**************************
-IF EXIST %I_TMP_ZIP%\%I_VER%_SRC\--SELF-CONTAINED.--SELF-CONTAINED ERASE /Q %I_TMP_ZIP%\%I_VER%_SRC\--SELF-CONTAINED.--SELF-CONTAINED
+IF EXIST %I_TMP_ZIP%\i-language\--SELF-CONTAINED.--SELF-CONTAINED ERASE /Q %I_TMP_ZIP%\i-language\--SELF-CONTAINED.--SELF-CONTAINED
 REM ********( %I_TMP_ZIP%.zipのzip圧縮ファイル作成  )**************************
 IF EXIST %I_TMP_ZIP%.zip ERASE %I_TMP_ZIP%.zip >NUL
 IF EXIST %I_BIN%\IMENUW%I_FRAMEWORK%.EXE GOTO OK
@@ -72,9 +72,11 @@ COPY I_LANG??W.TXT %I_BIN%
 COPY I_MENU.*      %I_BIN%
 :OK
 %I_BIN%\IMENUW%I_FRAMEWORK%.EXE SET_ZIP.TXT dir=%I_ZIP%
-COPY %I_TMP_ZIP%.zip ..\%I_VER%_ZIP\ 
+REM COPY %I_TMP_ZIP%.zip ..\%I_VER%_ZIP\ 
+COPY %I_TMP_ZIP%.zip ..\ 
 REM ********( I言語ホームページへコピー）
-FOR %%J IN (..\sitemix) DO (
+REM FOR %%J IN (..\sitemix) DO (
+FOR %%J IN (..\I\sitemix) DO (
     IF EXIST %%J COPY %I_TMP_ZIP%.zip %%J
 )
 RMDIR /S /Q %I_TMP_ZIP%

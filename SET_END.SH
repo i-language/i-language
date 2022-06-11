@@ -35,34 +35,35 @@ for i in 1 2 3 4 5 6 7 8 9
    done
 # ===HOME===
 #cp ${I_VER}RESCCUE.*    $I_HOME 
-cp ${I_VER}UNINSTALL*.SH $I_HOME 
-# ===SERVICE===
-cp ${I_VER}SRVC*.SH      $I_HOME 
+cp IXXUNINSTALL.TXT     $I_HOME/${I_VER}UNINSTALL.TXT 
+cp IXXUNINSTALL_JAVA.SH $I_HOME/${I_VER}UNINSTALL_JAVA.SH 
+cp IXXUNINSTALL_MONO.SH $I_HOME/${I_VER}UNINSTALL_MONO.SH 
+#cp ${I_VER}SRVC*.SH      $I_HOME 
 # ===SERVER==== 
 cp *ZBACKUP $I_HOME/I.$1/BAT 
 cp *ZCPTR   $I_HOME/I.$1/BAT 
 cp *ZETC    $I_HOME/I.$1/BAT 
 cp *ZTIME   $I_HOME/I.$1/BAT 
 # ====SHARE====
-cp ${I_VER}CLIENT.S?             $I_HOME/SHARE/LINUX/CLIENT 
+cp IXXCLIENT.SH                  $I_HOME/SHARE/LINUX/CLIENT${I_VER}CLIENT.SH 
 cp CONVERT.TX?                   $I_HOME/SHARE/LINUX/CLIENT 
 cp $I_HOME/TMP/$6*               $I_HOME/SHARE/LINUX/CLIENT 
 cp I.IC?                         $I_HOME/SHARE/LINUX/BIN${I_VER} 
 cp I_LANG??U.TXT                 $I_HOME/SHARE/LINUX/BIN${I_VER} 
 cp ../${I_VER}_BIN/CLIENT_UD/*.* $I_HOME/SHARE/LINUX/BIN${I_VER}D 
 cp ../${I_VER}_BIN/JAVA/*.*      $I_HOME/SHARE/LINUX/BIN${I_VER}J 
-cp ../${I_VER}_DOWNLOAD/*.ar     $I_HOME/SHARE/LINUX/BIN${I_VER}J 
+cp ../i-download/*.ar            $I_HOME/SHARE/LINUX/BIN${I_VER}J 
 cp ../${I_VER}_BIN/CLIENT_UC/*.* $I_HOME/SHARE/LINUX/BIN${I_VER}C 
 
-cp ${I_VER}CLIENT.BA?            $I_HOME/SHARE/WINDOWS/CLIENT 
-cp ${I_VER}CLIENT.J?             $I_HOME/SHARE/WINDOWS/CLIENT 
+cp IXXCLIENT.BAT                 $I_HOME/SHARE/WINDOWS/CLIENT\${I_VER}CLIENT.BAT 
+cp IXXCLIENT.JS                  $I_HOME/SHARE/WINDOWS/CLIENT/${I_VER}CLIENT.JS 
 cp CONVERT.TX?                   $I_HOME/SHARE/WINDOWS/CLIENT 
 cp $I_HOME/TMP/$6*               $I_HOME/SHARE/WINDOWS/CLIENT 
 cp I.IC?                         $I_HOME/SHARE/WINDOWS/BIN${I_VER} 
 cp I_LANG??W.TXT                 $I_HOME/SHARE/WINDOWS/BIN${I_VER} 
 cp ../${I_VER}_BIN/CLIENT_WD/*.* $I_HOME/SHARE/WINDOWS/BIN${I_VER}D 
 cp ../${I_VER}_BIN/JAVA/*.*      $I_HOME/SHARE/WINDOWS/BIN${I_VER}J 
-cp ../${I_VER}_DOWNLOAD/*.jar    $I_HOME/SHARE/WINDOWS/BIN${I_VER}J 
+cp ../i-download/*.jar           $I_HOME/SHARE/WINDOWS/BIN${I_VER}J 
 cp ../${I_VER}_BIN/CLIENT_WC/*.* $I_HOME/SHARE/WINDOWS/BIN${I_VER}C 
 
 #cp -R $dd/I_SERVER/SHARE/*      $I_HOME/SHARE     2>> $file
