@@ -1,5 +1,7 @@
 #!/bin/sh
-i_ver=I37;i_ver_lower=i37
+i_ver=${0%ADD_MONO.SH}
+i_ver=${i_ver#./}
+i_ver_lower=`echo $i_ver | tr 'I' 'i'`
 ### BEGIN INIT INFO                                                          
 # Provides:       isrvcx_mono                                                       
 # Required-Start: $network $remote_fs $syslog                                

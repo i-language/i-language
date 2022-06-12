@@ -1,42 +1,42 @@
 *****************************************************************************
-** SQL Server2008R2 Express Edition �C���X�g�[�������� (2010�N5��16������) **
+** SQL Server2008R2 Express Edition インストール説明書 (2010年5月16日改定) **
 *****************************************************************************
-(1)�}�C�N���\�t�g�̃z�[���y�[�W�̃_�E�����[�h(���\�[�X)�A
-�_�E�����[�h�Z���^�[�̃L�[���[�h��"SQL Server 2008 R2 Express"�Ɠ���Č�����
-"SQL Server 2008 R2 - Express"(Microsoft SQL Server 2008 R2 RTM - Express - ���{��)���
-"SQLEXPR32_x86_JPN.exe"���_�E�����[�h���ĉ������B
+(1)マイクロソフトのホームページのダウンロード(リソース)、
+ダウンロードセンターのキーワードに"SQL Server 2008 R2 Express"と入れて検索後
+"SQL Server 2008 R2 - Express"(Microsoft SQL Server 2008 R2 RTM - Express - 日本語)より
+"SQLEXPR32_x86_JPN.exe"をダウンロードして下さい。
 
-(2)�_�E�����[�h�����v���O����"SQLEXPR32_x86_JPN.exe"�����s���܂��B
-�@�u�T�[�o�[�̍\���v��SQL Server Brawser�̃X�^�[�g�A�b�v�̎�ނ𖳌��������ɕύX���ĉ������B
-�i�l�b�g���[�N����Ȃ���ꍇ�ɕK�v�ƂȂ�܂��j
-�i�ݒ肵�Y�ꂽ�ꍇ��z�肵�AI����C���X�g�[���ł��ݒ肵�܂��j
-�A�u�f�[�^�x�[�X�G���W���̍\���v�ŔF�؃��[�h���u�������[�h�v�ɕύX���p�X���[�h���Q�ӏ�����ĉ������B
-�i�ݒ肵�Y�ꂽ�ꍇ�́AI����C���X�g�[���Őݒ肳��܂����AWindows�F�؂Őݒ肷��̂�SQLServer�̊Ǘ��Ҍ������K�v�ł��j
+(2)ダウンロードしたプログラム"SQLEXPR32_x86_JPN.exe"を実行します。
+①「サーバーの構成」でSQL Server Brawserのスタートアップの種類を無効を自動に変更して下さい。
+（ネットワークからつなげる場合に必要となります）
+（設定し忘れた場合を想定し、I言語インストールでも設定します）
+②「データベースエンジンの構成」で認証モードを「混合モード」に変更しパスワードを２箇所入れて下さい。
+（設定し忘れた場合は、I言語インストールで設定されますが、Windows認証で設定するのでSQLServerの管理者権限が必要です）
 
-(3)�C���X�g�[���ナ���[�g�ڑ���L���ɂ��邽�߈ȉ��̍�Ƃ����܂��B
-[�X�^�[�g][���ׂẴv���O����][Microsoft SQL Server 2008 R2][�\���c�[��]
-[SQL Server�\���}�l�[�W���[]��[SQL Server �l�b�g���[�N�̍\���n
-[�i�Y���̃C���X�^���X���j�̃v���g�R��]��[TCP/IP�v��L���ɕύX�B
-�iSQLServer�̍ċN���ŗL���ɂȂ�܂��j
-�i����̃C���X�^���X����MSSQLServer�ł��j
-�i�ݒ肵�Y�ꂽ�ꍇ��z�肵�AI����C���X�g�[���ł��ݒ肵�܂��j
+(3)インストール後リモート接続を有効にするため以下の作業をします。
+[スタート][すべてのプログラム][Microsoft SQL Server 2008 R2][構成ツール]
+[SQL Server構成マネージャー]の[SQL Server ネットワークの構成］
+[（該当のインスタンス名）のプロトコル]で[TCP/IP」を有効に変更。
+（SQLServerの再起動で有効になります）
+（既定のインスタンス名はMSSQLServerです）
+（設定し忘れた場合を想定し、I言語インストールでも設定します）
 
-(4)�ʂ̃}�V������ڑ�����ꍇ��z�肵�A�t�@�C���[�E�I�[����"I_(�C���X�^���X��)_sqlserver.exe"��
-  "I_sqlbrowser.exe"���ݒ肳��܂��B
-�l�b�g���[�N����̐ڑ����s�v�ȏꍇ��NETSH�R�}���h�ŏ����ĉ������B
-Vista=netsh advfirewall firewall delete rule name="I_(�C���X�^���X��)_sqlserver.exe"
+(4)別のマシンから接続する場合を想定し、ファイヤーウオールに"I_(インスタンス名)_sqlserver.exe"と
+  "I_sqlbrowser.exe"が設定されます。
+ネットワークからの接続が不要な場合はNETSHコマンドで消して下さい。
+Vista=netsh advfirewall firewall delete rule name="I_(インスタンス名)_sqlserver.exe"
 Vista=netsh advfirewall firewall delete rule name="I_sqlbrowser.exe"
- XP��=netsh firewall delete allowedprogram program="c:\Program Files\Microsoft SQL Server\MSSQL10.MSSQLSERVER\MSSQL\Binn\sqlservr.exe"
- XP��=netsh firewall delete allowedprogram program="C:\Program Files\Microsoft SQL Server\90\Shared\sqlbrowser.exe++"
+ XP例=netsh firewall delete allowedprogram program="c:\Program Files\Microsoft SQL Server\MSSQL10.MSSQLSERVER\MSSQL\Binn\sqlservr.exe"
+ XP例=netsh firewall delete allowedprogram program="C:\Program Files\Microsoft SQL Server\90\Shared\sqlbrowser.exe++"
 
   
-�������[�h�Ƃ́F
-�F�ؕ��@�͂Q��ނ���܂��P�ڂ�Windows�F�؂�OS�̔F�؂Ɠ��������g�p���܂��A
-�f�t�H���g(���w��)�ł͂�����g���܂���I����ł͂�����̕����g�p���܂��A
-���ꂪ�ASQL Server�F�؂ł��A�t��I����ł�Windows�F�؂͎g�p���Ȃ��̂ŁA
-�������I����̃C���X�g�[���ŋ��ۂ���w����ł��܂��B
-���ۂ����ꍇ�A���RWindows�F�؂œ������Ă���\�t�g�͓����Ȃ��Ȃ�܂��̂Œ��ӂ��K�v�ł��B
+混合モードとは：
+認証方法は２種類あります１つ目がWindows認証でOSの認証と同じ物を使用します、
+デフォルト(無指定)ではこれを使いますがI言語ではもう一つの方を使用します、
+それが、SQL Server認証です、逆にI言語ではWindows認証は使用しないので、
+こちらをI言語のインストールで拒否する指定もできます。
+拒否した場合、当然Windows認証で動かしているソフトは動かなくなりますので注意が必要です。
 
-�񋟎ҁF����M��
+提供者：原沢信道
 
-�ȏ�B
+以上。

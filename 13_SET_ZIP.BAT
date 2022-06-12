@@ -76,7 +76,7 @@ REM COPY %I_TMP_ZIP%.zip ..\%I_VER%_ZIP\
 COPY %I_TMP_ZIP%.zip ..\ 
 REM ********( I言語ホームページへコピー）
 REM FOR %%J IN (..\sitemix) DO (
-FOR %%J IN (..\I\sitemix) DO (
+FOR %%J IN (..\sitemix) DO (
     IF EXIST %%J COPY %I_TMP_ZIP%.zip %%J
 )
 RMDIR /S /Q %I_TMP_ZIP%

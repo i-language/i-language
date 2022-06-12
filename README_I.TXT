@@ -1,21 +1,21 @@
 ***************************************************
-** IBM DB2 �C���X�g�[�������� 2010�N05��16������ **
+** IBM DB2 インストール説明書 2010年05月16日改定 **
 ***************************************************
-(1)�V�X�e�����͂S�����ȓ��ɂ��ĉ������B�i���[�J�����[�U(���O�C��ID)�������Ȃ邽�߂S�����ȏ�ɂ͏o���܂���j
+(1)システム名は４文字以内にして下さい。（ローカルユーザ(ログインID)が長くなるため４文字以上には出来ません）
  
-(2)���O�C����"db2admin"�����"administrators"������^���āA"db2admin"�Ń��O�C���������Ă���C���X�g�[�����ĉ������B
+(2)ログイン名"db2admin"を作り"administrators"権限を与えて、"db2admin"でログインし直してからインストールして下さい。
 
-(3)�C���X�g�[����ɁhI_�V�X�e�����D�D�D�h�̃��[�J�����[�U��16����܂��B
-DB2���g�p����̂ŏ����Ȃ��ŉ������B
+(3)インストール後に”I_システム名．．．”のローカルユーザが16個作られます。
+DB2が使用するので消さないで下さい。
 
-(4)�ʂ̃}�V������ڑ����邽�߂Ƀt�@�C���[�E�H�[����I_db2syscs.exe�̖��O�Őݒ肳��܂��B
-�l�b�g���[�N����̐ڑ����s�v�ȏꍇ��NETSH�R�}���h�ŏ����ĉ������B
+(4)別のマシンから接続するためにファイヤーウォールにI_db2syscs.exeの名前で設定されます。
+ネットワークからの接続が不要な場合はNETSHコマンドで消して下さい。
 Vista=netsh advfirewall firewall delete rule name="I_db2syscs.exe"
- XP��=netsh firewall delete allowedprogram program="C:\PROGRA~1\IBM\SQLLIB\bin\db2syscs.exe"
+ XP例=netsh firewall delete allowedprogram program="C:\PROGRA~1\IBM\SQLLIB\bin\db2syscs.exe"
 
 
-(5)�f�[�^�x�[�X���P����A���O�́uI_�V�X�e�����v�ƂȂ�܂��B
+(5)データベースが１個作られ、名前は「I_システム名」となります。
 
-�񋟎ҁF����M��
+提供者：原沢信道
 
-�ȏ�B
+以上。

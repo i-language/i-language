@@ -1,5 +1,5 @@
-﻿* SET_I.TXT HARASAWA (この固定値先頭で最初に登場が必須,無いと_SETUP値が正しく設定されません)
-***( JAR 及び DLLの情報設定 )*******************************************************
+﻿* SET_I.TXT HARASAWA (この行は先頭に置き変更や削除はしないで下さい、そうでないと_SETUP値が正しく設定されません)
+***( 基本情報の設定 )*******************************************************
 ************************( 0/8 )*******************************************************
 PROGRAM=NOT
 CONTROL=PROGRAM,ERROR,SQL_DBO,HIGH
@@ -7,7 +7,7 @@ BEGIN
 =SET{WC.HOME=_OS_DRIVE+_P+'I'};
 =SET{WC.BIN=WC.HOME+_P+'BIN'+_IV};
 =SET{WC.TMP=WC.HOME+_P+'TMP'};
-******( JAR VER,NAME )*******************************************
+******( JDBC JAR NAME )*******************************************
 *=SET{WC.JAR_D='jaybird-full-3.0.9.jar'};
 *=SET{WC.JAR_F='fjsymjdbc.jar'};
 *=SET{WC.JAR_H='pdjdbc.jar'};
@@ -16,11 +16,11 @@ BEGIN
 =SET{WC.JAR_M='sqljdbc42.jar'};
 =SET{WC.JAR_O='ojdbc7.jar'};		
 =SET{WC.JAR_P='postgresql-42.2.18.jar'};
-******( DLL VER )**********************************************
+******( ★中止★ DLL VER )**********************************************
 *=SET{WC.DLL_VER_D1='7.1.1'};
 *=SET{WC.DLL_VER_L1='8.0.20'};
 *=SET{WC.DLL_VER_P1='3.2.6'};
-******( DOWNLOAD ディレクトリで変更)******
+******(  ★中止★ DOWNLOAD ディレクトリで変更)******
 *W+=IF_ERROR_DIR{..\i-download}JUMP{DIR_END};
 *W+=DIR_NEXT:DIR_NEXT{WN.FILE}JUMP{DIR_END};
 *W+=IF_NOT{WN.FILE%'.TXT'}BACK{DIR_NEXT};
@@ -29,7 +29,7 @@ BEGIN
 *W+=IF{WN.FILE/'System.Threading.Tasks.Extensions.'}SET{WC.DLL_VER_P2=WN.FILE[35;WN.FILE@LENGTH-38]}BACK{DIR_NEXT};
 *W+=BACK{DIR_NEXT};
 *W+=DIR_END:
-******( DLL NAME )**********************************************
+******(  ★中止★ DLL NAME )**********************************************
 *=SET{W0.DLL_CNT_M=0};
 *=SET{W0.DLL_CNT_D=1,WC.DLL_D1='FirebirdSql.Data.FirebirdClient.dll'};
 *=SET{W0.DLL_CNT_F=1,WC.DLL_F1='Fujitsu.Symfoware.dll'};

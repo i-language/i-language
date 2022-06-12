@@ -1,18 +1,18 @@
 ================================================================
-=== I���� Ver16.1 �o�[�W�����A�b�v��� (2015-8-31����)===
+=== I言語 Ver16.1 バージョンアップ情報 (2015-8-31現在)===
 ================================================================
-�i��=��݊������A����EXE�C���A�����x���v���O�����C���A�����V�@�\�ǉ��j
+（★=非互換発生、■＝EXE修正、▲＝支援プログラム修正、●＝新機能追加）
 ===================================================================
-��************( 2015-8-31 VER16.1�� )*********
-��(2015-07-22)CFG�t�@�C���̐ݒ���e��啝�ɕύX���܂����B�i�h���C�u�w���ύX���A�C���X�g�[���ݒ�l�ōŒ�K�v�Ǝv�������S�ċL�����܂����j
-��(2015-07-18)�f�[�^�x�[�X���܂ރo�b�N�A�b�v�t�@�C�����T�O���i�ύX�j�ۊǂ���悤�ɂ��܂����B�B
-��(2015-07-17)�f�B���N�g���̍\����S�ʓI�Ɍ������ĒP�������܂����B
-��(2015-07-14)MSSQL�ȊO���f�[�^�x�[�X�̃o�b�N�A�b�v�@�\��ǉ����܂����BPostgreSQL,MariaDB,MySQL,Oracle�̓A�[�J�C�u���[�h�̕ύX���t�����܂����B
-��(2015-07-12)MSSQL�̒�`���@�ƃo�b�N�A�b�v���@��S�ʓI�Ɍ������P�������܂����B
-��(2015-06-14)���݃e�[�u����ZZZZZZ_@��ZZZZZZ_VERSION��ZZZZZZ_VERSION_PRINT�ɕύX���܂����B�iZZZZ_VERSION_CHART�ɍ��킹�܂����j
-��(2015-06-14)SET_I.TXT��SET_I.TXT��SET_BEGIN.TXT�ɕ������A���C�u�����̃o�[�W�����ݒ��SET_I.TXT�ɏW�񂵂܂����B�iSET_JAVA.TXT���番���j
-��(2015-06-13)�f�[�^�x�[�X�ڑ��p���C�u����(dll,jar)���C���X�g�[���p�X�ɃR�s�[���Ă���C���X�g�[������悤�ɕύX���܂����B
-��(2015-06-10)Linux�ւ̃C���X�g�[����MONO�ł𕜊����܂����B�iJAVA�ł�SETUP_JA_JAVA.SH��MONO�ł�SETUP_JA_MONO.SH�Ƃ��܂����j
-��(2015-05-25)DB2���C���X�g�[���\�ɂ��܂����B(ZZZZZZ_CHART_COMMENT��NCHAR(95)����NVARCHAR(95)�ɕύX�j�B
-��(2015-05-19)ISOURCE.CS�ŕϊ������\�[�X�v���O�����̕����R�[�h���V�t�gJIS����UTF-8�ɕύX���܂����B
+◎************( 2015-8-31 VER16.1提供 )*********
+★(2015-07-22)CFGファイルの設定内容を大幅に変更しました。（ドライブ指定を変更し、インストール設定値で最低必要と思われる情報を全て記憶しました）
+●(2015-07-18)データベースを含むバックアップファイルを５０日（変更可）保管するようにしました。。
+★(2015-07-17)ディレクトリの構造を全面的に見直して単純化しました。
+●(2015-07-14)MSSQL以外もデータベースのバックアップ機能を追加しました。PostgreSQL,MariaDB,MySQL,Oracleはアーカイブモードの変更も付加しました。
+▲(2015-07-12)MSSQLの定義方法とバックアップ方法を全面的に見直し単純化しました。
+★(2015-06-14)混在テーブルのZZZZZZ_@のZZZZZZ_VERSIONをZZZZZZ_VERSION_PRINTに変更しました。（ZZZZ_VERSION_CHARTに合わせました）
+▲(2015-06-14)SET_I.TXTをSET_I.TXTとSET_BEGIN.TXTに分離し、ライブラリのバージョン設定をSET_I.TXTに集約しました。（SET_JAVA.TXTから分離）
+▲(2015-06-13)データベース接続用ライブラリ(dll,jar)をインストールパスにコピーしてからインストールするように変更しました。
+▲(2015-06-10)LinuxへのインストールでMONO版を復活しました。（JAVA版がSETUP_JA_JAVA.SHでMONO版がSETUP_JA_MONO.SHとしました）
+▲(2015-05-25)DB2をインストール可能にしました。(ZZZZZZ_CHART_COMMENTをNCHAR(95)からNVARCHAR(95)に変更）。
+■(2015-05-19)ISOURCE.CSで変換されるソースプログラムの文字コードをシフトJISからUTF-8に変更しました。
 ===================================================================

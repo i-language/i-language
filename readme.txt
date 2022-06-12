@@ -1,79 +1,79 @@
 ==========================================================
-=== I����̐��� (2020-11-06����)===
+=== I言語の説明 (2020-11-06現在)===
 =================================
-�P�D�͂��߂ɁB
-�P�jI����͓�����͑S�ăR���s���[�^�ɔC���鎖�ŁA
-�@�@�N�ł��ȒP�ɑ����v���O���~���O���o���镨�ł��B
-�@�@�J���x�����^�p�x�����[�����Ă���A�C���X�g�[������΁A
-�@�@���̓������V�X�e���Ƃ��ē����������o���܂��B
-�Q�jI����́A�ŐV��Windows-64Bit��OS�ŁA
-�@�@�ŐVMicrosoftSQLServer�iM)�ŁA
-�@�@�ŐV��.NET��œ����\�t�g�ł��B
-�@�@�ŐVMicrosoftSQLServer���C���X�g�[����A�@
-    [SETUP_JA.BAT]�����s���C���X�g�[�����܂��B
-�@�@���̏ꍇ��[I??_??_SETUP_ETC]�͕s�v�ł��B
-�R�j�K�p�͈͂��L����Ӗ��ŁA���̊��ł������܂����A
-�@�@��������S�Ɋm�F���Ă����ł͖����̂ŁA
-�@�@�\���ɓ���m�F�����ĉ������B
-�@�@[I??_??_SETUP_ETC]���_�E�����[�h�������ꏊ�ŉ𓀂��A
-�@�@[COPY_ETC.BAT]��[I??_??_SETUP]���ɃR�s�[���āA
-�@�@���삳����dll���C���^�[�l�b�g����_�E�����[�h��
-�@�@�ăR���p�C������K�v���L��܂��B
+１．はじめに。
+１）I言語は難しい事は全てコンピュータに任せる事で、
+　　誰でも簡単に早くプログラミングが出来る物です。
+　　開発支援も運用支援も充実しており、インストールすれば、
+　　その日から基幹システムとして動かす事が出来ます。
+２）I言語は、最新のWindows-64BitのOSで、
+　　最新MicrosoftSQLServer（M)で、
+　　最新の.NET上で動くソフトです。
+　　最新MicrosoftSQLServerをインストール後、　
+    [SETUP_JA.BAT]を実行しインストールします。
+　　この場合は[I??_??_SETUP_ETC]は不要です。
+３）適用範囲を広げる意味で、他の環境でも動きますが、
+　　動作を完全に確認している訳では無いので、
+　　十分に動作確認をして下さい。
+　　[I??_??_SETUP_ETC]もダウンロードし同じ場所で解凍し、
+　　[COPY_ETC.BAT]で[I??_??_SETUP]内にコピーして、
+　　動作させるdllをインターネットからダウンロード後
+　　再コンパイルする必要が有ります。
 *+*+*+*+*+*+*+*+*++*+*+*+
-���˗����FPostgreSQL��12:00�ɋN������o�b�N�A�b�v��
-Npgsql.dll�̃o�[�W�����A�b�v�ŁuSELECT PG_STOP_BACKUP(...)�v
-���G���[�Ɛ���悤�ɐ����Ă��܂��܂����B
-�Ή����@���������܂������A�T�[�o�[�̃o�b�`�t�@�C����postgres�̃p�X���[�h��ݒ�
-���Ȃ��Ɠ����Ȃ��̂ŁA�Ή��͕ۗ��Ƃ��܂����A�o�b�`�t�@�C���Ƀp�X���[�h��ݒ肵�Ă�
-�ǂ��Ɣ��f���ꂽ�ꍇ�͈ȉ��̍�ƂőΉ����ĉ������B
-(1)ZZZZ999850�́uP+=DBO_SQL{SELECT PG_START_BACKUP('?WN.DATE_TIME?')};�v
-�ƁuP+=DBO_SQL{SELECT PG_STOP_BACKUP()};�v��2�s�̓���*��t���ăR�����g�����܂��B
-(2)�uC:\I\I.[�V�X�e����]\BAT\ZZZZZZBACKUP.BAT�v��
-REM ***( NEW BEGIN )***����**( NEW END )�܂ł�4�s��REM������āA
-PGPASSWORD�Ƀp�X���[�h��ݒ肵�Apg_basebackup�̃f�B���N�g�����𐳂����C�����܂��B
-(3)�������������K������m�F���s���ĉ������B
+★依頼★：PostgreSQLは12:00に起動するバックアップが
+Npgsql.dllのバージョンアップで「SELECT PG_STOP_BACKUP(...)」
+がエラーと成るように成ってしまいました。
+対応方法を検討しましたが、サーバーのバッチファイルにpostgresのパスワードを設定
+しないと動かないので、対応は保留としました、バッチファイルにパスワードを設定しても
+良いと判断された場合は以下の作業で対応して下さい。
+(1)ZZZZ999850の「P+=DBO_SQL{SELECT PG_START_BACKUP('?WN.DATE_TIME?')};」
+と「P+=DBO_SQL{SELECT PG_STOP_BACKUP()};」の2行の頭に*を付けてコメント化します。
+(2)「C:\I\I.[システム名]\BAT\ZZZZZZBACKUP.BAT」の
+REM ***( NEW BEGIN )***から**( NEW END )までの4行のREMを取って、
+PGPASSWORDにパスワードを設定し、pg_basebackupのディレクトリ情報を正しく修正します。
+(3)正しく動くか必ず動作確認を行って下さい。
 *+*+*+*+*+*+*+*+*++*+*+*+
 ===================================
-�Q�D�ʂ̊��ɂ��āB 
-�P�j�O���t��\������v���O�����͓����܂���B
-�Q�j�������v���O�����͈ꕔ�����Ȃ��@�\�����݂��܂��B
-�R�jWindows�ł̓T�[�o�[��C++��OS��œ����܂��A
-�@�@�N���C�A���g��Java��JavaVM��ŁAC++��OS��œ����܂��B
-�S�jLinux�ł�C#��MONO��Java��JavaVM��C++��OS��œ����܂��B
-�T�jRDBMS��IBM DB2(I),Oracle(O),PostgreSQL(P),MariaDB(L)
-    �������܂��B	�@�@
-�U�jFirebird(D),HiRDB(H)�͖�肪�������͓����܂���B
-�V�jSymfoware(F)�͋@�\�s���œr���ŊJ���𒆎~���܂����B
-�W�jMONO�ł�[SETUP_JA_MONO.SH]���N�����܂����A
-�@�@DB2��Oracle�̓��C�u�����������̂œ����܂���B
-�X�jJava�ł̓V���A���|�[�g���C�u�������g���̂�
-    [purejavacomm]���C���X�g�[����[purejavacomm.jar]
-�@�@��[jna-4.0.0.jar]�i���l�͍ŐV�̃o�[�W�����j
-�@�@��[jna.jar]�ɖ��O��ς��Ă��̃f�B���N�g����ɃR�s�[
-�@�@���Ă���[SETUP_JA_JAVA.SH]���N�����܂��B
-10�jC++�ł�Qt���C���X�g�[�����܂��B
-�@�@Qt�ł�SQL Server��ODBC�ڑ����������A
-�@�@ODBC�ڑ��͊Ǘ��҂�sa�ł̐ڑ����o���Ȃ��̂ŁA
-�@�@�T�[�o�[�̃C���X�g�[���͖����̂悤�ł��B
-  �@����RDBMS����荇����ODBC�ɂ��ڑ��̂ݑΉ����Ȃ̂�
-�@�@���Ȃ��肪�L��܂��A�g���ꍇ�͏\���ɓ���m�F��
-�@�@�g���ĉ������B
+２．別の環境について。 
+１）グラフを表示するプログラムは動きません。
+２）印刷するプログラムは一部動かない機能が存在します。
+３）WindowsではサーバーはC++がOS上で動きます、
+　　クライアントはJavaがJavaVM上で、C++がOS上で動きます。
+４）LinuxではC#がMONOでJavaがJavaVMでC++がOS上で動きます。
+５）RDBMSはIBM DB2(I),Oracle(O),PostgreSQL(P),MariaDB(L)
+    か動きます。	　　
+６）Firebird(D),HiRDB(H)は問題が多く今は動きません。
+７）Symfoware(F)は機能不足で途中で開発を中止しました。
+８）MONO版は[SETUP_JA_MONO.SH]を起動しますが、
+　　DB2とOracleはライブラリが無いので動きません。
+９）Java版はシリアルポートライブラリを使うので
+    [purejavacomm]をインストールし[purejavacomm.jar]
+　　と[jna-4.0.0.jar]（数値は最新のバージョン）
+　　を[jna.jar]に名前を変えてこのディレクトリ上にコピー
+　　してから[SETUP_JA_JAVA.SH]を起動します。
+10）C++版はQtをインストールします。
+　　QtではSQL ServerはODBC接続しか無く、
+　　ODBC接続は管理者のsaでの接続が出来ないので、
+　　サーバーのインストールは無理のようです。
+  　他のRDBMSも取り合えずODBCによる接続のみ対応中なので
+　　かなり問題が有ります、使う場合は十分に動作確認後
+　　使って下さい。
 ==========================================================
-�R�D�����
-�i��=����,��=�����܂��j
-�o��=�͓̂����܂���,��=���m�F,X=�����܂���j
-�iS=Server,C=Client)(D=.NET,J=Java,+=C++)
+３．動作状況
+（◎=推奨,○=動きます）
+｛▲=昔は動きました,＊=未確認,X=動きません）
+（S=Server,C=Client)(D=.NET,J=Java,+=C++)
 
-            �@�@===Windows====  ====Linux=====
+            　　===Windows====  ====Linux=====
                 SDCD SJCJ S+C+  SDCD SJCJ S+C+
-1)SQL Server(M) ���� �~�� �~�Z  �Z�Z �Z�Z �~�Z(+��ODBC�ڑ�)�@
-2)IBM DB2(I)    �Z�Z �~�� �~�~  �~�~ �Z�Z �~�~(+�͕�������)
-3)Oracle(O)�@ �@�Z�Z �~�� �~�~  �~�~ �Z�Z �~�~(+�͕�������)�@�@
-4)PostgreSQL(P) �Z�Z �~�� ����  �Z�Z �Z�Z ����(+��'�G���[)
-5)MariaDB(L)    �Z�Z �~�� ����  �Z�Z �Z�Z ����(+��'�G���[)
-6)Firbird(D)    ���� �~�� ����  ���� ���� ����
-7)HiRDB(H)�@    ���� �~�� ����  ���� ���� ����
-8)Symfoware�iF) �~�~ �~�~ �~�~  �~�~ �~�~ �~�~ �@�@
+1)SQL Server(M) ◎◎ ×＊ ×〇  〇〇 〇〇 ×〇(+はODBC接続)　
+2)IBM DB2(I)    〇〇 ×＊ ××  ×× 〇〇 ××(+は文字化け)
+3)Oracle(O)　 　〇〇 ×＊ ××  ×× 〇〇 ××(+は文字化け)　　
+4)PostgreSQL(P) 〇〇 ×＊ ｘｘ  〇〇 〇〇 ｘｘ(+は'エラー)
+5)MariaDB(L)    〇〇 ×＊ ｘｘ  〇〇 〇〇 ｘｘ(+は'エラー)
+6)Firbird(D)    ▲▲ ×＊ ＊＊  ▲▲ ＊＊ ＊＊
+7)HiRDB(H)　    ▲▲ ×＊ ＊＊  ▲▲ ＊＊ ＊＊
+8)Symfoware（F) ×× ×× ××  ×× ×× ×× 　　
 
-�񋟎ҁF����M��
-�ȏ�
+提供者：原沢信道
+以上

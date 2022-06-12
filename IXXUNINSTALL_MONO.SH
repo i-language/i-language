@@ -1,5 +1,6 @@
 #!/bin/sh
-i_ver=I37
+i_ver=${0%UNINSTALL_MONO.SH}
+i_ver=${i_ver#./}
 if test `whoami` != "root" ;then 
    echo su -c \"sh $0\" root;su -c "sh $0" root;exit 0
 fi 

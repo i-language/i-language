@@ -1,15 +1,15 @@
 ****************************************************
-** Oracle10G�C���X�g�[�������� 2010�N05��16������ **
+** Oracle10Gインストール説明書 2010年05月16日改定 **
 ****************************************************
-(1)�C���X�g�[���̎��̃O���[�o���E�f�[�^�x�[�X����ORCL(O10)�̂܂܂Ƃ��ĉ������A
-   �܂��AExpress Edition��XE�iO10EX)�̂܂܂Ƃ��ĉ������B
-(2)�C���X�g�[���ɗ\�z�ȏ�Ɏ��Ԃ�������܂��B
-(3)�C���X�g�[�����ɃG���[���o��ꍇ������܂����A�Ƃ肠�����������ăC���X�g�[���𑱍s�������B
-(4)�N���C�A���g����ڑ����邽�߃t�@�C���[�E�I�[����"I_[�f�[�^�x�[�X��]_tnslsnr.exe"�̖��O�Őݒ肳��܂��B
-�l�b�g���[�N����̐ڑ����s�v�ȏꍇ��NETSH�R�}���h�ŏ����ĉ������B
-Vista=netsh advfirewall firewall delete rule name="I_[�f�[�^�x�[�X��]_tnslsnr.exe"
- XP��=netsh firewall delete allowedprogram program="C:\oraclexe\app\oracle\product\10.2.0\server\BIN\tnslsnr.exe"
+(1)インストールの時のグローバル・データベース名はORCL(O10)のままとして下さい、
+   また、Express EditionはXE（O10EX)のままとして下さい。
+(2)インストールに予想以上に時間がかかります。
+(3)インストール中にエラーが出る場合がありますが、とりあえず無視してインストールを続行下さい。
+(4)クライアントから接続するためファイヤーウオールに"I_[データベース名]_tnslsnr.exe"の名前で設定されます。
+ネットワークからの接続が不要な場合はNETSHコマンドで消して下さい。
+Vista=netsh advfirewall firewall delete rule name="I_[データベース名]_tnslsnr.exe"
+ XP例=netsh firewall delete allowedprogram program="C:\oraclexe\app\oracle\product\10.2.0\server\BIN\tnslsnr.exe"
 
-�񋟎ҁF����M��
+提供者：原沢信道
 
-�ȏ�B
+以上。

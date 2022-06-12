@@ -1,41 +1,41 @@
 ******************************************************
-*** IŒ¾Œê ƒCƒ“ƒXƒg[ƒ‹‚Ì à–¾ (2010”N‚P‚OŒŽ‚P‚X“ú‰ü’è)***
+*** Iè¨€èªž ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã® èª¬æ˜Ž (2010å¹´ï¼‘ï¼æœˆï¼‘ï¼™æ—¥æ”¹å®š)***
 ******************************************************
-IŒ¾Œê‚Æ‚ÍF
-IŒ¾Œê‚Í’N‚Å‚àƒvƒƒOƒ‰ƒ€‚ð‘¦À(ƒCƒ“ƒXƒ^ƒ“ƒg)‚Éì‚ê‚é‚æ‚¤‚É‚µ‚½“¹‹ï(ƒc[ƒ‹)‚Å‚·B
-ƒŠƒŒ[ƒVƒ‡ƒiƒ‹ƒf[ƒ^ƒx[ƒX‚Éƒf[ƒ^‚ðŠi”[‚µSQL‚ÆIŒ¾Œê‚ÅƒvƒƒOƒ‰ƒ€‚ðì‚è‚Ü‚·B
+Iè¨€èªžã¨ã¯ï¼š
+Iè¨€èªžã¯èª°ã§ã‚‚ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’å³åº§(ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ãƒˆ)ã«ä½œã‚Œã‚‹ã‚ˆã†ã«ã—ãŸé“å…·(ãƒ„ãƒ¼ãƒ«)ã§ã™ã€‚
+ãƒªãƒ¬ãƒ¼ã‚·ãƒ§ãƒŠãƒ«ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã«ãƒ‡ãƒ¼ã‚¿ã‚’æ ¼ç´ã—SQLã¨Iè¨€èªžã§ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’ä½œã‚Šã¾ã™ã€‚
 
-’ˆÓFƒCƒ“ƒXƒg[ƒ‹—pƒtƒ@ƒCƒ‹‚ðì‚ç‚È‚¢ê‡‚Í‰º‹L‚É‚·‚é•K—v‚ª‚ ‚è‚Ü‚·B
-ƒRƒ“ƒsƒ…[ƒ^[–¼‚ð"I1"–”‚Í"I2"‚É‚·‚é•K—v‚ª‚ ‚è‚Ü‚·B
-ƒZƒbƒgƒAƒbƒv–¼‚ÍhIh‚Å‚·B
+æ³¨æ„ï¼šã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ç”¨ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œã‚‰ãªã„å ´åˆã¯ä¸‹è¨˜ã«ã™ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚
+ã‚³ãƒ³ãƒ”ãƒ¥ãƒ¼ã‚¿ãƒ¼åã‚’"I1"åˆã¯"I2"ã«ã™ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚
+ã‚»ãƒƒãƒˆã‚¢ãƒƒãƒ—åã¯â€Iâ€ã§ã™ã€‚
 
-“®ìðŒF
-(1)OS‚ÍWindows7,Vista,XP,2008,2005,2003‚Å‚ ‚é‚±‚ÆB
-(‚½‚¾‚µAVistaˆÈŠO‚Å‚Ì“®ìŠm”F‚Í‚µ‚Ä‚ ‚è‚Ü‚¹‚ñ‚ª“®‚­‚Í‚¸‚Å‚·j
-(2)ŠÇ—ŽÒ(administrators)Œ ŒÀ‚ðŽ‚Á‚½ƒƒOƒCƒ“–¼‚ÅƒƒOƒCƒ“‚Å‚«‚é‚±‚ÆB
-(3).NET Framework3.5SP1(2.0ˆÈã‚Å‚ ‚ê‚Î“®‚«‚Ü‚·j‚ªƒCƒ“ƒXƒg[ƒ‹‚³‚ê‚Ä‚¢‚éŽ–B
-i‚V‚Æ2008R2‚ÍƒCƒ“ƒXƒg[ƒ‹•s—v‚Å‚·j
-ƒCƒ“ƒXƒg[ƒ‹‚Íƒ}ƒCƒNƒƒ\ƒtƒg‚Ìƒz[ƒ€ƒy[ƒW‚Ìƒ_ƒEƒ“ƒ[ƒh(ƒŠƒ\[ƒX)A
-ƒ_ƒEƒ“ƒ[ƒhƒZƒ“ƒ^[‚ÌƒL[ƒ[ƒh‚É".NET Framework 3.5"‚Æ“ü‚ê‚ÄŒŸõŒã
-"u.NET Framework 3.5 Service Pack 1iƒtƒ‹ƒpƒP[ƒW)vh
-‚ðƒ_ƒEƒ“ƒ[ƒh‚µƒCƒ“ƒXƒg[ƒ‹‰º‚³‚¢B
+å‹•ä½œæ¡ä»¶ï¼š
+(1)OSã¯Windows7,Vista,XP,2008,2005,2003ã§ã‚ã‚‹ã“ã¨ã€‚
+(ãŸã ã—ã€Vistaä»¥å¤–ã§ã®å‹•ä½œç¢ºèªã¯ã—ã¦ã‚ã‚Šã¾ã›ã‚“ãŒå‹•ãã¯ãšã§ã™ï¼‰
+(2)ç®¡ç†è€…(administrators)æ¨©é™ã‚’æŒã£ãŸãƒ­ã‚°ã‚¤ãƒ³åã§ãƒ­ã‚°ã‚¤ãƒ³ã§ãã‚‹ã“ã¨ã€‚
+(3).NET Framework3.5SP1(2.0ä»¥ä¸Šã§ã‚ã‚Œã°å‹•ãã¾ã™ï¼‰ãŒã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã•ã‚Œã¦ã„ã‚‹äº‹ã€‚
+ï¼ˆï¼—ã¨2008R2ã¯ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ä¸è¦ã§ã™ï¼‰
+ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã¯ãƒžã‚¤ã‚¯ãƒ­ã‚½ãƒ•ãƒˆã®ãƒ›ãƒ¼ãƒ ãƒšãƒ¼ã‚¸ã®ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰(ãƒªã‚½ãƒ¼ã‚¹)ã€
+ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰ã‚»ãƒ³ã‚¿ãƒ¼ã®ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰ã«".NET Framework 3.5"ã¨å…¥ã‚Œã¦æ¤œç´¢å¾Œ
+"ã€Œ.NET Framework 3.5 Service Pack 1ï¼ˆãƒ•ãƒ«ãƒ‘ã‚±ãƒ¼ã‚¸)ã€â€
+ã‚’ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰ã—ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ä¸‹ã•ã„ã€‚
 
-ƒCƒ“ƒXƒg[ƒ‹•û–@B
-’ˆÓF‘S‚ÄŠÇ—ŽÒŒ ŒÀ‚ðŽ‚Á‚½ƒƒOƒCƒ“–¼‚ÅŽÀs‚µ‚Ä‰º‚³‚¢B
-(1)ƒCƒ“ƒXƒg[ƒ‹—pƒtƒ@ƒCƒ‹‚ðì‚ç‚È‚¢ê‡‚ÍƒRƒ“ƒsƒ…[ƒ^–¼‚ð"I1"–”‚Í"I2"‚É•ÏX‚µ‚Ü‚·B
-   README1.TXT‚É•ÏX•û–@‚ª‚ ‚è‚Ü‚·B
-(2)ˆÈ‰º‚Ì‚Ç‚ê‚©‚PŒÂ‚Ìƒf[ƒ^ƒx[ƒXiRDBMSj‚ðƒCƒ“ƒXƒg[ƒ‹‚µ‚Ü‚·B
-iSQL  Server‚ÅŠJ”­‚µ‚Ä‚¢‚é‚Ì‚ÅAˆê”Ô[ŽÀ‚µ‚Ä‚¢‚Ü‚·‚Ì‚ÅASQL  Server‚ð„§‚µ‚Ü‚·j
-  ‡@  SQL Server2008(R2)ExpressEdition–”‚ÍSQL Server2008(R2)‚ðƒCƒ“ƒXƒg[ƒ‹‚µ‚Ü‚·B
-     README21.TXT‚ÉƒCƒ“ƒXƒg[ƒ‹•û–@‚ª‚ ‚è‚Ü‚·B(M2008EX,M2008)
-  ‡A  PostgreSQL9.0.?‚ðƒCƒ“ƒXƒg[ƒ‹‚µ‚Ü‚·B
-     README23.TXT‚ÉƒCƒ“ƒXƒg[ƒ‹•û–@‚ª‚ ‚è‚Ü‚·B(P90)
-  ‡B IBM  DB2 VER9.7‚ðƒCƒ“ƒXƒg[ƒ‹‚µ‚Ü‚·B
-     README25.TXT‚ÉƒCƒ“ƒXƒg[ƒ‹•û–@‚ª‚ ‚è‚Ü‚·B(I9)
-  ‡C Oracle10GExpressEdition–”‚ÍOracle11G‚ðƒCƒ“ƒXƒg[ƒ‹‚µ‚Ü‚·B
-     README26.TXT‚ÉƒCƒ“ƒXƒg[ƒ‹•û–@‚ª‚ ‚è‚Ü‚·B(O10EX,O11)
-(3)IŒ¾Œê SERVER‚ðƒCƒ“ƒXƒg[ƒ‹‚µ‚Ü‚·B
-   README3.TXT‚ÉƒCƒ“ƒXƒg[ƒ‹•û–@‚ª‚ ‚è‚Ü‚·B
+ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«æ–¹æ³•ã€‚
+æ³¨æ„ï¼šå…¨ã¦ç®¡ç†è€…æ¨©é™ã‚’æŒã£ãŸãƒ­ã‚°ã‚¤ãƒ³åã§å®Ÿè¡Œã—ã¦ä¸‹ã•ã„ã€‚
+(1)ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ç”¨ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œã‚‰ãªã„å ´åˆã¯ã‚³ãƒ³ãƒ”ãƒ¥ãƒ¼ã‚¿åã‚’"I1"åˆã¯"I2"ã«å¤‰æ›´ã—ã¾ã™ã€‚
+   README1.TXTã«å¤‰æ›´æ–¹æ³•ãŒã‚ã‚Šã¾ã™ã€‚
+(2)ä»¥ä¸‹ã®ã©ã‚Œã‹ï¼‘å€‹ã®ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ï¼ˆRDBMSï¼‰ã‚’ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã—ã¾ã™ã€‚
+ï¼ˆSQL  Serverã§é–‹ç™ºã—ã¦ã„ã‚‹ã®ã§ã€ä¸€ç•ªå……å®Ÿã—ã¦ã„ã¾ã™ã®ã§ã€SQL  Serverã‚’æŽ¨å¥¨ã—ã¾ã™ï¼‰
+  â‘   SQL Server2008(R2)ExpressEditionåˆã¯SQL Server2008(R2)ã‚’ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã—ã¾ã™ã€‚
+     README21.TXTã«ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«æ–¹æ³•ãŒã‚ã‚Šã¾ã™ã€‚(M2008EX,M2008)
+  â‘¡  PostgreSQL9.0.?ã‚’ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã—ã¾ã™ã€‚
+     README23.TXTã«ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«æ–¹æ³•ãŒã‚ã‚Šã¾ã™ã€‚(P90)
+  â‘¢ IBM  DB2 VER9.7ã‚’ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã—ã¾ã™ã€‚
+     README25.TXTã«ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«æ–¹æ³•ãŒã‚ã‚Šã¾ã™ã€‚(I9)
+  â‘£ Oracle10GExpressEditionåˆã¯Oracle11Gã‚’ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã—ã¾ã™ã€‚
+     README26.TXTã«ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«æ–¹æ³•ãŒã‚ã‚Šã¾ã™ã€‚(O10EX,O11)
+(3)Iè¨€èªž SERVERã‚’ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã—ã¾ã™ã€‚
+   README3.TXTã«ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«æ–¹æ³•ãŒã‚ã‚Šã¾ã™ã€‚
 
-’ñ‹ŸŽÒFŒ´‘òM“¹
-ˆÈã
+æä¾›è€…ï¼šåŽŸæ²¢ä¿¡é“
+ä»¥ä¸Š

@@ -1,12 +1,12 @@
 ================================================================
-=== IŒ¾Œê Ver32.1 ƒo[ƒWƒ‡ƒ“ƒAƒbƒvî•ñ (2020-03-08 Œ»Ý)===
+=== Iè¨€èªž Ver32.1 ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã‚¢ãƒƒãƒ—æƒ…å ± (2020-03-08 ç¾åœ¨)===
 ================================================================
-iš=”ñŒÝŠ·”­¶A¡EXEC³A£Žx‰‡ƒvƒƒOƒ‰ƒ€C³AœV‹@”\’Ç‰Áj
+ï¼ˆâ˜…=éžäº’æ›ç™ºç”Ÿã€â– ï¼EXEä¿®æ­£ã€â–²ï¼æ”¯æ´ãƒ—ãƒ­ã‚°ãƒ©ãƒ ä¿®æ­£ã€â—ï¼æ–°æ©Ÿèƒ½è¿½åŠ ï¼‰
 ===================================================================
-£(2020-01-12)ƒvƒƒOƒ‰ƒ€‚Ì•¶–@ƒ`ƒFƒbƒN‚Å"_#"‚Æ"_$"‚ÌƒVƒXƒeƒ€•Ï”‚ª•¶–@ƒGƒ‰[‚Æ‚È‚é–â‘è‚É‘Îˆ‚µ‚Ü‚µ‚½B
-¡(2019-12-26)“ü—Í‚Ìæ“ª‚ÅdeleteƒL[‰Ÿ‰ºŽž‚ÉƒvƒƒOƒ‰ƒ€‚ªˆÙíI—¹‚·‚éê‡‚ª—L‚é–â‘è‚É‘Îˆ‚µ‚Ü‚µ‚½B
-£(2019-12-06)PostgreSQL12‚Å‚Æ‚è‚ ‚¦‚¸,pg_basebackup‚ð‰Â”\‚É‚·‚éˆ×pg_hab.conf‚Ì"host    replication"‚ÌƒRƒƒ“ƒg‰»‚ð’†Ž~‚µ‚Ü‚µ‚½B
-¡(2019-12-04)_FOREIGN‚Æ_FOREIGN_TABLE‚ðVÝ‚µA@ZZZZZZ_START_1_FOREIGN‚ÌƒRƒs[ƒvƒƒOƒ‰ƒ€‚ðVÝ‚µA
-ŠO•”ƒL[‚Ìíœ”»’èƒƒWƒbƒN‚ðƒf[ƒ^Ž«‘‚ðŽg‚Á‚ÄƒvƒƒOƒ‰ƒ€‚É•t‰Áo—ˆ‚é‚æ‚¤‚É‚µ‚Ü‚µ‚½B
-£(2019-12-01)PostgreSQL12‚ÅRG_ATTRDEF‚ÌADSRC‚ª”pŽ~‚³‚ê‚½–â‘è‚É‘Îˆ‚µ‚Ü‚µ‚½B
-¡(2019-11-19)FRAMEWORK2‚ÆFRAMEWORK4‚ÌŽg—p‚ð”pŽ~‚µAFRAMEWORK4‚Ì‚Ý‚ÌŠÂ‹«‚É‰ü‚ß‚Ü‚µ‚½B
+â–²(2020-01-12)ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã®æ–‡æ³•ãƒã‚§ãƒƒã‚¯ã§"_#"ã¨"_$"ã®ã‚·ã‚¹ãƒ†ãƒ å¤‰æ•°ãŒæ–‡æ³•ã‚¨ãƒ©ãƒ¼ã¨ãªã‚‹å•é¡Œã«å¯¾å‡¦ã—ã¾ã—ãŸã€‚
+â– (2019-12-26)å…¥åŠ›ã®å…ˆé ­ã§deleteã‚­ãƒ¼æŠ¼ä¸‹æ™‚ã«ãƒ—ãƒ­ã‚°ãƒ©ãƒ ãŒç•°å¸¸çµ‚äº†ã™ã‚‹å ´åˆãŒæœ‰ã‚‹å•é¡Œã«å¯¾å‡¦ã—ã¾ã—ãŸã€‚
+â–²(2019-12-06)PostgreSQL12ã§ã¨ã‚Šã‚ãˆãš,pg_basebackupã‚’å¯èƒ½ã«ã™ã‚‹ç‚ºpg_hab.confã®"host    replication"ã®ã‚³ãƒ¡ãƒ³ãƒˆåŒ–ã‚’ä¸­æ­¢ã—ã¾ã—ãŸã€‚
+â– (2019-12-04)_FOREIGNã¨_FOREIGN_TABLEã‚’æ–°è¨­ã—ã€@ZZZZZZ_START_1_FOREIGNã®ã‚³ãƒ”ãƒ¼ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’æ–°è¨­ã—ã€
+å¤–éƒ¨ã‚­ãƒ¼ã®å‰Šé™¤åˆ¤å®šãƒ­ã‚¸ãƒƒã‚¯ã‚’ãƒ‡ãƒ¼ã‚¿è¾žæ›¸ã‚’ä½¿ã£ã¦ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã«ä»˜åŠ å‡ºæ¥ã‚‹ã‚ˆã†ã«ã—ã¾ã—ãŸã€‚
+â–²(2019-12-01)PostgreSQL12ã§RG_ATTRDEFã®ADSRCãŒå»ƒæ­¢ã•ã‚ŒãŸå•é¡Œã«å¯¾å‡¦ã—ã¾ã—ãŸã€‚
+â– (2019-11-19)FRAMEWORK2ã¨FRAMEWORK4ã®ä½¿ç”¨ã‚’å»ƒæ­¢ã—ã€FRAMEWORK4ã®ã¿ã®ç’°å¢ƒã«æ”¹ã‚ã¾ã—ãŸã€‚
