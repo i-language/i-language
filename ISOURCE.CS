@@ -35,10 +35,12 @@ public static int Main(string[] arg_sxi)
 {
 iver_s=arg_sxi[0];net_s=arg_sxi[1];if(arg_sxi.Length>2)define_s=arg_sxi[2];
 //net_s=iver_s.Substring(2);
-dir_in_s="..\\"+iver_s+"_SRC";
+//dir_in_s="..\\"+iver_s+"_SRC";
+//dir_in_s="..\\i-language";
+dir_in_s=".\\";
 dir_out_s="..\\"+iver_s+"_WORK";
 //dll_s=dll1_s+iver_s+dll2_s;
-dll_s="..\\i-download";
+//dll_s="..\\i-download";
 //if(arg_sxi.Length>1)define_s=arg_sxi[1];
 //if(arg_sxi.Length>2)obfuscate_s=arg_sxi[2]; //VER35 ソースの追加中止。
 //PACKAGE

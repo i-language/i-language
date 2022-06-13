@@ -5,7 +5,7 @@ REM SET Path=%Path%;%I_QT_TOOLS%;%I_QT_TOOLS2%
 SET Path=%Path%;%I_QT_TOOLS%
 REM ====================
 IF "%1"=="" CALL C_SOURCE.BAT CONT 
-CD ..\%I_VER%_WORK
+PUSHD ..\%I_VER%_WORK
 ECHO START>%I_LOG%
 SET I_PROGRAMS=IMENU IROOT IPRINT
 IF "%I_QT_SERVER_SW%"=="YES" SET I_PROGRAMS=%I_PROGRAMS% ISETUP ISRVC ITIME 
@@ -41,7 +41,7 @@ rem FOR %%J IN (h cpp o) DO (
 rem    IF EXIST release\*.%%J ERASE /Q release\*.%%J  
 rem )
 FIND "error:" %I_LOG%
-CD ..\%I_VER%_SRC
+POPD
 IF "%1"=="" %I_XCOPYF% ..\%I_VER%_BIN\CLIENT_WC\*C.exe %I_BIN%
 REM =============================
 IF "%1"=="" PAUSE

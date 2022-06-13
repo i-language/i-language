@@ -89,6 +89,7 @@ $2+DATA={O,,,B}VER$$##{11}
 2+=SPLIT_CHAR{WN.SPLIT}{WN}{' '};
 =SPLIT_CHAR{WN.SPLIT}{WN.SPLIT2}{'-'};
 =SET{VER$$##=WN.SPLIT1};
+2+=BACK{READ_NEXT1};
 =READ_END1:READ_CLOSE{1};
 **********************************************************
 REPEAT=

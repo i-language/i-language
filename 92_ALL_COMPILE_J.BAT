@@ -17,13 +17,13 @@ rem %I_JAVAC% -encoding utf-8 -Xlint:deprecation -Xlint:unchecked -d ..\%I_VER%_
 if errorlevel 1 PAUSE
 rem type java0.tmp
 REM ================
-CD ..\%I_VER%_WORK
+PUSHD ..\%I_VER%_WORK
 del iroot_l.class
 rem %I_JAR% cvf ..\%I_VER%_BIN\SERVER_WD\ISETUP.jar *.class >NUL 
 rem del isetup_l.class
 %I_JAR% cvf ..\%I_VER%_BIN\JAVA\IJAVA.jar  *.class >NUL    
 rem %I_XCOPYF%  ..\i-download\*.ja? ..\%I_VER%_BIN\JAVA
-CD ..\%I_VER%_SRC
+POPD
 REM ================
 rem goto fin
 rem :ERR_JAVA
