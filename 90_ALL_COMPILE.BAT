@@ -33,7 +33,9 @@ MOVE /Y ..\%I_VER%_BIN\CLIENT_WD\IMENUWD.dl? ..\%I_VER%_BIN_OBFUSCATE\OLD
 REM (šLinux–¢‘Î‰žˆ—•Û—¯’†š) MOVE /Y ..\%I_VER%_BIN\SERVER_UD\ITIMEUD.dl? ..\%I_VER%_BIN_OBFUSCATE\OLD   
 MOVE /Y ..\%I_VER%_BIN\SERVER_WD\ITIMEWD.dl? ..\%I_VER%_BIN_OBFUSCATE\OLD  
 REM (šLinux–¢‘Î‰žˆ—•Û—¯’†š) (C_OBFUSCAR.XML)   
-..\i-download\obfuscar.console.exe C_OBFUSCAR.XML > %I_TMP%\obfuscar.log 2>&1
+PUSHD ..\%I_VER%_BIN_OBFUSCATE
+..\i-download\obfuscar.console.exe ..\i-language\C_OBFUSCAR.XML > %I_TMP%\obfuscar.log 2>&1
+POPD
 %I_XCOPYF% ..\%I_VER%_BIN_OBFUSCATE\NEW\IMENUUD.* ..\%I_VER%_BIN\CLIENT_UD 
 %I_XCOPYF% ..\%I_VER%_BIN_OBFUSCATE\NEW\IMENUWD.* ..\%I_VER%_BIN\CLIENT_WD
 %I_XCOPYF% ..\%I_VER%_BIN_OBFUSCATE\NEW\ITIMEUD.* ..\%I_VER%_BIN\SERVER_UD

@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <Obfuscator>
-  <Var name="InPath"  value="..\I37_BIN_OBFUSCATE\OLD" />
-  <Var name="OutPath" value="..\I37_BIN_OBFUSCATE\NEW" />
+  <Var name="InPath"  value="OLD" />
+  <Var name="OutPath" value="NEW" />
   <Var name="KeepPublicApi"  value="false" />
   <Var name="HidePrivateApi" value="true" />
   <Var name="HideStrings"    value="true" />

@@ -2,7 +2,6 @@
 CALL _BEGIN.BAT
 COPY ISOURCEWD.CSPROJ ..\%I_VER%_WORK 
 CALL C_COMPILE_D.BAT ISOURCE CLIENT
-REM IF "%1"=="" %I_XCOPYD% ..\%I_VER%_WORK\bin\Release\net6.0\win-x64\*.* %I_BIN%
 IF "%1"=="" %I_XCOPYD% ..\%I_VER%_BIN\CLIENT_WD\*.* %I_BIN%
 REM IF EXIST   ..\%I_VER%_WORK\bin\*.* ERASE /Q /S ..\%I_VER%_WORK\bin\*.*>NUL
 REM IF EXIST   ..\%I_VER%_WORK\obj\*.* ERASE /Q /S ..\%I_VER%_WORK\obj\*.*>NUL

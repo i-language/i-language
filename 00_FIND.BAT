@@ -1,3 +1,3 @@
 @echo off
-find "I37" *.* > __FIND.TMP 
+find "SET_I.TXT" *.* > __FIND.TMP 
 start notepad __FIND.TMP
