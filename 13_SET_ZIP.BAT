@@ -3,16 +3,19 @@ REM CREATE ZIP FILE
 SET I_SET_ZIP_SW=YES
 SET I_FRAMEWORK=D
 CALL C_BEGIN.BAT
-ECHO =[1/4]==(SDKの最新が[ %I_VER2SDK% ]で有る事 )==(  I_VER2SDK,_BEGIN_VER2.BAT )===============================
+ECHO ●[1/5]==(3か所が[ %I_VER:~1% ]で有る事 )
+FIND "ZZZZZZ_VERSION1" SET_ETC.TXT
+FIND "public readonly int VERSION1=" II_VERSION.ORG
+ECHO ●[2/5]==(SDKの最新が[ %I_VER2SDK% ]で有る事 )==(  I_VER2SDK,_BEGIN_VER2.BAT )===============================
 DOTNET --version
-ECHO =[2/4]=(Desktop.Appの最新が[ %I_VER2RUN% ]で有る事)==( I_VER2RUN,_BEGIN_VER2.BAT )=============================
+ECHO ●[3/5]=(Desktop.Appの最新が[ %I_VER2RUN% ]で有る事)==( I_VER2RUN,_BEGIN_VER2.BAT )=============================
 DOTNET --list-runtimes | find "Desktop"
-ECHO =[3/4]========(2か所が[ %I_VER2RUN:~0,3% ]で有る事)== ( I_VER2RUN,_BEGIN.BAT )=====
+ECHO ●[4/5]========(2か所が[ %I_VER2RUN:~0,3% ]で有る事)== ( I_VER2RUN,_BEGIN.BAT )=====
 FIND "TargetFramework" ISOURCEWD.CSPROJ
 ECHO                         %I_VER2DOTNET%     ( I_VER2DOTNET=,_BEGIN_VER2.BAT ) 
-ECHO =[4/4]===============(５か所が[ 000%I_VER2RUN:~0,1%0%I_VER2RUN:~2,1%00%I_VER2RUN:~-1% ]と同じで有る事)===============================
+ECHO ●[5/5]===============(4か所が[ 000%I_VER2RUN:~0,1%0%I_VER2RUN:~2,1%00%I_VER2RUN:~-1% ]と同じで有る事)===============================
 FIND "ZZZZZZ_VERSION2" SET_ETC.TXT
-FIND "public readonly String VERSION2_S=" II_VERSION.*
+FIND "public readonly String VERSION2_S=" II_VERSION.ORG
 ECHO                                    %I_VER2% ( I_VER2=,_BEGIN_VER2.BAT )
 ECHO ================================================================
 ECHO ★これからI言語インストールファイル(%I_VER%_%I_VER2RUN%_SETUP.zip)を作ります。★

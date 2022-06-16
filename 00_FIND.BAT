@@ -1,3 +1,3 @@
 @echo off
-find "SET_I.TXT" *.* > __FIND.TMP 
+find "SRVC" *.* > __FIND.TMP 
 start notepad __FIND.TMP
