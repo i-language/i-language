@@ -734,7 +734,7 @@ if(!z_mt_n.init_sw_b())return false; //%名前のスイッチ関連設定
 if(!z_mt_n.init_fix_b())return false; //@名前の固定値設定
 //=**(  バージョン判定 )***
 z_mt_n.program_p.find_name_i=0;
-if(!z_p.e5s_b(z_p.job_s,"ZZZZ010511","ZZZZ010531","ZZZZ010121","ZZZZ010137")&&!z_p.ends_with_b(z_p.job_s,"00"))//バージョン不一致でも動かしたい処理は迂回。//VER23.1
+if(!z_p.e7s_b(z_p.job_s,"ZZZZ010511","ZZZZ010531","ZZZZ010121","ZZZZ010137","ZZZZ404040","ZZZZ010440")&&!z_p.ends_with_b(z_p.job_s,"00"))//バージョン不一致でも動かしたい処理は迂回。//VER23.1
   {if(!z_mt_n.program_p.find_name_b("ZZZZZZ_VERSION1",z_p.da_fix_a))
      {z_p.err_s="@ZZZZZZ_VERSION1 NOT FOUND";return false;}
    j=z_p.to_int_check(z_mt_n.program_p.da_find_name_data_p.data_s,'+',0,0);if(!z_p.return_b){z_p.err_s="@ZZZZZZ_VERSION1 NOT NUMERIC";return false;}

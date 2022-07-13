@@ -1,3 +1,3 @@
 @echo off
-find "SRVC" *.* > __FIND.TMP 
+find "ISOURCE" *.* > __FIND.TMP 
 start notepad __FIND.TMP

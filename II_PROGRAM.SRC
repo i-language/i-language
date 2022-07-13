@@ -1760,7 +1760,7 @@ for(;;)
          for(start=end=0;start<z_p.length(ss);start=j) //@の連続を\t+(char)数に置き換え。
            {if(-1==(end=z_p.index3c_i(ss,'@',start))){w_s+=z_p.substring2_s(ss,start);break;}
             for(j=end;j<z_p.length(ss);j++){if('@'!=z_p.at_s_c(ss,j))break;}
-            w_s+=z_p.substring3_s(ss,start,end-start)+'\t'+(char)(j-end);
+            w_s+=z_p.substring3_s(ss,start,end-start)+'\t'+(char )(j-end);
            }
          ii_zz_l ww_s_n=new ii_zz_l();
          z_mt_p.edit_b(ww_s_n,w_s);w_s=ww_s_n.s;
@@ -2577,7 +2577,7 @@ if(0==sw)
           {if(-1==z_p.hex(z_p.at_s_c(w_s,i)))break;
            hex=hex*16+z_p.hex(z_p.at_s_c(w_s,i));
           }
-         s_ni.s=z_p.to_c_s((char)hex);
+         s_ni.s=z_p.to_c_s((char )hex);
          sw=OK_8;break;
         }
       break;
@@ -3321,7 +3321,7 @@ for(;NEXT_1>=sw;)//NEXT_1以下のみ実行
    if(z_p.starts_with_b(name_s,"_A")&&2<z_p.length(name_s))
      {w_s="";i=z_p.to_int_check(z_p.substring2_s(name_s,2),'-',0,1);
       if(z_p.length(name_s)>2&&z_p.return_b)
-        {if(0<i&&27>i){w_s=z_p.to_c_s((char)(z_p.to_c_i('A')+i-1));sw=SET_NULL_6;break;}}
+        {if(0<i&&27>i){w_s=z_p.to_c_s((char )(z_p.to_c_i('A')+i-1));sw=SET_NULL_6;break;}}
      z_p.t_v(z_p.PR,"get_data_b)23"); 
      return set_data_err_b(s2_si);
      } 

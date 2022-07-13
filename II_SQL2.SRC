@@ -1,5 +1,6 @@
 // II_SQL2.SRC Firebird class author nobumichi harasawa// RDB(D)
 #if IMENU||ITIME //TEST
+////SS using System.Data.Common;
 #if D
 //SS //D using FirebirdSql.Data.FirebirdClient;
 #endif
@@ -10,32 +11,33 @@
 //SS //H using Hitachi.HiRDB;
 #endif
 #if I
-#if DOTNET
+//#if DOTNET
 //SS //I using IBM.Data.DB2.Core; //VER35
-#else
-//SS //I using IBM.Data.DB2; //VER35
-#endif
-#endif
+//#else
+////SS //I using IBM.Data.DB2; //VER35
+//#endif
+#endif//SS //D using FirebirdSql.Data.FirebirdClient;
+
 #if L
-#if DOTNET
+// #if DOTNET
 //SS //L using MySqlConnector;
-#else
-//SS //L using MySql.Data.MySqlClient;
-#endif
+//#else
+////SS //L using MySql.Data.MySqlClient;
+//#endif
 #endif
 //SS //M using System.Data.SqlClient;
 #if O
-#if ODP
-#if DOTNET
+//#if ODP
+//#if DOTNET
 //SS //O using Oracle.ManagedDataAccess.Client;  //ODP.NET //VER35
 //SS //O using Oracle.ManagedDataAccess.Types;  //ODP.NET //VER35
-#else
-//SS //O using Oracle.DataAccess.Client;  //ODP.NET //VER35
-#endif
-#else
-//SS //O using System.Data.Odbc;
-//SS //O using System.Data.OracleClient; //Oracle.DataAccess.Clientが//
-#endif
+//#else
+////SS //O using Oracle.DataAccess.Client;  //ODP.NET //VER35
+//#endif
+//#else
+////SS //O using System.Data.Odbc;
+////SS //O using System.Data.OracleClient; //Oracle.DataAccess.Clientが//
+//#endif
 #endif
 #if P
 //SS //P using Npgsql;
@@ -492,6 +494,7 @@ int column_cnt=0;
 //JJ return sql2_rc;
 }//try
 //***********************************************
+//#if DOTNET
 //SS //D catch(FbException e_ni)
 //SS //F catch(SymfowareException e_ni)
 //SS //H catch(HiRDBException e_ni)
@@ -506,6 +509,9 @@ int column_cnt=0;
 //SS //P catch(NpgsqlException e_ni)
 //SS //X catch(OdbcException e_ni)
 //JJ     catch(java.sql.SQLException e_ni)
+//#else
+////SS    catch(System.Data.Common.DbException e_ni)
+////#endif
 //SJ       {sql_error(e_ni);return error(sql_trace_s);}
 //SJ catch(Exception e_ni){sql2_z_p.err_s=exception_s+":"+sql2_z_p.message_s(e_ni);return error(sql_trace_s);}
 }
@@ -525,6 +531,7 @@ sql2_z_p.sql_limit=0;
 return sql2_rc;
 }
 //--------------------------------------------------------
+//#if DOTNET
 //HP     void sql_error(QSqlError e_nni)
 //SS //D void sql_error(FbException e_ni)
 //SS //F void sql_error(SymfowareException e_ni)
@@ -540,6 +547,9 @@ return sql2_rc;
 //SS //P void sql_error(NpgsqlException e_ni)
 //SS //X void sql_error(OdbcException e_ni)
 //JJ     void sql_error(java.sql.SQLException e_ni)
+//#else
+////SS void sql_error(System.Data.Common.DbException e_ni)
+//#endif
 {sql2_z_p.err_s="";sql2_z_p.db_i_error_s="ERROR";
 //HP sql2_rc=sql2_z_p.SW_ERROR_5; 
 //HP sql2_z_p.db_error_s=sql2_z_p.to_c_s(sql2_z_p.db_c)+e_nni.nativeErrorCode();

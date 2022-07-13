@@ -25,7 +25,7 @@
 ①*.SRCのソース変更,同名のBATファイル起動でコンパイルしエラーを確認。
 ②システム支援メニュー関連はシステム名「I37ORG」のI言語サーバーで修正。
 ③バージョンアップした場合。
-③ー①II_VERSION.ORG及びII_VERSION.CSのVERSION2=?を変更。
+③ー①II_VERSION.ORG及びII_VERSION.SRCのVERSION2=?を変更。
 ③ー②_BEGIN.BATの=SET{I_VER2=?}; 変更。
 ☆IPRINT.CRSバージョンアップ（VERSION=の変更）した場合は
 =SET{II_VERSION.CSのVERSION2=?を変更'};  IPRINT用*を最新バージョンに修正する。

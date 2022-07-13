@@ -8,7 +8,7 @@ SET I_VER_J=18
 rem SET I_VER_C=5.15.2
 rem SET I_VER_C=6.1.2
 rem SET I_VER_C=6.2.3
-SET I_VER_C=6.3.0
+SET I_VER_C=6.3.1
 REM ===( MONO mono使用中 )==========
 SET I_MONO_SW=YES
 REM ===( QtはODBC接続のみでsa接続が出来ないので、サーバー構築は保留中 )===

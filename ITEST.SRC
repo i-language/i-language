@@ -1,13 +1,77 @@
-using CommunityToolkit.Maui;
-public class itest_l{
-public static MauiApp CreateMauiApp()
+using System;
+using System.Windows;
+using System.Windows.Controls;
+class MainWindow : Window
 {
-    var builder = MauiApp.CreateBuilder();
-
-	builder.UseMauiApp<App>().UseMauiCommunityToolkit();
-
+private Button helloWorldButton;
+private void InitializeComponent()
+{
+ // Windowのプロパティの設定
+this.Title = "MainWindow";
+this.Height = 350;
+this.Width = 525;
+ 
+// Buttonの作成
+this.helloWorldButton = new Button
+{
+Content = "Hello world",
+HorizontalAlignment = HorizontalAlignment.Left,
+VerticalAlignment = VerticalAlignment.Top,
+Margin = new Thickness(10, 10, 0, 0),
+Width = 100
+};
+this.helloWorldButton.Click += helloWorldButton_Click;
+// Gridの作成
+var grid = new Grid();
+grid.Children.Add(this.helloWorldButton);
+// gridをWindowに設定
+this.Content = grid;
+}
+public MainWindow()
+{
+this.InitializeComponent();
+}
+private void helloWorldButton_Click(object sender, RoutedEventArgs e)
+{
+MessageBox.Show("Hello world");
 }
 }
+class App : Application
+{
+ private void InitializeComponent()
+{
+// StartupUriは使えないのでStartupイベントを使う
+this.Startup += App_Startup;
+}
+private void App_Startup(object sender, StartupEventArgs e)
+{
+var w = new MainWindow();
+w.Show();
+}
+[STAThread]
+public static void Main(string[] args)
+{
+// Appクラスを作成して初期化して実行
+var app = new App();
+app.InitializeComponent();
+app.Run();
+}
+}
+//using CommunityToolkit.Maui;
+//public class itest_l:View{
+//public itest_i()
+//{ Body=body;
+//}
+//View body()=>new Test("aaa");
+//}
+//public static MauiApp CreateMauiApp()
+//{
+//    var builder = MauiApp.CreateBuilder();
+//
+//	builder.UseMauiApp<App>().UseMauiCommunityToolkit();
+//
+//}
+//}
 //using Comet.WPF;
 //using System;
 //using System.Collections.Generic;

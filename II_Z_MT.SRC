@@ -169,11 +169,14 @@ if(z_p.e2s_b(s_si,""))return(true);
         int length=z_p.form_length(s);//表示文字数計算
         if(1<length||z_p.e2s_b(s," "))hosei=0;//全角及び空白は補正しない。
          else {hosei=(xx_ii-font_width(s))/2;//表示左端フォントサイズに合わせて補正 
-               if(0>hosei)hosei=0;//マイナス方向は補正しない。（通常は無いはず、念のため）
+               // if(0>hosei)hosei=0;//マイナス方向は補正しない。（通常は無いはず、念のため）// VER37.6.0.7(中止)
               }
+//HP    hosei=(len>2?0:xx_ii/2);  //VER37.6.0.7
         if(0==printer_ii)//１文字分表示。
-           rc=text_renderer2_b(Graphics_ni,s,x_left_text_f+hosei,y_top_text_f,Font_ni,Color_Color_ni);
-        else 
+           {rc=text_renderer2_b(Graphics_ni,s,x_left_text_f+hosei,y_top_text_f,Font_ni,Color_Color_ni);
+         //   trace_v(0,"s="+s+",hosei="+z_p.to_i_s(hosei)+",len="+z_p.to_i_s(len)+",length="+z_p.to_i_s(length)+",xx_ii="+z_p.to_i_s(xx_ii)+",font_width(s)="+z_p.to_i_s(font_width(s)));
+           } 
+       else 
           {
           draw_string_geta_v(Graphics_ni,s,Font_ni,Brushes.Black,x_left_text_f+hosei,y_top_text_f);
           }

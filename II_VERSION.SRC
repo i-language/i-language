@@ -18,9 +18,9 @@ public class ii_version_l
 //####################( IMENU,ITIMEのバージョンアップ時変更 )###############
 //###★注意：変更時オリジナルのZZZZZZ_ETC_TABLE,ZZZZZZ_@,ZZZZZZ_VERSION2を変更しインストール環境を再構築する事。###
 //#I言語のバージョン2      (I37用)(111122333) #####
-public readonly String VERSION2_S="000600006";
+public readonly String VERSION2_S="000600007";
 //############################################################################
-public readonly int VERSION1=37; //I言語のバージョン1(I37用)
+public readonly int VERSION1=37; //i-language Version(37)
 //#########( IPRINTのバージョンアップ時変更の事 )###########################
 //###★注意：変更時オリジナルのZZZZZZ_ETC_TABLE,ZZZZZZ_@,ZZZZZZ_VERSION_PRINTを変更しインストール環境を再構築する事。###
 public readonly int VERSION_PRINT=12;  //IPRINTのバージョン      #####
@@ -55,4 +55,4 @@ if(write_n.open_b(file_s,"OT","/"))
 return true;
 }
 }
-//#endif //IMENU||ITIME||IPRINT||ICHART
+//#endif //MENU||TIME||PRINT||CHART||TEST
