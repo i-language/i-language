@@ -2,7 +2,7 @@
 REM CREATE ZIP FILE
 SET I_SET_ZIP_SW=YES
 SET I_FRAMEWORK=D
-CALL C_BEGIN.BAT
+CALL _BEGIN.BAT
 ECHO ●[1/5]==(4か所が[ %I_VER:~1% ]で有る事 )
 FIND "ZZZZZZ_VERSION1" SET_ETC.TXT
 FIND "public readonly int VERSION1=" II_VERSION.ORG
@@ -21,6 +21,7 @@ ECHO ================================================================
 ECHO ★これからI言語インストールファイル(%I_VER%_%I_VER2RUN%_SETUP.zip)を作ります。★
 ECHO （★注意★難読化以前の初期の状態として作られます★注意★）
 PAUSE
+CALL C_BEGIN.BAT
 REM *****( BIN DELETE )*****
 FOR %%J IN (SERVER_UD SERVER_WD CLIENT_UD CLIENT_WD JAVA CLIENT_UC CLIENT_WC) DO (
     IF EXIST    ..\\%I_VER%_BIN\%%J\* ERASE /Q /S ..\\%I_VER%_BIN\%%J\*>NUL

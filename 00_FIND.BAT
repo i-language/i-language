@@ -1,3 +1,3 @@
 @echo off
-find "ISOURCE" *.* > __FIND.TMP 
+find "\" *.* > __FIND.TMP 
 start notepad __FIND.TMP

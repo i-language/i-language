@@ -221,7 +221,8 @@ JA	ZZZZ	01	03	24	INPUT	ZZZZ	ZZ	X							全てプログラムの サンプル
 JA	ZZZZ	01	03	25	INPUT	ZZZZ	ZZ	X							全てプログラムの サンプル2
 JA	ZZZZ	01	03	27	OUTPUT	ZZZZ	ZZ	X							CURSOR{}サンプル（発注数計算)
 JA	ZZZZ	01	03	28	INPUT	ZZZZ	ZZ	X							REPLACE_...{}サンプル
-JA	ZZZZ	01	03	29	INPUT	ZZZZ	ZZ	X							トランザクション処理
+JA	ZZZZ	01	03	29	INPUT	ZZZZ	ZZ	X							トランザクション処理1
+JA	ZZZZ	01	03	30	OUTPUT	ZZZZ	ZZ	X							トランザクション処理2
 JA	ZZZZ	01	03	31	INPUT	ZZZZ	ZZ	A							和暦-西暦テーブル作成(最初)
 JA	ZZZZ	01	03	32	INPUT	ZZZY	ZZ	X							和暦-西暦変換(年月補正非対応)
 JA	ZZZZ	01	03	34	INPUT	ZZZZ	ZZ	A							麻雀テーブル作成    (最初)

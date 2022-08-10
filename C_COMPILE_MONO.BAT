@@ -15,7 +15,7 @@ GOTO SKIP_WINEXE
 SET I_WINEXE=winexe
 :SKIP_WINEXE
 SET I_P=/r:System.Web /r:System.Management /r:System.Data /r:System.Drawing /r:System.Windows.Forms /r:System.Configuration.Install
-SET I_P=%I_P% /r:System.ServiceProcess /r:System.IO.Compression.FileSystem.dll /r:System.Windows.Forms.DataVisualization.dll
+SET I_P=%I_P% /r:System.ServiceProcess /r:System.IO.Compression.FileSystem.dll /r:System.Windows.Forms.DataVisualization.dll 
 SET I_RESU=
 IF "%1"=="IMENU" SET I_RESU=-res:imenu_l.resources -win32icon:I_MENU.ICO
 SET I_ARG=-t:%I_WINEXE% %I_RESU% %I_P% %I_PACKAGE_MONO% -d:MONO -d:%I_NAME% -d:U
