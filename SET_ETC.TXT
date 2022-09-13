@@ -7,7 +7,7 @@ ZZZZZZ_@	ZZZZZZ_PERMISSION_NO2	ZZZY	ZZZY
 ZZZZZZ_@	ZZZZZZ_VERSION_CHART	2	VERSION(2) ICHART
 ZZZZZZ_@	ZZZZZZ_VERSION_PRINT	12	VERSION(12) IPRINT
 ZZZZZZ_@	ZZZZZZ_VERSION1	37	VERSION1(37) IXMENU,IXTIME
-ZZZZZZ_@	ZZZZZZ_VERSION2	000600008	VERSION2(000600008) IXMENU,IXTIME
+ZZZZZZ_@	ZZZZZZ_VERSION2	000600009	VERSION2(000600009) IXMENU,IXTIME
 ZZZZZZ_COPY	ZZZZZZ_SQL               00100	%ZZZZZZ_SQL_SELECT+REPEAT=_SELECT_COUNT	
 ZZZZZZ_COPY	ZZZZZZ_SQL               00200	%ZZZZZZ_SQL_SELECT+SQL=?_SELECT##?	
 ZZZZZZ_COPY	ZZZZZZ_SQL               00300	%ZZZZZZ_SQL_SELECT+REPEAT=	
@@ -1829,7 +1829,7 @@ ZZZZZZ_SYSTEM	ZZZZZZ_I_USE_TABLE_CANCEL	365*5	ZZZZZZ_I_USE_TABLE CANCEL -(DAY)[3
 ZZZZZZ_SYSTEM	ZZZZZZ_INSTALL_CFG1	C,C,C,C,C	CFG1[C,C,C,C,C]
 ZZZZZZ_SYSTEM	ZZZZZZ_INSTALL_CFG2	NO,NO,NO,YES,I37,	CFG2[NO,NO,NO,YES,I36,]
 ZZZZZZ_SYSTEM	ZZZZZZ_INSTALL_PATH		INSTALL PATH
-ZZZZZZ_SYSTEM	ZZZZZZ_JDBC	SQLJDBC42.JAR	JAVA JDBC
+ZZZZZZ_SYSTEM	ZZZZZZ_JDBC	MSSQL-JDBC-11.2.0.JRE18.JAR	JAVA JDBC
 ZZZZZZ_SYSTEM	ZZZZZZ_PASSWORD_LIMIT_DATE	0	PASSWORD LIMIT DATE (DAY)[0]
 ZZZZZZ_SYSTEM	ZZZZZZ_PASSWORD_MIN_ALPHABET	1	PASSWORD MIN ALPHABET[1]
 ZZZZZZ_SYSTEM	ZZZZZZ_PASSWORD_MIN_LENGTH	7	PASSWORD MIN LENGTH[7]
@@ -1838,22 +1838,29 @@ ZZZZZZ_SYSTEM	ZZZZZZ_REGISTRY_PROXY	SYSTEM\CURRENTCONTROLSET\SERVICES\NLASVC\PAR
 ZZZZZZ_SYSTEM	ZZZZZZ_TIME_LIMIT	17:30	SYSTEM TIME LIMIT (HH:MM)[17:30]
 ZZZZZZ_SYSTEM	ZZZZZZ_TIME_START	08:30	SYSTEM START TIME (HH:MM)[08:30]
 ZZZZZZ_SYSTEM	ZZZZZZ_Z_CANCEL_DELETE	31	Z_CANCEL DELETE -(DAY)[31]
-ZZZZZZ_URL_VERSION	-D	https://dotnet.microsoft.com/download/dotnet/6.0/	,"#version_0">,6.0.8
-ZZZZZZ_URL_VERSION	D-	*ttp://www.firebirdsql.org/en/firebird-2-5/	,: Firebird,2.5.9<
+ZZZZZZ_URL_VERSION	#D	https://dotnet.microsoft.com/download/dotnet/6.0/	,"#version_0">,6.0.9
+ZZZZZZ_URL_VERSION	#J	http://jdk.java.net/	,">JDK ,18
+ZZZZZZ_URL_VERSION	#J--	A	
+ZZZZZZ_URL_VERSION	#J2	http://jdk.java.net/18/	,>JDK ,18
+ZZZZZZ_URL_VERSION	#M	https://www.mono-project.com/download/stable/	,installer/mono-,6.12.0.182
+ZZZZZZ_URL_VERSION	#O	https://www.nuget.org/packages?q=obfuscar	,/obfuscar/,2.2.33
+ZZZZZZ_URL_VERSION	D#	*ttp://www.firebirdsql.org/en/firebird-2-5/	,: Firebird,2.5.9<
 ZZZZZZ_URL_VERSION	DJ	*ttp://www.firebirdsql.org/en/jdbc-driver/	,Jaybird-,3.0.8-
+ZZZZZZ_URL_VERSION	DJ--	3.0.0	
 ZZZZZZ_URL_VERSION	DN	*ttp://www.firebirdsql.org/en/additional-downloads	/,FirebirdClient-,7.1.1
 ZZZZZZ_URL_VERSION	IN	https://www.nuget.org/packages/IBM.Data.DB2.Core/	,content="IBM.Data.DB2.Core ,3.1.0.600
-ZZZZZZ_URL_VERSION	-J	http://jdk.java.net/	,">JDK ,18
-ZZZZZZ_URL_VERSION	-J2	http://jdk.java.net/18/	,>JDK ,18
-ZZZZZZ_URL_VERSION	L-	https://downloads.mariadb.org/	,product=mariadb">,10.8.3
+ZZZZZZ_URL_VERSION	L#	https://downloads.mariadb.org/	,product=mariadb">,10.9.2
+ZZZZZZ_URL_VERSION	L#--	10.10.1</a> (RC)	
 ZZZZZZ_URL_VERSION	LJ	https://mariadb.org/connector-java/all-releases/	,old=">,2.7.3
+ZZZZZZ_URL_VERSION	LJ--	3.0.0</a></td><td>2021-05-05</td><td>Alpha	
 ZZZZZZ_URL_VERSION	LJ*	*https://downloads.mariadb.org/	,connector-java/,2.7.3/
-ZZZZZZ_URL_VERSION	LN	https://www.nuget.org/packages/MySqlConnector/	,content="MySqlConnector ,2.1.11
-ZZZZZZ_URL_VERSION	-M	https://www.mono-project.com/download/stable/	,installer/mono-,6.12.0.182
-ZZZZZZ_URL_VERSION	MJ	https://www.microsoft.com/ja-jp/download/details.a	spx?id=11774,JDBC Driver ,6.0
-ZZZZZZ_URL_VERSION	-O	https://www.nuget.org/packages?q=obfuscar	,/obfuscar/,2.2.33
+ZZZZZZ_URL_VERSION	LN	https://www.nuget.org/packages/MySqlConnector/	,content="MySqlConnector ,2.1.13
+ZZZZZZ_URL_VERSION	MJ	https://docs.microsoft.com	
+ZZZZZZ_URL_VERSION	MJ*	*ttps://www.microsoft.com/ja-jp/download/details.a	spx?id=11774,JDBC Driver ,6.0
+ZZZZZZ_URL_VERSION	MJ++	/ja-jp/sql/connect/jdbc/download-microsoft-jdbc-dr	iver-for-sql-server,Version ,11.2
+ZZZZZZ_URL_VERSION	OJ	https://www.oracle.com/jp/database/technologies/ap	pdev/jdbc-downloads.html,ojdbc,11
 ZZZZZZ_URL_VERSION	ON	https://www.nuget.org/packages/Oracle.ManagedDataA	ccess.Core,Oracle.ManagedDataAccess.Core ,3.21.70
-ZZZZZZ_URL_VERSION	P-	https://www.postgresql.org/	,><strong>,14.4
+ZZZZZZ_URL_VERSION	P#	https://www.postgresql.org/	,><strong>,14.5
 ZZZZZZ_URL_VERSION	PJ	http://www.postgresql.org/applications-v2.xml	,>edb_pgjdbc<,<version>,42.2.18-
 ZZZZZZ_URL_VERSION	PN	https://www.nuget.org/packages/Npgsql	,content="Npgsql ,6.0.6
 ZZZZZZ_URL_VERSION	PN*	*http://www.postgresql.org/applications-v2.xml	,>edb_npgsql<,<version>,3.2.6-

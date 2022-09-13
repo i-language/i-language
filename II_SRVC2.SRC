@@ -86,7 +86,7 @@ for(;;)
    if(7<z_p.count_sx_i(split_sx))file_s=split_sx[7]; //各種パラメータ値設定。
    if(!z_p.e2s_b(cmd_s,"SERVER_BAT"))
      {//full_file_s=z_p.server_tmp_path_s()+z_p.dir_s+file_s;//TMPパス設定 //VER16.1
-      full_file_s=z_p.get_tmp_path_s(z_p.dir_s,"TIME")+file_s;//TMPパス設定 //VER16.1
+      full_file_s=z_p.get_tmp_path_s(z_p.dir_s,"ITIME")+file_s;//TMPパス設定 //VER16.1
       if(z_p.e2s_b(cmd_s,"SERVER_GET")&&!z_p.e2s_b(path_s,"TMP")) //SERVER_GETでパスがTMP以外はパス名設定。
          full_file_s=(z_p.starts_with_b(path_s,"SHARE")?z_p.server_i_file_path_s()+z_p.dir_s+path_s:z_p.server_file_path_s() //VER16.1
          +z_p.dir_s+path_s+"_"+z_p.test_s)+z_p.dir_s+file_s; //VER16.1

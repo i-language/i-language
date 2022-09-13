@@ -6,7 +6,7 @@ I_VER=$1
 I_HOME=/home/I
 I_SYSTEM_DIR=$I_HOME/I.$2
 file=$I_HOME/TMP/SETUP_$2_END.TXT
-for i in $I_HOME $I_HOME/SHARE $I_SYSTEM_DIR  $I_SYSTEM_DIR/BAT
+for i in $I_HOME $I_HOME/SHARE $I_HOME/SHARE/MESSAGE $I_SYSTEM_DIR  $I_SYSTEM_DIR/BAT
    do
    if test ! -d $i;then
       mkdir         $i 2>>$file
@@ -76,7 +76,8 @@ for i in BAT
 #  cp -R $dd/I_SERVER/$3/$i/* $I_SYSTEM_DIR/$i 2>> $file
    chmod 775 $I_SYSTEM_DIR/$i/*
    done
-chmod 775 $I_HOME/SHARE 
+chmod 775 $I_HOME/SHARE
+chmod 775 $I_HOME/SHARE/MESSAGE  
 chmod 777 $I_SYSTEM_DIR/DATA_TEST
 # if test "$9" = "J";then 
 #  cp $I_HOME/SHARE/LINUX/BINI$1/I$1JAVA.jar $I_HOME/SERVICE/I$1JAVA.jar 2>>$file

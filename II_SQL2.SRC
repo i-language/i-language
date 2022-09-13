@@ -225,6 +225,7 @@ if(SQL2_OFF_0!=sql2_sw_sql)close_v(sql2_z_p.COMMIT);
 //SS //M sql2_connection1_s="Data Source="
 //JJ     sql2_connection1_s="jdbc:sqlserver://"
 //JJ_M   +sql2_z_p.server_name_s+(sql2_z_p.e2s_b(sql2_z_p.instance_s,"")?"":"\\"+sql2_z_p.instance_s)
+//JJ     +";encrypt=true;trustServerCertificate=true" //VER37.6.0.9 
 //JJ_M   +";Connect Timeout="+sql2_z_p.timeout_connect+";";
 //JP   }else if('O'==sql2_z_p.db_c)
 //JP   {

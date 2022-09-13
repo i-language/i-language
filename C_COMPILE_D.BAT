@@ -49,7 +49,7 @@ IF EXIST ..\%I_VER%_WORK\obj\*.* ERASE /Q /S ..\%I_VER%_WORK\obj\*.* >NUL
 REM dotnet %I_DOTNET% ..\%I_VER%_WORK\%1%I_OS%D.csproj 
 dotnet build -c Release %I_DOTNET% ..\%I_VER%_WORK\%1%I_OS%D.csproj
 IF ERRORLEVEL 1 PAUSE
-SET I_DIR_IN=..\%I_VER%_WORK\bin\Release\net%I_VER2DOTNET%
+SET I_DIR_IN=..\%I_VER%_WORK\bin\Release\net%I_VER2NET%
 SET I_DIR_OUT=..\%I_VER%_BIN\%2_%I_OS%D
 IF "%I_OS%"=="W" IF "%2"=="" SET I_DIR_OUT=%I_BIN%
 REM IF EXIST %I_DIR_IN%\%I_OS2%-x64%I_PUBLISH%\*.*         %I_XCOPYD% %I_DIR_IN%\%I_OS2%-x64%I_PUBLISH%\*.*         %I_DIR_OUT% >NUL

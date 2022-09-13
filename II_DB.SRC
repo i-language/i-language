@@ -75,7 +75,7 @@ public String db_s(String _pmx_si,String real_test_si,String inp_out_si,String p
 //----------------------------------------------
 public int set_b(char db_ci,String system_si,String db_soft_si)
 {user_sep_s="_";db_sep_s="_";from_dual_s="";v_s="V_";e_s=";";d_s="D";
-ix_s="";sql_length_s="LENGTH";len1_s="LENGTH";lenb1_s="LENGTH";
+ix_s="";sql_length_s="LENGTH";len1_s="LENGTH(RTRIM(";len2_s="))";lenb1_s="LENGTH(RTRIM(";lenb2_s="))";
 grant_add_s="";
 o_fd_s="F_";o_fs_s="F_";o_wd_s="W_";o_ws_s="W_";
 c_begin1_s="";c_begin2_s="";c_begin3_s="";c_begin9_s="";
@@ -153,7 +153,7 @@ if     ('M'==db_ci) // MS SQL Server
   week1_s="DATEPART(DW,";week2_s=")";
   trunc1_s="ROUND(";trunc2_s=",1)";stdevs_s="STDEV";stdevp_s="STDEVP";
   vars_s="VAR";varp_s="VARP";
-  len1_s="LEN";lenb1_s="DATALENGTH(RTRIM(";lenb2_s="))";atan2x_s="ATN2";
+  len1_s="LEN(RTRIM(";lenb1_s="DATALENGTH(RTRIM(";atan2x_s="ATN2";
  }
 //=****( O Oracle )***************** 
 else if('O'==db_ci) // ORACLE
@@ -207,7 +207,7 @@ else if('O'==db_ci) // ORACLE
  rand_s="DBMS_RANDOM.VALUE";cot_s="1/TAN";
  cast_oracle1_s="CAST(";cast_oracle2_s=" AS NUMBER(38,15))";
  div1_s="TRUNC(";div2_s=")";stdevp_s="STDDEV_POP";varp_s="VAR_POP";
-lenb1_s="LENGTHB";
+lenb1_s="LENGTHB(RTRIM(";
  }
 //=****( I IBM DB2 )***************** 
 else if('I'==db_ci) // IBMDB2
@@ -319,7 +319,7 @@ else if('P'==db_ci)// PostgreSQL
   log_s="LN";log10x1_s="LOG(10,";log10x2_s=")" ;
   rand_s="RANDOM()";
   stdevp_s="STDDEV_POP";varp_s="VAR_POP";
-  lenb1_s="OCTET_LENGTH";
+  lenb1_s="OCTET_LENGTH(RTRIM(";
 }
 //=****( L MariaDB )***************** 
 else if('L'==db_ci) // MySQL
@@ -378,7 +378,7 @@ else if('L'==db_ci) // MySQL
   trunc1_s="TRUNCATE";
    div1_s="TRUNCATE(";div2_s=",0)";
    stdevs_s="STDDEV_SAMP";vars_s="VAR_SAMP";
-  len1_s="CHAR_LENGTH";
+  len1_s="CHAR_LENGTH(RTRIM(";
   rollup1_s="";rollup2_s=" WITH ROLLUP";cube1_s="";cube2_s=" WITH CUBE";
 }
 //=****( D FireBird )***************** 
@@ -434,7 +434,7 @@ sql_char_set_s="CHARACTER SET UTF8";//Ver13.1
   day1_s="REPLACE(DATEADD(DAY,";day2_s=",";day3_s="),'-','')";
   week1_s="1+MOD(DATEDIFF(DAY,CAST('0001-01-07' AS DATE),";week2_s="),7)";
   o_set_s="";
-  log_s="LN";lenb1_s="CHAR_LENGTH(RTRIM(";lenb2_s="))";
+  log_s="LN";lenb1_s="CHAR_LENGTH(RTRIM(";
   stdevp_s="STDEVP";vars_s="VAR";varp_s="VARP";
 }
 //=****( F FACOM Symforware )***************** 

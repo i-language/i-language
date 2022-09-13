@@ -3,7 +3,7 @@
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <EnableDefaultItems>false</EnableDefaultItems>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net$(I_VER2NET)</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="isource.cs" />

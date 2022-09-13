@@ -1124,25 +1124,25 @@ public bool check_path_b(String si)
 {return (':'==at_s_c(si,1)||starts_with_b(si,dir_s)||starts_with_b(si,"."+dir_s)||starts_with_b(si,".."+dir_s)?true:false);
 }
 public String get_tmp_file_s(String si)
-{
-return (check_path_b(si)?"":get_tmp_path_s(dir_s))+si; 
+{return (check_path_b(si)?"":get_tmp_path_s(dir_s))+si; 
 }
 public String get_tmp_path_s(String si)
 {return get_tmp_path_s(si,main_program_s);
 }
 public String get_tmp_path_s(String si,String time_s)
 {
-if(e2s_b(time_s,"TIME"))
-      return os_drive_s+dir_s+"I"+dir_s+"I."+system_s+dir_s+"TMP_"+test_s+si; //VER16.1
-else  return os_drive_s+dir_s+"I"+dir_s+"TMP"+si;                             //VER16.1
+return os_drive_s+dir_s+"I"+dir_s+(e2s_b(time_s,"ITIME")?"I."+system_s+dir_s+"TMP_"+test_s:"TMP")+si; //VER37.6.0.9
+//if(e2s_b(time_s,"ITIME"))
+//      return os_drive_s+dir_s+"I"+dir_s+"I."+system_s+dir_s+"TMP_"+test_s+si; //VER16.1
+//else  return os_drive_s+dir_s+"I"+dir_s+"TMP"+si;                             //VER16.1
 }
 ////public String get_i_path_s() //VER33
 ////{ //VER33
-////return os_drive_s+dir_s+"I"+(e3s_b(main_program_s,"TIME","SRVC")?dir_s+"I."+system_s:"")+dir_s; //VER16.1 //VER17//VER33
+////return os_drive_s+dir_s+"I"+(e3s_b(main_program_s,"ITIME","ISRVC")?dir_s+"I."+system_s:"")+dir_s; //VER16.1 //VER17//VER33
 ////} //VER33
 //public String get_bin_path_s()//VER33
 //{
-//return get_i_path_s()+"BIN"+(e3s_b(main_program_s,"TIME","SRVC")?"":iv_s)+dir_s; //VER33
+//return get_i_path_s()+"BIN"+(e3s_b(main_program_s,"ITIME","ISRVC")?"":iv_s)+dir_s; //VER33
 //}
 public String environment_s(String si)
 {
@@ -2360,7 +2360,7 @@ message_si,title_si,0);
 }
 #if ISRVC
 public void srvc_log_file_v(int i_ii,String error_si) //VER31.1
-{log_file_v(i_ii,service_name_s+(9==i_ii?" Error ":" ")+error_si,service_name_s+".TXT");}
+{log_file_v(i_ii,service_name_s+(9==i_ii?" Error ":" ")+error_si,"ISRVC.TXT");} //VER37.6.0.9
 #endif //SRVC||TEST
 #if IMENU||ITIME||ISRVC //TEST
 //---------------------------------------------------------------------
@@ -2377,7 +2377,7 @@ if(ww_write_n.open_b(server_i_file_path_s()+dir_s+"SHARE"+dir_s+"MESSAGE"+dir_s+
 }
 //--------( server_bat() ---------------------------------
 public int server_bat(String work_si,String command_si)  //VER17
-{String exit_file_s=get_tmp_path_s(dir_s,"TIME")+work_si+".EXIT";//VER17
+{String exit_file_s=get_tmp_path_s(dir_s,"ITIME")+work_si+".EXIT";//VER37.6..9
 ii_write_l ww_write_n=new ii_write_l(this);//開始をファイルに宣言。//VER17
 int rc=0;
 if(ww_write_n.open_b(exit_file_s,"OT","/")){ww_write_n.write_b("(NOT START (SERVER,BAT,EXIT FILE,"+command_si+"))");ww_write_n.write_close_v();} //VER17
