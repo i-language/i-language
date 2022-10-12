@@ -4,7 +4,7 @@ REM ===( 最新バージョンを設定 )===
 CALL _BEGIN_VER2.BAT
 SET I_VER=I37
 REM SET I_VER_J=17.0.1
-SET I_VER_J=18
+SET I_VER_J=19
 rem SET I_VER_C=5.15.2
 rem SET I_VER_C=6.1.2
 rem SET I_VER_C=6.2.3
