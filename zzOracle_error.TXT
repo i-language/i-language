@@ -1,40 +1,40 @@
-startupƒŠƒXƒi[‚ªÚ‘±‚ğˆêØ‹‘”Û‚·‚éƒGƒ‰[‚Ì‘Î‰•û–@B
-1)SQLƒRƒ}ƒ“ƒhƒ‰ƒCƒ“‚ÌÀs‚ğ‹N“®B
+startupâ—ãƒªã‚¹ãƒŠãƒ¼ãŒæ¥ç¶šã‚’ä¸€åˆ‡æ‹’å¦ã™ã‚‹ã‚¨ãƒ©ãƒ¼ã®å¯¾å¿œæ–¹æ³•ã€‚
+1)SQLã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ã®å®Ÿè¡Œã‚’èµ·å‹•ã€‚
 2)conn / as sysdba
 3)shutdown
 4)startup
-uORA-28056: Writing audit records to Windows Event Log failedv
-‚ÌƒGƒ‰[‚ªo‚½ê‡‚ÍƒCƒxƒ“ƒgƒrƒ…[ƒA‚ÅƒCƒxƒ“ƒgƒƒO‚ğ‘S‚ÄÁ‹‚·‚éB
-‚»‚ê‚Å‚àƒGƒ‰[‚ªo‚éê‡‚ÍƒT[ƒrƒX‚ğÄ‹N“®‚µ‚Ä‚İ‚éB
-./runInstaller‚ÅGUI‚ª•\¦‚³‚ê‚È‚¢B
-uxhost +ƒzƒXƒg–¼v‚ğÀsB
-ORA-01033‚ª”­¶
-sqlplus / as sysdba‚Å ‹N“®
+ã€ŒORA-28056: Writing audit records to Windows Event Log failedã€
+ã®ã‚¨ãƒ©ãƒ¼ãŒå‡ºãŸå ´åˆã¯ã‚¤ãƒ™ãƒ³ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã§ã‚¤ãƒ™ãƒ³ãƒˆãƒ­ã‚°ã‚’å…¨ã¦æ¶ˆå»ã™ã‚‹ã€‚
+ãã‚Œã§ã‚‚ã‚¨ãƒ©ãƒ¼ãŒå‡ºã‚‹å ´åˆã¯ã‚µãƒ¼ãƒ“ã‚¹ã‚’å†èµ·å‹•ã—ã¦ã¿ã‚‹ã€‚
+â—./runInstallerã§GUIãŒè¡¨ç¤ºã•ã‚Œãªã„ã€‚
+ã€Œxhost +ãƒ›ã‚¹ãƒˆåã€ã‚’å®Ÿè¡Œã€‚
+â—ORA-01033ãŒç™ºç”Ÿ
+sqlplus / as sysdbaã§ èµ·å‹•
 shutdown immediate
 startup mount
 recover database
 alter database open;
-ORA-01033‚ª”­¶(ƒ†[ƒU[‚ªƒƒbƒN‚³‚ê‚½j
-ALTER USER ƒ†[ƒU[–¼ ACCOUNT UNLOCK;
-ORA-01033‚ª”­¶i‹N“®ƒpƒ‰ƒ[ƒ^‚ª‰ó‚ê‚½j
+â—ORA-01033ãŒç™ºç”Ÿ(ãƒ¦ãƒ¼ã‚¶ãƒ¼ãŒãƒ­ãƒƒã‚¯ã•ã‚ŒãŸï¼‰
+ALTER USER ãƒ¦ãƒ¼ã‚¶ãƒ¼å ACCOUNT UNLOCK;
+â—ORA-01033ãŒç™ºç”Ÿï¼ˆèµ·å‹•ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãŒå£Šã‚ŒãŸï¼‰
 CREATE SPFILE FROM PFILE;
-ORA-01017‚ª”­¶ipassword‚ªˆá‚¤j
+â—ORA-01017ãŒç™ºç”Ÿï¼ˆpasswordãŒé•ã†ï¼‰
 su - oracle
 . /u01/app/oracle/product/11.2.0/xe/bin/oracle_env.sh
 /u01/app/oracle/product/11.2.0/xe/bin/sqlplus -l / as sysdba 
-alter user system identified by ƒpƒXƒ[ƒh;
+alter user system identified by ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰;
 exit
-ORA-28002: the password will expire within X days
+â—ORA-28002: the password will expire within X days
 alter profile default limit password_life_time unlimited;
-alter user system identified by ƒpƒXƒ[ƒh;
-ƒvƒ‰ƒKƒuƒ‹DB–¼‚ÌŠm”FB
+alter user system identified by ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰;
+ãƒ—ãƒ©ã‚¬ãƒ–ãƒ«DBåã®ç¢ºèªã€‚
 select name, open_mode from v$pdbs;
-ƒvƒ‰ƒKƒuƒ‹DB‚Ö‚ÌØ‚è‘Ö‚¦B
+ãƒ—ãƒ©ã‚¬ãƒ–ãƒ«DBã¸ã®åˆ‡ã‚Šæ›¿ãˆã€‚
 alter session set container=XEPDB1;
-ORA-28001‚ª”­¶(ƒRƒ}ƒ“ƒhƒvƒƒ“ƒvƒgã‚Åj
+â—ORA-28001ãŒç™ºç”Ÿ(ã‚³ãƒãƒ³ãƒ‰ãƒ—ãƒ­ãƒ³ãƒ—ãƒˆä¸Šã§ï¼‰
 sqlplus / as sysdba
 alter session set container=XEPDB1;
 ALTER PROFILE DEFAULT LIMIT PASSWORD_LIFE_TIME UNLIMITED;
-ALTER USER ƒ†[ƒU[–¼@ACCOUNT UNLOCK;
-ALTER USER ƒ†[ƒU[–¼ IDENTIFIED BY ƒpƒXƒ[ƒh;
+ALTER USER ãƒ¦ãƒ¼ã‚¶ãƒ¼åã€€ACCOUNT UNLOCK;
+ALTER USER ãƒ¦ãƒ¼ã‚¶ãƒ¼å IDENTIFIED BY ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰;
 

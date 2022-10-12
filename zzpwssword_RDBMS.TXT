@@ -1,2 +1,2 @@
 H=root/root
-D=SYSDBA/masterkey(–”‚ÍA/opt/firebird/SYSDBA.password ‚Ì“à—e)
+D=SYSDBA/masterkey(åˆã¯ã€/opt/firebird/SYSDBA.password ã®å†…å®¹)

@@ -1,36 +1,36 @@
-ƒCƒ“ƒXƒg[ƒ‹
+â—ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«
 rpm -ivh ~~~.rpm
 
-‰ğ“€
-unzip@~~~.zip@
-tar@zxvf ~~~.tar.gz
+â—è§£å‡
+unzipã€€~~~.zipã€€
+tarã€€zxvf ~~~.tar.gz
 
-javaƒo[ƒWƒ‡ƒ“•ÏX
+â—javaãƒãƒ¼ã‚¸ãƒ§ãƒ³å¤‰æ›´
 update-alternatives --config java 
 
-DB2@ƒCƒ“ƒXƒg[ƒ‹
-32 ƒrƒbƒg‚Ìƒ‰ƒCƒuƒ‰ƒŠ[Eƒtƒ@ƒCƒ‹ libstdc++.so.6 ‚¨‚æ‚Ñ /lib/libpam.so* ‚ªŒ©‚Â‚©‚ç‚È‚¢B||„–³‹‚µ‚Ä—Ç‚¢B
-db2 list db directory (ƒf[ƒ^ƒx[ƒXˆê——j
+â—DB2ã€€ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«
+32 ãƒ“ãƒƒãƒˆã®ãƒ©ã‚¤ãƒ–ãƒ©ãƒªãƒ¼ãƒ»ãƒ•ã‚¡ã‚¤ãƒ« libstdc++.so.6 ãŠã‚ˆã³ /lib/libpam.so* ãŒè¦‹ã¤ã‹ã‚‰ãªã„ã€‚ï¼ï¼ï¼ç„¡è¦–ã—ã¦è‰¯ã„ã€‚
+db2 list db directory (ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ä¸€è¦§ï¼‰
 
-@ƒXƒƒbƒvƒGƒŠƒAŠg‘åi‚U‚TMB)
+â—ã€€ã‚¹ãƒ¯ãƒƒãƒ—ã‚¨ãƒªã‚¢æ‹¡å¤§ï¼ˆï¼–ï¼•MB)
 dd if=/dev/zero of=/swapfile bs=1024 count=65536
 mkswap /swapfile
 swapon /swapfile
-/etc/fstab‚É"/swapfile swap swap defaults 0 0"‚ğ’Ç‰ÁB
+/etc/fstabã«"/swapfile swap swap defaults 0 0"ã‚’è¿½åŠ ã€‚
 
-/etc/init.d/oracle-xe configure(oracle-‹N“®ƒXƒNƒŠƒvƒg)
-ƒ|[ƒgŠm”F netstat -anpt (root‚Åj
-cifs‚Åmounto—ˆ‚È‚¢ê‡[[[cifs-utils‚ğƒCƒ“ƒXƒg[ƒ‹‚·‚éB(Ubuntu:apt-get install cifs-utis)
-SELinux‚ğˆê“I‚É–³Œø‰»---setenforce 0 (—LŒø‰»‚Í1)
-Ubuntu
-apt-get -y install samba (samba‚ğƒCƒ“ƒXƒg[ƒ‹‚·‚éj 
-apt-get -y install at (atd‚ğƒCƒ“ƒXƒg[ƒ‹‚·‚éj 
-apt-get -y install sysv-rc-conf(sysv-rc-conf‚ğƒCƒ“ƒXƒg[ƒ‹‚·‚éj 
+â—/etc/init.d/oracle-xe configure(oracle-èµ·å‹•ã‚¹ã‚¯ãƒªãƒ—ãƒˆ)
+â—ãƒãƒ¼ãƒˆç¢ºèª netstat -anpt (rootã§ï¼‰
+â—cifsã§mountå‡ºæ¥ãªã„å ´åˆãƒ¼ãƒ¼ãƒ¼cifs-utilsã‚’ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã™ã‚‹ã€‚(Ubuntu:apt-get install cifs-utis)
+â—SELinuxã‚’ä¸€æ™‚çš„ã«ç„¡åŠ¹åŒ–---setenforce 0 (æœ‰åŠ¹åŒ–ã¯1)
+â—Ubuntu
+apt-get -y install samba (sambaã‚’ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã™ã‚‹ï¼‰ 
+apt-get -y install at (atdã‚’ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã™ã‚‹ï¼‰ 
+apt-get -y install sysv-rc-conf(sysv-rc-confã‚’ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã™ã‚‹ï¼‰ 
 
-=====(@WSL‘Î‰@)======================
+=====(ã€€WSLå¯¾å¿œã€€)======================
 
-UBUNTU‚ğƒCƒ“ƒXƒg[ƒ‹‚·‚é
-X-Windows‚ÍXlanch‚ğƒCƒ“ƒXƒg[ƒ‹Auexport DISPLAY=:0.0v‚ğÀs‚µ‚Ä‚©‚ç‹N“®‚·‚éB
-Qt‚Íu/opt/v‚ÉƒCƒ“ƒXƒg[ƒ‹‚·‚éB
-Windows‚©‚ç‚ÍWSL‚Å‹N“®B
-Windows‚ÌƒfƒBƒŒƒNƒgƒŠ‚Íu/mnt/ƒhƒ‰ƒCƒu–¼/v‚Å‰Â”\B
+â—UBUNTUã‚’ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã™ã‚‹
+â—X-Windowsã¯Xlanchã‚’ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã€ã€Œexport DISPLAY=:0.0ã€ã‚’å®Ÿè¡Œã—ã¦ã‹ã‚‰èµ·å‹•ã™ã‚‹ã€‚
+â—Qtã¯ã€Œ/opt/ã€ã«ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã™ã‚‹ã€‚
+â—Windowsã‹ã‚‰ã¯WSLã§èµ·å‹•ã€‚
+â—Windowsã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã¯ã€Œ/mnt/ãƒ‰ãƒ©ã‚¤ãƒ–å/ã€ã§å¯èƒ½ã€‚

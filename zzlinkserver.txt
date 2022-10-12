@@ -1,4 +1,4 @@
-I‚ÆL‚ÆP‚ÍMSDASQL(ODBCƒhƒ‰ƒCƒo[‚ðŽg—pj
-I‚Í‹Lq‚Éu"IA"ƒVƒXƒeƒ€–¼v‚ð“ü‚ê‚éŽ–B
-P‚ÍƒT[ƒo[–¼(Server)‚Æƒf[ƒ^ƒx[ƒX–¼(Database)‚É"mysql"‚ð“ü‚ê‚éŽ–B
-L‚Í‰Šú‰»o—ˆ‚¸‚ÅÚ‘±o—ˆ‚È‚¢B
+Iã¨Lã¨Pã¯MSDASQL(ODBCãƒ‰ãƒ©ã‚¤ãƒãƒ¼ã‚’ä½¿ç”¨ï¼‰
+Iã¯è¨˜è¿°ã«ã€Œ"IA"ã‚·ã‚¹ãƒ†ãƒ åã€ã‚’å…¥ã‚Œã‚‹äº‹ã€‚
+Pã¯ã‚µãƒ¼ãƒãƒ¼å(Server)ã¨ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹å(Database)ã«"mysql"ã‚’å…¥ã‚Œã‚‹äº‹ã€‚
+Lã¯åˆæœŸåŒ–å‡ºæ¥ãšã§æŽ¥ç¶šå‡ºæ¥ãªã„ã€‚
