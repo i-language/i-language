@@ -208,7 +208,8 @@ if(SQL2_OFF_0!=sql2_sw_sql)close_v(sql2_z_p.COMMIT);
 //JP   {
 //HP     sql2_connection1_s="Driver={MariaDB ODBC 3.1 Driver};Server="+sql2_z_p.server_name_s+";";
 //SS //L sql2_connection1_s="Server="
-//JJ     sql2_connection1_s="jdbc:mysql://"
+////JJ     sql2_connection1_s="jdbc:mysql://" //VER37.6.0.12
+//JJ     sql2_connection1_s="jdbc:mariadb://"  //VER37.6.0.12
 //JJ_L   +sql2_z_p.lower_s(sql2_z_p.server_name_s)
 //SS //L +";Database=mysql;Connect Timeout="+sql2_z_p.timeout_connect+";Charset=utf8mb4;SslMode=none;"
 #if DOTNET
