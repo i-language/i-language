@@ -1,3 +1,3 @@
 @echo off
-find "IXTIME" *.* > __FIND.TMP 
+find "C_COMPILE_C.SH" *.* > __FIND.TMP 
 start notepad __FIND.TMP

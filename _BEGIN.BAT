@@ -3,12 +3,8 @@ REM ===( I_...環境変数設定 )===
 REM ===( 最新バージョンを設定 )===
 CALL _BEGIN_VER2.BAT
 SET I_VER=I37
-REM SET I_VER_J=17.0.1
 SET I_VER_J=19
-rem SET I_VER_C=5.15.2
-rem SET I_VER_C=6.1.2
-rem SET I_VER_C=6.2.3
-SET I_VER_C=6.3.1
+SET I_VER_C=6.4.2
 REM ===( MONO mono使用中 )==========
 SET I_MONO_SW=YES
 REM ===( QtはODBC接続のみでsa接続が出来ないので、サーバー構築は保留中 )===
