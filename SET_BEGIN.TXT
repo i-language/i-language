@@ -910,7 +910,7 @@ JA+MESSAGE=デスクトップ上に表示するアイコンに表示されます
 ***M+=IF{$NEXT='TEST'}SET{OS_LOGIN='NO'};
 ***W+=IF{$NEXT='TEST'}SET{SECRET='NO',GUEST='NO',RUN='YES'};
 ***=IF{$NEXT='TEST'}exit3{PASSWORD_LINK2};
-JA+FORM=★重要★パスワードは許可の追加や再インストルで必要なので記録し保管して下さい。★
+JA+FORM=★重要★パスワードはシステム障害等でI言語の再インストルに必ず必要なので保管して下さい。★
 JA+FORM=注意：パスワードには記号「!"$&'()=^\|?_A?`;:*<>,./?_Q? 」は使えません。(英字は大文字)
 JA+FORM=    リンクパスワード @@@@@@@@@@@@@@ @@@@@@@@@@@@@@ (★公開の必要は有りません)
 JA-FORM=       LINK PASSWORD @@@@@@@@@@@@@@ @@@@@@@@@@@@@@ (Please never show it)

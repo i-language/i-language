@@ -326,7 +326,9 @@ else return sql(s_index_a,"SQL","REAL",usr_si,"",sql_s,"","","","");//"REAL"„ÅßÂ
 public String link_set_b(String s2_si,String s3_si,String s4_si,String s5_si)
 {String[] w_sx;w_sx=z_p.split_sx(s3_si,'.');
  if('M'==z_p.db_c&&4==z_p.count_sx_i(w_sx))return "SELECT * FROM OPENQUERY("+w_sx[0]+",'"
-   +z_p.replace_s_s(s2_si+" "+w_sx[1]+(z_p.e2s_b(w_sx[1],"")?"":".")+w_sx[2]+(z_p.e2s_b(w_sx[2],"")?"":".")+w_sx[3]+" "+s4_si+" "
+   +z_p.replace_s_s(s2_si+" "
+   +(z_p.upper_s(w_sx[2])!="DBO"?"":w_sx[1]+(z_p.e2s_b(w_sx[1],"")?"":".")) //VERI37.6.0.14
+   +w_sx[2]+(z_p.e2s_b(w_sx[2],"")?"":".")+w_sx[3]+" "+s4_si+" "
    +s5_si,"'","''")+"') "+(z_p.e2s_b(s4_si,"")?"":"AS ")+s4_si;
   else return s2_si+" "+s3_si+" "+s4_si+" "+s5_si; 
 }
