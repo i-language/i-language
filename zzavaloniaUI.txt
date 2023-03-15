@@ -1,0 +1,8 @@
+(1)インストール
+dotnet new --install Avalonia.Templates
+(2)サンプル構築
+dotnet new avalonia.app -o MyApp
+cd MyApp
+dotnet run
+
+
