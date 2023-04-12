@@ -211,12 +211,14 @@ if(SQL2_OFF_0!=sql2_sw_sql)close_v(sql2_z_p.COMMIT);
 ////JJ     sql2_connection1_s="jdbc:mysql://" //VER37.6.0.12
 //JJ     sql2_connection1_s="jdbc:mariadb://"  //VER37.6.0.12
 //JJ_L   +sql2_z_p.lower_s(sql2_z_p.server_name_s)
-//SS //L +";Database=mysql;Connect Timeout="+sql2_z_p.timeout_connect+";Charset=utf8mb4;SslMode=none;"
+////SS //L +";Database=mysql;Connect Timeout="+sql2_z_p.timeout_connect+";Charset=utf8mb4;SslMode=none;" //VER37.6.0.1.16
+//SS //L +";Database=mysql;Connect Timeout="+sql2_z_p.timeout_connect+";Charset=utf8mb4;" //VER37.6.0.1.16
 #if DOTNET
 //SS //L +"Allow User Variables=True;" //VER27.1 //VER35
 #endif
 //SS //L ;
-//JJ              +"/mysql?Connect Timeout="+sql2_z_p.timeout_connect+"&Charset=utf8mb4&SslMode=none&Allow User Variables=True";  //VER27.1 //VER35
+////JJ              +"/mysql?Connect Timeout="+sql2_z_p.timeout_connect+"&Charset=utf8mb4&SslMode=none&Allow User Variables=True";  //VER27.1 //VER35//VER37.6.0.1.16
+//JJ              +"/mysql?Connect Timeout="+sql2_z_p.timeout_connect+"&Charset=utf8mb4&Allow User Variables=True";  //VER37.6.0.1.16
 //JP   }else if('M'==sql2_z_p.db_c)
 //JP   {
 ////HP     sql2_connection1_s="Driver={ODBC Driver 13 for SQL Server};Server="
