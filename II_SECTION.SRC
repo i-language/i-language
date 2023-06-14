@@ -104,7 +104,7 @@ bool sw_program2_b=true;if(z_p.e2s_b(cmd2_s,"PROGRAM2"))sw_program2_b=false;
 z_mt_p.program_p.sql_cnt_ix[sql_cnt]=0;
 sql_s="SELECT "+(('0'!=z_p.at_s_c(opt1_si,0)||(z_p.e2s_b(z_p.trim_s(z_p.at_s(s_work_data_a,0)),"")&&1==z_p.count_s_i(s_work_data_a)))?
      (sw_program2_b?"Z_CANCEL":"' '"):sql_data_s("",",",s_work_data_a))
-+" FROM "+opt3_si+z_mt_p.db_n.lock1_s
++" FROM "+opt3_si+" "+z_mt_p.db_n.lock1_s  //VER37.6.0.17
           +(z_p.e2s_b(opt4_si,"")?"":sql_data_s(" WHERE "," AND ",s_work_key_a,"=",s_key_a))+where_s
 
           +(('0'==z_p.at_s_c(opt1_si,0)||sw_p_program_b)&&sw_program2_b?(z_p.e2s_b(opt4_si,"")&&z_p.e2s_b(opt5_si,"")?" WHERE":" AND")+z_p.DUMMY_S
@@ -1746,7 +1746,7 @@ else if(z_p.e2s_b(s,"READ_OPEN"))
           else if(z_p.e2s_b(z_p.upper_s(opt1_sx[j]),"U"))w_u_s="U";
           else encode_s=opt1_sx[j];
          z_p.sql_limit=z_mt_p.program_p.sql_limit_org;z_mt_p.program_p.sql_limit_org=0; 
-         rc=z_mt_p.sql_n.sql(z_mt_p.sql_n.s_sql_a,z_p.substring2_s(cmd2_s,4),z_p.real_test_s,usr_s
+         rc=z_mt_p.sql_n.sql_sql(z_mt_p.sql_n.s_sql_a,z_p.substring2_s(cmd2_s,4),z_p.real_test_s,usr_s
  //      ,"",opt2_s,(z_p.e2s_b(cmd2_s,"SQL_FILE")?z_p.get_tmp_path_s(z_p.dir_s)+z_p.job_s+z_p.hh_s+z_p.mm_s:"")+opt1_sx[0] //VER36
          ,"",opt2_s,(z_p.e2s_b(cmd2_s,"SQL_FILE")?z_p.get_tmp_path_s(z_p.dir_s)+z_p.job_s+z_p.hh_s+z_p.mm_s+opt1_sx[0]:
            z_mt_p.get_tmp_or_same_file_s(opt1_sx[0])) //VER36.000600003
@@ -2030,7 +2030,7 @@ else if(z_p.e2s_b(s,"READ_OPEN"))
          if(CONTINUE_NORMAL_0!=sw_skip){sw=LOOP_2;continue;}  //スキップ中 
          if(!z_p.e4s_b(opt2_s,"","ADD","OT")){z_p.err_s=z_p.e_err_s;rc=z_p.SW_ERROR_5;sw=CHECK_RC_10;continue;}
          z_p.sql_limit=z_mt_p.program_p.sql_limit_org;z_mt_p.program_p.sql_limit_org=0; 
-         rc=z_mt_p.sql_n.sql(z_mt_p.sql_n.s_sql_a,"FILE",z_p.real_test_s,usr_s
+         rc=z_mt_p.sql_n.sql_sql(z_mt_p.sql_n.s_sql_a,"FILE",z_p.real_test_s,usr_s
             ,"",opt4_s,z_p.get_tmp_path_s(z_p.dir_s)+z_p.job_s+z_p.hh_s+z_p.mm_s+opt1_s,opt2_s,opt3_s,"");
          z_mt_p.program_p.file_record_cnt=z_p.db_record_cnt;
          z_mt_p.program_p.file_column_cnt=z_p.db_column_cnt;
@@ -2042,7 +2042,7 @@ else if(z_p.e2s_b(s,"READ_OPEN"))
          if(CONTINUE_NORMAL_0!=sw_skip){sw=LOOP_2;continue;}  //スキップ中 
          if(!z_p.e4s_b(opt2_s,"","ADD","OT")){z_p.err_s=z_p.e_err_s;rc=z_p.SW_ERROR_5;sw=CHECK_RC_10;continue;}
          z_p.sql_limit=z_mt_p.program_p.sql_limit_org;z_mt_p.program_p.sql_limit_org=0; 
-         rc=z_mt_p.sql_n.sql(z_mt_p.sql_n.s_sql_a,"FILE2",z_p.real_test_s,usr_s
+         rc=z_mt_p.sql_n.sql_sql(z_mt_p.sql_n.s_sql_a,"FILE2",z_p.real_test_s,usr_s
             ,"",opt4_s,z_mt_p.get_tmp_or_same_file_s(opt1_s),opt2_s,opt3_s,"");  //VER36.000600003
          z_mt_p.program_p.file_record_cnt=z_p.db_record_cnt;
          z_mt_p.program_p.file_column_cnt=z_p.db_column_cnt;
@@ -3380,7 +3380,7 @@ z_p.sql_limit=z_mt_p.program_p.sql_limit_org;z_mt_p.program_p.sql_limit_org=0;
                      +" WHERE SYSTEM_PRINT='"+opt1_si+"' AND Z_CANCEL=' ' ORDER BY SYSTEM_SEQ";                     
              }
            if(!z_p.e2s_b(opt1_si,""))//VER20.1
-             {rc=z_mt_p.sql_n.sql(z_mt_p.sql_n.s_sql_a,"FILE",z_p.real_test_s,usr_s
+             {rc=z_mt_p.sql_n.sql_sql(z_mt_p.sql_n.s_sql_a,"FILE",z_p.real_test_s,usr_s
               ,"",s0,z_p.get_tmp_path_s(z_p.dir_s)+z_p.job_s+z_mt_p.window_s+cmd2_s+opt3_si+z_p.to_i_s(cnt++)+".TXT","OT","","");
               if(0!=rc){rc=z_p.SW_ERROR_5;sw=CHECK_RC_10;return;}
               if(0==z_p.db_record_cnt){z_p.err_s=cmd2_s+"{"+opt1_si+"} zero count";rc=z_p.SW_ERROR_5;sw=CHECK_RC_10;return;}
@@ -3402,7 +3402,7 @@ z_p.sql_limit=z_mt_p.program_p.sql_limit_org;z_mt_p.program_p.sql_limit_org=0;
                     if('\''==z_p.at_s_c(s0,i)){if(0==alter)alter=1;else alter=0;}
                     else if(0==alter&&';'==z_p.at_s_c(s0,i))break;
                  if(!z_p.e2s_b(z_p.trim_s(z_p.substring3_s(s0,st,i-st-1)),"")) 
-                   {if(0!=z_mt_p.sql_n.sql(z_mt_p.sql_n.s_sql_a,"FILE",z_p.real_test_s,usr_s
+                   {if(0!=z_mt_p.sql_n.sql_sql(z_mt_p.sql_n.s_sql_a,"FILE",z_p.real_test_s,usr_s
                      ,"",z_p.substring3_s(s0,st,i-st),z_p.get_tmp_path_s(z_p.dir_s)+z_p.job_s+z_mt_p.window_s+cmd2_s+opt3_si+z_p.to_i_s(cnt++)+".TXT","OT","",""))
                       {rc=z_p.SW_ERROR_5;sw=CHECK_RC_10;break;}
                    }
@@ -3415,7 +3415,7 @@ z_p.sql_limit=z_mt_p.program_p.sql_limit_org;z_mt_p.program_p.sql_limit_org=0;
             {cnt=3;
              if(false==data_b)  //DATA以外はデータファイル作成。
                  {if(!z_p.e2s_b(opt4_si,"")) //VER20.1
-                  if(0!=z_mt_p.sql_n.sql(z_mt_p.sql_n.s_sql_a,"FILE",z_p.real_test_s,usr_s
+                  if(0!=z_mt_p.sql_n.sql_sql(z_mt_p.sql_n.s_sql_a,"FILE",z_p.real_test_s,usr_s
                      ,"",opt4_si,z_p.get_tmp_path_s(z_p.dir_s)+z_p.job_s+z_mt_p.window_s+cmd2_s+opt3_si+"1.TXT","OT","",""))
                     {rc=z_p.SW_ERROR_5;sw=CHECK_RC_10;return;}
                  }

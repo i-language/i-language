@@ -1,6 +1,48 @@
+using Microsoft.Maui;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Controls.Xaml;
+using Microsoft.Maui.Essentials;
+
+    public class Program
+    {
+        static void Main(string[] args)
+        {
+            var app = MauiApp.CreateBuilder();
+            app.UseMauiApp<MyApp>();
+            app.Build().Run(args);
+        }
+    }
+
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class MyApp : ContentPage, IViewFor<MyModel>
+    {
+        public MyApp()
+        {
+            InitializeComponent();
+            ViewModel = new MyModel();
+            this.Bind(ViewModel, vm => vm.MyProperty, v => v.MyLabel.Text);
+        }
+
+        public MyModel ViewModel { get; set; }
+        object IViewFor.ViewModel { get => ViewModel; set => ViewModel = (MyModel)value; }
+    }
+
+    public class MyModel : BindableObject
+    {
+        public static readonly BindableProperty MyPropertyProperty = BindableProperty.Create(nameof(MyProperty), typeof(string), typeof(MyModel), default(string));
+
+        public string MyProperty
+        {
+            get => (string)GetValue(MyPropertyProperty);
+            set => SetValue(MyPropertyProperty, value);
+        }
+    }
+/*
+
 using System;
 using System.Windows;
-using System.Windows.Controls;
+//using System.Windows.Controls;
+
 class MainWindow : Window
 {
 private Button helloWorldButton;
@@ -48,15 +90,21 @@ private void App_Startup(object sender, StartupEventArgs e)
 var w = new MainWindow();
 w.Show();
 }
-[STAThread]
-public static void Main(string[] args)
+class a
 {
-// Appクラスを作成して初期化して実行
+[STAThread]
+static void Main(string[] args)
+{
+goto a;
+a:
+return ;
 var app = new App();
 app.InitializeComponent();
 app.Run();
 }
 }
+*/
+
 //using CommunityToolkit.Maui;
 //public class itest_l:View{
 //public itest_i()

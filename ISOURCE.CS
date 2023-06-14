@@ -491,7 +491,7 @@ for(i=0;i<name_sx.Length;i++)
         else 
           {write_v("    <OutputType>Exe</OutputType>");
  //          write_v("    <TargetFramework>net"+net_s+".0</TargetFramework>");
-          write_v("    <TargetFramework>net"+net_s+"</TargetFramework>");
+          write_v("    <TargetFramework>net"+net_s+"-windows</TargetFramework>");
           }
         if(def_s.StartsWith("ITI"))write_v("    <OutputType>Exe</OutputType>");
 //         write_v("    <TargetFramework>netcoreapp5.0</TargetFramework>");
@@ -526,6 +526,10 @@ for(i=0;i<name_sx.Length;i++)
                                    write_package_v("Microsoft.Maui","6.0.100-preview.5.794");
                                    write_package_v("CommunityToolkit.Maui","*");
                                   }
+//        if(def_s.StartsWith("ISR")&&"W"==wu_si)
+//          {//write_package_v("Microsoft.Extensions.Hosting","*");
+//           write_package_v("Microsoft.Extensions.Hosting.WindowsServices","*");
+//          }
 /*
         if(def_s.StartsWith("IME")||def_s.StartsWith("IT"))
           {write_package_v("System.IO.Ports","*");
@@ -540,6 +544,8 @@ for(i=0;i<name_sx.Length;i++)
 ////           write_v("    <PackageReference Include=\"System.Configuration.Install\" Version=\"*\" />");
           if(def_s.StartsWith("ISR")&&"W"==wu_si)
             {write_package_v("Microsoft.Extensions.Hosting","*");
+             write_package_v("Microsoft.Extensions.Hosting.WindowsService","*");
+                          
              ////write_v("    <PackageReference Include=\"Microsoft.Extensions.DependencyInjection\" Version=\"*\" />"); 
              write_package_v("System.ServiceProcess.ServiceController","*");
              //write_v("    <PackageReference Include=\"System.ServiceProcess.ServiceController\" Version=\"4.7.0\" />");

@@ -29,8 +29,10 @@ apt-get -y install sysv-rc-conf(sysv-rc-confをインストールする）
 
 =====(　WSL対応　)======================
 
-◎UBUNTUをインストールする
+◎UBUNTUをインストールする(user はubuntu）
+◎sudo apt update
+◎sudo apt install libxkbcommon-x11-0
 ◎X-WindowsはXlanchをインストール、「export DISPLAY=:0.0」を実行してから起動する。
-◎Qtは「/opt/」にインストールする。
+◎Qtは「/home/ubuntu/Qtx.x.x」にインストールする。
 ◎WindowsからはWSLで起動。
 ◎Windowsのディレクトリは「/mnt/ドライブ名/」で可能。

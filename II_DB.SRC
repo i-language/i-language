@@ -120,7 +120,8 @@ if     ('M'==db_ci) // MS SQL Server
   now_date_s=now0_s="GETDATE()";
   now8_s="CONVERT(CHAR(8),GETDATE(),112)";
   now17_s="REPLACE(REPLACE(REPLACE(REPLACE(CONVERT(CHAR(23),GETDATE(),121),'-',''),':',''),'.',''),' ','')";
-  substr_s="SUBSTRING";lock1_s="(UPDLOCK)";lock2_s="";
+//  substr_s="SUBSTRING";lock1_s="(UPDLOCK)";lock2_s=""; //VER37.6.0.17
+    substr_s="SUBSTRING";lock1_s=" WITH(UPDLOCK)";lock2_s=""; //VER37.6.0.17
   sql_yyyymm_s="CONVERT(CHAR(6),GETDATE(),112)";
   sql_date_time_s="DATETIME";sql_null_s="NULL";
   sql_nchar_s="NCHAR";sql_nvarchar_s="NVARCHAR";sql_varchar_s="VARCHAR";

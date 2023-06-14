@@ -220,7 +220,7 @@
 #if DOTNET
 //SS public static IHostBuilder CreateHostBuilder(string[] args) =>
 //SS    Host.CreateDefaultBuilder(args).ConfigureServices((hostContext, services) =>
-//SS   {services.AddHostedService<Worker>();});
+//SS   {services.AddHostedService<Worker>();}).UseWindowsService(); //VER37.7.0.5
 //SS static async Task Main(string[] arg_sxi)
 //SS {var create_host_builder_n=CreateHostBuilder(arg_sxi);
 //SS  await create_host_builder_n.RunAsServiceAsync();

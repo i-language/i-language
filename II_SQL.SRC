@@ -12,7 +12,7 @@
 //JJ import java.io.*;
 //JJ import java.math.*;
 //JJ import java.util.*;
-//SS delegate int sql(List<String> s_data_ai,String command_si,String user_id_si,String passwd_si
+//SS delegate int sql_sql(List<String> s_data_ai,String command_si,String user_id_si,String passwd_si
 //SS      ,String sql_si,String file_si,String add_si,String encode_si,String login_si);
 //SS delegate void transaction_v(int commit_ii);
 //SS delegate void close_v(int commit_ii);
@@ -20,7 +20,7 @@
 
 public class ii_sql_l
 {
-//SS sql sql_g= null ; close_v close_g= null ;
+//SS sql_sql sql_g= null ; close_v close_g= null ;
 //SS ii_sql2m_l sql2m_n;
 #if P
 //SS ii_sql2p_l sql2p_n;
@@ -71,29 +71,29 @@ public List<String> s_types_a=new List<String>();
 public ii_sql_l(ii_z_l z_ni,ii_z_mt_l z_mt_ni){z_p=z_ni;z_mt_p=z_mt_ni;}
 //--------------------------------------------------------
 public int sql_dbo_zzzz1(String sql_si) //ツール用SQL
-{return sql(s_sql_a,"SQL","REAL","DBO","ZZZZ",sql_si,"","","","");}
+{return sql_sql(s_sql_a,"SQL","REAL","DBO","ZZZZ",sql_si,"","","","");}
 //--------------------------------------------------------
 public int sql_dbo_zzzz2(List<String> s_ai,String sql_si) //ツール用SQL
-{return sql(s_ai,"SQL","REAL","DBO","ZZZZ",sql_si,"","","","");}
+{return sql_sql(s_ai,"SQL","REAL","DBO","ZZZZ",sql_si,"","","","");}
 //--------------------------------------------------------
 public int sql_dbo_zzzz_real_test(String sql_si) //ツール用SQL
-{return sql(s_sql_a,"SQL",z_p.test_s,"DBO","ZZZZ",sql_si,"","","","");}
+{return sql_sql(s_sql_a,"SQL",z_p.test_s,"DBO","ZZZZ",sql_si,"","","","");}
 //--------------------------------------------------------
 public int sql_usr2(String sql_si,String usr_si)//プログラム用usr or dbo SQL(s_sql_a)
 {return sql_usr3(s_sql_a,sql_si,usr_si);}
 //--------------------------------------------------------
 public int sql_usr3(List<String> s_ai,String sql_si,String usr_si)//プログラム用usr or dbo SQL(a_ai)
-{return sql(s_ai,"SQL",z_p.real_test_s,usr_si,"",sql_si,"","","","");}
+{return sql_sql(s_ai,"SQL",z_p.real_test_s,usr_si,"",sql_si,"","","","");}
 //--------------------------------------------------------
 //--------------------------------------------------------
 public int sql_sel(List<String> s_ai,String usr_si,String test_si,String sql_si)//SQL=用SQL
-{return sql(s_ai,"SQL",(z_p.e2s_b(test_si,"")?z_p.real_test_s:test_si),
+{return sql_sql(s_ai,"SQL",(z_p.e2s_b(test_si,"")?z_p.real_test_s:test_si),
            usr_si,z_mt_p.program_p.sql_permission_s,sql_si,"","","","");
 }
 //--------------------------------------------------------////
 //--------------------------------------------------------
 //***( SQL MAIN )***
-public int sql(List<String> s_ai,String option_si,String real_si,String usr_si,String permission_si,String sql_si,String file_si,String add_si,String encording_si,String login_si)
+public int sql_sql(List<String> s_ai,String option_si,String real_si,String usr_si,String permission_si,String sql_si,String file_si,String add_si,String encording_si,String login_si)
 {
 if(z_p.e4s_b(usr_si,"DBO","INP","OUT"))
   {login_id_s=get_login_id_s(real_si,usr_si,(z_p.e2s_b(permission_si,"")?z_mt_p.sql_permission_s():permission_si));
@@ -141,7 +141,7 @@ int rc=0;
 
 try{
 //SS rc=sql_g
-//JP rc=sql2_n.sql
+//JP rc=sql2_n.sql_sql
      (s_ai,option_si,login_id_s
     ,(z_p.e2s_b(real_s,"")?z_mt_p.program_p.login_password_s:z_mt_p.password_s(real_s))
      ,sql_si,file_si,add_si,encording_si,login_si);
@@ -149,28 +149,28 @@ try{
 catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);rc=z_p.SW_ERROR_5;}
 return rc;
 }
-//SS void      sql_mssql(){sql2m_n=new ii_sql2m_l(z_p,z_mt_p);sql_g=new sql(sql2m_n.sql);close_g=new close_v(sql2m_n.close_v);}
+//SS void      sql_mssql(){sql2m_n=new ii_sql2m_l(z_p,z_mt_p);sql_g=new sql_sql(sql2m_n.sql_sql);close_g=new close_v(sql2m_n.close_v);}
 #if O
-//SS void     sql_oracle(){sql2o_n=new ii_sql2o_l(z_p,z_mt_p);sql_g=new sql(sql2o_n.sql);close_g=new close_v(sql2o_n.close_v);} 
+//SS void     sql_oracle(){sql2o_n=new ii_sql2o_l(z_p,z_mt_p);sql_g=new sql_sql(sql2o_n.sql_sql);close_g=new close_v(sql2o_n.close_v);} 
 #endif
 #if I
-//SS void     sql_ibmdb2(){sql2i_n=new ii_sql2i_l(z_p,z_mt_p);sql_g=new sql(sql2i_n.sql);close_g=new close_v(sql2i_n.close_v);} 
+//SS void     sql_ibmdb2(){sql2i_n=new ii_sql2i_l(z_p,z_mt_p);sql_g=new sql_sql(sql2i_n.sql_sql);close_g=new close_v(sql2i_n.close_v);} 
 #endif
 #if P
-//SS void sql_postgresql(){sql2p_n=new ii_sql2p_l(z_p,z_mt_p);sql_g=new sql(sql2p_n.sql);close_g=new close_v(sql2p_n.close_v);}
+//SS void sql_postgresql(){sql2p_n=new ii_sql2p_l(z_p,z_mt_p);sql_g=new sql_sql(sql2p_n.sql_sql);close_g=new close_v(sql2p_n.close_v);}
 #endif
 #if L
-//SS void      sql_mysql(){sql2l_n=new ii_sql2l_l(z_p,z_mt_p);sql_g=new sql(sql2l_n.sql);close_g=new close_v(sql2l_n.close_v);}
+//SS void      sql_mysql(){sql2l_n=new ii_sql2l_l(z_p,z_mt_p);sql_g=new sql_sql(sql2l_n.sql_sql);close_g=new close_v(sql2l_n.close_v);}
 #endif
-//SS void       sql_odbc(){sql2x_n=new ii_sql2x_l(z_p,z_mt_p);sql_g=new sql(sql2x_n.sql);close_g=new close_v(sql2x_n.close_v);}
+//SS void       sql_odbc(){sql2x_n=new ii_sql2x_l(z_p,z_mt_p);sql_g=new sql_sql(sql2x_n.sql_sql);close_g=new close_v(sql2x_n.close_v);}
 #if F
-//SS void       sql_symfoware(){sql2f_n=new ii_sql2f_l(z_p,z_mt_p);sql_g=new sql(sql2f_n.sql);close_g=new close_v(sql2f_n.close_v);}
+//SS void       sql_symfoware(){sql2f_n=new ii_sql2f_l(z_p,z_mt_p);sql_g=new sql_sql(sql2f_n.sql_sql);close_g=new close_v(sql2f_n.close_v);}
 #endif
 #if H
-//SS void       sql_hirdb(){sql2h_n=new ii_sql2h_l(z_p,z_mt_p);sql_g=new sql(sql2h_n.sql);close_g=new close_v(sql2h_n.close_v);}
+//SS void       sql_hirdb(){sql2h_n=new ii_sql2h_l(z_p,z_mt_p);sql_g=new sql_sql(sql2h_n.sql_sql);close_g=new close_v(sql2h_n.close_v);}
 #endif
 #if D
-//SS void       sql_firebird(){sql2d_n=new ii_sql2d_l(z_p,z_mt_p);sql_g=new sql(sql2d_n.sql);close_g=new close_v(sql2d_n.close_v);}
+//SS void       sql_firebird(){sql2d_n=new ii_sql2d_l(z_p,z_mt_p);sql_g=new sql_sql(sql2d_n.sql_sql);close_g=new close_v(sql2d_n.close_v);}
 #endif
 //--------------------------------------------------------
 public String sql_date_s(){return z_p.substring3_s(sql_time_s(),0,8);}
@@ -229,7 +229,7 @@ for(i=0;i<z_p.count_sx_i(s_sxi);i+=cnt)
          +z_mt_p.db_n.n_s+"'"+z_p.trim_s(s_sxi[i])
          +"' AND SYSTEM_LANG='"+z_p.lang_system_s+"' AND Z_CANCEL=' '";
          /* +" AND SYSTEM_PERMISSION='"+define_table_permission_s+"'"; */ // VER22.1 VER36.6.0.3
-         rc=sql(s_ww_a,"SQL","REAL",usr_si,"",sql_s,"","","","");//"REAL"で実行する。
+         rc=sql_sql(s_ww_a,"SQL","REAL",usr_si,"",sql_s,"","","","");//"REAL"で実行する。
          if(0!=rc||3!=z_p.count_s_i(s_ww_a)){z_p.err_s="not found dictionary ("+s_sxi[i]+")";return 5;}
          type_long_s=z_p.at_s(s_ww_a,0);length_s=z_p.at_s(s_ww_a,1);length2_s=z_p.at_s(s_ww_a,2);
          sql_s_ni.s+=sep_s_ni.s+define_s(z_p.dot_string_s(s_sxi[i]),type_long_s,length_s,length2_s,"*","*",declare_s);//設定結果追加。
@@ -248,7 +248,7 @@ for(i=0;i<z_p.count_sx_i(s_sxi);i+=cnt)
     {String sql_s;
      sql_s="SELECT 0 FROM "+m_real_dbo_zzzzzz_s()+"_ETC_TABLE WHERE SYSTEM_KEY1='ZZZZZZ_RESERVED' AND SYSTEM_KEY2="
        +z_mt_p.db_n.n_s+"'"+z_p.trim_s(s_sxi[i])+"'  AND Z_CANCEL=' '";
-         rc=sql(s_ww_a,"SQL","REAL",usr_si,"",sql_s,"","","","");//"REAL"で実行する。
+         rc=sql_sql(s_ww_a,"SQL","REAL",usr_si,"",sql_s,"","","","");//"REAL"で実行する。
        if(0!=rc||0!=z_p.count_s_i(s_ww_a)){z_p.err_s="SQL reserved word ("+s_sxi[i]+")";return 5;}
     }
   if(2<cnt)
@@ -320,7 +320,7 @@ else sql_s="SELECT SUBSTRING(REVERSE(TRIM(I.INDEX_DSO_NAME)) FROM 1 FOR 1),U.ORD
 if(z_p.e3c_b(z_p.db_c,'O','H')&&(!z_p.e2s_b(z_p.real_test_s,"REAL")||
       !z_p.e2s_b(define_table_real_test_s,"REAL")))
      return sql_dbo_zzzz2(s_index_a,sql_s);//REAL_DBO_ZZZZで実行。
-else return sql(s_index_a,"SQL","REAL",usr_si,"",sql_s,"","","","");//"REAL"で実行する。
+else return sql_sql(s_index_a,"SQL","REAL",usr_si,"",sql_s,"","","","");//"REAL"で実行する。
 }
 //--------------------------------------------------------
 public String link_set_b(String s2_si,String s3_si,String s4_si,String s5_si)
@@ -380,7 +380,7 @@ else
     +z_p.DUMMY_S+" WHERE T.SYSTEM_LANG='"+z_p.lang_system_s+"' AND T.SYSTEM_DATA_NAME="+z_mt_p.db_n.n_s+"'"+data_name_si
     +"' AND T.Z_CANCEL=' '"
     +z_p.DUMMY_S+"  AND T.SYSTEM_PERMISSION='"+permission_si+"'"; //VER22.1
-   if(0!=(rc=sql(s_ww_a,"SQL","REAL",usr_si,"",sql_s,"","","","")))return rc;//"REAL"で実行する。
+   if(0!=(rc=sql_sql(s_ww_a,"SQL","REAL",usr_si,"",sql_s,"","","","")))return rc;//"REAL"で実行する。
    if(0==z_p.db_record_cnt)//REAL_DBO_ZZZZで実行。
      {z_p.db_error_s=z_mt_p.db_n.not_found_s;z_p.err_s="not found dictionary ("+data_name_si+")";return 1;}
 }
@@ -465,7 +465,7 @@ else sql_s="SELECT C.SYSTEM_COLUMN_NAME,CASE C.SYSTEM_DATA_TYPE WHEN 'CH' THEN '
 if(z_p.e3c_b(z_p.db_c,'O','H')&&(!z_p.e2s_b(z_p.real_test_s,"REAL")||
    !z_p.e2s_b(define_table_real_test_s,"REAL")))
      rc=sql_dbo_zzzz2(s_ww_a,sql_s);//REAL_DBO_ZZZZで実行。 //VER 17.1
-else rc=sql(s_ww_a,"SQL","REAL",usr_si,"",sql_s,"","","","");//"REAL"で実行する。
+else rc=sql_sql(s_ww_a,"SQL","REAL",usr_si,"",sql_s,"","","","");//"REAL"で実行する。
 if(0==z_p.db_record_cnt&&0==rc)
  {z_p.db_error_s=z_mt_p.db_n.not_found_s;z_p.err_s="not found table ("+define_table_name_s+")";rc=1;/*return 1;*/}
 //HP z_p.to_sa_v(s_table_a,s_ww_a);
@@ -499,7 +499,7 @@ sql_s="SELECT "
      +z_p.DUMMY_S+",SYSTEM_USER_X FROM "+m_real_dbo_zzzzzz_s()
  +"_I_PERMISSION_TABLE WHERE SYSTEM_NAME="+z_mt_p.db_n.n_s+"'"
  +define_table_name_s+"' AND Z_CANCEL=' ' ORDER BY 1";
-if(0!=(rc=sql(s_ww_a,"SQL","REAL",usr_si,"",sql_s,"","","","")))return rc;//"REAL"で実行する。
+if(0!=(rc=sql_sql(s_ww_a,"SQL","REAL",usr_si,"",sql_s,"","","","")))return rc;//"REAL"で実行する。
 //HP z_p.to_sa_v(s_table_a,s_ww_a);
 //SJ s_table_a=z_p.to_sa_sa(s_ww_a);
 //HP z_p.clear_s_v(s_ww_a);
@@ -1329,7 +1329,7 @@ s_1=s1+opt2_si+s2;s_2=s4;
 if     ('P'==z_p.db_c)s_1+=opt3_si+s3;
 else if('L'==z_p.db_c)s_1+=(z_p.e2s_b(opt3_si,"")?"":"@'"+opt3_si+"'")+s3;
 else                  s_2=s3+opt3_si+s4;
-return(sql(s_sql_a,"SQL",z_p.real_test_s,usr_si,"",s_1,"",s_2,"",opt1_si));
+return(sql_sql(s_sql_a,"SQL",z_p.real_test_s,usr_si,"",s_1,"",s_2,"",opt1_si));
 }
 }
 #endif //MENU||TIME

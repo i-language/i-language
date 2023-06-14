@@ -12,6 +12,7 @@ System.IO.Ports * =
 System.Management * =
 System.Configuration * !
 Microsoft.Extensions.Hosting * !
+Microsoft.Extensions.Hosting.WindowsServices * !
 System.ServiceProcess.ServiceController * !
 *以下XAMARIN関連試作中
 *Xamarin.Forms * =

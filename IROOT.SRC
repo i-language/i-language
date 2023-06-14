@@ -35,6 +35,7 @@ z_p.console_write_v(exe_s+" "+arg_s);
 ////   if(z_p.e2s_b(s,"YES"))
 //     {if(0!=z_p.process(exe_s,arg_s,"",false))z_p.console_write_v(z_p.err_s);break;} //VER35
        /*{*/if(0!=z_p.process(exe_s,arg_s,"",true))z_p.console_write_v(z_p.err_s);/*break;}*/ //VER35.1 VER36.6.0.3
+//       String s=z_p.upper_s(z_p.console_read_s());
 ////   else if(z_p.e2s_b(s,"NO"))break;
 ////  }
 //HP return 0;

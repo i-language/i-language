@@ -3808,7 +3808,7 @@ String get_sql_select_s(String s_si,int lock_ii)
 {ii_zz_l ww_ss_n=new ii_zz_l();
  z_mt_p.edit_b(ww_ss_n,table_s);table_edit_s=ww_ss_n.s;
 //HP delete ww_ss_n;
-return "SELECT "+s_si+" FROM "+table_edit_s+(1==lock_ii?z_mt_p.db_n.lock1_s:"")
+return "SELECT "+s_si+" FROM "+table_edit_s+(1==lock_ii?" "+z_mt_p.db_n.lock1_s:"") //VER37.6.0.17
    +" WHERE"+sql_data_all_s(" AND ",'K',1,"")+(1==lock_ii?z_mt_p.db_n.lock2_s:"");
 }
 //----------------------------------------------

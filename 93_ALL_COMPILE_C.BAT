@@ -1,12 +1,14 @@
 @echo off
 IF "%I_VER%"=="" CALL C_BEGIN.BAT
 SET I_LOG=TMP_CPP_COMPILE.TXT
+SET I_LOG_W=TMP_CPP_COMPILE_W.TXT
 REM SET Path=%Path%;%I_QT_TOOLS%;%I_QT_TOOLS2%
 SET Path=%Path%;%I_QT_TOOLS%
 REM ====================
 IF "%1"=="" CALL C_SOURCE.BAT CONT 
 PUSHD ..\%I_VER%_WORK
 ECHO START>%I_LOG%
+ECHO START>%I_LOG_W%
 SET I_PROGRAMS=IMENU IROOT IPRINT
 IF "%I_QT_SERVER_SW%"=="YES" SET I_PROGRAMS=%I_PROGRAMS% ISETUP ISRVC ITIME 
 FOR %%I IN (%I_PROGRAMS%) DO ( 
@@ -19,7 +21,7 @@ REM =====( qmake w )=====
     %I_QMAKE_W% %%IWC.pro -spec win32-g++ "CONFIG+=qtquickcompiler"
    rem  %I_QT_TOOLS%\mingw32-make -j6 >NUL 2>>%I_LOG%
 REM =====( make w )=====
-    %I_MAKE_W% -j6 >NUL 2>>%I_LOG%
+    %I_MAKE_W% -j6 >>%I_LOG_W% 2>>%I_LOG%
    IF EXIST *.o ERASE /Q *.o  
    %I_XCOPYF% release\%%IWC.EXE ..\%I_VER%_BIN\CLIENT_WC
    if "%%I"=="IROOT" copy IROOT.EXE.MANIFEST ..\%I_VER%_BIN\CLIENT_WC\IROOT.EXE.MANIFEST

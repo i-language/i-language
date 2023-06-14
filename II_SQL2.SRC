@@ -273,7 +273,7 @@ sql2_sw_sql=SQL2_OFF_0;
 }
 String exception_s="",sql_trace_s="";
 //--------------------------------------------------------
-public int sql(List<String> s_data_ai,String command_si,String user_id_si,String passwd_si,String sql_si,String file_si,String add_si,String encode_si,String login_si)
+public int sql_sql(List<String> s_data_ai,String command_si,String user_id_si,String passwd_si,String sql_si,String file_si,String add_si,String encode_si,String login_si)
 {sql2_rc=0;bool bl;
 sql2_z_p.db_cancel=-1;sql2_z_p.db_error_s="";sql2_z_p.db_i_error_s="";
 //SJ try
@@ -286,7 +286,7 @@ if(SQL2_OFF_0!=sql2_sw_sql&&(!sql2_z_p.e2s_b(user_id_si,sql2_user_id_s)||(sql2_z
 sql_trace_s=sql_si+(sql2_z_p.e2s_b(login_si,"")?"":"???"+add_si);
 sql2_user_id_s=user_id_si;
 if(sql2_z_p.e3c_b(sql2_z_p.db_c,'I','D')){sql2_restore_db_s=sql2_z_mt_p.restore_db_s;sql2_z_mt_p.restore_db_s="";}//RESTORE＿DBは１回のみ有効。//VER18.1
-sql2_z_mt_p.trace_v(0,":sql("+(sql2_z_p.e2s_b(sql2_restore_db_s,"")?"":"[RESTORE_DB="+sql2_restore_db_s+"]")+sql2_user_id_s+")"+sql_trace_s);//VER12.0//VER18.1
+sql2_z_mt_p.trace_v(0,":sql_sql("+(sql2_z_p.e2s_b(sql2_restore_db_s,"")?"":"[RESTORE_DB="+sql2_restore_db_s+"]")+sql2_user_id_s+")"+sql_trace_s);//VER12.0//VER18.1
 if(!sql2_z_p.e2s_b(login_si,"")&&sql2_z_p.e2c_b(sql2_z_p.db_c,'I')) //ZZ_ADDLOGIN で　DB2 はコマンド実行。
   if('W'==sql2_z_p.os_c)return(sql2_z_p.command(sql_si+sql2_z_mt_p.password_s(login_si)+add_si));// DB2はコマンド実行し終了。
    else {sql2_z_p.command(sql_si);return(sql2_z_p.command2(add_si,sql2_z_mt_p.password_s(login_si)));}
