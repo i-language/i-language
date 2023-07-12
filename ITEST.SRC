@@ -1,3 +1,10 @@
+public class MyPage : View {
+    public MyPage() {
+        Body = body;
+    }
+    View body () => new Text("Hello World");
+}
+/*
 using Microsoft.Maui;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.Xaml;
