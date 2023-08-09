@@ -5,7 +5,7 @@ CALL _BEGIN_VER2.BAT
 SET I_VER=I37
 SET I_VER_J=20
 rem SET I_VER_C=6.4.3
-SET I_VER_C=6.5.1
+SET I_VER_C=6.5.2
 REM ===( MONO mono使用中 )==========
 SET I_MONO_SW=YES
 REM ===( QtはODBC接続のみでsa接続が出来ないので、サーバー構築は保留中 )===

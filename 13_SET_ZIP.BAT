@@ -69,6 +69,7 @@ MKDIR    %I_TMP_ZIP%
 %I_XCOPYF% /Q ..\i-language\SETUP_JA*.*          %I_TMP_ZIP% 
 %I_XCOPYF% /Q ..\i-language\VERSIONUP_JA*.*      %I_TMP_ZIP% 
 %I_XCOPYF% /Q ..\i-language\ALTER_PASSWORD_JA*.* %I_TMP_ZIP% 
+%I_XCOPYF% /Q ..\i-language\利用者向け説明書.*   %I_TMP_ZIP% 
 REM ********( 難読化ファイル削除 )**************************
 IF EXIST %I_TMP_ZIP%\i-language\II_OBFUSCATE.OBFUSCATE            ERASE /Q %I_TMP_ZIP%\i-language\II_OBFUSCATE.OBFUSCATE
 REM ********( buildファイル削除 )**************************

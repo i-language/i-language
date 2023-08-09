@@ -6,6 +6,11 @@ ECHO IŒ¾Œêƒo[ƒWƒ‡ƒ“‚ª(%I_VER%)‚Å.NET‚ª(%I_VER2RUN%)‚ÌIŒ¾ŒêƒT[ƒo[‚ðƒCƒ“ƒXƒg
 ECHO šWindows‚ÌŠÇ—ŽÒŒ ŒÀ‚ðŽ‚Á‚½ƒ†[ƒU[‚ªs‚Á‚Ä‰º‚³‚¢B
 ECHO š’ˆÓšIŒ¾Œêƒo[ƒWƒ‡ƒ“(%I_VER%)‚ªŠù‚É‰Ò“­‚µ‚Ä‚¢‚éê‡‚ÍƒvƒƒOƒ‰ƒ€‚ð‹¤—L‚·‚é‚Ì‚Å
 ECHO@@@@@.NET‚Ìƒ‰ƒ“ƒ^ƒCƒ€‚ª“¯‚¶‚Å—L‚é•K—v‚ª‚ ‚è‚Ü‚·B®A‰^—p‚ª‘å•Ï‚Å‚·‚Ì‚Å‚¨Š©‚ß‚Ío—ˆ‚Ü‚¹‚ñB@
+ECHO š’ˆÓšRDBMS‚ÌMicrosoft SQL Server(„§),IBM DB2,Oracle,PostgreSQL,MariaDB‚Ì‚Ç‚ê‚©ˆê‚Â‚ð
+ECHO         Ž–‘O‚ÉƒCƒ“ƒXƒg[ƒ‹‚µ‚Ä‚¨‚­•K—v‚ª—L‚è‚Ü‚·B
+ECHO         RDBMS‚ðƒCƒ“ƒXƒg[ƒ‹‚µ‚Ä‚È‚¢ê‡‚Í‚±‚Ìˆ—‚ð•Â‚¶‚ÄƒCƒ“ƒXƒg[ƒ‹Œã‚ÉÄ“x‹N“®‚µ‚Ä‰º‚³‚¢B
+ECHO       i‚±‚Ì‰æ–Ê‚ÍRDBMS‚ÌŠÂ‹«•Ï”‚ª–¢Ý’è‚È‚Ì‚ÅA³í‚ÉƒCƒ“ƒXƒg[ƒ‹o—ˆ‚È‚¢‰Â”\«‚ª—L‚è‚Ü‚·j
+
 IF EXIST --SELF-CONTAINED.--SELF-CONTAINED GOTO NOTNET_OK
 ECHO š’ˆÓš.NET %I_VER2RUN%‚ÌuƒfƒXƒNƒgƒbƒvƒ‰ƒ“ƒ^ƒCƒ€v‚ªƒCƒ“ƒXƒg[ƒ‹‚³‚ê‚Ä‚¢‚é•K—v‚ª—L‚è‚Ü‚·B
 ECHO       @ƒCƒ“ƒXƒg[ƒ‹‚³‚ê‚Ä‚¢‚È‚¢ê‡‚ÍƒCƒ“ƒ^[ƒlƒbƒg‚©‚çƒ_ƒEƒ“ƒ[ƒh‚µ‚æ‚¤‚Æ‚·‚é‚Ì‚ÅA
