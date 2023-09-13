@@ -522,10 +522,10 @@ for(i=0;i<name_sx.Length;i++)
         for(int ii=0;w1_sa.Count>ii;ii++)
           if("W"==wu_s){if("!"!=w1_sa[ii])write_package_v(w1_sa[ii],w2_sa[ii]);}
           else         {if("!"!=u1_sa[ii])write_package_v(u1_sa[ii],u2_sa[ii]);}
-        if(def_s.StartsWith("ITE")){write_package_v("Xamarin.Forms","*");write_package_v("System.Drawing.Common","*");
-                                   write_package_v("Microsoft.Maui","6.0.100-preview.5.794");
-                                   write_package_v("CommunityToolkit.Maui","*");
-                                  }
+ //       if(def_s.StartsWith("ITE")){write_package_v("Xamarin.Forms","*");write_package_v("System.Drawing.Common","*");
+//                                   write_package_v("Microsoft.Maui","6.0.100-preview.5.794");
+//                                   write_package_v("CommunityToolkit.Maui","*");
+//                                  }
 //        if(def_s.StartsWith("ISR")&&"W"==wu_si)
 //          {//write_package_v("Microsoft.Extensions.Hosting","*");
 //           write_package_v("Microsoft.Extensions.Hosting.WindowsServices","*");

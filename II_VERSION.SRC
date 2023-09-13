@@ -18,12 +18,12 @@ public class ii_version_l
 //####################( IMENU,ITIMEのバージョンアップ時変更 )###############
 //###★注意：変更時オリジナルのZZZZZZ_ETC_TABLE,ZZZZZZ_@,ZZZZZZ_VERSION2を変更しインストール環境を再構築する事。###
 //#I言語のバージョン2      (I37用)(111122333) #####
-public readonly String VERSION2_S="000600021";
+public readonly String VERSION2_S="000600022";
 //############################################################################
 public readonly int VERSION1=37; //i-language Version(37)
 //#########( IPRINTのバージョンアップ時変更の事 )###########################
 //###★注意：変更時オリジナルのZZZZZZ_ETC_TABLE,ZZZZZZ_@,ZZZZZZ_VERSION_PRINTを変更しインストール環境を再構築する事。###
-public readonly int VERSION_PRINT=12;  //IPRINTのバージョン      #####
+public readonly int VERSION_PRINT=13;  //IPRINTのバージョン      #####
 //##########################################################################
 //###★注意：変更時オリジナルのZZZZZZ_ETC_TABLE,ZZZZZZ_@,ZZZZZZ_VERSION_CHARTを変更しインストール環境を再構築する事。###
 public readonly int VERSION_CHART=2;  //ICHARTのバージョン      #####

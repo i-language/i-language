@@ -345,6 +345,7 @@ JA	ZZZZ	01	07	32	INPUT	ZZZZ	ZY	J		ZZZZ010712					雛型給与標準報酬更新
 JA	ZZZZ	01	07	33	INPUT	ZZZZ	ZY	A		ZZZZ010711					雛型給与基本情報更新(例外処理)
 JA	ZZZZ	01	07	34	INPUT	ZZZZ	ZY	A		ZZZZ010712					雛型給与標準報酬更新(例外処理)
 JA	ZZZZ	01	07	36	OUTPUT	ZZZZ	ZY	X							雛型シリアルポート送受信
+JA	ZZZZ	01	07	38	INPUT	ZZZZ	ZY	P							雛型投資更新及び検索
 JA	ZZZZ	01	07	40	INPUT	ZZZZ	ZY	A							雛型初期設定処理(テーブル作成)
 JA	ZZZZ	01	08	00		ZZZZ									I言語の勉強 メニュー
 JA	ZZZZ	01	08	01	OUTPUT	ZZZY	ZZ	X							1.RDBとテーブルとSQLとI言語

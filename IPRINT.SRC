@@ -1,4 +1,4 @@
-//IPRINT.SRC VER4 iprogram author nobumich harasawa
+//IPRINT.SRC VER13 iprogram author nobumich harasawa
 #if IPRINT
 //HH #include "ii_include_hh.h"
 //PP #include "ii_include_pp.h"
@@ -128,6 +128,7 @@ String[] help_sx=
 "                     文字数が０の時は文字列(データ）より文字数を計算します。",
 "                     編集はRは右詰め,Dは日付け(YYYY-MM-DD),-,+,.は数値で','を付加して右詰め、",
 "                     Zは単に右詰めしますがZと．は少数点以下が０の時は．以下を印字しません。",
+"                     Eは+と同じですが先頭に\\記号を付加します。(Ver13)",
 "                     Yは日付けを日月年の順番（DD-MM-YYYY)で出します。",
 "                     ..._Vは縦方向に印刷します(★注意:JAVA版は縦方向印刷は出来ません。",
 "                     ..._FIXは文字間隔を右端位置とみなして等間隔に印刷します。",
@@ -355,7 +356,7 @@ for(;;)
      {
 //JJ  if(z_p.e5s_b(cmd_s,"DATA_V","DATA_FIX_V","TEXT_V","TEXT_FIX_V"))
 //JJ     if(java_cmd_err_b()){close_v();sw=LAYOUT_END;continue;}//Javaはエラー。         
-      start=(z_p.starts_with_b(z_p.at_s(s_a,0),"DATA")?1:2);loop=6;//DATA...は1、TEXT...は2。
+      start=(z_p.starts_with_b(z_p.upper_s(z_p.at_s(s_a,0)),"DATA")?1:2);loop=6;//DATA...は1、TEXT...は2。//VER13
       if(1==start)sw_data=1; //外部からデータをもらう。
       add_space_data_v();//入力データ省略分追加。
       for(i=start;i<z_p.count_s_i(s_a);i+=loop)
@@ -371,7 +372,7 @@ for(;;)
          print_n.y=f_n.f; //7..=y
          if(!to_int_b(j_n,z_p.at_s(s_a,i+4))){add_err_v(0);continue;}
          print_n.cnt=j_n.i; //8..=文字数｡
-         print_n.etc_s=z_p.at_s(s_a,i+5); //9..=編集｡
+         print_n.etc_s=z_p.upper_s(z_p.at_s(s_a,i+5)); //9..=編集｡  //VER13
          z_p.add_p(p_char_a,print_n);//CHARデータ追加
         }
      }
@@ -422,7 +423,8 @@ for(;;)
      {occurs();
       line_occurs_start=z_p.count_p_i(p_line_a);   //***(line_occurs_start)***
       char_occurs_start=z_p.count_p_i(p_char_a);   //***(char_occurs_start)***
-      for(i=1;z_p.count_s_i(s_a)>j_n.i;j_n.i+=3)
+////  for(i=1;z_p.count_s_i(s_a)>j_n.i;j_n.i+=3)   VER12
+      for(i=1;z_p.count_s_i(s_a)>i;i+=3)         //VER13
         {if(!to_int_b(j_n,z_p.at_s(s_a,i))){add_err_v(0);continue;}
          z_p.add_i(i_occurs_a,j_n.i);               //***(occurs_a 1/3)***
          if(!to_float_b(f_n,z_p.at_s(s_a,i+1))){add_err_v(0);continue;}
@@ -507,7 +509,7 @@ for(;;)
   }//for(;;)
 occurs();
 if(0==z_p.count_f_i(f_offset_a)){z_p.add_f(f_offset_a,(float)0);z_p.add_f(f_offset_a,(float)0);}
-text_s=" VERSION("+z_p.to_i_s(z_p.version_n.VERSION_PRINT)+") PAPER("+paper_size_s+","+paper_hv_s+") DATA("
+text_s=" PAPER("+paper_size_s+","+paper_hv_s+") DATA(" //VER13
        +z_p.to_i_s(data_max)+","+z_p.to_i_s(z_p.count_f_i(f_offset_a)/2)+")";
 
 data_max*=z_p.count_f_i(f_offset_a)/2;//オフセットの数分追加。
@@ -571,7 +573,7 @@ if(1==sw_data)data_max++;//データ必要
 //****( print_n作成 ）********
 void set_print_v()
 {print_n=new ii_print_l();print_n.data=sw_data;//print_n新規作成
-print_n.command_s=z_p.at_s(s_a,0); //コマンド　
+print_n.command_s=z_p.upper_s(z_p.at_s(s_a,0)); //コマンド//VER13　
 if(1==sw_data){sw_data=2;} //dataが1の時は2の継続にする。 
 if(0==sw_data)print_n.data_s=z_p.at_s(s_a,1);//データ設定。
 }
@@ -893,7 +895,7 @@ String exe_s=z_p.exe_name_s;
 //HP setWindowTitle(
 //SS Text=
 //JJ setTitle(
-          exe_s+text_s+" PAGE("+z_p.to_i_s(page_cnt)+")"
+          exe_s+" VERSION("+z_p.to_i_s(z_p.version_n.VERSION_PRINT)+")"+text_s+" PAGE("+z_p.to_i_s(page_cnt)+")"
 //JP          )
 ;
 if(sw_error!=0)//エラー時エラー内容出力。
@@ -982,7 +984,7 @@ for(int iz=0;iz<z_p.count_p_i(p_char_a);iz++)//char_aの数だけ文字を印字
       keep_s=data_s;//処理中キープ分
      }
    else if(2==print_n.data)data_s=keep_s;//処理中キープデータを使う。　　
-      if(z_p.e3s_b(z_p.substring3_s(print_n.command_s,0,4),"TEXT","DATA"))
+      if(z_p.e3s_b(z_p.upper_s(z_p.substring3_s(print_n.command_s,0,4)),"TEXT","DATA")) //VER13
         {float char_size_f=z_p.at_f(f_char_size_a,print_n.index);
          int ind;
          if(0.0==char_size_f)//文字サイズが０の時はデータが「サイズ:文字列」とみなし設定。
@@ -995,13 +997,13 @@ for(int iz=0;iz<z_p.count_p_i(p_char_a);iz++)//char_aの数だけ文字を印字
             for(ind=0;z_p.count_s_i(s_replace_a)>ind;ind+=2)
                 data_s=z_p.replace_s_s(data_s,z_p.at_s(s_replace_a,ind),z_p.at_s(s_replace_a,ind+1)); //縦印字文字変更。
          if(0.0==char_size_f)char_size_f=1;//サイズ無は1に設定。
-         if(z_p.e4s_b(print_n.etc_s,"+","-",".")&&0<print_n.cnt)//数値印刷
+         if(z_p.e5s_b(print_n.etc_s,"+","-",".","E")&&0<print_n.cnt)//数値印刷 //VER13
            {if(DATA_1==control)
             data_s=z_p.pad_end_s(data_s,print_n.cnt-print_n.cnt/4,z_p.at_s_c(data_s,0));//テストデータは文字数分にする。
-            data_s=z_p.comma_s(data_s);//カンマを追加。
+            data_s=(z_p.e2s_b(print_n.etc_s,"E")&&!z_p.e2s_b(data_s,"")?"\\":"")+z_p.comma_s(data_s);//カンマを追加。//VER13
             data_s=z_p.pad_start_s(data_s,print_n.cnt);//右詰めの為先頭に空白付加。
            }
-         else if(z_p.e3s_b(print_n.etc_s,"R","Z")) //右詰め
+         else if(z_p.e3s_b(print_n.etc_s,"R","Z")) //右詰め 
            {if(0!=print_n.cnt)data_s=z_p.pad_start_s(data_s,print_n.cnt);}
          else if(z_p.e2s_b(print_n.etc_s,"D"))//日付けYYYY-MM-DD。
            {if(DATA_1==control)data_s=z_p.pad_end_s(data_s,8,z_p.at_s_c(data_s,0));
@@ -1014,7 +1016,7 @@ for(int iz=0;iz<z_p.count_p_i(p_char_a);iz++)//char_aの数だけ文字を印字
                data_s=z_p.substring3_s(data_s,6,2)+"-"+z_p.substring3_s(data_s,4,2)+"-"+z_p.substring3_s(data_s,0,4);
            }
          else if(DATA_1==control)data_s=z_p.pad_end_s(data_s,print_n.cnt,z_p.at_s_c(data_s,0));
-         if(z_p.e3s_b(print_n.etc_s,".","Z")) //.00 空白変換
+         if(z_p.e3s_b(print_n.etc_s,".","Z")) //.00 空白変換 
             for(j=z_p.length(data_s)-1;0<j;j--)
                 if('0'==z_p.at_s_c(data_s,j))continue;
                 else {if('.'==z_p.at_s_c(data_s,j))data_s=z_p.substring3_s(data_s,0,j);else break;}

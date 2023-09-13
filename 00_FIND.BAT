@@ -1,3 +1,3 @@
 @echo off
-find "||" *.* > __FIND.TMP 
+find "await" *.* > __FIND.TMP 
 start notepad __FIND.TMP
