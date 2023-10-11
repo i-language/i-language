@@ -1246,8 +1246,8 @@ for(int iz=0;iz<z_p.length(s_si);iz++)
    }
  }
 if(0==print_n.etc3)return true;
-x1_f=(print_n.x+print_n.x2+xx_fi)*ritu_fi;
-y1_f=(print_n.etc2+print_n.y+print_n.y2+yy_fi)*ritu_fi;
+x1_f=(print_n.x+/*print_n.x2+*/xx_fi)*ritu_fi; //VER13 UPDATE
+y1_f=(print_n.etc2+print_n.y+/*print_n.y2+*/yy_fi)*ritu_fi; //VER13 UPDATE
    font_n=new_font_n(default_font_s,print_n.etc3*ritu_fi,"");
    draw_h_string_v((float)0,s_si,font_n,Brushes.Black,x1_f,y1_f);
 return true;
