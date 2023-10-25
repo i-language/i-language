@@ -1,3 +1,3 @@
 @echo off
-find "await" *.* > __FIND.TMP 
+find "trace_v(" *.* > __FIND.TMP 
 start notepad __FIND.TMP
