@@ -1,3 +1,3 @@
 @echo off
-find "trace_v(" *.* > __FIND.TMP 
+find  "XEPDB" *.* > __FIND.TMP 
 start notepad __FIND.TMP

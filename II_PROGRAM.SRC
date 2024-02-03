@@ -842,6 +842,7 @@ for(;;)
       no_s=z_p.at_s(z_p.s_program_a,program_cnt);       //プログラム番号を設定。
       seq_s=z_p.trim_s((z_p.at_s(z_p.s_program_a,program_cnt+1)));//プログラム無いシーケンス番号を設定。
       z_p.prog_s_n.s=z_p.trim_s((z_p.at_s(z_p.s_program_a,program_cnt+2)));
+//    z_mt_p.trace_v(0,"seq_s="+seq_s+"/"+z_p.to_i_s(program_cnt)+"/"+z_p.to_i_s(z_p.program_a_max)); //-----------------------------------------CPP ORACLE TEST-----//
       if(0!=repeat0_cnt)z_p.prog_s_n.s=z_p.replace_s_s(z_p.replace_s_s(z_p.replace_s_s(z_p.prog_s_n.s //z_p.prog_s_n.sにプログラムを設定。
           //repeat0_cntで'$$','$+','$-'を編集。
          ,"$$",z_p.to_i_s(repeat0_cnt)),"$-",z_p.to_i_s(repeat0_cnt-1)),"$+",z_p.to_i_s(repeat0_cnt+1));
