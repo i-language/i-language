@@ -18,7 +18,7 @@ public class ii_version_l
 //####################( IMENU,ITIMEのバージョンアップ時変更 )###############
 //###★注意：変更時オリジナルのZZZZZZ_ETC_TABLE,ZZZZZZ_@,ZZZZZZ_VERSION2を変更しインストール環境を再構築する事。###
 //#I言語のバージョン2      (I37用)(111122333) #####
-public readonly String VERSION2_S="000800001";
+public readonly String VERSION2_S="000800002";
 //############################################################################
 public readonly int VERSION1=37; //i-language Version(37)
 //#########( IPRINTのバージョンアップ時変更の事 )###########################
