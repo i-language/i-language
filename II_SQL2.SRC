@@ -12,28 +12,31 @@
 #endif
 #if I
 //#if DOTNET
+//VER37.8.0.2
+#if MONO
+//SS //I using IBM.Data.DB2; //VER37.8.0.2
+#else
 //SS //I using IBM.Data.DB2.Core; //VER35
-//#else
-////SS //I using IBM.Data.DB2; //VER35
-//#endif
-#endif//SS //D using FirebirdSql.Data.FirebirdClient;
-
+#endif
+#endif
 #if L
 // #if DOTNET
+#if MONO 
+//SS //L using MySql.Data.MySqlClient; //VER37.8.0.2
+#else
 //SS //L using MySqlConnector;
-//#else
-////SS //L using MySql.Data.MySqlClient;
-//#endif
+#endif
 #endif
 //SS //M using System.Data.SqlClient;
 #if O
 //#if ODP
 //#if DOTNET
+#if MONO
+//SS //O using Oracle.DataAccess.Client;  //I37.8.0.2
+#else
 //SS //O using Oracle.ManagedDataAccess.Client;  //ODP.NET //VER35
 //SS //O using Oracle.ManagedDataAccess.Types;  //ODP.NET //VER35
-//#else
-////SS //O using Oracle.DataAccess.Client;  //ODP.NET //VER35
-//#endif
+#endif
 //#else
 ////SS //O using System.Data.Odbc;
 ////SS //O using System.Data.OracleClient; //Oracle.DataAccess.Clientが//
