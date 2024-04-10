@@ -5,9 +5,9 @@ ZZZZZZ_@	ZZZZZZ_PERMISSION_COUNT	2	PERMISSION COUNT
 ZZZZZZ_@	ZZZZZZ_PERMISSION_NO1	ZZZZ	ZZZZ
 ZZZZZZ_@	ZZZZZZ_PERMISSION_NO2	ZZZY	ZZZY
 ZZZZZZ_@	ZZZZZZ_VERSION_CHART	2	VERSION(2) ICHART
-ZZZZZZ_@	ZZZZZZ_VERSION_PRINT	13	VERSION(13) IPRINT
+ZZZZZZ_@	ZZZZZZ_VERSION_PRINT	14	VERSION(14) IPRINT
 ZZZZZZ_@	ZZZZZZ_VERSION1	37	VERSION1(37) IMENU,ITIME
-ZZZZZZ_@	ZZZZZZ_VERSION2	000800003	VERSION2(000800003) IMENU,ITIME
+ZZZZZZ_@	ZZZZZZ_VERSION2	000800004	VERSION2(000800004) IMENU,ITIME
 ZZZZZZ_COPY	ZZZZZZ_SQL               00100	%ZZZZZZ_SQL_SELECT+REPEAT=_SELECT_COUNT	
 ZZZZZZ_COPY	ZZZZZZ_SQL               00200	%ZZZZZZ_SQL_SELECT+SQL=?_SELECT##?	
 ZZZZZZ_COPY	ZZZZZZ_SQL               00300	%ZZZZZZ_SQL_SELECT+REPEAT=	
@@ -1840,9 +1840,9 @@ ZZZZZZ_SYSTEM	ZZZZZZ_TIME_LIMIT	17:30	SYSTEM TIME LIMIT (HH:MM)[17:30]
 ZZZZZZ_SYSTEM	ZZZZZZ_TIME_START	08:30	SYSTEM START TIME (HH:MM)[08:30]
 ZZZZZZ_SYSTEM	ZZZZZZ_Z_CANCEL_DELETE	31	Z_CANCEL DELETE -(DAY)[31]
 ZZZZZZ_URL_VERSION	#D	https://dotnet.microsoft.com/download/dotnet/8.0/	,"#version_0">,8.0.3
-ZZZZZZ_URL_VERSION	#J	http://jdk.java.net/	,">JDK ,21
+ZZZZZZ_URL_VERSION	#J	http://jdk.java.net/	,">JDK ,22
 ZZZZZZ_URL_VERSION	#J--	A	
-ZZZZZZ_URL_VERSION	#J2	http://jdk.java.net/21/	,>JDK ,21
+ZZZZZZ_URL_VERSION	#J2	http://jdk.java.net/22/	,>JDK ,22
 ZZZZZZ_URL_VERSION	#M	https://www.mono-project.com/download/stable/	,installer/mono-,6.12.0.206
 ZZZZZZ_URL_VERSION	#O	https://www.nuget.org/packages?q=obfuscar	,/obfuscar/,2.2.38
 ZZZZZZ_URL_VERSION	D#	*ttp://www.firebirdsql.org/en/firebird-2-5/	,: Firebird,2.5.9<
@@ -1855,7 +1855,7 @@ ZZZZZZ_URL_VERSION	L#--	11.4.1/">11.4.1</a> <strong>(RC)
 ZZZZZZ_URL_VERSION	LJ	https://mariadb.com/kb/en/about-mariadb-connector-	J/,>MariaDB Connector/J ,3.3.3
 ZZZZZZ_URL_VERSION	LJ*	*https://mariadb.org/connector-java/all-releases/	,old=">,2.7.3
 ZZZZZZ_URL_VERSION	LJ--*	*3.0.0</a></td><td>2021-05-05</td><td>Alpha	
-ZZZZZZ_URL_VERSION	LN	https://www.nuget.org/packages/MySqlConnector/	,content="MySqlConnector ,2.3.5
+ZZZZZZ_URL_VERSION	LN	https://www.nuget.org/packages/MySqlConnector/	,content="MySqlConnector ,2.3.6
 ZZZZZZ_URL_VERSION	MJ	https://docs.microsoft.com	
 ZZZZZZ_URL_VERSION	MJ*	*ttps://www.microsoft.com/ja-jp/download/details.a	spx?id=11774,JDBC Driver ,6.0
 ZZZZZZ_URL_VERSION	MJ++	/ja-jp/sql/connect/jdbc/download-microsoft-jdbc-dr	iver-for-sql-server,<p>バージョン ,12.6

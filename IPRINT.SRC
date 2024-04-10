@@ -282,8 +282,9 @@ if(z_p.count_s_i(z_p.s_arg_a)>1)data_file_s=z_p.at_s(z_p.s_arg_a,1);//２個目�
 if(z_p.count_s_i(z_p.s_arg_a)>2)layout_file_s=z_p.at_s(z_p.s_arg_a,2);//３個目（レイアウトファイル）のパラメータ設定。
 if(z_p.count_s_i(z_p.s_arg_a)>3)if(!to_int_b(start_cnt_n,z_p.at_s(z_p.s_arg_a,3))){err_s="開始[4]";add_err_v(1);return;}//４個目（開始）のパラメータ設定。
 if(z_p.count_s_i(z_p.s_arg_a)>4)if(!to_int_b(stop_cnt_n,z_p.at_s(z_p.s_arg_a,4))){err_s="終了[5]";add_err_v(1);return;}//５個目（終了）のパラメータ設定。
+if(0==start_cnt_n.i)start_cnt_n.i=1; //VER14
 if(1>start_cnt_n.i){err_s="開始[4]";z_p.err_s="("+z_p.to_i_s(start_cnt_n.i)+") error";add_err_v(1);return;}//開始位置が0以下はエラー。
-if(0>stop_cnt_n.i||(0!=stop_cnt_n.i&&stop_cnt_n.i<start_cnt_n.i))//終了位置確認。
+if(0>stop_cnt_n.i||(0!=stop_cnt_n.i&&stop_cnt_n.i<start_cnt_n.i))//終了位置確認。//VER14
  {err_s="終了[5]";z_p.err_s="("+z_p.to_i_s(stop_cnt_n.i)+") error";add_err_v(1);return;}//終了位置エラー。
 if(-1==(i=z_p.last_index2c_i(data_file_s,z_p.at_s_c(z_p.dir_s,0))))i=0;//ディレクトリ区切り文字最後の位置設定。
 doc_s=z_p.substring2_s(data_file_s,i);//ディレクトリ無ファイル名設定。

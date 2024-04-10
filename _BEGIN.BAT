@@ -3,10 +3,10 @@ REM ===( I_...環境変数設定 )===
 REM ===( 最新バージョンを設定 )===
 CALL _BEGIN_VER2.BAT
 SET I_VER=I37
-SET I_VER_J=21
+SET I_VER_J=22
 rem SET I_VER_C=6.4.3
 rem SET I_VER_C=6.5.2
-SET I_VER_C=6.6.2
+SET I_VER_C=6.6.3
 REM ===( MONO mono使用中 )==========
 SET I_MONO_SW=YES
 REM ===( QtはODBC接続のみでsa接続が出来ないので、サーバー構築は保留中 )===
@@ -36,9 +36,10 @@ SET I_TMP=%I_HOME%\TMP
 REM ===( Java )============================
 REM SET I_JAVA=%I_DIR_J%\jdk-%I_VER_J%\bin
 REM SET I_JAVAC=%I_JAVA%\javac.exe
-SET I_JAVAC=javac.exe
+rem SET I_JAVAC=javac.exe
 REM SET I_JAVA=C:\Program Files\Java\jdk-%I_VER_J%\bin
 SET I_JAVA=C:\jdk-%I_VER_J%\bin
+SET I_JAVAC=%I_JAVA%\javac.exe
 SET I_JAR="%I_JAVA%\jar.exe"
 REM ===( Qt 当面開発中止　)=============================
 IF "%I_VER_C%"=="" GOTO SKIP-C
