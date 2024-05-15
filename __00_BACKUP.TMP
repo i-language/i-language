@@ -1,0 +1,214 @@
+
+-------------------------------------------------------------------------------
+   ROBOCOPY     ::     Windows の堅牢性の高いファイル コピー                              
+-------------------------------------------------------------------------------
+
+  開始: 2024年5月15日 12:38:42
+   コピー元 : D:\HARASAWA\
+     コピー先 = J:\HARASAWA-BACKUP\
+
+    ファイル: *.*
+	    
+  オプション: *.* /S /E /DCOPY:DAT /COPY:DAT /PURGE /MIR /R:1000000 /W:30 
+
+------------------------------------------------------------------------------
+
+	                 106	D:\HARASAWA\
+	  新しいファイル		  47.7 m	I37_8.0.5_SETUP.zip  2.0%  4.1%  6.2%  8.3% 10.4% 12.5% 14.6% 16.7% 18.8% 20.9% 23.0% 25.1% 27.2% 29.3% 31.4% 33.5% 35.5% 37.6% 39.7% 41.8% 43.9% 46.0% 48.1% 50.2% 52.3% 54.4% 56.5% 58.6% 60.7% 62.8% 64.9% 67.0% 69.1% 71.1% 73.2% 75.3% 77.4% 79.5% 81.6% 83.7% 85.8% 87.9% 90.0% 92.1% 94.2% 96.3% 98.4%100%  
+	                   0	D:\HARASAWA\DCIM\
+	                  14	D:\HARASAWA\DCIM\10000307\
+	                  54	D:\HARASAWA\DCIM\10011114\
+	                  54	D:\HARASAWA\DCIM\10011114JPEG\
+	                   6	D:\HARASAWA\DCIM\10121026\
+	                   3	D:\HARASAWA\DCIM\10210216\
+	                   8	D:\HARASAWA\DCIM\10221027\
+	                   8	D:\HARASAWA\DCIM\10221027JPEG\
+	                   4	D:\HARASAWA\DCIM\10360101\
+	                   4	D:\HARASAWA\DCIM\1036101JPEG\
+	                  23	D:\HARASAWA\DCIM\JPEG\
+	                  15	D:\HARASAWA\ETC\
+	                   4	D:\HARASAWA\ETC\CPP\
+	                  22	D:\HARASAWA\ETC\Desktop\
+	                   1	D:\HARASAWA\ETC\Desktop\A\
+	                   1	D:\HARASAWA\ETC\Desktop\B\
+	                   7	D:\HARASAWA\ETC\Desktop\写真\
+	                  85	D:\HARASAWA\FILE\
+	                 168	D:\HARASAWA\geocities\
+	                   1	D:\HARASAWA\gmail\
+	                  31	D:\HARASAWA\I\
+	                  52	D:\HARASAWA\I\BIN\
+	                   0	D:\HARASAWA\I\BIN\e.t.c\
+	                   1	D:\HARASAWA\I\BIN\FRAMEWORK2\
+	                   1	D:\HARASAWA\I\BIN\FRAMEWORK4\
+	                   0	D:\HARASAWA\I\BIN\JAVA\
+	                   0	D:\HARASAWA\I\BIN\MONO\
+	                   0	D:\HARASAWA\I\BIN\MONO4\
+	                   5	D:\HARASAWA\I\build-IMENUWC-Desktop_Qt_6_4_2_MinGW_64_bit-Debug\
+	                   1	D:\HARASAWA\I\build-IMENUWC-Desktop_Qt_6_4_2_MinGW_64_bit-Debug\.qtc_clangd\
+	                   0	D:\HARASAWA\I\build-IMENUWC-Desktop_Qt_6_4_2_MinGW_64_bit-Debug\.qtc_clangd\.cache\
+	                   0	D:\HARASAWA\I\build-IMENUWC-Desktop_Qt_6_4_2_MinGW_64_bit-Debug\.qtc_clangd\.cache\clangd\
+	                1013	D:\HARASAWA\I\build-IMENUWC-Desktop_Qt_6_4_2_MinGW_64_bit-Debug\.qtc_clangd\.cache\clangd\index\
+	                  51	D:\HARASAWA\I\build-IMENUWC-Desktop_Qt_6_4_2_MinGW_64_bit-Debug\debug\
+	                   1	D:\HARASAWA\I\build-IMENUWC-Desktop_Qt_6_4_2_MinGW_64_bit-Debug\release\
+	                   0	D:\HARASAWA\I\I10_DLL\
+	                   1	D:\HARASAWA\I\I10_DLL\D-NET2-2.5.2\
+	                   2	D:\HARASAWA\I\I10_DLL\D-NET4-4.5.0\
+	                  27	D:\HARASAWA\I\I10_EXE\
+	                   0	D:\HARASAWA\I\I10_EXE\JAVA\
+	                  23	D:\HARASAWA\I\I10_INSTALL\
+	                  27	D:\HARASAWA\I\I10_INSTALL\I_SERVER\
+	                   0	D:\HARASAWA\I\I10_INSTALL\I_SERVER\JAVA\
+	                   0	D:\HARASAWA\I\I10_INSTALL\I_SERVER\SHARE\
+	                   0	D:\HARASAWA\I\I10_INSTALL\I_SERVER\SHARE\UNIX\
+	                   5	D:\HARASAWA\I\I10_INSTALL\I_SERVER\SHARE\UNIX\BINI10\
+	                   0	D:\HARASAWA\I\I10_INSTALL\I_SERVER\SHARE\UNIX\BINI10\JAVA\
+	                   2	D:\HARASAWA\I\I10_INSTALL\I_SERVER\SHARE\UNIX\CLIENT\
+	                   0	D:\HARASAWA\I\I10_INSTALL\I_SERVER\SHARE\WINDOWS\
+	                   4	D:\HARASAWA\I\I10_INSTALL\I_SERVER\SHARE\WINDOWS\BIN\
+	                  11	D:\HARASAWA\I\I10_INSTALL\I_SERVER\SHARE\WINDOWS\BINI10\
+	                   0	D:\HARASAWA\I\I10_INSTALL\I_SERVER\SHARE\WINDOWS\BINI10\JAVA\
+	                   3	D:\HARASAWA\I\I10_INSTALL\I_SERVER\SHARE\WINDOWS\CLIENT\
+	                   0	D:\HARASAWA\I\I10_INSTALL\I_SERVER\UNIX\
+	                   2	D:\HARASAWA\I\I10_INSTALL\I_SERVER\UNIX\FILE\
+	                   2	D:\HARASAWA\I\I10_INSTALL\I_SERVER\UNIX\FILE\SERVICE\
+	                   0	D:\HARASAWA\I\I10_INSTALL\I_SERVER\UNIX\FILE\SERVICE\JAVA\
+	                   0	D:\HARASAWA\I\I10_INSTALL\I_SERVER\UNIX\SERVER\
+	                   4	D:\HARASAWA\I\I10_INSTALL\I_SERVER\UNIX\SERVER\BAT\
+	                   1	D:\HARASAWA\I\I10_INSTALL\I_SERVER\UNIX\SERVER\BIN\
+	                   0	D:\HARASAWA\I\I10_INSTALL\I_SERVER\UNIX\SERVER\BIN\JAVA\
+	                   0	D:\HARASAWA\I\I10_INSTALL\I_SERVER\WINDOWS\
+	                   2	D:\HARASAWA\I\I10_INSTALL\I_SERVER\WINDOWS\FILE\
+	                   4	D:\HARASAWA\I\I10_INSTALL\I_SERVER\WINDOWS\FILE\SERVICE\
+	                   0	D:\HARASAWA\I\I10_INSTALL\I_SERVER\WINDOWS\FILE\SERVICE\JAVA\
+	                   0	D:\HARASAWA\I\I10_INSTALL\I_SERVER\WINDOWS\SERVER\
+	                   6	D:\HARASAWA\I\I10_INSTALL\I_SERVER\WINDOWS\SERVER\BAT\
+	                   4	D:\HARASAWA\I\I10_INSTALL\I_SERVER\WINDOWS\SERVER\BIN\
+	                   0	D:\HARASAWA\I\I10_INSTALL\I_SERVER\WINDOWS\SERVER\BIN\JAVA\
+	                   0	D:\HARASAWA\I\I10_JAVA\
+	                  18	D:\HARASAWA\I\I10_SETUPI10\
+	                 158	D:\HARASAWA\I\I10_SETUPI10\I10_SRC\
+	                  27	D:\HARASAWA\I\I10_SETUPI10\I_SERVER\
+	                   0	D:\HARASAWA\I\I10_SETUPI10\I_SERVER\JAVA\
+	                   0	D:\HARASAWA\I\I10_SETUPI10\I_SERVER\SHARE\
+	                   0	D:\HARASAWA\I\I10_SETUPI10\I_SERVER\SHARE\UNIX\
+	                   5	D:\HARASAWA\I\I10_SETUPI10\I_SERVER\SHARE\UNIX\BINI10\
+	                   0	D:\HARASAWA\I\I10_SETUPI10\I_SERVER\SHARE\UNIX\BINI10\JAVA\
+	                   2	D:\HARASAWA\I\I10_SETUPI10\I_SERVER\SHARE\UNIX\CLIENT\
+	                   0	D:\HARASAWA\I\I10_SETUPI10\I_SERVER\SHARE\WINDOWS\
+	                  11	D:\HARASAWA\I\I10_SETUPI10\I_SERVER\SHARE\WINDOWS\BINI10\
+	                   0	D:\HARASAWA\I\I10_SETUPI10\I_SERVER\SHARE\WINDOWS\BINI10\JAVA\
+	                   3	D:\HARASAWA\I\I10_SETUPI10\I_SERVER\SHARE\WINDOWS\CLIENT\
+	                   0	D:\HARASAWA\I\I10_SETUPI10\I_SERVER\UNIX\
+	                   2	D:\HARASAWA\I\I10_SETUPI10\I_SERVER\UNIX\FILE\
+	                   2	D:\HARASAWA\I\I10_SETUPI10\I_SERVER\UNIX\FILE\SERVICE\
+	                   0	D:\HARASAWA\I\I10_SETUPI10\I_SERVER\UNIX\FILE\SERVICE\JAVA\
+	                   0	D:\HARASAWA\I\I10_SETUPI10\I_SERVER\UNIX\SERVER\
+	                   4	D:\HARASAWA\I\I10_SETUPI10\I_SERVER\UNIX\SERVER\BAT\
+	                   1	D:\HARASAWA\I\I10_SETUPI10\I_SERVER\UNIX\SERVER\BIN\
+	                   0	D:\HARASAWA\I\I10_SETUPI10\I_SERVER\UNIX\SERVER\BIN\JAVA\
+	                   0	D:\HARASAWA\I\I10_SETUPI10\I_SERVER\WINDOWS\
+	                   2	D:\HARASAWA\I\I10_SETUPI10\I_SERVER\WINDOWS\FILE\
+	                   4	D:\HARASAWA\I\I10_SETUPI10\I_SERVER\WINDOWS\FILE\SERVICE\
+	                   0	D:\HARASAWA\I\I10_SETUPI10\I_SERVER\WINDOWS\FILE\SERVICE\JAVA\
+	                   0	D:\HARASAWA\I\I10_SETUPI10\I_SERVER\WINDOWS\SERVER\
+	                   6	D:\HARASAWA\I\I10_SETUPI10\I_SERVER\WINDOWS\SERVER\BAT\
+	                   4	D:\HARASAWA\I\I10_SETUPI10\I_SERVER\WINDOWS\SERVER\BIN\
+	                   0	D:\HARASAWA\I\I10_SETUPI10\I_SERVER\WINDOWS\SERVER\BIN\JAVA\
+	                 157	D:\HARASAWA\I\I10_SRC\
+	                   7	D:\HARASAWA\I\I10_TABLE\
+	                  74	D:\HARASAWA\I\I10_WORK\
+	                   2	D:\HARASAWA\I\I10_ZIP\
+	                   0	D:\HARASAWA\I\I11_DLL\
+	                   1	D:\HARASAWA\I\I11_DLL\D-MONO4-4.5.0\
+	                   1	D:\HARASAWA\I\I11_DLL\D-MONO4-4.5.1\
+	                   1	D:\HARASAWA\I\I11_DLL\D-NET2-2.5.2\
+	                   2	D:\HARASAWA\I\I11_DLL\D-NET4-4.5.0\
+	                   1	D:\HARASAWA\I\I11_DLL\D-NET4-4.5.1\
+	                   1	D:\HARASAWA\I\I11_DLL\D-NET4-4.5.2\
+	                   1	D:\HARASAWA\I\I11_DLL\I-MONO4\
+	                  26	D:\HARASAWA\I\I11_EXE\
+	                   0	D:\HARASAWA\I\I11_EXE\JAVA\
+	                  16	D:\HARASAWA\I\I11_EXE_MONO\
+	                  25	D:\HARASAWA\I\I11_INSTALL\
+	                  27	D:\HARASAWA\I\I11_INSTALL\I_SERVER\
+	                   0	D:\HARASAWA\I\I11_INSTALL\I_SERVER\SHARE\
+	                   0	D:\HARASAWA\I\I11_INSTALL\I_SERVER\SHARE\UNIX\
+	                   5	D:\HARASAWA\I\I11_INSTALL\I_SERVER\SHARE\UNIX\BINI11\
+	                   2	D:\HARASAWA\I\I11_INSTALL\I_SERVER\SHARE\UNIX\CLIENT\
+	                   0	D:\HARASAWA\I\I11_INSTALL\I_SERVER\SHARE\WINDOWS\
+	                   2	D:\HARASAWA\I\I11_INSTALL\I_SERVER\SHARE\WINDOWS\BIN\
+	                  11	D:\HARASAWA\I\I11_INSTALL\I_SERVER\SHARE\WINDOWS\BINI11\
+	                   3	D:\HARASAWA\I\I11_INSTALL\I_SERVER\SHARE\WINDOWS\CLIENT\
+	                   0	D:\HARASAWA\I\I11_INSTALL\I_SERVER\UNIX\
+	                   2	D:\HARASAWA\I\I11_INSTALL\I_SERVER\UNIX\FILE\
+	                   2	D:\HARASAWA\I\I11_INSTALL\I_SERVER\UNIX\FILE\SERVICE\
+	                   0	D:\HARASAWA\I\I11_INSTALL\I_SERVER\UNIX\SERVER\
+	                   4	D:\HARASAWA\I\I11_INSTALL\I_SERVER\UNIX\SERVER\BAT\
+	                   1	D:\HARASAWA\I\I11_INSTALL\I_SERVER\UNIX\SERVER\BIN\
+	                   0	D:\HARASAWA\I\I11_INSTALL\I_SERVER\WINDOWS\
+	                   2	D:\HARASAWA\I\I11_INSTALL\I_SERVER\WINDOWS\FILE\
+	                   4	D:\HARASAWA\I\I11_INSTALL\I_SERVER\WINDOWS\FILE\SERVICE\
+	                   0	D:\HARASAWA\I\I11_INSTALL\I_SERVER\WINDOWS\SERVER\
+	                   6	D:\HARASAWA\I\I11_INSTALL\I_SERVER\WINDOWS\SERVER\BAT\
+	                   4	D:\HARASAWA\I\I11_INSTALL\I_SERVER\WINDOWS\SERVER\BIN\
+	                   0	D:\HARASAWA\I\I11_JAVA\
+	                  19	D:\HARASAWA\I\I11_SETUPI11\
+	                 159	D:\HARASAWA\I\I11_SETUPI11\I11_SRC\
+	                  28	D:\HARASAWA\I\I11_SETUPI11\I_SERVER\
+	                   0	D:\HARASAWA\I\I11_SETUPI11\I_SERVER\SHARE\
+	                   0	D:\HARASAWA\I\I11_SETUPI11\I_SERVER\SHARE\UNIX\
+	                   5	D:\HARASAWA\I\I11_SETUPI11\I_SERVER\SHARE\UNIX\BINI11\
+	                   2	D:\HARASAWA\I\I11_SETUPI11\I_SERVER\SHARE\UNIX\CLIENT\
+	                   0	D:\HARASAWA\I\I11_SETUPI11\I_SERVER\SHARE\WINDOWS\
+	                  11	D:\HARASAWA\I\I11_SETUPI11\I_SERVER\SHARE\WINDOWS\BINI11\
+	                   3	D:\HARASAWA\I\I11_SETUPI11\I_SERVER\SHARE\WINDOWS\CLIENT\
+	                   0	D:\HARASAWA\I\I11_SETUPI11\I_SERVER\UNIX\
+	                   2	D:\HARASAWA\I\I11_SETUPI11\I_SERVER\UNIX\FILE\
+	                   2	D:\HARASAWA\I\I11_SETUPI11\I_SERVER\UNIX\FILE\SERVICE\
+	                   0	D:\HARASAWA\I\I11_SETUPI11\I_SERVER\UNIX\SERVER\
+	                   4	D:\HARASAWA\I\I11_SETUPI11\I_SERVER\UNIX\SERVER\BAT\
+	                   1	D:\HARASAWA\I\I11_SETUPI11\I_SERVER\UNIX\SERVER\BIN\
+	                   0	D:\HARASAWA\I\I11_SETUPI11\I_SERVER\WINDOWS\
+	                   2	D:\HARASAWA\I\I11_SETUPI11\I_SERVER\WINDOWS\FILE\
+	                   4	D:\HARASAWA\I\I11_SETUPI11\I_SERVER\WINDOWS\FILE\SERVICE\
+	                   0	D:\HARASAWA\I\I11_SETUPI11\I_SERVER\WINDOWS\SERVER\
+	                   6	D:\HARASAWA\I\I11_SETUPI11\I_SERVER\WINDOWS\SERVER\BAT\
+	                   4	D:\HARASAWA\I\I11_SETUPI11\I_SERVER\WINDOWS\SERVER\BIN\
+	                 158	D:\HARASAWA\I\I11_SRC\
+	                   7	D:\HARASAWA\I\I11_TABLE\
+	                  74	D:\HARASAWA\I\I11_WORK\
+	                   2	D:\HARASAWA\I\I11_ZIP\
+	                   0	D:\HARASAWA\I\I12_DLL\
+	                   1	D:\HARASAWA\I\I12_DLL\D-NET2-2.5.2\
+	                   1	D:\HARASAWA\I\I12_DLL\D-NET4-4.5.2\
+	                  20	D:\HARASAWA\I\I12_EXE\
+	                   0	D:\HARASAWA\I\I12_EXE_MONO\
+	                  22	D:\HARASAWA\I\I12_INSTALL\
+	                  26	D:\HARASAWA\I\I12_INSTALL\I_SERVER\
+	                   0	D:\HARASAWA\I\I12_INSTALL\I_SERVER\SHARE\
+	                   0	D:\HARASAWA\I\I12_INSTALL\I_SERVER\SHARE\UNIX\
+	                   5	D:\HARASAWA\I\I12_INSTALL\I_SERVER\SHARE\UNIX\BINI12\
+	                   2	D:\HARASAWA\I\I12_INSTALL\I_SERVER\SHARE\UNIX\CLIENT\
+	                   0	D:\HARASAWA\I\I12_INSTALL\I_SERVER\SHARE\WINDOWS\
+	                  10	D:\HARASAWA\I\I12_INSTALL\I_SERVER\SHARE\WINDOWS\BINI12\
+	                   3	D:\HARASAWA\I\I12_INSTALL\I_SERVER\SHARE\WINDOWS\CLIENT\
+	                   0	D:\HARASAWA\I\I12_INSTALL\I_SERVER\UNIX\
+	                   2	D:\HARASAWA\I\I12_INSTALL\I_SERVER\UNIX\FILE\
+	                   2	D:\HARASAWA\I\I12_INSTALL\I_SERVER\UNIX\FILE\SERVICE\
+	                   0	D:\HARASAWA\I\I12_INSTALL\I_SERVER\UNIX\SERVER\
+	                   4	D:\HARASAWA\I\I12_INSTALL\I_SERVER\UNIX\SERVER\BAT\
+	                   1	D:\HARASAWA\I\I12_INSTALL\I_SERVER\UNIX\SERVER\BIN\
+	                   0	D:\HARASAWA\I\I12_INSTALL\I_SERVER\WINDOWS\
+	                   2	D:\HARASAWA\I\I12_INSTALL\I_SERVER\WINDOWS\FILE\
+	                   3	D:\HARASAWA\I\I12_INSTALL\I_SERVER\WINDOWS\FILE\SERVICE\
+	                   0	D:\HARASAWA\I\I12_INSTALL\I_SERVER\WINDOWS\SERVER\
+	                   6	D:\HARASAWA\I\I12_INSTALL\I_SERVER\WINDOWS\SERVER\BAT\
+	                   2	D:\HARASAWA\I\I12_INSTALL\I_SERVER\WINDOWS\SERVER\BIN\
+	                   0	D:\HARASAWA\I\I12_JAVA\
+	                  18	D:\HARASAWA\I\I12_SETUPI12\
+	                 154	D:\HARASAWA\I\I12_SETUPI12\I12_SRC\
+	                  26	D:\HARASAWA\I\I12_SETUPI12\I_SERVER\
+	                   0	D:\HARASAWA\I\I12_SETUPI12\I_SERVER\SHARE\
+	                   0	D:\HARASAWA\I\I12_SETUPI12\I_SERVER\SHARE\UNIX\
+	                   5	D:\HARASAWA\I\I12_SETUPI12\I_SERVER\SHARE\UNIX\BINI12\
+	                   2	D:\HARASAWA\I\I12_SETUPI12\I_SERVER\SHARE\UNIX\CLIENT\
