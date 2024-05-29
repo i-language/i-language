@@ -29,7 +29,7 @@
 #include <QTcpServer>
 #include <QtGui>
 #include <QtSql>
-#include <QUdpSocket> //VER37.8.0.4
+#include <QUdpSocket> //VER37_8.0.4
 #if W
 #include <tchar.h>
 #endif

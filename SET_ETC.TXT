@@ -7,7 +7,7 @@ ZZZZZZ_@	ZZZZZZ_PERMISSION_NO2	ZZZY	ZZZY
 ZZZZZZ_@	ZZZZZZ_VERSION_CHART	2	VERSION(2) ICHART
 ZZZZZZ_@	ZZZZZZ_VERSION_PRINT	14	VERSION(14) IPRINT
 ZZZZZZ_@	ZZZZZZ_VERSION1	37	VERSION1(37) IMENU,ITIME
-ZZZZZZ_@	ZZZZZZ_VERSION2	000800005	VERSION2(000800005) IMENU,ITIME
+ZZZZZZ_@	ZZZZZZ_VERSION2	000800006	VERSION2(000800006) IMENU,ITIME
 ZZZZZZ_COPY	ZZZZZZ_SQL               00100	%ZZZZZZ_SQL_SELECT+REPEAT=_SELECT_COUNT	
 ZZZZZZ_COPY	ZZZZZZ_SQL               00200	%ZZZZZZ_SQL_SELECT+SQL=?_SELECT##?	
 ZZZZZZ_COPY	ZZZZZZ_SQL               00300	%ZZZZZZ_SQL_SELECT+REPEAT=	
@@ -1839,7 +1839,7 @@ ZZZZZZ_SYSTEM	ZZZZZZ_REGISTRY_PROXY	SYSTEM\CURRENTCONTROLSET\SERVICES\NLASVC\PAR
 ZZZZZZ_SYSTEM	ZZZZZZ_TIME_LIMIT	17:30	SYSTEM TIME LIMIT (HH:MM)[17:30]
 ZZZZZZ_SYSTEM	ZZZZZZ_TIME_START	08:30	SYSTEM START TIME (HH:MM)[08:30]
 ZZZZZZ_SYSTEM	ZZZZZZ_Z_CANCEL_DELETE	31	Z_CANCEL DELETE -(DAY)[31]
-ZZZZZZ_URL_VERSION	#D	https://dotnet.microsoft.com/download/dotnet/8.0/	,"#version_0">,8.0.5
+ZZZZZZ_URL_VERSION	#D	https://dotnet.microsoft.com/download/dotnet/8.0/	,"#version_0">,8.0.6
 ZZZZZZ_URL_VERSION	#J	http://jdk.java.net/	,">JDK ,22
 ZZZZZZ_URL_VERSION	#J--	A	
 ZZZZZZ_URL_VERSION	#J2	http://jdk.java.net/22/	,>JDK ,22
@@ -1851,8 +1851,8 @@ ZZZZZZ_URL_VERSION	DJ--	3.0.0
 ZZZZZZ_URL_VERSION	DN	*ttp://www.firebirdsql.org/en/additional-downloads	/,FirebirdClient-,7.1.1
 ZZZZZZ_URL_VERSION	IN	https://www.nuget.org/packages/IBM.Data.DB2.Core/	,content="IBM.Data.DB2.Core ,3.1.0.600
 ZZZZZZ_URL_VERSION	L#	https://downloads.mariadb.org/	,downloads.mariadb.org/mariadb/,11.3.2
-ZZZZZZ_URL_VERSION	L#--	11.4.1/">11.4.1</a> <strong>(RC)	
-ZZZZZZ_URL_VERSION	LJ	https://mariadb.com/kb/en/about-mariadb-connector-	J/,>MariaDB Connector/J ,3.3.3
+ZZZZZZ_URL_VERSION	L#--	11.4.1/">11.4.1</a> (RC)	11.5.0/">11.5.0 (preview)
+ZZZZZZ_URL_VERSION	LJ	https://mariadb.com/kb/en/about-mariadb-connector-	J/,>MariaDB Connector/J ,3.4.0
 ZZZZZZ_URL_VERSION	LJ*	*https://mariadb.org/connector-java/all-releases/	,old=">,2.7.3
 ZZZZZZ_URL_VERSION	LJ--*	*3.0.0</a></td><td>2021-05-05</td><td>Alpha	
 ZZZZZZ_URL_VERSION	LN	https://www.nuget.org/packages/MySqlConnector/	,content="MySqlConnector ,2.3.7
