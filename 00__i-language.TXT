@@ -3,30 +3,35 @@
 ******************************************************************************
 (1)I言語開発環境の構築。
 ①SQL Server Express Editionの最新版をインストールする。
-②.net6の最新版をインストールする。(I37の場合）
-③OracleJDKの最新版をインストールする。
-④WSLを有効にする。
-⑤WSLにUbuntuをインストールする。
-⑥Otの最新版をC:\Qt?.?.?にインストールする。(?,?,?はバージョン)
-⑦QtをUbuntuのホームディレクトリ/Qt?.?.?にインストールする。
+②.net8の最新版をインストールする。(I37の場合）
+③OpenJDKの最新版をインストールする。(c:\jdk-??に移動)(??はバージョン)
+③－①_BEGIN.BATのSET I_VER_J=??を最新バージョンに変更。
+④WSL2を有効にする。
+⑤WSL2にUbuntuをインストールする(ユーザー名=ubuntu)。
+⑥Otの最新版をWindowsのC:\Qt?.?.?にインストールする。(?,?,?はバージョン)
+(★注意★2024年7月現在6.7.2は動かないので6.6.xの最新版をインストールして下さい）
+⑥‐①_BEGIN.BATのSET I_VER_C=?.?.?を最新バージョンに変更。
+⑦Qtの最新版をUbutuの/home/ubuntu/Qt?.?.?にインストールする。
 ⑧I言語をシステム名I37ORGでインストールする。
 ⑨..\i-dowloadディレクトリを作り下記ファイルをダウンロードします。
-(★注意★JDBCのバージョンが変わった場合は、SET_I.TXT内のバージョンを変更して下さい)
+★JDBCのバージョンが変わった場合は、_VAR.TXT内のバージョンを変更して下さい。
 ⑨‐①Obfuscar.Console.exe　(C#難読化ソフト）
 ⑨‐②jna.jar　        (Java用COMライブラリ1/2,★注意★バージョン部分を取ってリネームします)
 ⑨‐③purejavacomm.jar (Java用COMライブラリ2/2)
-⑨‐④db2jcc4.jar                   (IBM DB2 JDBC,最新)
-⑨‐⑤mariadb-java-client-2.7.3.jar (MariaDB JDBC,最新)
-⑨‐⑥ojdbc7.jar                    (Oracle JDBC,最新)
-⑨‐⑦postgresql-42.2.18.jar        (PostgeSQL JDBC,最新)
-⑨‐⑧sqljdbc42.jar　               (SQL Server JDBC,最新)
+⑨‐④db2jcc4.jar                   (I IBM DB2 JDBC,最新)
+⑨‐⑤mariadb-java-client-3.4.0.jar (L MariaDB JDBC,最新)
+⑨‐⑥ojdbc11.jar                   (O Oracle JDBC,最新)
+⑨‐⑦postgresql-42.7.2.jar         (P PostgeSQL JDBC,最新)
+⑨‐⑧mssql-jdbc-12.6.0.jre11.jar   (M SQL Server JDBC,最新)
 ******************************************************************************
 (2)I言語修正時のインストールファイル作成操作手順
 ①*.SRCのソース変更,同名のBATファイル起動でコンパイルしエラーを確認。
 ②システム支援メニュー関連はシステム名「I37ORG」のI言語サーバーで修正。
+(1)ZZZZ010137で、キー1=ZZZZZ_URL_VERSION、キー2＝＃D、コメントのカンマの右を最新バージョンに変更(x.x.x)
+(2)ZZZZ010137で、キー1=ZZZZZ_@、キー2＝ZZZZZZ_VERSION2、ETCデータ及びコメントの２か所を最新バージョンに変更（111122333）
 ③バージョンアップした場合。
-③ー①II_VERSION.ORG及びII_VERSION.SRCのVERSION2=?を変更。
-③ー②_BEGIN.BATの=SET{I_VER2=?}; 変更。
+③ー①II_VERSION.ORGのVERSION2=?を変更。
+③ー②_BEGIN_VER2.BATの上位３か所を変更。（３カ所目はSDK)
 ☆IPRINT.CRSバージョンアップ（VERSION=の変更）した場合は
 =SET{II_VERSION.CSのVERSION2=?を変更'};  IPRINT用*を最新バージョンに修正する。
 ④11_readme37.batを実行し、修正内容を書き込む。
@@ -36,7 +41,6 @@
 　ランタイムが無いと動かない再コンパイルをします）
 （注意：難読化されていない状態を作ります）
 ⑦00_BACKUP.BAT必ずバックアップを取ります。
-
 ******************************************************************************
 (2)「I言語ホームページ」を修正する手順。（ホームページファイル分、残りはI5IISで開発してある）
 ①c:\inetpub\wwwroot\内を修正しデスクトップ及びFFTPでFC2サーバーに転送する。（ノートPC内がオリジナル）

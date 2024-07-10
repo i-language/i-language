@@ -7,15 +7,15 @@ BEGIN
 =SET{WC.HOME=_OS_DRIVE+_P+'I'};
 =SET{WC.BIN=WC.HOME+_P+'BIN'+_IV};
 =SET{WC.TMP=WC.HOME+_P+'TMP'};
-******( JDBC JAR NAME )*******************************************
+******( ★中止★ JDBC JAR NAME _VAR.TXTで対応)*******************************************
 *=SET{WC.JAR_D='jaybird-full-3.0.9.jar'};
 *=SET{WC.JAR_F='fjsymjdbc.jar'};
 *=SET{WC.JAR_H='pdjdbc.jar'};
-=SET{WC.JAR_I='db2jcc4.jar'};
-=SET{WC.JAR_L='mariadb-java-client-2.7.3.jar'};
-=SET{WC.JAR_M='sqljdbc42.jar'};
-=SET{WC.JAR_O='ojdbc7.jar'};		
-=SET{WC.JAR_P='postgresql-42.2.18.jar'};
+*=SET{WC.JAR_I='db2jcc4.jar'};
+*=SET{WC.JAR_L='mariadb-java-client-3.4.0.jar'};
+*=SET{WC.JAR_M='mssql-jdbc-12.6.0.jre11.jar'};
+*=SET{WC.JAR_O='ojdbc11.jar'};		
+*=SET{WC.JAR_P='postgresql-42.7.2.jar'};
 ******( ★中止★ DLL VER )**********************************************
 *=SET{WC.DLL_VER_D1='7.1.1'};
 *=SET{WC.DLL_VER_L1='8.0.20'};
