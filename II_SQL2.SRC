@@ -639,6 +639,10 @@ return sql2_rc;
 //JJ     sql2_z_p.err_s=sql2_z_p.substring2_s(e_ni.getMessage(),7); //VER26.1
 //SS //P sql2_z_p.db_error_s=""+sql2_z_p.db_c+sql2_z_p.substring3_s(e_ni.Message,0,5); //VER26.1
 //JJ     sql2_z_p.db_error_s=""+sql2_z_p.db_c+e_ni.getSQLState();
+//HP     if(sql2_z_p.e2s_b(sql2_z_p.db_error_s,"P1")) //VER37.8.0.8
+//HP       {int qodbc=sql2_z_p.index2s_i(sql2_z_p.err_s," QODBC:"); //VER37.8.0.8
+//HP        sql2_z_p.db_error_s="P"+sql2_z_p.substring3_s(sql2_z_p.err_s,qodbc-5,5); //VER37.8.0.8
+//HP       }  //VER37.8.0.8
 //JP_P if     (sql2_z_p.e4s_b(sql2_z_p.db_error_s,"P42710","P42P06","P42P07"))sql2_z_p.db_i_error_s="EXIST";
 //JP_P else if(sql2_z_p.e5s_b(sql2_z_p.db_error_s,"P3F000","P42704","P42883","P42P01"))sql2_z_p.db_i_error_s="NOT_EXIST";
 //JP_P else if(sql2_z_p.e2s_b(sql2_z_p.db_error_s,"P23505"))sql2_z_p.db_i_error_s="DUPLICATE_KEY";

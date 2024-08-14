@@ -32,6 +32,7 @@
 #include <QUdpSocket> //VER37_8.0.4
 #if W
 #include <tchar.h>
+#include <windows.h>
 #endif
 #include <math.h>
 #endif // II_INCLUDE_H

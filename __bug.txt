@@ -1,7 +1,7 @@
-●Ctrl+BackSpaceが動かない。
 MONO--Windows.Formsが新.NETに移行されないので開発中止、将来MAUIでの再構築が必要。
-Qt---WSLのUBUNTUでコンパイル出来ない。(libQt6Core.so.6: cannot open shared object file: No such file or directory)
-QtSQL--OracleでORDER BYが正しく動かない場合が有る。 (ZZZZ010328でFETCHエラー）
-QtSQL--PostgreSQLでRDBのエラーコードが受け取れない。(ZZZZ010327でテーブル無エラー）
-QtSQL--DB2で占有ロックのSELECT文がエラーで動かない。(ZZZZ010321で削除できず)
+QtSQL--DB2でトランザクション中の占有ロックのSELECT文がエラーとなり動かない。(ZZZZ010321で削除できず)
+★済★●Ctrl+BackSpaceが動かない。
+★済★[Qt6.7.2で改善]Qt---WSLのUBUNTUでコンパイル出来ない。(libQt6Core.so.6: cannot open shared object file: No such file or directory)
+★済★[Qt6.7.2で改善]QtSQL--OracleでORDER BYが正しく動かない場合が有る。 (ZZZZ010328でFETCHエラー）
+★済★[I言語VER37.8.0.8で対応]QtSQL--PostgreSQLでRDBのエラーコードが受け取れない。(ZZZZ010327でテーブル無エラー）
 
