@@ -510,7 +510,7 @@ void caret_set_v(){try{if( null != z_mt_n.program_p)z_mt_n.program_p.keyboard_n.
 //JJ public void keyPressed(KeyEvent e_ni)
 {z_p.t_v(z_p.ME,"key_Press(");
 //JJ if(1==sw_popup_menu)imenu_p.repaint();
-if(0==z_mt_n.sw_keyboard){z_p.beep_v();return;} 
+if(0==z_mt_n.sw_keyboard){z_p.beep_v();return;} //キーボード入力指示無い時は無視。
 z_mt_n.sw_keyboard=2;
 // z_p.console_write_v("imenu/1,sw_keyboard=2");
 z_p.t_v(z_p.ME2,"z_mt_p.sw_keyboard=2;KeyPress()");

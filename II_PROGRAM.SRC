@@ -3753,7 +3753,7 @@ for(i=0;(z_p.prog_n.i+i_ii+i)<z_p.length(z_p.prog_s_n.s);i++)
    else break;//空白,'+','-'以外が有る場合は対象外と判定。
 return 0;//対象外の判定
 }
-//----------------------------------------------
+//---（前のプログラムを探す　)-------------------------------------------
 bool set_old_data_data_b(String name_si)
 {int i;
 da_set_data_data_p= null ;set_data_data_s="";set_data_type_c=' ';

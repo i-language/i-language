@@ -1,9 +1,8 @@
-using Microsoft.Maui.Controls;
-    public class Program
-    {
-        static void Main(string[] args)
-        {
-         bool anser_b=await DisplayAlert("title","message","Yes","No");
-        }
-    }
+//public class Program
+//{
+//static void Main()
+//{
+System.Console.WriteLine("hello world");
+//}
+//}
 

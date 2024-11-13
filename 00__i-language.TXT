@@ -31,7 +31,7 @@
 (2)ZZZZ010137で、キー1=ZZZZZ_@、キー2＝ZZZZZZ_VERSION2、ETCデータ及びコメントの２か所を最新バージョンに変更（111122333）
 ③バージョンアップした場合。
 ③ー①II_VERSION.ORGのVERSION2=?を変更。
-③ー②_BEGIN_VER2.BATの上位３か所を変更。（３カ所目はSDK)
+③ー②_BEGIN_VER2.BATの３か所を変更。（３カ所目はSDK)
 ☆IPRINT.CRSバージョンアップ（VERSION=の変更）した場合は
 =SET{II_VERSION.CSのVERSION2=?を変更'};  IPRINT用*を最新バージョンに修正する。
 ④11_readme37.batを実行し、修正内容を書き込む。

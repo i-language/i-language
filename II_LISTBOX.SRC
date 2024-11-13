@@ -123,7 +123,8 @@ else if(Keys.PageUp==Keys_ni) //PageUp
  {cnt=(--now_cnt)*offset;
   if(0>cnt){cnt=z_p.count_s_i(s_data_a)-offset;now_cnt=cnt/offset;}
  }
-else if(Keys.Enter==Keys_ni||Keys.Tab==Keys_ni||Keys.Down==Keys_ni)return set_b(Keys_ni);
+// else if(Keys.Enter==Keys_ni||Keys.Tab==Keys_ni||Keys.Down==Keys_ni)return set_b(Keys_ni); // VER37.8.0.9
+else if(Keys.Enter==Keys_ni||Keys.Tab==Keys_ni||Keys.Down==Keys_ni||z_mt_p.program_p.skip_cnt!=-1)return set_b(Keys_ni); // VER37.8.0.9
 else {set_index_v(0);return set_b(Keys.None);}
 if(!z_p.e2s_b(z_p.at_s(s_data_a,now_cnt),"\0"))set_index_v(now_cnt);
 else return true;

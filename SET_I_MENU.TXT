@@ -225,6 +225,7 @@ JA	ZZZZ	01	03	29	INPUT	ZZZZ	ZZ	X							トランザクション処理1
 JA	ZZZZ	01	03	30	OUTPUT	ZZZZ	ZZ	X							トランザクション処理2
 JA	ZZZZ	01	03	31	INPUT	ZZZZ	ZZ	A							和暦-西暦テーブル作成(最初)
 JA	ZZZZ	01	03	32	INPUT	ZZZY	ZZ	X							和暦-西暦変換(年月補正非対応)
+JA	ZZZZ	01	03	33	INPUT	ZZZY	ZZ	X							麻雀サーバー同期
 JA	ZZZZ	01	03	34	INPUT	ZZZZ	ZZ	A							麻雀テーブル作成    (最初)
 JA	ZZZZ	01	03	35	INPUT	ZZZY	ZZ	X							麻雀参加者更新      (準備1/2)
 JA	ZZZZ	01	03	36	INPUT	ZZZY	ZZ	X							麻雀点数表作成      (準備2/2)

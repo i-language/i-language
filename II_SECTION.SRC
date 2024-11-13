@@ -26,6 +26,7 @@ ii_z_l z_p;ii_z_mt_l z_mt_p;ii_zz_l w_cmd_s_n;ii_zz_l w_s_n;
 readonly int CONTINUE_IF_M1=-1,CONTINUE_NORMAL_0=0,SKIP_NORMAL_1=1,SKIP_IF_2=2,IF_ERROR_3=3; //VER17
 ii_data_l w_data_n;ii_read_l read_n;
 bool sw_counter_b=true,sw_e_program_b,sw_p_program_b,sw_n_program_b,sw_data_b=false;
+bool sw_0_program_b; //VER37_8.0.9
 int counter=1,counter_len_0=1,counter_len_m=1,counter_len_p=1
 ,counter_len_old_0=1,counter_len_old_m=1,counter_len_old_p=1,edit=0,prog_cmd=0,sw_continue=0,sw_if_error=0,sw_jump_null=0,cnt_back_null=0;  //VER17
 readonly String[] RESERV_SX?=?   {"_DRIVE_FREE","_DRIVE_TYPE","_PART","_JOB_PART","_JOB_PERMISSION","_SQL_PERMISSION","_WMI","_CLICK","_CODE","_CODE39"
@@ -104,11 +105,13 @@ bool sw_program2_b=true;if(z_p.e2s_b(cmd2_s,"PROGRAM2"))sw_program2_b=false;
 z_mt_p.program_p.sql_cnt_ix[sql_cnt]=0;
 sql_s="SELECT "+(('0'!=z_p.at_s_c(opt1_si,0)||(z_p.e2s_b(z_p.trim_s(z_p.at_s(s_work_data_a,0)),"")&&1==z_p.count_s_i(s_work_data_a)))?
      (sw_program2_b?"Z_CANCEL":"' '"):sql_data_s("",",",s_work_data_a))
-+" FROM "+opt3_si+" "+z_mt_p.db_n.lock1_s  //VER37.6.0.17
+// +" FROM "+opt3_si+" "+z_mt_p.db_n.lock1_s  //VER37.6.0.17 //VER37_8.0.9
+   +" FROM "+opt3_si+" "+(true==sw_0_program_b?"":z_mt_p.db_n.lock1_s)  //VER37.6.0.17 //VER37_8.0.9
           +(z_p.e2s_b(opt4_si,"")?"":sql_data_s(" WHERE "," AND ",s_work_key_a,"=",s_key_a))+where_s
 
           +(('0'==z_p.at_s_c(opt1_si,0)||sw_p_program_b)&&sw_program2_b?(z_p.e2s_b(opt4_si,"")&&z_p.e2s_b(opt5_si,"")?" WHERE":" AND")+z_p.DUMMY_S
-          +" Z_CANCEL=' '":"")+z_mt_p.db_n.lock2_s;
+//          +" Z_CANCEL=' '":"")+z_mt_p.db_n.lock2_s; //VER37_8.0.9
+            +" Z_CANCEL=' '":"")+(true==sw_0_program_b?"":z_mt_p.db_n.lock2_s); //VER37_8.0.9
 if(0!=z_mt_p.sql_n.sql_usr2(sql_s,usr_s))return 1; 
 z_mt_p.program_p.sql_record_cnt_ix[sql_cnt]=z_p.db_record_cnt;
 //===( 0＝検索処理 )*****
@@ -1306,7 +1309,8 @@ for(;CONTINUE_17>=sw;)//CONTINUE_17(17)>=swの場合のみ繰り返す。（ABOR
                 if     (z_p.e2s_b(w_s," ")){w_ss=z_mt_p.sql_char_s(w_ss);}
                 else if(z_p.e2s_b(w_s,"/")){w_ss=z_mt_p.sql_nchar_s(w_ss);}
                 else if(z_p.e2s_b(w_s,"E")){w_ss=z_mt_p.sql_char_s(z_p.date_time_edit_s(w_ss,2));}
-                else                      {w_ss="0";}
+////            else                      {w_ss="0";}// VER37.8.0.9
+                else                      {if(z_p.e2s_b(w_ss,""))w_ss="0";} // VER37.8.0.9
                 sql_s+=sep_s+w_ss;
                 sep_s=",";
                }
@@ -1931,6 +1935,7 @@ else if(z_p.e2s_b(s,"READ_OPEN"))
         {if('M'==z_mt_p.program_c){sw=ABORT_MENU_23;continue;}
          if(CONTINUE_NORMAL_0!=sw_skip){sw=LOOP_2;continue;}  //スキップ中 
          sw_e_program_b=sw_p_program_b=sw_n_program_b=false;
+         sw_0_program_b=false; //VER37_8.0.9
          if(2>z_p.count_sx_i(opt1_sx)){rc=z_p.SW_ERROR_5;sw=CHECK_RC_10;z_p.err_s="under patameter count < 2";continue;}
          if(-1!=z_p.index2c_i(opt1_sx[1],' ')||z_p.e2s_b(opt1_sx[1],""))
              {rc=z_p.SW_ERROR_5;sw=CHECK_RC_10;z_p.err_s="patameter2 is null";continue;}
@@ -1952,6 +1957,7 @@ else if(z_p.e2s_b(s,"READ_OPEN"))
             if     ('E'==z_p.at_s_c(opt1_sx[0],i)&&'0'!=z_p.at_s_c(opt1_sx[0],0))sw_e_program_b=true;
             else if('P'==z_p.at_s_c(opt1_sx[0],i)&&z_p.e3c_b(z_p.at_s_c(opt1_sx[0],0),'1','3'))sw_p_program_b=true;
             else if('N'==z_p.at_s_c(opt1_sx[0],i))sw_n_program_b=true;
+            else if('0'==z_p.at_s_c(opt1_sx[0],i))sw_0_program_b=true; //VER37_8.0.9
             else {z_p.err_s="operand1 {"+z_p.to_c_s(z_p.at_s_c(opt1_sx[0],i))+"} error";rc=z_p.SW_ERROR_5;sw=CHECK_RC_10;sw_continue_b=true;break;}
          if(true==sw_continue_b)continue; 
          if(!z_p.e2s_b(opt2_s,""))
@@ -2184,6 +2190,7 @@ else if(z_p.e2s_b(s,"READ_OPEN"))
         {if('M'==z_mt_p.program_c){sw=ABORT_MENU_23;continue;}
          if(CONTINUE_NORMAL_0!=sw_skip){sw=LOOP_2;continue;}  //スキップ中 
          sw_e_program_b=sw_p_program_b=sw_n_program_b=false;
+         sw_0_program_b=false; //VER37_8.0.9
          opt3_s=z_p.trim_s(opt3_s); 
          if(-1!=z_p.index2c_i(opt3_s,' ')||z_p.e2s_b(opt3_s,"")){sw=ABORT_TABLE_SPACE_21;continue;}
          if(z_p.e2s_b(opt4_s,"")&&'0'!=z_p.at_s_c(opt1_s,0)){sw=ERROR_OPT4_NULL_14;continue;}
@@ -2205,6 +2212,7 @@ else if(z_p.e2s_b(s,"READ_OPEN"))
             if     ('E'==z_p.at_s_c(opt1_s,i)&&'0'!=z_p.at_s_c(opt1_s,0))sw_e_program_b=true;
             else if('P'==z_p.at_s_c(opt1_s,i)&&z_p.e3c_b(z_p.at_s_c(opt1_s,0),'1','3'))sw_p_program_b=true;
             else if('N'==z_p.at_s_c(opt1_s,i))sw_n_program_b=true;
+            else if('0'==z_p.at_s_c(opt1_s,i))sw_0_program_b=true; //VER37_8.0.9
             else {z_p.err_s="operand1 {"+z_p.to_c_s(z_p.at_s_c(opt1_s,i))+"} error";rc=z_p.SW_ERROR_5;sw=CHECK_RC_10;sw_continue_b=true;break;}
          if(true==sw_continue_b)continue; 
          if(!z_p.e2s_b(opt4_s,""))

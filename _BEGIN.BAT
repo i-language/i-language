@@ -1,19 +1,16 @@
 @ECHO OFF
-REM ===( I_...環境変数設定 )===
-REM ===( 最新バージョンを設定 )===
-CALL _BEGIN_VER2.BAT
+REM ===( SET_ZIP 開始処理 )====
+REM ===( 最新バージョンを設定 )============================
+REM ===( I言語 VER1 )===
 SET I_VER=I37
-SET I_VER_J=22
-rem SET I_VER_C=6.4.3
-rem SET I_VER_C=6.5.2
+REM ===( I言語 VER2 )===
+CALL _BEGIN_VER2.BAT
+REM ===( Java )===
+SET I_VER_J=23
+REM ===( Qt(C++) )===
 rem SET I_VER_C=6.6.3
-SET I_VER_C=6.7.2
-REM ===( MONO mono使用中 )==========
-SET I_MONO_SW=YES
-REM ===( QtはODBC接続のみでsa接続が出来ないので、サーバー構築は保留中 )===
-SET I_QT_SERVER_SW=NO 	
-REM ===( I_DB 5 RDBMS )=============
-SET I_DB=;M;I;L;O;P
+rem SET I_VER_C=6.7.3
+SET I_VER_C=6.8.0
 REM ===( dir )===
 SET I_DIR_J=%SystemDrive%
 rem SET I_DIR_WC=%SystemDrive%
@@ -22,12 +19,20 @@ rem SET I_DIR_WC1=mingw81_64
 SET I_DIR_WC1=mingw_64
 rem SET I_DIR_WC2=mingw810_64
 rem SET I_DIR_WC2=mingw900_64
-SET I_DIR_WC2=mingw1120_64
+rem SET I_DIR_WC2=mingw1120_64
+SET I_DIR_WC2=mingw1310_64
 rem SET I_DIR_UD=/opt
 SET I_DIR_UD=/home/ubuntu/Qt%I_VER_C%
 rem SET I_DIR_UC=/opt
 SET I_DIR_UC=/home/ubuntu/Qt%I_VER_C%
 SET I_DIR_UC1=gcc_64
+REM =====================================================
+REM ===( MONO 使用中 ただし、コンパイルは保留中 )==========
+SET I_MONO_SW=YES
+REM ===( Qtはサーバー構築は保留中 )===
+SET I_QT_SERVER_SW=NO 	
+REM ===( I_DB 5 RDBMS )=============
+SET I_DB=;M;I;L;O;P
 REM ====( e.t.c )==================================
 SET I_XCOPYF=XCOPY /C /D /H /I /K /R /V /Y
 SET I_XCOPYD=%I_XCOPYF% /E
@@ -42,7 +47,7 @@ REM SET I_JAVA=C:\Program Files\Java\jdk-%I_VER_J%\bin
 SET I_JAVA=C:\jdk-%I_VER_J%\bin
 SET I_JAVAC=%I_JAVA%\javac.exe
 SET I_JAR="%I_JAVA%\jar.exe"
-REM ===( Qt 当面開発中止　)=============================
+REM ===( C++(Qt) )=============================
 IF "%I_VER_C%"=="" GOTO SKIP-C
 rem SET I_QT_DIR=%SystemDrive%\QT\%I_VER_C%
 SET I_QT_DIR=%SystemDrive%\QT%I_VER_C%\%I_VER_C%
