@@ -557,8 +557,7 @@ for(i=0;i<name_sx.Length;i++)
         if(def_s.StartsWith("ICH"))
            write_v("    <PackageReference Include=\"System.Windows.Forms.DataVisualization\" Version=\"1.0.0-prerelease.20110.1\" />");
         if(def_s.StartsWith("IME")||def_s.StartsWith("IT"))
-          {write_package_v("System.Data.SqlClient","*");
-           //write_v("    <PackageReference Include=\"System.Data.SqlClient\" Version=\"4.8.1\" />");
+          {write_package_v("Microsoft.Data.SqlClient","*"); //VER37.8.0.12
            write_package_v("System.Data.Odbc","*");
            //write_v("    <PackageReference Include=\"System.Data.Odbc\" Version=\"4.7.0\" />");
           //// if(-1!=define_s.IndexOf("D"))write_v("    <Reference Include=\"FirebirdSql.Data.FirebirdClient\"><HintPath>"+dll_s+"FirebirdSql.Data.FirebirdClient.dll</HintPath></Reference>");

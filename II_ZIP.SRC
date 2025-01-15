@@ -11,7 +11,7 @@
 //JJ import java.io.*;
 //JJ import java.math.*;
 //JJ import java.util.*;
-//SS using System.Data.SqlClient;
+//SS using Microsoft.Data.SqlClient; //VER37.8.0.12
 public class ii_zip_l
 {
 //COPY *BEGIN

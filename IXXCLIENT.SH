@@ -11,13 +11,14 @@ else
   if test ! -d /home/I      ;then mkdir /home/I;fi
   if test ! -d /home/I/TMP  ;then mkdir /home/I/TMP;fi
   if test ! -d /home/I/BIN$1;then mkdir /home/I/BIN$1;fi
-  cp -r BIN$1/*.*   /home/I/BIN$1
-  cp -r BIN$1$8/*.* /home/I/BIN$1
-  cp -r CLIENT/$5   /home/I/BIN$1
-  chmod 777 /home/I/TMP
-  chmod 777 /home/I/BIN$1
-  chmod 777 /home/I/BIN$1/*.*
 fi
+cp -r BIN$1/*.*   /home/I/BIN$1
+cp -r BIN$1$8/*.* /home/I/BIN$1
+cp -r CLIENT/$5   /home/I/BIN$1
+chmod 777 /home/I/TMP
+chmod 777 /home/I/BIN$1
+chmod 777 /home/I/BIN$1/*.*
+
 # Oracle Run     
 #oracle=""
 #grep '^.*	.*	.*	O1.*	.*	.*	.*	.*	.*$' /home/I/BIN$1/$5 >/dev/null

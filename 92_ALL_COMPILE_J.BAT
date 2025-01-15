@@ -44,7 +44,7 @@ rem del /q ..\%I_VER%_JAVA\*.*
 rem if exist \linux_bini11 %I_XCOPYD% ..\%I_VER%_EXE\IJAVA.j* \linux_bini11 
 rem if exist \windows_bini11 %I_XCOPYD% ..\%I_VER%_EXE\IJAVA.j* \windows_bini11 
 rem if exist %SystemDrive%\I\SHARE\LINUX\BIN%I_VER% %I_XCOPYD% ..\%I_VER%_EXE\IJAVA.j* %SystemDrive%\I\SHARE\LINUX\BIN%I_VER%
-rem java.exe -cp c:\I\BIN%I_VER%\sqljdbc4.jar;%SystemDrive%\I\BIN%I_VER%\IJAVA.jar imenu_l JA 30/600 I_NOBUMICHI-PC_%I_VER%ORG.I ZZZZ
+rem java.exe -cp c:\I\BIN%I_VER%\sqljdbc4.jar;%SystemDrive%\I\BIN%I_VER%\IJAVA.jar imenu_l JA 30/600 I_%COMPUTERNAME%_%I_VER%ORG.I ZZZZ
 rem start c:\I\BIN\IPRINTW4.EXE
 :fin2
 IF "%1"=="" PAUSE

@@ -1,3 +1,3 @@
 @echo off
-find  "I.IC" *.* > __FIND.TMP 
+find  "NOBUMICHI-PC" *.* > __FIND.TMP 
 start notepad __FIND.TMP

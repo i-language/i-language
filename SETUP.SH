@@ -45,7 +45,7 @@ else
 fi
 if test "$2" = "JAVA";then
   java -cp $I_BIN/purejavacomm.jar:$I_BIN/jna.jar:$I_BIN/IJAVA.jar imenu_l $1 30/600 SET_I.TXT SET_JAVA.TXT
-  java -cp $I_BIN/purejavacomm.jar:$I_BIN/jna.jar:$I_BIN/IJAVA.jar imenu_l $1 30/600 SET_I.TXT SET_BEGIN.TXT SET_DB_P.TXT SET_DB_M.TXT SET_DB_I.TXT SET_DB_O.TXT SET_DB_L.TXT SET_END.TXT
+# java -cp $I_BIN/purejavacomm.jar:$I_BIN/jna.jar:$I_BIN/IJAVA.jar imenu_l $1 30/600 SET_I.TXT SET_BEGIN.TXT SET_DB_P.TXT SET_DB_M.TXT SET_DB_I.TXT SET_DB_O.TXT SET_DB_L.TXT SET_END.TXT
 else 
   mono $I_BIN/IMENUU4.EXE $1 30/600 SET_I.TXT SET_BEGIN.TXT SET_DB_P.TXT SET_DB_M.TXT SET_DB_I.TXT SET_DB_O.TXT SET_DB_L.TXT SET_END.TXT
 fi

@@ -4,13 +4,14 @@ REM ===( 最新バージョンを設定 )============================
 REM ===( I言語 VER1 )===
 SET I_VER=I37
 REM ===( I言語 VER2 )===
-CALL _BEGIN_VER2.BAT
+CALL _BEGIN_VER2.BAT 
+rem SET I_VER_J=23
 REM ===( Java )===
-SET I_VER_J=23
+SET I_VER_J=21.0.2
 REM ===( Qt(C++) )===
 rem SET I_VER_C=6.6.3
 rem SET I_VER_C=6.7.3
-SET I_VER_C=6.8.0
+SET I_VER_C=6.8.1
 REM ===( dir )===
 SET I_DIR_J=%SystemDrive%
 rem SET I_DIR_WC=%SystemDrive%

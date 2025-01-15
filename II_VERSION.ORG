@@ -3,7 +3,7 @@
 //#if IMENU||ITIME||IPRINT||ICHART||ICHART2||IROOT||ISRVC||ISETUP||IPAPER //TEST
 //HH #include "ii_include_hh.h"
 //PP #include "ii_include_pp.h"
-//SS using System.Data.SqlClient;
+//SS using Microsoft.Data.SqlClient; //VER37.8.0.12
 //SS using System;
 //SS using System.Collections.Generic;
 //SS using System.Drawing;
@@ -18,7 +18,7 @@ public class ii_version_l
 //####################( IMENU,ITIMEのバージョンアップ時変更 )###############
 //###★注意：変更時オリジナルのZZZZZZ_ETC_TABLE,ZZZZZZ_@,ZZZZZZ_VERSION2を変更しインストール環境を再構築する事。###
 //#I言語のバージョン2      (I37用)(111122333) #####
-public readonly String VERSION2_S="000800011";
+public readonly String VERSION2_S="000800012";
 //############################################################################
 public readonly int VERSION1=37; //i-language Version(37)
 //#########( IPRINTのバージョンアップ時変更の事 )###########################

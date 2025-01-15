@@ -4,7 +4,7 @@
 //=***( クラスリスト（全行分リストで構成）作成 )*****************
 //HH #include "ii_include_hh.h"
 //PP #include "ii_include_pp.h"
-//SS using System.Data.SqlClient;
+//SS using Microsoft.Data.SqlClient; //VER37.8.0.12
 //SS using System;
 //SS using System.Collections.Generic;
 //SS using System.IO;
@@ -65,7 +65,7 @@ public void remove_v(int y_ii)
 //=****( pa_paint_aに追加 )*****
 public void add_v(String data_si,int y_ii,int x_ii,int length_ii,String font_si,Font Font_ni,Brush Brush_ni)
 {int i;
-data_si=paint_list_z_p.replace_rn_s(paint_list_z_p.replace_c_s(data_si,'\t','?'),'?');
+data_si=paint_list_z_p.replace_rn_s(paint_list_z_p.replace_c_s(data_si,'\t','?'),'?'); 
 for(i=0;paint_list_z_p.count_pa_i(pa_paint_a)>i;i++)
   {ii_paint_l paint_n=paint_list_z_p.at_pa(pa_paint_a,i);
    if(y_ii>paint_n.y||(y_ii==paint_n.y&&x_ii>paint_n.x))continue;//y,xの小さい順の位置まで繰り返す

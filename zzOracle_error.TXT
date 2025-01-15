@@ -1,3 +1,10 @@
+Oracle 23ai Free を普通にインストールするとエラーとなるので事前に次の作業をしてからインストールします
+1)管理者権限のコマンドプロンプトを立ち上げる
+2)「mkdir c:\app」でディレクトリを作ります。
+2)「icacls c:\app /inheritancelevel:d」で継承を無効にします。
+3)「icacls c:\app /remove:g *s-1-5-11」でAuthenticated Users権限を削除します。
+4)インストールします。
+*************************
 startup◎リスナーが接続を一切拒否するエラーの対応方法。
 1)SQLコマンドラインの実行を起動。
 2)conn / as sysdba

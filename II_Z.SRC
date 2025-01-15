@@ -3,7 +3,7 @@
 //#if IMENU||ITIME||ISRVC||ICHART||IPRINT||ISETUP||IPAPER||ICHART2||IROOT||ITEST
 //HH #include "ii_include_hh.h"
 //PP #include "ii_include_pp.h"
-//SS using System.Data.SqlClient;
+//SS using Microsoft.Data.SqlClient; //VER37.8.0.12
 //SS using System;
 //SS using System.Collections.Generic;
 //SS using System.IO;
@@ -412,7 +412,7 @@ public String to_o_s(double oi)
 //JJ di.toString();
 //SJ }
 public String replace_c_s(String si,char before_ci,char after_ci)
-{return 
+{return  
 //SS si.Replace(before_ci,after_ci);
 //JP si.replace(before_ci,after_ci);
 }
@@ -1352,14 +1352,14 @@ public int command2(String s_si,String s2_si)//passwd処理の場合s2_siにパ�
 //JJ int i=0;
 if('W'==os_c)rc_rc=process("cmd","/c "+s_si,s2_si,true);  //ver18.1
 else {
-//SJ  rc_rc=process("sh","-c \""+s_si+"\"",s2_si,true);  //SS   //ver18.1 //VER36.6.0.3
+//SJ  rc_rc=process("sh","-c \"\""+s_si+"\"\"",s2_si,true);  //SS   //ver18.1 //VER36.6.0.3　//VER37.8.0.12
 ////JJ  try{
 ////JJ     Process process_n=Runtime.getRuntime().exec(s_si);
 ////JJ     is_n=process_n.getInputStream(); 
 ////JJ     es_n=process_n.getErrorStream();
 ////JJ     os_n=process_n.getOutputStream();
 ////JJ     command_i_s="";command_e_s="";
-////JJ     try 36.{Runnable or_n=new Runnable()
+////JJ     try{Runnable or_n=new Runnable()
 ////JJ              {public void run()
 ////JJ                 {String ss;		
 ////JJ                  try{p_n=new PrintStream(os_n);
@@ -1865,7 +1865,7 @@ s2_si=replace_rn_s(s2_si,' ');
 //JJ             {public void run()
 //JJ                {String ss;		
 //JJ                 try{p_n=new PrintStream(os_n);
-//JJ                     p_n.println(s3_si);
+//JJ                     p_n.println(s3_si);  //標準入力よりpassword 2回入力
 //JJ                     p_n.println(s3_si);
 //JJ                     p_n.close();
 //JJ                    }catch (Exception e_ni){}
@@ -1875,8 +1875,8 @@ s2_si=replace_rn_s(s2_si,' ');
 //JJ             {public void run()
 //JJ                {String ss;		
 //JJ                 try{ib_n=new BufferedReader(new InputStreamReader(is_n,('W'==os_c?"SHIFT_JIS":"UTF-8")));
-////JJ                     for(; null !=(ss=ib_n.readLine());)command_i_s+=ss+" "; //VER36.6.0.3
-//JJ                     for(; null !=(command_i_s=ib_n.readLine());)console_write_v(command_i_s); //VER36.6.0.3
+////JJ             　    for(; null !=(ss=ib_n.readLine());)command_i_s+=ss+" "; //VER36.6.0.3
+//JJ                     for(; null !=(ss=ib_n.readLine());){command_i_s+=ss+" ";console_write_v(ss);} //VER36.6.0.3  //VER37.8.0.12
 //JJ                    }catch (Exception e_ni){}
 //JJ                }
 //JJ             };
@@ -1884,15 +1884,15 @@ s2_si=replace_rn_s(s2_si,' ');
 //JJ             {public void run()
 //JJ                {String ss;		
 //JJ                 try{eb_n=new BufferedReader(new InputStreamReader(es_n,('W'==os_c?"SHIFT_JIS":"UTF-8")));
-/////JJ                     for(; null !=(ss=eb_n.readLine());)command_e_s+=ss+" ";//VER36.6.0.3
-//JJ                     for(; null !=(command_e_s=eb_n.readLine());)console_write_v(command_e_s); //VER36.6.0.3
+/////JJ                  for(; null !=(ss=eb_n.readLine());)command_e_s+=ss+" ";//VER36.6.0.3
+//JJ                     for(; null !=(ss=eb_n.readLine());){command_e_s+=ss+" ";console_write_v(ss);} //VER36.6.0.3 //VER37.8.0.12
 //JJ                    }catch (Exception e_ni){}		
 //JJ                }
 //JJ             };
 //JJ           it_n=new Thread(ir_n);et_n=new Thread(er_n);
 //JJ           if(!e2s_b(s3_si,"")){ot_n=new Thread(or_n);ot_n.start();}
 //JJ            Process_n.waitFor();it_n.start();et_n.start();
-//JJ            Process_n.waitFor();it_n.join(); et_n.join();
+//JJ            Process_n.waitFor();it_n.join();et_n.join(); 
 //JJ            Process_n.destroy();
 //JJ           }catch (Exception e_ni) {}    
 //JJ        if( null !=ib_n){ib_n.close();ib_n= null ;}
@@ -1903,10 +1903,14 @@ s2_si=replace_rn_s(s2_si,' ');
 //JJ        int i=Process_n.exitValue();
 //JJ        if(0<i){err_s=command_e_s;return 5;} //VER 36.0.3
 //JJ    }
-if(true==b_bi)
+if(true==b_bi){
 //HP  process_nn.waitForFinished();
 //SS  Process_n.WaitForExit();
 //JJ  Process_n.waitFor();
+//SS  int rc=Process_n.ExitCode;  //VER37.8.0.12
+//HP  int rc=process_nn.exitCode(); //VER37.8.0.12
+//SP  if(rc!=0){err_s="Exit Code="+rc;return 5;}  //VER37.8.0.12 
+              }
 //SJ    }catch(Exception e_ni){err_s=message_s(e_ni);return 5;}
 return 0;
 }

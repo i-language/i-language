@@ -9,9 +9,10 @@ ECHO　　　　　.NETのランタイムが同じで有る必要があります。尚、運用が大変ですので
 ECHO ★注意★RDBMSのMicrosoft SQL Server(推奨),IBM DB2,Oracle,PostgreSQL,MariaDBのどれか一つを
 ECHO         このユーザーIDで事前にインストールしておく必要が有ります。
 ECHO         RDBMSをインストールしてない場合はこの処理を閉じてインストール後に再度起動して下さい。
-ECHO       （この画面はRDBMSの環境変数が未設定で、続行するとインストール出来ない可能性が有ります）
-
-IF EXIST --SELF-CONTAINED.--SELF-CONTAINED GOTO NOTNET_OK
+ECHO       （RDBMSがインストールされていない場合はこの画面は必ず閉じて下さい）
+ECHO ★注意★Microsoft SQL Serverが暗号化対応されている場合の対策はされていません、
+ECHO         暗号化されている場合はII_SQL2.SRCを暗号化対応し再コンパイルする必要が有ります。
+IF EXIST --SELF-CONTAINED.--SELF-CONTAINED GOTO NOTNET_OK　　　
 ECHO ★注意★.NET %I_VER2RUN%の「デスクトップランタイム」がインストールされている必要が有ります。
 ECHO       　インストールされていない場合はインターネットからダウンロードしようとするので、
 ECHO         インターネットに接続されていない場合は別の方法で「デスクトップ ランタイム」を

@@ -11,7 +11,7 @@ W-COMMENT_BEGIN
 PROGRAM=NOT
 =SET{_TITLE='SETUP I SERVER 1/12'};
 CONTROL=PROGRAM,ERROR,SQL_DBO,HIGH 
-=IF_FILE{.\II_OBFUSCATE.OBFUSCATE}SET{COMPILE='NO'};
+=IF_FILE{.?_P?II_OBFUSCATE.OBFUSCATE}SET{COMPILE='NO'};
 FORM=◎I言語の世界へようこそ。ここで、I言語のインストール方法を説明します。
 FORM=◎I言語はC#を基本に作られていますが、実行プログラムからソースを簡単に復元出来、
 FORM=  それを使ってデータベースに接続するパスワード等を容易に解読が可能です。
@@ -130,10 +130,10 @@ DATA={O,,,Y}NEW{9}
 =IF_ERROR_DIR_DIR{?WC.USERPROFILE_YEN?.nuget}SET{LIBRARY='NO'};
 *==========================================(COMMENT2_BEGIN )==================
 %NO_VERSIONUP-COMMENT2_BEGIN
-=IF_FILE{.\II_OBFUSCATE.OBFUSCATE}SET{OBFUSCATE='NO'}EXIT3{};
+=IF_FILE{.?_P?II_OBFUSCATE.OBFUSCATE}SET{OBFUSCATE='NO'}EXIT3{};
 =SET{OBFUSCATE='YES'};
 FORM=（注意：II_OBFUSCATE.OBFUSCATEが既に有る時は難読済で再難読化出来ません)
-FORM= @@@ {.\II_OBFUSCATE.OBFUSCATEファイルを作り難読化します}
+FORM= @@@ {.?_P?II_OBFUSCATE.OBFUSCATEファイルを作り難読化します}
 DATA=OBFUSCATE{4}{YES,NO}
 *******( 難読化 )**************************
 =IF{OBFUSCATE='NO'}EXIT{LIBRARY};
@@ -145,15 +145,15 @@ FORM= @ @ {パスワード２回(5文字以上)}　
 DATA=OBFUSCATE1{14,5,H,*}
 DATA=OBFUSCATE2{14,5,H,*}
 =IF{OBFUSCATE1!=_DATA}ERROR{パスワードが一致していません};
-=IF_FILE{.\II_OBFUSCATE.OBFUSCATE}ERROR{II_OBFUSCATE.OBFUSCATE FOUND};再確認*
+=IF_FILE{.?_P?II_OBFUSCATE.OBFUSCATE}ERROR{II_OBFUSCATE.OBFUSCATE FOUND};再確認*
 *****( II_OBFUSCATE.ORGからII_OBFUSCATE.OBFUSCATEを作成 )****
-=SET{WC.FUNC_READ= '.\II_OBFUSCATE.ORG'};
-=SET{WC.FUNC_WRITE='.\II_OBFUSCATE.OBFUSCATE'};
+=SET{WC.FUNC_READ= '.?_P?II_OBFUSCATE.ORG'};
+=SET{WC.FUNC_WRITE='.?_P?II_OBFUSCATE.OBFUSCATE'};
 =SET{WC.FUNC_STR='public readonly String s='};
 =SET{WC.FUNC_STR2='"?_DATA?";'};
 COPY=FUNC_READ_WRITE
 ********( II_OBFUSCATEN.ORGからII_OBFUSCATE.SRCを作成 )****************************
-=SET{WC.FUNC_WRITE='.\II_OBFUSCATE.SRC'};
+=SET{WC.FUNC_WRITE='.?_P?II_OBFUSCATE.SRC'};
 COPY=FUNC_READ_WRITE
 ******************************************************************************
 =SKIP_OBFUSCATE:
@@ -164,9 +164,9 @@ FORM= @@@ 'YES'で@以下のファイルを全て消して　
 FORM=   　 RDBMS用ライブラリを最新にします。(少し時間が掛かる場合が有ります）
 DATA=LIBRARY{4}{YES,NO}
 DATA={O}DIR_NAME{35}
-=IF_FILE{.\II_OBFUSCATE.OBFUSCATE}
-=   IF_FILE_NOT{..\i-download\Obfuscar.Console.exe}
-=   ERROR{..\i-download\Obfuscar.Console.exeに難読化ソフトが有りません};
+=IF_FILE{.?_P?II_OBFUSCATE.OBFUSCATE}
+=   IF_FILE_NOT{..?_P?i-download?_P?Obfuscar.Console.exe}
+=   ERROR{..?_P?i-download?_P?Obfuscar.Console.exeに難読化ソフトが有りません};
 =IF{LIBRARY='YES'}
 =   COMMAND{RMDIR /Q /S ?WC.USERPROFILE_YEN?.nuget};
 FORM=(★注意★新しい.NETのバージョンをII_VERSION.SRCと_BEGIN_VER2.BATに書きます)
@@ -174,17 +174,17 @@ FORM= @ {[Enter]で必要ファイルに新しバージョンを書き替えコ�
 DATA=COMPILE{1}
 %NO_VERSIONUP-=COMMAND{SET_RENAME_MKDIR_UP.BAT                     ?_IV?_BIN           ?_IV?_BIN_?_TODAY_CLIENT?};
 %NO_VERSIONUP-=IF{#OBFUSCATE='YES'}COMMAND{SET_RENAME_MKDIR_UP.BAT ?_IV?_BIN_OBFUSCATE ?_IV?_BIN_OBFUSCATE_?_TODAY_CLIENT?};
-%NO_VERSIONUP-FORM= @ ( ここで..\?_IV?_BINが?_IV?_?_TODAY_CLIENT?にリネームされ、且つ
-%NO_VERSIONUP-FORM=     ..\?_IV?_BINが作られた事を確認し、Enterでコンパイルします ) 
+%NO_VERSIONUP-FORM= @ ( ここで..?_P??_IV?_BINが?_IV?_?_TODAY_CLIENT?にリネームされ、且つ
+%NO_VERSIONUP-FORM=     ..?_P??_IV?_BINが作られた事を確認し、Enterでコンパイルします ) 
 %NO_VERSIONUP-DATA=VERSION_UP{1}
 *********( II_VERSION.ORG から　II_VERSION.SRCを作成 )*******
-=SET{WC.FUNC_READ ='.\II_VERSION.ORG'};
-=SET{WC.FUNC_WRITE='.\II_VERSION.SRC'};
+=SET{WC.FUNC_READ ='.?_P?II_VERSION.ORG'};
+=SET{WC.FUNC_WRITE='.?_P?II_VERSION.SRC'};
 =SET{WC.FUNC_STR='public readonly String VERSION2_S='};
 =SET{WC.FUNC_STR2='"?NEW?";'};
 COPY=FUNC_READ_WRITE
 ********( _BEGIN_VER2.BATを書き換え )************************************
-=WRITE_OPEN{1,.\_BEGIN_VER2.BAT,OT,/};
+=WRITE_OPEN{1,.?_P?_BEGIN_VER2.BAT,OT,/};
 =WRITE{1,'REM REWRITE (SET_BEGIN.TXT)'};
 =WRITE{1,'SET I_VER2=?NEW?'};
 =WRITE{1,'SET I_VER2RUN=?VER22?'};
@@ -192,7 +192,7 @@ COPY=FUNC_READ_WRITE
 =WRITE{1,'SET I_VER2NET=?WC.VER2NET?'};
 =WRITE_CLOSE{1};
 *[中止]*******( ISOURCEWD.CSPROJ　作成 )************************************
-*=WRITE_OPEN{1,.\ISOURCEWD.CSPROJ,OT};
+*=WRITE_OPEN{1,.?_P?ISOURCEWD.CSPROJ,OT};
 *=WRITE{1,'<Project Sdk="Microsoft.NET.Sdk">'};
 *=WRITE{1,'  <PropertyGroup>'};
 *=WRITE{1,'    <RuntimeIdentifier>win-x64</RuntimeIdentifier>'};
@@ -216,6 +216,8 @@ DATA=END{1}
 ***%OBFUSCATE-COMMENT2_END
 %NO_COMPILE-COMMENT2_END
 *==========================================(COMMENT2_END )==================
+W-COMMENT_END
+*==========================================(COMMENT_END )==================
 *==========================================(COMMENT2_BEGIN )==================
 %NO_ALTER_PASSWORD-COMMENT2_BEGIN
 *****( SETUP開始 )******************************************
@@ -239,7 +241,7 @@ JA+FORM=【クリックした場所に入力位置が移動したり,先頭行�
 JA-FORM=I VER11 [Installation program oneself moves by I language, too]
 JA+FORM=◎インストール条件
 JA-FORM=***( installation condition )***
-W+JA+FORM=  〇全ドライブのフォルダー名"\I"以下を他のソフトで使用していない。
+W+JA+FORM=  〇全ドライブのフォルダー名"?_P?I"以下を他のソフトで使用していない。
 U+JA+FORM=  〇フォルダー名"/home/I"以下を他のソフトで使用していない。
 JA-FORM=  〇 do not use the folder excellent "I" 
 JA-FORM=       following of all drives by other software.
@@ -368,7 +370,7 @@ JA-FORM=           SETUP @
 DATA={}SETUP{50,1,I}
 MESSAGE=パスワードの暗号化に使います。組織内では同じにする事をお勧めします。
 =SET{_SETUP=SETUP};
-=IF_FILE{..\?_P??SETUP?_?_SERVER_NAME?.III}EXIT3{INSTALL_FILE};
+=IF_FILE{..?_P??SETUP?_?_SERVER_NAME?.III}EXIT3{INSTALL_FILE};
 =SET{INSTALL_FILE='YES'};
 FORM=    INSTALL_FILE @ (INSTALLファイルを作成します。[Enter]を押してして下さい。）  
 DATA={}INSTALL_FILE{4}{YES,NO}
@@ -376,12 +378,12 @@ MESSAGE=該当セットアップ名のインストールファイルが無いの
 =IF{_DATA='NO'}JUMP{NO};
 ******( インストールファイル作成 )*****
 =SET{WC.PASSWORD='NAGANO'};
-W+=EXE_WAIT{?_BIN?\ISETUP?_OS??_FRAMEWORK?.EXE,?WC.PASSWORD? ?SETUP? ?_COMPUTER_NAME?}; 
+W+=EXE_WAIT{?_BIN??_P?ISETUP?_OS??_FRAMEWORK?.EXE,?WC.PASSWORD? ?SETUP? ?_COMPUTER_NAME?}; 
 U+=IF{_FRAMEWORK='J'}EXE_WAIT{java,-cp /home/I/BIN?_IV?/purejavacomm.jar:/home/I/BIN?_IV?/jna.jar:/home/I/BIN?_IV?/IJAVA.jar isetup_l ?WC.PASSWORD? ?SETUP? ?_COMPUTER_NAME?}; 
 U+=IF{_FRAMEWORK='D'}EXE_WAIT{mono,/home/I/BIN?_IV?/ISETUP?_OS??_FRAMEWORK?.EXE ?WC.PASSWORD? ?SETUP? ?_COMPUTER_NAME?}; 
 U+=IF{_FRAMEWORK='C'}EXE_WAIT{/home/I/BIN?_IV?/ISETUP?_OS??_FRAMEWORK? ?WC.PASSWORD? ?SETUP? ?_COMPUTER_NAME?}; 
 =SET{INSTALL_FILE='NO'};
-=NO:READ_OPEN{1,..\?_P??SETUP?_?_SERVER_NAME?.III};
+=NO:READ_OPEN{1,..?_P??SETUP?_?_SERVER_NAME?.III};
 =READ_NEXT{1,WC.PASSWORD64}ERROR{};
 =READ_CLOSE{1};
 =SET{WC.CHECK=};
@@ -396,7 +398,8 @@ U+=IF{_FRAMEWORK='C'}EXE_WAIT{/home/I/BIN?_IV?/ISETUP?_OS??_FRAMEWORK? ?WC.PASSW
 *%L+=IF{SYSTEM@LENGTH<6}SET{WC.CHECK='?WC.DB?MRDB112,MariaDB11.2.x{L},MRDB111,MariaDB11.1.x{L},MRDB110,MariaDB11.0.x{L}'};
 *%L+=IF{SYSTEM@LENGTH<6}SET{WC.CHECK='?WC.DB?MRDB113,MariaDB11.3.x{L},MRDB112,MariaDB11.2.x{L},MRDB111,MariaDB11.1.x{L}'};
 *%L+=IF{SYSTEM@LENGTH<6}SET{WC.CHECK='?WC.DB?MRDB114,MariaDB11.4.x{L},MRDB113,MariaDB11.3.x{L},MRDB112,MariaDB11.2.x{L}'};
-%L+=IF{SYSTEM@LENGTH<6}SET{WC.CHECK='?WC.DB?MRDB115,MariaDB11.5.x{L},MRDB114,MariaDB11.4.x{L},MRDB113,MariaDB11.3.x{L}'};
+*%L+=IF{SYSTEM@LENGTH<6}SET{WC.CHECK='?WC.DB?MRDB115,MariaDB11.5.x{L},MRDB114,MariaDB11.4.x{L},MRDB113,MariaDB11.3.x{L}'};
+%L+=IF{SYSTEM@LENGTH<6}SET{WC.CHECK='?WC.DB?MRDB116,MariaDB11.6.x{L},MRDB115,MariaDB11.5.x{L},MRDB114,MariaDB11.4.x{L}'};
 %I+=IF{SYSTEM@LENGTH<3}SET{WC.CHECK+='?WC.DB?I11,IBM DB2 V11.x{I},I10,IBM DB2 V10.x{I},I9,IBM DB2 V9.x{I}'};
 *****%F+=IF{SYSTEM@LENGTH=1}SET{WC.CHECK+='?WC.DB?SYMF,Symfoware{F}'};
 *****%H+=IF{SYSTEM@LENGTH=1}SET{WC.CHECK+='?WC.DB?HIRDB,HiRDB{H}'};
@@ -581,6 +584,7 @@ W+=   ,WC.PROGRAM_FIRE2=_OS_DRIVE+_P+'I'+_P+'BIN'+_IV+_P+'IMENU'+_OS+_FRAMEWORK+
 W+=SET{WC.SCQC_SW=0};
 W+NAME=SCQC
 W+=SET{WC.SCQC=};
+W+I+=IF_ERROR_COMMAND{sc qc ?WC.NAME?>?_TMP?SCQC.TMP}SET{WC.NAME=WC.NAME+'-0'}
 W+=COMMAND{sc qc ?WC.NAME?>?_TMP?SCQC.TMP};
 W+=READ_OPEN{1,?_TMP?SCQC.TMP,SHIFT_JIS};
 W+=READ_NEXT1:READ_NEXT{1,WC.DATA}JUMP{READ_END1};
@@ -650,7 +654,7 @@ W+M-=SET{WC.NAME_FIRE4=,WC.PROGRAM_FIRE4=};
 *=DLL_END:
 *REPEAT=
 *=SKIP_0:
-=READ_OPEN{1,.\_JAR.TXT};
+=READ_OPEN{1,.?_P?_JAR.TXT};
 =READ_NEXT1:READ_NEXT{1}JUMP{READ_END1};
 =SPLIT_CHAR{WC}{_READ_DATA}{' '};
 =IF{_DB!=WC1}BACK{READ_NEXT1};
@@ -660,7 +664,7 @@ FORM=JDBC @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 FORM=     (空白にするとチェックを迂回します)
 =EXIT3{};
 DATA=JDBC{50,,,L}
-=IF{_DATA!=}IF_FILE_NOT{..\i-download\?_DATA?}ERROR{..\i-download\?_DATA? NOT FOUND};
+=IF{_DATA!=}IF_FILE_NOT{..?_P?i-download?_P??_DATA?}ERROR{..?_P?i-download?_P??_DATA? NOT FOUND};
 =IF{_DATA=}SET{JDBC='x'};
 *%JDBC-DATA={O}JDBC{50,,,L}
 *W+JA+P+FORM=◎確認：Npgsqlを使用します。まだ、インストールしてない場合は
@@ -869,7 +873,7 @@ P-=SET{WC.DATABASE_PATH=};
 =PERMISSION_NOW_NOT_FOUND:
 %NO_ALTER_PASSWORD-=ERROR{ファイル?_OS_DRIVE??_P?I?_P?I.?_SYSTEM??_P?BAT?_P?Z_PERMISSION.CFGが無く続行出来ません};
 =SET{WC.PERMISSION_SW=1};
-=READ_OPEN{1,.\Z_PERMISSION.CFG};
+=READ_OPEN{1,.?_P?Z_PERMISSION.CFG};
 =PERMISSION_OK:SET{W0.PERMISSION=0};
 =READ_NEXT1:READ_NEXT{1}JUMP{READ_END1};
 =COMPUTE{W0.PERMISSION+=1};SET{WC.PER?W0.PERMISSION?=_READ_DATA};
@@ -906,7 +910,7 @@ JA+FORM=     セットアップ名 @
 JA-FORM=              SETUP @
 DATA={O}SETUP{50,1}
 =SET{_PASSWORD64_CHECK=$WC.PASSWORD64};
-=IF{_PASSWORD64_CHECK!='OK'}ERROR{..\?_P??SETUP?_?_SERVER_NAME?.III BAD};
+=IF{_PASSWORD64_CHECK!='OK'}ERROR{..?_P??SETUP?_?_SERVER_NAME?.III BAD};
 =SET{_PASSWORD='ZZZZZZZZ'+'ZZZZZZZZZZZZZZZZ',WC.ZZZZ_PASSWORD=_PASSWORD};
 =SET{_PASSWORD='ZZZZZZZY'+'ZZZZZZZZZZZZZZZY',WC.ZZZY_PASSWORD=_PASSWORD};
 JA+FORM=      インスタンス名 @@@@@@@@@@@@@@@@ 
@@ -1077,7 +1081,7 @@ DATA=RUN{4,1}{YES,SKIP}
 ************************( ALTER PASSWORD MAIN LOGIC )**********************************
 *==========================================(COMMENT2_BEGIN )==================
 %NO_ALTER_PASSWORD+COMMENT2_BEGIN
-=COPY_FILE{..\?WC.I_NAME?_?_TODAY_CLIENT?,?WC.I_FILE?};
+=COPY_FILE{..?_P??WC.I_NAME?_?_TODAY_CLIENT?,?WC.I_FILE?};
 =COPY_FILE{?WC.I_FILE?,?_TMP??WC.I_NAME?};
 =COPY_FILE{?_OS_DRIVE??_P?I?_P?SHARE?_P?WINDOWS?_P?CLIENT?_P??WC.I_NAME?,?_TMP??WC.I_NAME?};
 =COPY_FILE{?_OS_DRIVE??_P?I?_P?SHARE?_P?LINUX?_P?CLIENT?_P??WC.I_NAME?,?_TMP??WC.I_NAME?};
@@ -1256,7 +1260,8 @@ P+REPEAT=
 =SET{WC.CHG_SW=1};
 =SKIP:
 *********( SQLBrowserサービスの起動 )*****************
-M+=COMMAND{SC CONFIG SQLBrowser START= AUTO&SC START SQLBrowser};
+M+=IF_ERROR_COMMAND{SC CONFIG SQLBrowser START= AUTO}NOP{};
+M+=IF_ERROR_COMMAND{SC START SQLBrowser}NOP{};
 *********( saの有効化及びパスワード設定 )********************
 =IF{WC.SA_SW=0}JUMP{SKIP};
 =SET{WC.INST=};IF{INSTANCE!=}SET{WC.INST=_P+INSTANCE};

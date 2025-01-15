@@ -2,7 +2,7 @@
 //= 共有クラス(JAVAで ref が使えないので新設) 
 //HH #include "ii_include_hh.h"
 //PP #include "ii_include_pp.h"
-//SS using System.Data.SqlClient;
+//SS using Microsoft.Data.SqlClient; //VER37.8.0.12
 //SS using System;
 //SS using System.Collections.Generic;
 //SS using System.Drawing;

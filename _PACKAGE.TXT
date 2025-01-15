@@ -6,7 +6,7 @@ System.Text.Encoding.CodePages * =
 Microsoft.Win32.Registry * !
 System.Windows.Forms.DataVisualization 1.0.0-prerelease.20110.1 =
 # # obfuscar
-System.Data.SqlClient * =
+Microsoft.Data.SqlClient * =
 System.Data.Odbc * =
 System.IO.Ports * =
 System.Management * =

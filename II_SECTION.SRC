@@ -2,7 +2,7 @@
 #if IMENU||ITIME //TEST
 //HH #include "ii_include_hh.h"
 //PP #include "ii_include_pp.h"
-//SS using System.Data.SqlClient;
+//SS using Microsoft.Data.SqlClient; //VER37.8.0.12
 //SS using System;
 //SS using System.Collections.Generic;
 //SS using System.Drawing;
@@ -3064,9 +3064,15 @@ else
 //SS           else if('%'==compute_c)decimal1_d%=decimal2_d;
 //JJ           else if('%'==compute_c)decimal1_d=decimal1_d.subtract(decimal2_d.multiply(decimal1_d.divide(decimal2_d,RoundingMode.DOWN)));//VER28.1
 //SJ          }catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);{rc=5;break;}}
-//SJ       if(0==compute_cut_ii)//COMPUTE(文字はそのまま）
-//SS       decimal1_d=decimal.Round(decimal1_d,length2);//四捨五入
-//JJ       decimal1_d=decimal1_d.setScale(length2,RoundingMode.HALF_UP);//四捨五入//VER28.1
+//SJ       if(0==compute_cut_ii)//COMPUTE(四捨五入）
+//HP          {                                       //VER37.8.0.12
+////SS          decimal1_d=decimal.Round(decimal1_d,length2);//四捨五入 //VER37.8.0.12
+//SS          decimal1_d=decimal.Round(decimal1_d,length2,MidpointRounding.AwayFromZero);//四捨五入 //VER37.8.0.12　
+//JJ          decimal1_d=decimal1_d.setScale(length2,RoundingMode.HALF_UP);//四捨五入//VER28.1
+//HP           double scale_o=std::pow(10.0,length2);               //VER37.8.0.12　　　
+//HP           double1_o=std::round(double1_o*scale_o)/scale_o;     //VER37.8.0.12
+//HP           ww2_s_n.s=z_p.to_o_s(double1_o);                    //VER37.8.0.12  
+//HP          }                                                    //VER37.8.0.12
 //SJ       ww2_s_n.s=z_p.to_d_s(decimal1_d);//(文字はそのまま）
 //SJ       if(1==compute_cut_ii) //COMPUTE_CUT(文字はそのまま）
 //SJ       if(-1!=(i=z_p.index2c_i(ww2_s_n.s,'.')))

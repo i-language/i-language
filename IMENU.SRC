@@ -2,16 +2,16 @@
 //HH #define IMENU_H
 //= IMENU.SRC i menu author nocumichi.hFarasawa
 //= メニュー及びファイル起動ジョブ開始
-///##########(先頭文字による対応）#########################################################
+///##########(先頭文字による対応）#( Mの部分はRDBMS(MOIPL DHF)の指定 )####################
 // （先頭文字）　 //SS (//SS //M ) //JJ  //JJ_M  //SJ  //HH  //PP  //HP  //SP  //JP [?=?] 
 // C#使用(RDBMS)   ○     (○)            (○)    ○                      ○          =  
 // Java使用　   　                  ○ 　  ○　 　○       　　　　             ○    =  
 // .h使用                                               ○          ○    ○    ○         
 // .cpp使用                                                   ○    ○    ○    ○         
 ///##########(名前の末尾の意味）###########################################################
-// byte char decimal 引数 int　　　　　クラス　インスタンス doubule string void   	
-// _b   _c   _d      i　　無し又は_i   _l　　　_n　　       _o      _s　   _v　          
-///##########(Array Listの名前は先頭で意味を分る）########################################
+// クラス　インスタンス void 引数 string int        char byte doubule decimal 　　　　　   	
+// _l　　　_n　　       _v   i    _s     無し又は_i _c   _b   _o      _d      　          
+///##########(Listの名前は先頭で意味を分る）###############################################
 //　byte char ii_data_l int ii_paint_l ii_program_l ii_read_l string ii_write_l
 //  b_   c_   da_       i_  pa_        pr_          re_       s_     wr_   
 //##########（記入方法）###################################################################
@@ -534,6 +534,7 @@ alt_b=
 //HP (e_ni->modifiers()&Qt::AltModifier);
 //SS e_ni.Alt;//Altキー状態設定。
 //JJ (0==(mod&InputEvent.ALT_DOWN_MASK)?false:true);//Altキー状態設定。
+//HP if(!shift_b){QChar c=(char )keys_n;if('A'<=c&&'Z'>=c){c=c.toLower();keys_n=c.unicode();}}  //VeR37.8.0.12 shift無しは大文字を小文字に変換
 if(true==control_b)
   {char c=(char )
 //HP e_ni->key();

@@ -4,7 +4,7 @@
 //HH #include "ii_include_hh.h"
 //PP #include "ii_include_pp.h"
 //HH #include "imenu.h"
-//SS using System.Data.SqlClient;
+//SS using Microsoft.Data.SqlClient; //VER37.8.0.12
 //SS using System;
 //SS using System.Collections.Generic;
 //SS using System.IO;
@@ -932,10 +932,11 @@ public String work_mt_s()
 //******************( random )*********************************
 public String random_s(int i_i)
 {if(i_i<1)i_i=1;
-//SS if( null ==random_n)random_n=new System.Random();
+//SJ if( null ==random_n)random_n=new Random(); //VER37.8.0.12
 int i=
-//HP std::rand()*i_i/RAND_MAX
-//JJ (int )Math.random()*i_i
+////HP std::rand()*i_i/RAND_MAX //VER37.8.0.12 
+//HP std::rand()%i_i            //VER37.8.0.12 
+//JJ random_n.nextInt(i_i) //VER37.8.0.12 
 //SS random_n.Next(i_i)
      +1;
 return z_p.to_i_s(1>i?1:(i_i<i?i_i:i));

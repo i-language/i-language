@@ -2,7 +2,7 @@
 //#if IMENU||ITIME||IPRINT||IROOT||ISRVC||ISETUP||IPAPER||ICHART||ICHART2 //TEST
 //HH #include "ii_include_hh.h"
 //PP #include "ii_include_pp.h"
-//SS using System.Data.SqlClient;
+//SS using Microsoft.Data.SqlClient; //VER37.8.0.12
 //SS using System;
 //SS using System.Collections.Generic;
 //SS using System.Drawing;
@@ -40,8 +40,9 @@ public bool write_b(String data_si)
 //JJ int iz=0;
 //SJ try{
 //SS StreamWriter_n.Write(data_si+record_end_s);
-//JJ data_si+=record_end_s;
-//JJ for(iz=0;iz<data_si.length();iz++)StreamWriter_n.write((int )data_si.charAt(iz));
+////JJ data_si+=record_end_s;
+////JJ for(iz=0;iz<data_si.length();iz++)StreamWriter_n.write((int )data_si.charAt(iz));//VER37.8.0.12
+//JJ StreamWriter_n.write(data_si+record_end_s);                                        //VER37.8.0.12
 //SJ   } 
 //SJ catch(Exception e_ni)
 //SJ   {write_z_p.err_s=write_z_p.message_s(e_ni);write_close_v();return false;}

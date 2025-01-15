@@ -3,7 +3,7 @@
 #if IMENU||ITIME
 //HH #include "ii_include_hh.h"
 //PP #include "ii_include_pp.h"
-//SS using System.Data.SqlClient;
+//SS using Microsoft.Data.SqlClient; //VER37.8.0.12
 //SS using System;
 //SS using System.Drawing;
 //SS using System.Collections.Generic;
@@ -686,6 +686,7 @@ public void display_v(int edit_ii,ii_data_l data_ni,int line_ii,int column_ii)
 {z_p.t_v(z_p.PR,"display_v(");
 int i,j;
  if( null ==data_ni){z_p.t_v(z_p.PR,"display_v)1");return;} // バグ発生中。
+////if(null ==data_ni.data_s)data_ni.data_s="i-program error"; //VER37.8.0.12
 String s=data_ni.data_s,ss;
 if('N'==data_ni.mark2_c){z_p.t_v(z_p.PR,"display_v)2");return;}
 if(!(0==edit_ii||z_p.e2s_b(s,"")))

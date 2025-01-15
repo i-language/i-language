@@ -3,7 +3,7 @@
 #if IMENU||ITIME
 //HH #include "ii_include_hh.h"
 //PP #include "ii_include_pp.h"
-//SS using System.Data.SqlClient;
+//SS using Microsoft.Data.SqlClient; //VER37.8.0.12
 //SS using System;
 //SS using System.Collections.Generic;
 //SS using System.Drawing;
@@ -229,7 +229,8 @@ else if('I'==db_ci) // IBMDB2
   now0_s="CURRENT TIMESTAMP";
    now8_s="REPLACE(CHAR(CURRENT DATE),'-','')";
    now17_s="CAST(REPLACE(REPLACE(CHAR(CURRENT TIMESTAMP),'-',''),'.','') AS CHAR(17))";
-  substr_s="SUBSTRING";lock1_s="";lock2_s=" FOR UPDATE WITH RS"; //VER361.
+// substr_s="SUBSTRING";lock1_s="";lock2_s=" FOR UPDATE WITH RS"; //VER361.
+   substr_s="SUBSTRING";lock1_s="";lock2_s=" FOR UPDATE WITH RR"; //VER38.8.0.12
   sql_yyyymm_s="CAST("+now8_s+" AS CHAR(6))";
   sql_date_time_s="TIMESTAMP";sql_null_s="";
   sql_nchar_s="CHAR";sql_nvarchar_s="VARCHAR";sql_varchar_s="VARCHAR";

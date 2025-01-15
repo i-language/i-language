@@ -27,7 +27,7 @@
 //SS //L using MySqlConnector;
 #endif
 #endif
-//SS //M using System.Data.SqlClient;
+//SS //M using Microsoft.Data.SqlClient; //VER37.8.0.12
 #if O
 //#if ODP
 //#if DOTNET
@@ -227,12 +227,14 @@ if(SQL2_OFF_0!=sql2_sw_sql)close_v(sql2_z_p.COMMIT);
 ////HP     sql2_connection1_s="Driver={ODBC Driver 13 for SQL Server};Server="
 /////HP     sql2_connection1_s="Driver={SQL Server Native Client 11.0};Server="
 //HP     sql2_connection1_s="Driver={SQL Server};Server="
-//HP                       +sql2_z_p.server_name_s+(sql2_z_p.e2s_b(sql2_z_p.instance_s,"")?"":"\\")+sql2_z_p.instance_s+";";
+//HP                       +sql2_z_p.server_name_s+(sql2_z_p.e2s_b(sql2_z_p.instance_s,"")?"":"\\")+sql2_z_p.instance_s+";"
+//HP                       +"Encrypt=true;TrustServerCertificate=true;"; //VER37.8.0.12
 //SS //M sql2_connection1_s="Data Source="
 //JJ     sql2_connection1_s="jdbc:sqlserver://"
 //JJ_M   +sql2_z_p.server_name_s+(sql2_z_p.e2s_b(sql2_z_p.instance_s,"")?"":"\\"+sql2_z_p.instance_s)
 //JJ     +";encrypt=true;trustServerCertificate=true" //VER37.6.0.9 
 //JJ_M   +";Connect Timeout="+sql2_z_p.timeout_connect+";";
+//SS //M sql2_connection2_s="Encrypt=true;TrustServerCertificate=true;"; //VER37.8.0.12
 //JP   }else if('O'==sql2_z_p.db_c)
 //JP   {
 //HP    String odbc_s="OraDB18Home1";
