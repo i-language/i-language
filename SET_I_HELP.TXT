@@ -1593,6 +1593,7 @@ JA	ZZZZ010241	7540		  _IV--"I"+_VERSION1です。
 JA	ZZZZ010241	7550		  _JAN--SET{_JAN=..でJANのチェックディジットを計算。
 JA	ZZZZ010241	7560		  _JOB--ジョブ名。
 JA	ZZZZ010241	7570		  _JOB_CGI--CGIで次に実行するジョブ名を指定します。 VER20.1
+JA	ZZZZ010241	7571		             (読み出し不可）
 JA	ZZZZ010241	7580		  _JOB_NAME--ジョブ名称。
 JA	ZZZZ010241	7590		  _JOB_PART--------ジョブの許可区分。
 JA	ZZZZ010241	7600		      メニューの許可がZZZZでメニュー認証方法がX以外では

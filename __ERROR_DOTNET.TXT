@@ -1,9 +1,0 @@
-●NET5エラー状況
-◎NETSDK1137ワーニングエラー発生
-◎SYSLIB0006ワーニングエラー発生
-◎Linux版Windows.Formsが未対応でコンパイル出来ず。
-(済)◎CA1416ワーニングエラー発生
-(済)◎ICHART.SRCでSystem.Windows.Forms.DataVisualizationの.NET5版が無く起動時エラー
-(済)◎IBM.Data.DB2でOpen()エラー。
-(済)◎文字コードのShift_JISが無い為WindowsのデフォルトがUTF-8と成ってしまいバッチ処理で文字化けする。
-(済)◎Oracle.Dataccess.Client.Connect()でエラー。

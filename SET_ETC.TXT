@@ -705,7 +705,7 @@ ZZZZZZ_PROGRAM	UN _)TRUNC	R
 ZZZZZZ_PROGRAM	UN _)VARP	R	
 ZZZZZZ_PROGRAM	UN _)VARS	R	
 ZZZZZZ_PROGRAM	UN _A	R	
-ZZZZZZ_PROGRAM	UN _AND_SPACE	W	
+ZZZZZZ_PROGRAM	UN _AND_SPACE		
 ZZZZZZ_PROGRAM	UN _ARG		
 ZZZZZZ_PROGRAM	UN _BIN	R	
 ZZZZZZ_PROGRAM	UN _C	R	
@@ -759,7 +759,7 @@ ZZZZZZ_PROGRAM	UN _EC	R
 ZZZZZZ_PROGRAM	UN _EDIT		
 ZZZZZZ_PROGRAM	UN _EDIT_ERROR		
 ZZZZZZ_PROGRAM	UN _ENCODE	R	
-ZZZZZZ_PROGRAM	UN _ENVIRONMENT	W	
+ZZZZZZ_PROGRAM	UN _ENVIRONMENT		
 ZZZZZZ_PROGRAM	UN _ERROR	R	
 ZZZZZZ_PROGRAM	UN _ESC		
 ZZZZZZ_PROGRAM	UN _EXE_NAME	R	
@@ -917,7 +917,7 @@ ZZZZZZ_PROGRAM	UN _RECEIVE_SYSTEM	R
 ZZZZZZ_PROGRAM	UN _REGISTRY		
 ZZZZZZ_PROGRAM	UN _REGISTRY_READ	R	
 ZZZZZZ_PROGRAM	UN _REPEAT	R	
-ZZZZZZ_PROGRAM	UN _RESTORE_DB	W	
+ZZZZZZ_PROGRAM	UN _RESTORE_DB	R	
 ZZZZZZ_PROGRAM	UN _RETURN_SQL	W	
 ZZZZZZ_PROGRAM	UN _S	R	
 ZZZZZZ_PROGRAM	UN _SECURITY	R	
@@ -980,7 +980,7 @@ ZZZZZZ_PROGRAM	UN _UPPER
 ZZZZZZ_PROGRAM	UN _URL	R	
 ZZZZZZ_PROGRAM	UN _URL_DECODE		
 ZZZZZZ_PROGRAM	UN _URL_ENCODE		
-ZZZZZZ_PROGRAM	UN _URL_ENCODE_DECODE	W	
+ZZZZZZ_PROGRAM	UN _URL_ENCODE_DECODE		
 ZZZZZZ_PROGRAM	UN _USER	R	
 ZZZZZZ_PROGRAM	UN _USER_DOMAIN	R	
 ZZZZZZ_PROGRAM	UN _UTF8_GET	R	
@@ -1850,8 +1850,9 @@ ZZZZZZ_URL_VERSION	DJ	*ttp://www.firebirdsql.org/en/jdbc-driver/	,Jaybird-,3.0.8
 ZZZZZZ_URL_VERSION	DJ--	3.0.0	
 ZZZZZZ_URL_VERSION	DN	*ttp://www.firebirdsql.org/en/additional-downloads	/,FirebirdClient-,7.1.1
 ZZZZZZ_URL_VERSION	IN	https://www.nuget.org/packages/IBM.Data.DB2.Core/	,content="IBM.Data.DB2.Core ,3.1.0.600
-ZZZZZZ_URL_VERSION	L#	https://downloads.mariadb.org/	,downloads.mariadb.org/mariadb/,11.6.2
-ZZZZZZ_URL_VERSION	L#--	11.7.1/">11.7.1 RC	11.8.0/">11.8.0 preview
+ZZZZZZ_URL_VERSION	L#	https://mariadb.com/kb/en/changes-improvements-in-	mariadb-11-6/,Current Version: ,11.6.2
+ZZZZZZ_URL_VERSION	L#*	*https://downloads.mariadb.org/	,downloads.mariadb.org/mariadb/,11.6.2
+ZZZZZZ_URL_VERSION	L#--*	*11.7.1/">11.7.1 RC	11.8.0/">11.8.0 preview
 ZZZZZZ_URL_VERSION	LJ	https://mariadb.com/kb/en/about-mariadb-connector-	J/,>MariaDB Connector/J ,3.5.1
 ZZZZZZ_URL_VERSION	LJ*	*https://mariadb.org/connector-java/all-releases/	,old=">,2.7.3
 ZZZZZZ_URL_VERSION	LJ--*	*3.0.0</a></td><td>2021-05-05</td><td>Alpha	
@@ -1859,7 +1860,7 @@ ZZZZZZ_URL_VERSION	LN	https://www.nuget.org/packages/MySqlConnector/	,content="M
 ZZZZZZ_URL_VERSION	MJ	https://docs.microsoft.com	
 ZZZZZZ_URL_VERSION	MJ*	*ttps://www.microsoft.com/ja-jp/download/details.a	spx?id=11774,JDBC Driver ,6.0
 ZZZZZZ_URL_VERSION	MJ++	/ja-jp/sql/connect/jdbc/download-microsoft-jdbc-dr	iver-for-sql-server,<p>バージョン ,12.8
-ZZZZZZ_URL_VERSION	MN	https://www.nuget.org/packages/Microsoft.Data.SqlC	lient,content="Microsoft.Data.SqlClient ,5.2.2
+ZZZZZZ_URL_VERSION	MN	https://www.nuget.org/packages/Microsoft.Data.SqlC	lient,content="Microsoft.Data.SqlClient ,6.0.1
 ZZZZZZ_URL_VERSION	OJ	https://www.oracle.com/jp/database/technologies/ap	pdev/jdbc-downloads.html,219/ojdbc,11
 ZZZZZZ_URL_VERSION	ON	https://www.nuget.org/packages/Oracle.ManagedDataA	ccess.Core,Oracle.ManagedDataAccess.Core ,23.7.0
 ZZZZZZ_URL_VERSION	P#	https://www.postgresql.org/	,><strong>,17.2

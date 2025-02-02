@@ -1,3 +1,3 @@
 @echo off
-find  "NOBUMICHI-PC" *.* > __FIND.TMP 
+find  "DOTNET_TEST" *.* > __FIND.TMP 
 start notepad __FIND.TMP
