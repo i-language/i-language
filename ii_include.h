@@ -27,6 +27,7 @@
 #include <QTimer>
 #include <QTcpSocket>
 #include <QTcpServer>
+//#include <QTextToSpeech> //VER37.8.0.13
 #include <QtGui>
 #include <QtSql>
 #include <QUdpSocket> //VER37_8.0.4

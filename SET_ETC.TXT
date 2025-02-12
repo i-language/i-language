@@ -7,7 +7,7 @@ ZZZZZZ_@	ZZZZZZ_PERMISSION_NO2	ZZZY	ZZZY
 ZZZZZZ_@	ZZZZZZ_VERSION_CHART	2	VERSION(2) ICHART
 ZZZZZZ_@	ZZZZZZ_VERSION_PRINT	14	VERSION(14) IPRINT
 ZZZZZZ_@	ZZZZZZ_VERSION1	37	VERSION1(37) IMENU,ITIME
-ZZZZZZ_@	ZZZZZZ_VERSION2	000800012	VERSION2(000800012) IMENU,ITIME
+ZZZZZZ_@	ZZZZZZ_VERSION2	000800013	VERSION2(000800013) IMENU,ITIME
 ZZZZZZ_COPY	ZZZZZZ_SQL               00100	%ZZZZZZ_SQL_SELECT+REPEAT=_SELECT_COUNT	
 ZZZZZZ_COPY	ZZZZZZ_SQL               00200	%ZZZZZZ_SQL_SELECT+SQL=?_SELECT##?	
 ZZZZZZ_COPY	ZZZZZZ_SQL               00300	%ZZZZZZ_SQL_SELECT+REPEAT=	
@@ -264,6 +264,7 @@ ZZZZZZ_PROGRAM	//=SET_TABLE//               1	=SET_TABLE{&X2,?_MM?_TT_TABLE};	//
 ZZZZZZ_PROGRAM	//=SLEEP//                   1	=SLEEP{(SEC)};	//1     -99
 ZZZZZZ_PROGRAM	//=SMTP//                    1	=SMTP{(SERVER)}{(PORT)}{(TO);(TO)}	//6     ***   ***   ***   ***   ***   ***
 ZZZZZZ_PROGRAM	//=SMTP//                    2	=   {(FROM)}{(SUB)}{(MESSAGE)};	/*
+ZZZZZZ_PROGRAM	//=SPEAK//                   1	=SPEAK{.....};	//1     ***
 ZZZZZZ_PROGRAM	//=SPLIT_CHAR//              1	=SPLIT_CHAR{WN.SPLIT}{WC.XXX,WC.YYY}{WC.XX,WC.YY};	//3     -NW    NR    NR
 ZZZZZZ_PROGRAM	//=SPLIT_CHAR_VALUE//        1	=SPLIT_CHAR_VALUE{WN.SPLIT}{(STRING)}{(CHAR)};	//3     -NW    ST    CH
 ZZZZZZ_PROGRAM	//=SPLIT_FORM//              1	=SPLIT_FORM{WN.SPLIT}{WC.XXX,WC.YYY}{W0.XX};	//3     -NW    NR    NR
@@ -1839,7 +1840,7 @@ ZZZZZZ_SYSTEM	ZZZZZZ_REGISTRY_PROXY	SYSTEM\CURRENTCONTROLSET\SERVICES\NLASVC\PAR
 ZZZZZZ_SYSTEM	ZZZZZZ_TIME_LIMIT	17:30	SYSTEM TIME LIMIT (HH:MM)[17:30]
 ZZZZZZ_SYSTEM	ZZZZZZ_TIME_START	08:30	SYSTEM START TIME (HH:MM)[08:30]
 ZZZZZZ_SYSTEM	ZZZZZZ_Z_CANCEL_DELETE	31	Z_CANCEL DELETE -(DAY)[31]
-ZZZZZZ_URL_VERSION	#D	https://dotnet.microsoft.com/download/dotnet/8.0/	,"#version_0">,8.0.12
+ZZZZZZ_URL_VERSION	#D	https://dotnet.microsoft.com/download/dotnet/8.0/	,"#version_0">,8.0.13
 ZZZZZZ_URL_VERSION	#J	http://jdk.java.net/	,">JDK ,23
 ZZZZZZ_URL_VERSION	#J--	A	
 ZZZZZZ_URL_VERSION	#J2	http://jdk.java.net/23/	,>JDK ,23
@@ -1853,7 +1854,7 @@ ZZZZZZ_URL_VERSION	IN	https://www.nuget.org/packages/IBM.Data.DB2.Core/	,content
 ZZZZZZ_URL_VERSION	L#	https://mariadb.com/kb/en/changes-improvements-in-	mariadb-11-6/,Current Version: ,11.6.2
 ZZZZZZ_URL_VERSION	L#*	*https://downloads.mariadb.org/	,downloads.mariadb.org/mariadb/,11.6.2
 ZZZZZZ_URL_VERSION	L#--*	*11.7.1/">11.7.1 RC	11.8.0/">11.8.0 preview
-ZZZZZZ_URL_VERSION	LJ	https://mariadb.com/kb/en/about-mariadb-connector-	J/,>MariaDB Connector/J ,3.5.1
+ZZZZZZ_URL_VERSION	LJ	https://mariadb.com/kb/en/about-mariadb-connector-	J/,>MariaDB Connector/J ,3.5.2
 ZZZZZZ_URL_VERSION	LJ*	*https://mariadb.org/connector-java/all-releases/	,old=">,2.7.3
 ZZZZZZ_URL_VERSION	LJ--*	*3.0.0</a></td><td>2021-05-05</td><td>Alpha	
 ZZZZZZ_URL_VERSION	LN	https://www.nuget.org/packages/MySqlConnector/	,content="MySqlConnector ,2.4.0

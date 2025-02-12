@@ -437,6 +437,7 @@ for(i=0;i<name_sx.Length;i++)
         write_v("            network \\");
         write_v("            printsupport \\");
 //        write_v("            serialport \\"); //VER36.1
+//        write_v("            texttospeech \\"); //VER37.8.0.13
         write_v("            sql");
         write_v("TARGET = "+prog_s+wu_si+"C");
         write_v("TEMPLATE = app");

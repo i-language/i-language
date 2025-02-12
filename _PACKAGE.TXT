@@ -11,6 +11,7 @@ System.Data.Odbc * =
 System.IO.Ports * =
 System.Management * =
 System.Configuration * !
+System.Speech * =
 Microsoft.Extensions.Hosting * !
 Microsoft.Extensions.Hosting.WindowsServices * !
 System.ServiceProcess.ServiceController * !

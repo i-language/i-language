@@ -9,6 +9,7 @@
 //SS using System.IO;
 //SS using Microsoft.Win32;
 //SS using System.Threading.Tasks;
+//SS using System.Speech.Synthesis; //VER8.0.13
 //JJ import java.awt.*;
 //JJ import java.awt.event.*;
 
@@ -18,6 +19,7 @@
 //SS using System.Net.Mail;
 public class ii_section_l
 {
+//SS SpeechSynthesizer speak_n=null; //VER8.0.13 
 //COPY $II_DIR
 //COPY $II_READ
 //COPY $II_SQL2
@@ -1539,6 +1541,16 @@ else if(z_p.e2s_b(s,"READ_OPEN"))
       i=z_p.count_xm_i(z_mt_p.program_p.xm_json_a);
       if(0<i)z_p.remove_xm_v(z_mt_p.program_p.xm_json_a,i-1);
       sw=CHECK_RC_10;continue;//VER17
+     }
+ else if(z_p.e2s_b(s,"SPEAK"))//VER8.0.13
+     {if(CONTINUE_NORMAL_0!=sw_skip){sw=LOOP_2;continue;}  //スキップ中　 
+//SS  if(null==speak_n)speak_n=new SpeechSynthesizer();
+//SS  speak_n.Speak(opt1_s);
+////PP  QCoreApplication a();
+////PP  QTextToSpeech *speak_p=new QTextToSpeech(&a);
+////PP  speak_p->say(opt1_s);
+////PP  delete speak_p;
+      sw=CHECK_RC_10;continue;
      }
     } 
   rc_b=prog_edit2_b(); //VER18.1

@@ -1,3 +1,3 @@
 @echo off
-find  "DOTNET_TEST" *.* > __FIND.TMP 
+find  "IXX-" *.* > __FIND.TMP 
 start notepad __FIND.TMP
