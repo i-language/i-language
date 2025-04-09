@@ -1401,7 +1401,7 @@ JA	ZZZZ010241	5620		       (ORACLEのODP.NETでのオーバフローエラー回
 JA	ZZZZ010241	5630		  _AVG(数値式)--平均を求めるSQL関数(集計)。　VER22.1
 JA	ZZZZ010241	5640		       (ORACLEのODP.NETでのオーバフローエラー回避対応中）
 JA	ZZZZ010241	5650		  _BIN--I言語プログラムの有るディレクトリです。(VER35)
-JA	ZZZZ010241	5660		  _C-- SQLの文字結合記号。(DB確定時設定）
+JA	ZZZZ010241	5660		  _C-- SQLの文字結合記号。(_CLと_CRを前後に付けます)
 JA	ZZZZ010241	5670		  _C(--SQLの文字結合の左。(MaruaDB'CONCAT('以外空白)(VER18.1)
 JA	ZZZZ010241	5680		       ("_(C"も同じ)VER22.1
 JA	ZZZZ010241	5690		  _C)--SQLの文字結合の右。(MariaDBは')'以外空白)(VER18.1)
@@ -1422,7 +1422,7 @@ JA	ZZZZ010241	5830		  _CHECK2_TYPE1_NCHAR--型1(UNICODE)CHECK用。(VER4追加)
 JA	ZZZZ010241	5840		  _CHECK2_TYPE2_CHAR--型2(半角文字)CHECK用。(VER4変更)
 JA	ZZZZ010241	5850		  _CHECK2_TYPE2_DECIMAL--型2(数値)CHECK用。
 JA	ZZZZ010241	5860		  _CHECK2_TYPE2_NCHAR--型2(UNICODE)CHECK用。(VER4追加)
-JA	ZZZZ010241	5870		  _CL--[旧]文字結合の左。(MariaDBは'CONCAT('以外は空白)(VER8)
+JA	ZZZZ010241	5870		  _CL--文字結合の左。(MariaDBは'CONCAT('以外は空白)(VER8)
 JA	ZZZZ010241	5880		  _CLICK--CLICK=で文字をSETするとキーボード入力となります。
 JA	ZZZZ010241	5890		          (読み出し不可）
 JA	ZZZZ010241	5900		  _CODE--SET{_で先頭が全角文字は2,半角カナは3,以外は1を返す。
@@ -1441,7 +1441,7 @@ JA	ZZZZ010241	6020		       (ORACLEのODP.NETでのオーバフローエラー回
 JA	ZZZZ010241	6030		  _COUNTER--セクション実行時$$,$-,$+を置き換えます,初期は1。
 JA	ZZZZ010241	6040		              (最後のセミコロンは付けません）
 JA	ZZZZ010241	6050		      (0から999までです）
-JA	ZZZZ010241	6060		  _CR--[旧]文字結合の右。（MariaDBは')'以外は空白）(VER8)
+JA	ZZZZ010241	6060		  _CR--文字結合の右。（MariaDBは')'以外は空白）(VER8)
 JA	ZZZZ010241	6070		  _CUBE(式...)--CUBEのSQL関数。　(VER22.1)
 JA	ZZZZ010241	6080		       (注意:MariaDBでは動きません）
 JA	ZZZZ010241	6090		【廃止】_CURSOR_...は全て廃止 (VER28.1)

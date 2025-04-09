@@ -377,6 +377,8 @@ JA	ZZZZ	01	08	25	OUTPUT	ZZZY	ZZ	X							25.I言語の動作環境
 JA	ZZZZ	01	08	26	OUTPUT	ZZZY	ZZ	X							26.正規化について
 JA	ZZZZ	01	08	27	OUTPUT	ZZZY	ZZ	X							27.SQLとI言語のエラーについて
 JA	ZZZZ	01	08	28	OUTPUT	ZZZY	ZZ	X							28.ノウハウ集
+JA	ZZZZ	01	08	29	OUTPUT	ZZZY	ZZ	X							29 [2025年の崖」について
+JA	ZZZZ	01	08	30	OUTPUT	ZZZY	ZZ	X							20 誰でも簡単に出来るについて
 JA	ZZZZ	40	00	00		ZZZY									サンプル発注 メニュー
 JA	ZZZZ	40	01	00		ZZZY			HALT						サンプル発注 日常業務メニュー
 JA	ZZZZ	40	01	01	OUTPUT	ZZZY	ZY	P	HALT	ZZZZ400121					サンプル発注 生産計画　検索

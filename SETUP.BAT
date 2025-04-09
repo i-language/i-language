@@ -12,12 +12,12 @@ ECHO         RDBMSをインストールしてない場合はこの処理を閉じてインストール後に再
 ECHO       （RDBMSがインストールされていない場合はこの画面は必ず閉じて下さい）
 ECHO ★注意★Microsoft SQL Serverが暗号化対応されている場合の対策はされていません、
 ECHO         暗号化されている場合はII_SQL2.SRCを暗号化対応し再コンパイルする必要が有ります。
-IF EXIST --SELF-CONTAINED.--SELF-CONTAINED GOTO NOTNET_OK　　　
+IF EXIST --SELF-CONTAINED.--SELF-CONTAINED GOTO DOTNET_OK
 ECHO ★注意★.NET %I_VER2RUN%の「デスクトップランタイム」がインストールされている必要が有ります。
 ECHO       　インストールされていない場合はインターネットからダウンロードしようとするので、
 ECHO         インターネットに接続されていない場合は別の方法で「デスクトップ ランタイム」を
 ECHO 　      インストールした後 [Enter]で続行して下さい。
-:NOTNET_OK
+:DOTNET_OK
 PAUSE
 IF NOT EXIST %I_HOME% MKDIR %I_HOME%
 IF NOT EXIST %I_BIN%  MKDIR %I_BIN%

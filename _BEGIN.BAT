@@ -5,8 +5,8 @@ REM ===( IŒ¾Œê VER1 )===
 SET I_VER=I37
 REM ===( IŒ¾Œê VER2 )===
 CALL _BEGIN_VER2.BAT 
-rem SET I_VER_J=23
 REM ===( Java )===
+rem SET I_VER_J=23
 SET I_VER_J=21.0.2
 REM ===( Qt(C++) )===
 rem SET I_VER_C=6.6.3

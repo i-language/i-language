@@ -3,7 +3,7 @@ CALL C_BEGIN.BAT
 IF "%I_SET_ZIP_SW%"=="YES"          GOTO SKIP_OBFUSCATE1
 IF NOT EXIST II_OBFUSCATE.OBFUSCATE GOTO SKIP_OBFUSCATE1
 :LOOP
-IF NOT EXIST ..\i-download\obfuscar.console.exe ECHO NOT FOUND ..\i-download\obfuscar.console.exe&PAUSE&GOTO LOOP
+IF NOT EXIST ..\i-download\obfuscar\obfuscar.console.exe ECHO NOT FOUND ..\i-download\obfuscar\obfuscar.console.exe&PAUSE&GOTO LOOP
 IF EXIST ..\%I_VER%_BIN_OBFUSCATE\ORG GOTO SKIP_ORG
 MKDIR                                         ..\%I_VER%_BIN_OBFUSCATE\ORG
 REM (šLinux–¢‘Î‰žˆ—•Û—¯’†š) IF EXIST ..\%I_VER%_BIN\CLIENT_UD\IMENU* MOVE /Y ..\%I_VER%_BIN\CLIENT_UD\IMENU* ..\%I_VER%_BIN_OBFUSCATE\ORG   
@@ -33,7 +33,7 @@ REM (šLinux–¢‘Î‰žˆ—•Û—¯’†š) MOVE /Y ..\%I_VER%_BIN\SERVER_UD\ITIMEUD.dl? ..\
 MOVE /Y ..\%I_VER%_BIN\SERVER_WD\ITIMEWD.dl? ..\%I_VER%_BIN_OBFUSCATE\OLD  
 REM (šLinux–¢‘Î‰žˆ—•Û—¯’†š) (C_OBFUSCAR.XML)   
 PUSHD ..\%I_VER%_BIN_OBFUSCATE
-..\i-download\obfuscar.console.exe ..\i-language\C_OBFUSCAR.XML > %I_TMP%\obfuscar.log 2>&1
+..\i-download\obfuscar\obfuscar.console.exe ..\i-language\C_OBFUSCAR.XML > %I_TMP%\obfuscar.log 2>&1
 POPD
 %I_XCOPYF% ..\%I_VER%_BIN_OBFUSCATE\NEW\IMENUUD.* ..\%I_VER%_BIN\CLIENT_UD 
 %I_XCOPYF% ..\%I_VER%_BIN_OBFUSCATE\NEW\IMENUWD.* ..\%I_VER%_BIN\CLIENT_WD

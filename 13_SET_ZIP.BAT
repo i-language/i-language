@@ -63,7 +63,7 @@ SET I_TMP_ZIP=%I_TMP%\%I_ZIP%
 IF EXIST %I_TMP_ZIP% RMDIR /S /Q %I_TMP_ZIP%
 MKDIR    %I_TMP_ZIP%
 %I_XCOPYF% /Q ..\i-download\*.jar                %I_TMP_ZIP%\i-download
-%I_XCOPYF% /Q ..\i-download\Obfuscar.Console.*   %I_TMP_ZIP%\i-download
+%I_XCOPYD% /Q ..\i-download\obfuscar             %I_TMP_ZIP%\i-download\obfuscar
 %I_XCOPYF% /Q ..\i-language\*.*                  %I_TMP_ZIP%\%i-language 
 %I_XCOPYD% /Q ..\%I_VER%_BIN                     %I_TMP_ZIP%\%I_VER%_BIN 
 %I_XCOPYF% /Q ..\i-language\SETUP_JA*.*          %I_TMP_ZIP% 

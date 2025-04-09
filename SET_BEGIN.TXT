@@ -165,8 +165,8 @@ FORM=   　 RDBMS用ライブラリを最新にします。(少し時間が掛�
 DATA=LIBRARY{4}{YES,NO}
 DATA={O}DIR_NAME{35}
 =IF_FILE{.?_P?II_OBFUSCATE.OBFUSCATE}
-=   IF_FILE_NOT{..?_P?i-download?_P?Obfuscar.Console.exe}
-=   ERROR{..?_P?i-download?_P?Obfuscar.Console.exeに難読化ソフトが有りません};
+=   IF_FILE_NOT{..?_P?i-download?_P?obfuscar?_P?Obfuscar.Console.exe}
+=   ERROR{..?_P?i-download?_P?obfuscar?_P?Obfuscar.Console.exeに難読化ソフトが有りません};
 =IF{LIBRARY='YES'}
 =   COMMAND{RMDIR /Q /S ?WC.USERPROFILE_YEN?.nuget};
 FORM=(★注意★新しい.NETのバージョンをII_VERSION.SRCと_BEGIN_VER2.BATに書きます)
