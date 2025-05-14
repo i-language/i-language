@@ -7,7 +7,7 @@ ZZZZZZ_@	ZZZZZZ_PERMISSION_NO2	ZZZY	ZZZY
 ZZZZZZ_@	ZZZZZZ_VERSION_CHART	2	VERSION(2) ICHART
 ZZZZZZ_@	ZZZZZZ_VERSION_PRINT	14	VERSION(14) IPRINT
 ZZZZZZ_@	ZZZZZZ_VERSION1	37	VERSION1(37) IMENU,ITIME
-ZZZZZZ_@	ZZZZZZ_VERSION2	000800015	VERSION2(000800015) IMENU,ITIME
+ZZZZZZ_@	ZZZZZZ_VERSION2	000800016	VERSION2(000800016) IMENU,ITIME
 ZZZZZZ_COPY	ZZZZZZ_SQL               00100	%ZZZZZZ_SQL_SELECT+REPEAT=_SELECT_COUNT	
 ZZZZZZ_COPY	ZZZZZZ_SQL               00200	%ZZZZZZ_SQL_SELECT+SQL=?_SELECT##?	
 ZZZZZZ_COPY	ZZZZZZ_SQL               00300	%ZZZZZZ_SQL_SELECT+REPEAT=	
@@ -212,36 +212,33 @@ ZZZZZZ_PROGRAM	//=READ2_OPEN//              2	=   ERROR{};	/*
 ZZZZZZ_PROGRAM	//=RECEIVE//                 1	=RECEIVE{NUMBER};	M/1      RC
 ZZZZZZ_PROGRAM	//=RECEIVE_BEEP//            1	=RECEIVE_BEEP{NUMBER};	M/1      RC
 ZZZZZZ_PROGRAM	//=RENAME_FILE//             1	=RENAME_FILE{OUTPUT FILE,INPUT FILE};	//1111  -NF,  -NF
-ZZZZZZ_PROGRAM	//=REPLACE_ALL//             1	=REPLACE_ALL{?_MM?_TT_TABLE,?_WORK_TABLE?A	//642*  -NT,  -NT,  =NC   =NC   -SQ   -SQ
-ZZZZZZ_PROGRAM	//=REPLACE_ALL//             2	=   ,XX_DATA1,XX_DATA2}{XX_KEY1,XX_KEY2}	/*
-ZZZZZZ_PROGRAM	//=REPLACE_ALL//             3	=   {OUTPUT WHERE}{INPUT WHERE};	/*
-ZZZZZZ_PROGRAM	//=REPLACE_ALL2//            1	=REPLACE_ALL2{?_MM?_TT_TABLE,?_WORK_TABLE?A	//642*  -NT,  -NT,  =NC   =NC   -SQ   -SQ
-ZZZZZZ_PROGRAM	//=REPLACE_ALL2//            2	=   ,XX_DATA1,XX_DATA2}{XX_KEY1,XX_KEY2}	/*
-ZZZZZZ_PROGRAM	//=REPLACE_ALL2//            3	=   {OUTPUT WHERE}{INPUT WHERE};	/*
-ZZZZZZ_PROGRAM	//=REPLACE_PART//            1	=REPLACE_PART{?_MM?_TT_TABLE,?_WORK_TABLE?A	//642*  -NT,  -NT,  =NC   =NC   -SQ   -SQ
-ZZZZZZ_PROGRAM	//=REPLACE_PART//            2	=   ,XX_DATA1,XX_DATA2}{XX_KEY1,XX_KEY2}	/*
-ZZZZZZ_PROGRAM	//=REPLACE_PART//            3	=   {[,(OUTPUT WHERE)]}{[,(INPUT WHERE)]};	/*
-ZZZZZZ_PROGRAM	//=REPLACE_PART_ADD//        1	=REPLACE_PART_ADD{?_MM?_TT_TABLE,?_WORK_TABLE?A	//642*  -NT,  -NT,  =NC   =NC   -SQ   -SQ
-ZZZZZZ_PROGRAM	//=REPLACE_PART_ADD//        2	=   ,XX_DATA1,XX_DATA2}{XX_KEY1,XX_KEY2}	/*
-ZZZZZZ_PROGRAM	//=REPLACE_PART_ADD//        3	=   {[,(OUTPUT WHERE)]}{[,(INPUT WHERE)]};	/*
-ZZZZZZ_PROGRAM	//=REPLACE_PART_ADD2//       1	=REPLACE_PART_ADD2{?_MM?_TT_TABLE,?_WORK_TABLE?	//642*  -NT,  -NT,  =NC   =NC   -SQ   -SQ
-ZZZZZZ_PROGRAM	//=REPLACE_PART_ADD2//       2	=   ,XX_DATA1,XX_DATA2}{XX_KEY1,XX_KEY2}	/*
-ZZZZZZ_PROGRAM	//=REPLACE_PART_ADD2//       3	=   {OUTPUT WHERE}{INPUT WHERE};	/*
-ZZZZZZ_PROGRAM	//=REPLACE_PART_CANCEL//     1	=REPLACE_PART_CANCEL{?_MM?_TT_TABLE	//641*  -NT,  -NT,  =NC   =NC   -SQ   -SQ
-ZZZZZZ_PROGRAM	//=REPLACE_PART_CANCEL//     2	=   ,?_WORK_TABLE?A}	/*
-ZZZZZZ_PROGRAM	//=REPLACE_PART_CANCEL//     3	=   {XX_KEY1,XX_KEY2}	/*
-ZZZZZZ_PROGRAM	//=REPLACE_PART_CANCEL//     4	=   {OUTPUT WHERE}{INPUT WHERE};	/*
-ZZZZZZ_PROGRAM	//=REPLACE_PART_CHANGE//     1	=REPLACE_PART_CHANGE{?_MM?_TT_TABLE	//642*  -NT,  -NT,  =NC   =NC   -SQ   -SQ
-ZZZZZZ_PROGRAM	//=REPLACE_PART_CHANGE//     2	=   ,?_WORK_TABLE?A	/*
-ZZZZZZ_PROGRAM	//=REPLACE_PART_CHANGE//     3	=   ,XX_DATA1,XX_DATA2}{XX_KEY1,XX_KEY2}	/*
-ZZZZZZ_PROGRAM	//=REPLACE_PART_CHANGE//     4	=   {OUTPUT WHERE}{INPUT WHERE};	/*
-ZZZZZZ_PROGRAM	//=REPLACE_PART_CHANGE2//    1	=REPLACE_PART_CHANGE2{?_MM?_TT_TABLE	//642*  -NT,  -NT,  =NC   =NC   -SQ   -SQ
-ZZZZZZ_PROGRAM	//=REPLACE_PART_CHANGE2//    2	=   ,?_WORK_TABLE?A	/*
-ZZZZZZ_PROGRAM	//=REPLACE_PART_CHANGE2//    3	=   ,XX_DATA1,XX_DATA2}{XX_KEY1,XX_KEY2}	/*
-ZZZZZZ_PROGRAM	//=REPLACE_PART_CHANGE2//    4	=   {OUTPUT WHERE}{INPUT WHERE};	/*
-ZZZZZZ_PROGRAM	//=REPLACE_PART2//           1	=REPLACE_PART2{?_MM?_TT_TABLE,?_WORK_TABLE?A	//642*  -NT,  -NT,  =NC   =NC   -SQ   -SQ
-ZZZZZZ_PROGRAM	//=REPLACE_PART2//           2	=   ,XX_DATA1,XX_DATA2}{XX_KEY1,XX_KEY2}	/*
-ZZZZZZ_PROGRAM	//=REPLACE_PART2//           3	=   {OUTPUT WHERE}{INPUT WHERE};	/*
+ZZZZZZ_PROGRAM	//=REPLACE_ALL//             1	=REPLACE_ALL{?&X1.TABLE?,?_WORK_TABLE?A	//642*  -NT,  -NT,  =NC   =NC   -SQ   -SQ
+ZZZZZZ_PROGRAM	//=REPLACE_ALL//             2	=   ,?&X1.DATA?}{?&X1.KEY?}	/*
+ZZZZZZ_PROGRAM	//=REPLACE_ALL//             3	=   {*O*.OUTPUT_COLUMN...}{I.INPUT_COLUMN...};	/*
+ZZZZZZ_PROGRAM	//=REPLACE_ALL2//            1	=REPLACE_ALL2{?&X1.TABLE?,?_WORK_TABLE?A	//642*  -NT,  -NT,  =NC   =NC   -SQ   -SQ
+ZZZZZZ_PROGRAM	//=REPLACE_ALL2//            2	=   ,?&X1.DATA?}{?&X1.KEY?}	/*
+ZZZZZZ_PROGRAM	//=REPLACE_ALL2//            3	=   {*O*.OUTPUT_COLUMN...}{I.INPUT_COLUMN...};	/*
+ZZZZZZ_PROGRAM	//=REPLACE_PART//            1	=REPLACE_PART{?&X1.TABLE?,?_WORK_TABLE?A	//642*  -NT,  -NT,  =NC   =NC   -SQ   -SQ
+ZZZZZZ_PROGRAM	//=REPLACE_PART//            2	=   ,?&X1.DATA?}{?&X1.KEY?}	/*
+ZZZZZZ_PROGRAM	//=REPLACE_PART//            3	=   {*O*.OUTPUT_COLUMN...}{I.INPUT_COLUMN...};	/*
+ZZZZZZ_PROGRAM	//=REPLACE_PART_ADD//        1	=REPLACE_PART_ADD{?&X1.TABLE?,?_WORK_TABLE?A	//642*  -NT,  -NT,  =NC   =NC   -SQ   -SQ
+ZZZZZZ_PROGRAM	//=REPLACE_PART_ADD//        2	=   ,?&X1.DATA?}{?&X1.KEY?}	/*
+ZZZZZZ_PROGRAM	//=REPLACE_PART_ADD//        3	=   {*O*.OUTPUT_COLUMN...}{I.INPUT_COLUMN...};	/*
+ZZZZZZ_PROGRAM	//=REPLACE_PART_ADD2//       1	=REPLACE_PART_ADD2{?&X1.TABLE?,?_WORK_TABLE?	//642*  -NT,  -NT,  =NC   =NC   -SQ   -SQ
+ZZZZZZ_PROGRAM	//=REPLACE_PART_ADD2//       2	=   ,?&X1.DATA?}{?&X1.KEY?}	/*
+ZZZZZZ_PROGRAM	//=REPLACE_PART_ADD2//       3	=   {*O*.OUTPUT_COLUMN...}{I.INPUT_COLUMN...};	/*
+ZZZZZZ_PROGRAM	//=REPLACE_PART_CANCEL//     1	=REPLACE_PART_CANCEL{?&X1.TABLE?,?_WORK_TABLE?A	//641*  -NT,  -NT,  =NC   =NC   -SQ   -SQ
+ZZZZZZ_PROGRAM	//=REPLACE_PART_CANCEL//     2	=   ,?&X1.DATA?}{?&X1.KEY?}	/*
+ZZZZZZ_PROGRAM	//=REPLACE_PART_CANCEL//     3	=   {*O*.OUTPUT_COLUMN...}{I.INPUT_COLUMN...};	/*
+ZZZZZZ_PROGRAM	//=REPLACE_PART_CHANGE//     1	=REPLACE_PART_CHANGE{?&X1.TABLE?,,?_WORK_TABLE?A	//642*  -NT,  -NT,  =NC   =NC   -SQ   -SQ
+ZZZZZZ_PROGRAM	//=REPLACE_PART_CHANGE//     2	=   ,?&X1.DATA?}{?&X1.KEY?}	/*
+ZZZZZZ_PROGRAM	//=REPLACE_PART_CHANGE//     3	=   {*O*.OUTPUT_COLUMN...}{I.INPUT_COLUMN...};	/*
+ZZZZZZ_PROGRAM	//=REPLACE_PART_CHANGE2//    1	=REPLACE_PART_CHANGE2{?&X1.TABLE?,,?_WORK_TABLE?A	//642*  -NT,  -NT,  =NC   =NC   -SQ   -SQ
+ZZZZZZ_PROGRAM	//=REPLACE_PART_CHANGE2//    2	=   ,?&X1.DATA?}{?&X1.KEY?}	/*
+ZZZZZZ_PROGRAM	//=REPLACE_PART_CHANGE2//    3	=   {*O*.OUTPUT_COLUMN...}{I.INPUT_COLUMN...};	/*
+ZZZZZZ_PROGRAM	//=REPLACE_PART2//           1	=REPLACE_PART2{?&X1.TABLE?,,?_WORK_TABLE?A	//642*  -NT,  -NT,  =NC   =NC   -SQ   -SQ
+ZZZZZZ_PROGRAM	//=REPLACE_PART2//           2	=   ,?&X1.DATA?}{?&X1.KEY?}	/*
+ZZZZZZ_PROGRAM	//=REPLACE_PART2//           3	=   {*O*.OUTPUT_COLUMN...}{I.INPUT_COLUMN...};	/*
 ZZZZZZ_PROGRAM	//=REVOKE_PERMISSION//       1	=REVOKE_PERMISSION{OBJECT}	//6     -NO   +OB   -PM   #LK
 ZZZZZZ_PROGRAM	//=REVOKE_PERMISSION//       2	=   {[TABLE,VIEW,FUNC,PROC,TRIG]}{ZZZY}{LINK};	/*
 ZZZZZZ_PROGRAM	//=SEND//                    1	=SEND{1-89}{COMPUTER;COMPUTER2}{MESSAGE};	//3      SD   ***   ***
@@ -1840,28 +1837,32 @@ ZZZZZZ_SYSTEM	ZZZZZZ_REGISTRY_PROXY	SYSTEM\CURRENTCONTROLSET\SERVICES\NLASVC\PAR
 ZZZZZZ_SYSTEM	ZZZZZZ_TIME_LIMIT	17:30	SYSTEM TIME LIMIT (HH:MM)[17:30]
 ZZZZZZ_SYSTEM	ZZZZZZ_TIME_START	08:30	SYSTEM START TIME (HH:MM)[08:30]
 ZZZZZZ_SYSTEM	ZZZZZZ_Z_CANCEL_DELETE	31	Z_CANCEL DELETE -(DAY)[31]
-ZZZZZZ_URL_VERSION	#D	https://dotnet.microsoft.com/download/dotnet/8.0/	,"#version_0">,8.0.15
-ZZZZZZ_URL_VERSION	#J	http://jdk.java.net/	,">JDK ,21
-ZZZZZZ_URL_VERSION	#J--	A	
-ZZZZZZ_URL_VERSION	#J2	http://jdk.java.net/21/	,>JDK ,21.0.2
+ZZZZZZ_URL_VERSION	#D	https://dotnet.microsoft.com/download/dotnet/8.0/	,"#version_0">,8.0.16
+ZZZZZZ_URL_VERSION	#J	https://jdk.java.net/archive/	,GA/jdk,21.0.2
+ZZZZZZ_URL_VERSION	#J--	24	23,22
+ZZZZZZ_URL_VERSION	#J*	*ttp://jdk.java.net/	,">JDK ,21
+ZZZZZZ_URL_VERSION	#J2*	*ttp://jdk.java.net/21/	,>JDK ,21.0.2
 ZZZZZZ_URL_VERSION	#M	https://www.mono-project.com/download/stable/	,installer/mono-,6.12.0.206
-ZZZZZZ_URL_VERSION	#O	https://www.nuget.org/packages?q=obfuscar	,/obfuscar/,2.2.47
+ZZZZZZ_URL_VERSION	#O	https://www.nuget.org/packages?q=obfuscar	,/obfuscar/,2.2.49
 ZZZZZZ_URL_VERSION	D#	*ttp://www.firebirdsql.org/en/firebird-2-5/	,: Firebird,2.5.9<
 ZZZZZZ_URL_VERSION	DJ	*ttp://www.firebirdsql.org/en/jdbc-driver/	,Jaybird-,3.0.8-
 ZZZZZZ_URL_VERSION	DJ--	3.0.0	
 ZZZZZZ_URL_VERSION	DN	*ttp://www.firebirdsql.org/en/additional-downloads	/,FirebirdClient-,7.1.1
 ZZZZZZ_URL_VERSION	IN	https://www.nuget.org/packages/IBM.Data.DB2.Core/	,content="IBM.Data.DB2.Core ,3.1.0.600
-ZZZZZZ_URL_VERSION	L#	https://mariadb.com/kb/en/changes-improvements-in-	mariadb-11-6/,Current Version: ,11.6.2
+ZZZZZZ_URL_VERSION	L#	https://downloads.mariadb.org/	,downloads.mariadb.org/mariadb/,11.6.2
+ZZZZZZ_URL_VERSION	L#--	11.7	11.8,12.0
 ZZZZZZ_URL_VERSION	L#*	*https://downloads.mariadb.org/	,downloads.mariadb.org/mariadb/,11.6.2
 ZZZZZZ_URL_VERSION	L#--*	*11.7.1/">11.7.1 RC	11.8.0/">11.8.0 preview
-ZZZZZZ_URL_VERSION	LJ	https://mariadb.com/kb/en/about-mariadb-connector-	J/,>MariaDB Connector/J ,3.5.3
+ZZZZZZ_URL_VERSION	L#**	**tps://mariadb.com/kb/en/changes-improvements-in-	mariadb-11-6/,Current Version: ,11.6.2
+ZZZZZZ_URL_VERSION	LJ	https://mariadb.org/connector-java/all-releases/	,8;rel=,3.5.3
 ZZZZZZ_URL_VERSION	LJ*	*https://mariadb.org/connector-java/all-releases/	,old=">,2.7.3
 ZZZZZZ_URL_VERSION	LJ--*	*3.0.0</a></td><td>2021-05-05</td><td>Alpha	
+ZZZZZZ_URL_VERSION	LJ**	https://mariadb.com/kb/en/about-mariadb-connector-	J/,>MariaDB Connector/J ,3.5.3
 ZZZZZZ_URL_VERSION	LN	https://www.nuget.org/packages/MySqlConnector/	,content="MySqlConnector ,2.4.0
 ZZZZZZ_URL_VERSION	MJ	https://docs.microsoft.com	
 ZZZZZZ_URL_VERSION	MJ*	*ttps://www.microsoft.com/ja-jp/download/details.a	spx?id=11774,JDBC Driver ,6.0
 ZZZZZZ_URL_VERSION	MJ++	/ja-jp/sql/connect/jdbc/download-microsoft-jdbc-dr	iver-for-sql-server,<p>バージョン ,12.10
-ZZZZZZ_URL_VERSION	MN	https://www.nuget.org/packages/Microsoft.Data.SqlC	lient,content="Microsoft.Data.SqlClient ,6.0.1
+ZZZZZZ_URL_VERSION	MN	https://www.nuget.org/packages/Microsoft.Data.SqlC	lient,content="Microsoft.Data.SqlClient ,6.0.2
 ZZZZZZ_URL_VERSION	OJ	https://www.oracle.com/jp/database/technologies/ap	pdev/jdbc-downloads.html,219/ojdbc,11
 ZZZZZZ_URL_VERSION	ON	https://www.nuget.org/packages/Oracle.ManagedDataA	ccess.Core,Oracle.ManagedDataAccess.Core ,23.8.0
 ZZZZZZ_URL_VERSION	P#	https://www.postgresql.org/	,><strong>,17.4

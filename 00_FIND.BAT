@@ -1,3 +1,3 @@
 @echo off
-find  "i-download" *.* > __FIND.TMP 
+find  "(Keys " *.* > __FIND.TMP 
 start notepad __FIND.TMP

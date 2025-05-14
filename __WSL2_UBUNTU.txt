@@ -1,0 +1,21 @@
+WSL2のUbuntuでの構築方法
+◎下記をコマンドプロンプトで管理者権限で実行するとWSL2とUBUNTUがインストール出来る。
+wsl --install
+(0)最新化
+sudo apt update
+sudo apt upgrade
+(1)日本語化方法。
+sudo apt -y install language-pack-ja
+sudo update-locale LANG=ja_JP.UTF8
+sudo apt -y install manpages-ja manpages-ja-dev
+sudo apt -y install fonts-noto-cjk
+sudo apt -y install fonts-ipafont
+sudo apt -y install fcitx-mozc
+.bashrcに以下を追加
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS=@im=fcitx
+(2)DOTNETの対応(.NET8.0、GTKの場合)
+×(sudo snap install dotnet-sdk --classic）
+sudo apt install -y dotnet-sdk-8.0
+sudo apt install -y libgtk-3-dev
