@@ -791,7 +791,7 @@ for(;CONTINUE_17>=sw;)//CONTINUE_17(17)>=swの場合のみ繰り返す。（ABOR
           if(','==edit_c){z_p.err_s="find ','";sw=ABORT_24;continue;}
           if(!z_p.e2s_b(w1_s_n.s,""))
             {if(!w_set_name_b(w1_s_n.s)){sw=ABORT_24;continue;}
-             w_set_data(z_mt_p.program_p.dir_dir_n.dir_file_s); 
+             if(0!=w_set_data(z_mt_p.program_p.dir_dir_n.dir_file_s)){sw=ABORT_24;continue;}  //VER37.8.0.17 
             } 
           sw=SKIP_LOOP_1;continue; //データ有りは";"まで移動する。
          } 
@@ -802,14 +802,14 @@ for(;CONTINUE_17>=sw;)//CONTINUE_17(17)>=swの場合のみ繰り返す。（ABOR
           if(!edit_word_b(w1_s_n,",}")){sw=ABORT_24;continue;}
           if(!z_p.e2s_b(w1_s_n.s,""))
             {if(!w_set_name_b(w1_s_n.s)){sw=ABORT_24;continue;}
-             w_set_data(z_mt_p.program_p.dir_n.dir_file_s); 
+             if(0!=w_set_data(z_mt_p.program_p.dir_n.dir_file_s)){sw=ABORT_24;continue;}  //VER37.8.0.17
             } 
           if('}'==edit_c){sw=SKIP_LOOP_1;continue;} //データ有りは";"まで移動する。
           if(!edit_word_b(w1_s_n,",}")){sw=ABORT_24;continue;}
           if(','==edit_c){z_p.err_s="find ','";sw=ABORT_24;continue;}
           if(!z_p.e2s_b(w1_s_n.s,""))
             {if(!w_set_name_b(w1_s_n.s)){sw=ABORT_24;continue;}
-             w_set_data(z_mt_p.program_p.dir_n.last_write_time_s); 
+             if(0!=w_set_data(z_mt_p.program_p.dir_n.last_write_time_s)){sw=ABORT_24;continue;}  //VER37.8.0.17 
             } 
           sw=SKIP_LOOP_1;continue; //データ有りは";"まで移動する。
          }
@@ -2544,12 +2544,14 @@ for(int sw2=0;;)//////( sw2 w1_n.sが左辺)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
             else {sw=ABORT_24;sw_continue_b=true;break;}
            }
          else if(!w_set_name_b(set_s)){sw=ABORT_24;sw_continue_b=true;break;} //データ名判定。
-         if(!z_p.e2s_b(z_mt_p.program_p.program_s,"NOT")&&z_p.e2s_b(w_kind_s,"DATA")
+         if(z_p.e3s_b(z_mt_p.program_p.program_s,"INPUT","OUTPUT")&&z_p.e2s_b(w_kind_s,"DATA")
             &&!z_p.e4s_b(z_mt_p.program_p.now_kind_s,"DATA","START","SQL")
             &&!z_p.starts_with_b(z_mt_p.program_p.now_kind_s,"STOP")&&!z_p.e2s_b(in_kind_s,"COLOR"))
             if(z_p.e2s_b(property_s,""))
-              {z_p.err_s="not set \""+w_data_n.name_s+"\"";sw=ABORT_24;sw_continue_b=true;break;}
-         w1_s_n.s=w_data_n.name_s;
+              {z_p.err_s="not set ["+z_mt_p.program_p.now_kind_s+(z_p.e2s_b(z_mt_p.program_p.now_kind_s,"SET")?"=":"")  //VER37.8.0.17
+               +"](DATA="+w_data_n.name_s+")";sw=ABORT_24;sw_continue_b=true;break;  //VER37.8.0.17
+              }  
+        w1_s_n.s=w_data_n.name_s;
         }
          if(SET2>=sw2)//--------------------------------------------------------------(SET2>=sw2)
            {w2_s_n.s="";
@@ -3265,6 +3267,13 @@ return(rc);
 int w_set_data(String s_si)
 {z_p.t_v(z_p.SE,"w_set_data(");
 int rc=0;
+if(z_p.e3s_b(z_mt_p.program_p.program_s,"INPUT","OUTPUT")&&z_p.e2s_b(w_kind_s,"DATA") //VER37.8.0.17
+   &&!z_p.e4s_b(z_mt_p.program_p.now_kind_s,"DATA","START","SQL") //VER37.8.0.17
+   &&!z_p.starts_with_b(z_mt_p.program_p.now_kind_s,"STOP")&&!z_p.e2s_b(in_kind_s,"COLOR")) //VER37.8.0.17
+   if(z_p.e2s_b(property_s,"")) //VER37.8.0.17
+     {z_p.err_s="not set ["+z_mt_p.program_p.now_kind_s+(z_p.e2s_b(z_mt_p.program_p.now_kind_s,"SET")?"=":"")  //VER37.8.0.17
+      +"](DATA="+w_data_n.name_s+")";return 9; //VER37.8.0.17
+     }
 rc=w_data_n.set_i(s_si);
 z_mt_p.trace_v(0,":"+w_name_top_s+w_data_n.name_s+"=\""+w_data_n.data_s+"\""); //VER15.1で修正。
 #if IMENU

@@ -151,12 +151,12 @@ public int column=0,begin_line=4,line=0,record_max=0;
 String cmd_s="",seq_s;
 readonly String[] CONTROL_SX?=?{"0","1","2","3","BEGIN_ENTER","ERROR","ERROR_SQL","IF_ERROR","JUDGE","MAX","PROGRAM" //VER17(IF_ERRORを追加)
 ,"PROGRAM_ERROR","PROGRAM_TEST","SAME","SCROLL","SMTP","SQL_DBO","SQL_D","SQL_OUT","SQL_O","SQL_LOGIN"
-,"SQL_TEST","WIDTH","HIGH","2_KEY","1_TABLE","1_PROGRAM","2_PROGRAM","3_PROGRAM","RESTORE_DB","ROLLUP","CUBE"
+,"SQL_TEST","WIDTH","HIGH","2_KEY","1_TABLE","1_PROGRAM","2_PROGRAM","3_PROGRAM","RESTORE_DB","ROLLUP","CUBE","TITLE"
                                };
-public int[] CONTROL_IX?=?{0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+public int[] CONTROL_IX?=?{0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 public readonly int C_0=0,C_1=1,C_2=2,C_3=3,C_BEGIN_ENTER_4=4,C_ERROR_5=5,C_ERROR_SQL_6=6,C_IF_ERROR_7=7,C_JUDGE_8=8,C_MAX_9=9,C_PROGRAM_10=10      //VER17
 ,C_PROGRAM_ERROR_11=11,C_PROGRAM_TEST_12=12,C_SAME_13=13,C_SCROLL_14=14,C_SMTP_15=15,C_SQL_DBO_16=16,C_SQL_D_17=17,C_SQL_OUT_18=18,C_SQL_O_19=19,C_SQL_LOGIN_20=20 //VER17
-,C_SQL_TEST_21=21,C_WIDTH_22=22,C_HIGH_23=23,C_2_KEY_24=24,C_1_TABLE_25=25,C_1_PROGRAM_26=26,C_2_PROGRAM_27=27,C_3_PROGRAM_28=28,C_RESTORE_DB_29=29,C_ROLLUP_30=30,C_CUBE_31=31; //VER18.1                            //VER17
+,C_SQL_TEST_21=21,C_WIDTH_22=22,C_HIGH_23=23,C_2_KEY_24=24,C_1_TABLE_25=25,C_1_PROGRAM_26=26,C_2_PROGRAM_27=27,C_3_PROGRAM_28=28,C_RESTORE_DB_29=29,C_ROLLUP_30=30,C_CUBE_31=31,C_TITLE_32=32; //VER18.1                            //VER17
 public String sel_s="INP",sel_test_s="";
 int sw_data_save=0;
 public String _pmx_wp_s()
@@ -653,7 +653,8 @@ for(;;)/////////////////////////////////////////////////////////////////////////
    break;
   }//for(;;)/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 z_mt_p.sql_n.sql_close_v(z_p.COMMIT,1);//入力開始時RDBMSの待ち状態を防ぐためCOMMITを実行。
-if(2==z_p.sw_return_sql){z_p.sw_return_sql=0;main_v(Keys.Enter,false,0);}//_RETURN_SQL対応(VER10.1)
+//if(2==z_p.sw_return_sql){z_p.sw_return_sql=0;main_v(Keys.Enter,false,0);}//_RETURN_SQL対応(VER10.1)//VER.8.0.17
+if(2==z_p.sw_return_sql){z_p.sw_return_sql=0;main_v(Keys.Left,false,1);main_v(Keys.Enter,false,0);}//_RETURN_SQL対応(VER10.1)//VER37.8.0.17
 z_p.t_v(z_p.PR,"main_v)25");
 return;
 }
@@ -1720,7 +1721,7 @@ for(;;)
          ii_zz_l ww_s_n=new ii_zz_l();
          z_mt_p.edit_b(ww_s_n,da_work_data_p.title_s);da_work_data_p.title_s=ww_s_n.s;//SET=のタイトルを編集。
 //HP     delete ww_s_n;
-         w1_s=da_work_data_p.title_s+s1_s+s2_s; //SET=の表示文字を組立て。
+         w1_s=da_work_data_p.title_s+(0!=CONTROL_IX[C_TITLE_32]?"":s1_s+s2_s); //SET=の表示文字を組立て。//VER37.8.0.17
          length=z_p.form_length(w1_s); //SET=の画面表示文字長を設定。
          if(z_p.e3s_b(da_work_data_p.type1_s,"+","-"))//数値の時はZERO表示に変更。
            {if     (' '==da_work_data_p.type2_c)da_work_data_p.type2_c='Z';
