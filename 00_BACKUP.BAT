@@ -1,0 +1,13 @@
+@ECHO ON
+SET DRV=J:
+SET DIR=\HARASAWA-BACKUP
+:LOOP1
+IF NOT EXIST %DRV%%DIR% ECHO %DRV%%DIR% NOT FOUND(ReTry)&PAUSE&GOTO LOOP1
+REM *****( BACKUP )****
+ROBOCOPY D:\HARASAWA\ %DRV%%DIR% /MIR /DCOPY:DAT > __00_BACKUP.TMP             
+ROBOCOPY %SystemDrive%\inetpub\wwwroot\      %DRV%\wwwroot-BACKUP    /MIR /DCOPY:DAT >> __00_BACKUP.TMP
+ROBOCOPY %USERPROFILE%\Documents\‚Í‚ª‚«ì‰Æ\ %DRV%\‚Í‚ª‚«ì‰Æ-BACKUP /MIR /DCOPY:DAT >> __00_BACKUP.TMP
+ROBOCOPY D:\software\_fujitsu\               %DRV%\_fujitsu-BACKUP   /MIR /DCOPY:DAT >> __00_BACKUP.TMP
+ROBOCOPY %USERPROFILE%\Desktop\              %DRV%\Desktop-BACKUP    /MIR /DCOPY:DAT >> __00_BACKUP.TMP
+:FIN
+PAUSE

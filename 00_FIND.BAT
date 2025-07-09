@@ -1,3 +1,3 @@
 @echo off
-find  "not set" *.* > __FIND.TMP 
+find  "err_s=" *.* > __FIND.TMP 
 start notepad __FIND.TMP

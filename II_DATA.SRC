@@ -30,7 +30,7 @@ public Font Font_n;public Brush Brush_n,org_Brush_n,save_Brush_n;
 public String font_s;
 public int line=0,column=0,length0=0 //表示の長さ
 ,length1=0,length2=0,filler=1,left_cnt=-1;
-public char mark1_c=' '; //(属性1,K=KEY,'*'=更新対象でない、' '=更新対象）
+public char mark1_c=' '; //(属性1,K=KEY,'*'=更新対象でない、' '=更新対象,'$'=更新と検索対象で無い） //VER38.8.0.18
 public char mark2_c=' '; //(属性2,' ','O'=表示,'N'=非表示,'/'=EnterのみOK,'!'='/'回避,'#'=SETでKeys.Down停止)
 public String mark3_s=""; //(属性3,"","L","I","E","=",">=","<=","<>" Where設定,L,I,EはLIKE,D=DESC,C=CUT,B=BOTTOM)
 public String mark4_s=""; //(属性4,"G","",GROUP BY)

@@ -2892,7 +2892,7 @@ for(int sw2=0;;)//////( sw2 w1_n.sが左辺)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                        else z_mt_p.program_p.random_i=random_i;
                        
                       }
-                else if(z_p.e2s_b(s_s,"_RETURN_SQL")){z_p.sw_return_sql=(z_p.e2s_b(w2_s_n.s,"1")?1:0);w3_s_n.s=w2_s_n.s;}
+                else if(z_p.e2s_b(s_s,"_RETURN_SQL")){z_p.sw_return_sql=(z_p.e2s_b(w2_s_n.s,"1")?1:(z_p.e2s_b(w2_s_n.s,"2")?2:0));w3_s_n.s=w2_s_n.s;}
                 else if(z_p.e2s_b(s_s,"_SPACE"))
                       {w3_s_n.s="";for(k=0;k<z_p.length(w2_s_n.s);k++)w3_s_n.s+=(' '>z_p.at_s_c(w2_s_n.s,k)?' ':z_p.at_s_c(w2_s_n.s,k));
                        z_mt_p.program_p.space_s=w3_s_n.s;  //空白以下空白化

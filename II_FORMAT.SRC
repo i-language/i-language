@@ -207,7 +207,7 @@ for(;9!=sw_list;)//for()list_0:(9!=sw_list)(((((((((((((((((((((((((((((((((((
            {data_cnt_save_n=w_data_n;
             w_s="";
             if(0==cnt){if(z_p.e2s_b(z_mt_p.program_p.program_s,"INPUT"))w_s="********** ";w_s+="*";} //VER23.1
-            else w_s=z_p.pad_end_s("",w_data_n.length0,('K'==w_data_n.mark1_c?'+':('*'==w_data_n.mark1_c?'*':'-')));
+            else w_s=z_p.pad_end_s("",w_data_n.length0,('K'==w_data_n.mark1_c?'+':('*'==w_data_n.mark1_c||'$'==w_data_n.mark1_c?'*':'-'))); //VER37.8.0.18
             z_mt_p.program_p.scroll_y_line_top=form_line_offset+id_cnt+2;
             z_mt_p.program_p.paint_list_n.add_v(w_s,form_line_offset+id_cnt+1
             ,z_mt_p.program_p.form_column_offset+w_data_n.column,w_data_n.length0
@@ -323,7 +323,7 @@ for(;9!=sw_list;)//for()list_0:(9!=sw_list)(((((((((((((((((((((((((((((((((((
                                      }
        else length=w_data_n.length0;
        if(0!=cnt)
-         {s1=('K'==w_data_n.mark1_c?"+":('*'==w_data_n.mark1_c?"*":"-"));
+         {s1=('K'==w_data_n.mark1_c?"+":('*'==w_data_n.mark1_c||'$'==w_data_n.mark1_c?"*":"-"));  //VER37.8.0.18
           s2=('O'==w_data_n.mark2_c||z_p.e2s_b(z_mt_p.program_p.program_s,"OUTPUT")?"=":"#");
           work_name_s=w_data_n.title_s+(0!=z_mt_p.program_p.CONTROL_IX[z_mt_p.program_p.C_TITLE_32]?"":s1+s2); //VER37.8.0.17
           length=z_p.form_length(work_name_s);

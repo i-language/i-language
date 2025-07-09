@@ -28,8 +28,8 @@ public class ii_z_l
 public enum prog_e
 {BEGIN
 //###(END以前をトレースし標準出力に書きます。)#############
-      ,AA  //全部に共通
   ,END
+      ,AA  //全部に共通
       ,KE  //KEYBOARD
       ,ME  //MENU	　
       ,PR  //PROGRAM

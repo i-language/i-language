@@ -468,7 +468,8 @@ for(;;)
          z_mt_n.title_bar_v();//タイトルバー表示 
         }
       resize_v(1);//画面サイズ変更 
-      if(1==z_p.sw_return_sql)z_p.sw_return_sql=2;//_RETURN_SQLの有効化。
+      if     (1==z_p.sw_return_sql)z_p.sw_return_sql=6;//_RETURN_SQLの有効化。
+      else if(2==z_p.sw_return_sql)z_p.sw_return_sql=7;//_RETURN_SQLの有効化。//VER37.8.0.18
       if(0<z_p.count_pr_i(z_mt_n.program_list_n.pr_a))//通常の戻り処理
         {z_p.sw_program=0;}//_RETURN_SQLの有効化。
       else//一番最初の状態に戻る。 
@@ -486,7 +487,7 @@ for(;;)
         } 
       z_p.sw_program=-1;//プログラム続行指定。
       Keys_ni=Keys.None;sw_ii=0;
-      if(1==z_p.sw_return_sql)z_p.sw_return_sql=0;//_RETURN_SQLクリア（戻った時のみ実行）
+      if(1==z_p.sw_return_sql||2==z_p.sw_return_sql)z_p.sw_return_sql=0;//_RETURN_SQLクリア（戻った時のみ実行）
 //HP  repaint();    
 //SJ  z_mt_n.program_p.paint_list_n.on_paint_v(); //画面作画  
       sw=MAIN;continue;//メイン処理へ
