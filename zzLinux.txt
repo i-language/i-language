@@ -1,0 +1,83 @@
+◎インストール
+rpm -ivh ~~~.rpm
+
+◎解凍
+unzip　~~~.zip　
+tar　zxvf ~~~.tar.gz
+
+◎javaバージョン変更
+update-alternatives --config java 
+
+◎DB2　インストール
+32 ビットのライブラリー・ファイル libstdc++.so.6 および /lib/libpam.so* が見つからない。－－＞無視して良い。
+db2 list db directory (データベース一覧）
+
+◎　スワップエリア拡大（６５MB)
+dd if=/dev/zero of=/swapfile bs=1024 count=65536
+mkswap /swapfile
+swapon /swapfile
+/etc/fstabに"/swapfile swap swap defaults 0 0"を追加。
+
+◎/etc/init.d/oracle-xe configure(oracle-起動スクリプト)
+◎ポート確認 netstat -anpt (rootで）
+◎cifsでmount出来ない場合ーーーcifs-utilsをインストールする。(Ubuntu:apt-get install cifs-utis)
+◎SELinuxを一時的に無効化---setenforce 0 (有効化は1)
+◎Ubuntu
+apt-get -y install samba (sambaをインストールする） 
+apt-get -y install at (atdをインストールする） 
+apt-get -y install sysv-rc-conf (sysv-rc-confをインストールする） 
+
+=====(　WSL対応　)======================
+
+◎UBUNTUをユーザー名ubuntuでインストールする(wsl --install Ubuntu)
+◎WSL1はWSL2にする。(wsl -l -v　で確認）（wsl --set-version Ubuntu 2)　
+◎sudo apt update
+◎sudo apt upgrade
+◎sudo apt -y install libxkbcommon-x11-0 (Qtのインストールで必要）
+◎/mnt/d/software/_linux/qt-unified-linux-x64-online.run　(Qtのインストール)
+◎Qtは「/home/ubuntu/Qtx.x.x」にインストールする。
+◎sudo apt -y install make　(コンパイルで必要）
+◎sudo apt -y install g++ 　(コンパイルで必要）
+◎sudo apt -y install libglu1-mesa-dev mesa-common-dev freeglut3-dev (OpenGLをインストール)
+◎WindowsからはWSLで起動。
+◎Windowsのディレクトリは「/mnt/ドライブ名/」で可能。
+=======================================
+WLSのUbuntuでの対応方法
+◎下記をコマンドプロンプトで管理者権限で実行するとWSL2とUBUNTUがインストール出来る。
+wsl --install
+(0)最新化
+sudo apt update
+sudo apt upgrade
+(1)日本語化方法。
+sudo apt -y install language-pack-ja
+sudo update-locale LANG=ja_JP.UTF8
+sudo apt -y install manpages-ja manpages-ja-dev
+sudo apt -y install fonts-noto-cjk
+sudo apt -y install fonts-ipafont
+sudo apt -y install fcitx-mozc
+im-config -n fcitx5
+.profilに以下を追加
+****************************************
+# For FCITX5
+while true; do
+  dbus-update-activation-environment --systemd DBUS_SESSION_BUS_ADDRESS DISPLAY XAUTHORITY 2> /dev/null && break
+done
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS="@im=fcitx"
+if [ $SHLVL = 1 ] ; then
+  (fcitx5 --disable=wayland -d --verbose '*'=0 &)
+fi
+*************************************
+(理由は分からないはwaylandは使わない宣言をしないとwslでうまく動かない模様）
+fcitx5-configtool で　mozcを⇦で左に移動後、⇧で上に移動
+==============================================
+DOTNETの対応(.NET8.0、GTKの場合)
+(1)sudo apt install -y dotnet-sdk-8.0
+(2)sudo apt install -y libgtk-3-dev
+(3)dotnet new --install GtkSharp.Template.CSharp
+=======================================
+sudo権限が無い時 (rootユーザーで入れる事が前提)
+(1)wsl -d ubuntu -u root (rootユーザーで入る)
+(2)usermod -aG sudo [ユーザー名]
+=======================================

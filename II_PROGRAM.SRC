@@ -5,16 +5,17 @@
 //PP #include "ii_include_pp.h"
 //SS using Microsoft.Data.SqlClient; //VER37.8.0.12
 //SS using System;
-//SS using System.Drawing;
 //SS using System.Collections.Generic;
 //SS using System.IO;
 #if IMENU||ITEST
-#if XAMARIN
-//SS using Xamarin.Forms;
-////SS using System.Drawing.Common;
-#else
+#if GTK
+//SS using Gtk;
+//SS using Gdk;
+//SS using Keys=Gdk.Key;
+#else //GTK
 //SS using System.Windows.Forms;
-#endif
+//SS using System.Drawing;
+#endif //GTK
 #endif
 //JJ import java.awt.*;
 //JJ import java.awt.event.*;
@@ -852,6 +853,7 @@ for(;;)
       seq_s=z_p.trim_s((z_p.at_s(z_p.s_program_a,program_cnt+1)));//プログラム無いシーケンス番号を設定。
       z_p.prog_s_n.s=z_p.trim_s((z_p.at_s(z_p.s_program_a,program_cnt+2)));
 //    z_mt_p.trace_v(0,"seq_s="+seq_s+"/"+z_p.to_i_s(program_cnt)+"/"+z_p.to_i_s(z_p.program_a_max)); //-----------------------------------------CPP ORACLE TEST-----//
+      if(!z_p.e2s_b(z_mt_p.tilde_s,""))z_p.prog_s_n.s=z_p.replace_s_s(z_p.prog_s_n.s,"~~",z_mt_p.tilde_s);       //"~~をTILDE=に設定　VER37.8.0.21
       if(0!=repeat0_cnt)z_p.prog_s_n.s=z_p.replace_s_s(z_p.replace_s_s(z_p.replace_s_s(z_p.prog_s_n.s //z_p.prog_s_n.sにプログラムを設定。
           //repeat0_cntで'$$','$+','$-'を編集。
          ,"$$",z_p.to_i_s(repeat0_cnt)),"$-",z_p.to_i_s(repeat0_cnt-1)),"$+",z_p.to_i_s(repeat0_cnt+1));
@@ -1234,6 +1236,11 @@ for(;;)
          w_s_n.s=z_mt_p.space_cut_s(w_s_n.s);
          if(z_p.length(w_s_n.s)<2||'%'!=z_p.at_s_c(w_s_n.s,0)){sw=ERR_21;break;}
          z_mt_p.set_name_data_b(z_p.da_sw_a,z_p.substring2_s(w_s_n.s,1),"+");        
+         sw=NEXT_14;continue;
+        }
+       if(z_p.e2s_b(s,"TILDE"))  //VER37.8.0.21
+        {if(!data_set_b(w_s_n,2)){sw=ERR_21;break;}
+         z_mt_p.tilde_s=z_mt_p.space_cut_s(w_s_n.s);        
          sw=NEXT_14;continue;
         }
       if(z_p.e2s_b(program_s,"")){sw=NEXT_14;continue;}
@@ -2935,6 +2942,7 @@ for(;NEXT_1>=sw;)//NEXT_1以下のみ実行
       if(z_p.e2s_b(s,"_SYSTEM_NAME")){w_s=z_p.system_name_s;sw=SET_NULL_6;break;}
       if(z_p.e2s_b(s,"_T")){w_s=table_alias_s;sw=SET_NULL_6;break;} //VER18.1
       if(z_p.e2s_b(s,"_TABLE")){if(z_p.e2s_b(table_s,"")){z_p.t_v(z_p.PR,"get_data_b)10");return set_data_err_b(s2_si);}z_mt_p.edit_b(ww1_s_n,table_s);w_s=ww1_s_n.s;sw=SET_NULL_6;break;}
+      if(z_p.e2s_b(s,"_TILDE")){w_s="~";sw=SET_NULL_6;break;} //VER37.8.0.21
       if(z_p.e2s_b(s,"_TIMEOUT_CONNECT")){w_s=z_p.to_i_s(z_p.timeout_connect);sw=SET_PLUS_NULL_5;break;}
       if(z_p.e2s_b(s,"_TIMEOUT_SQL")){w_s=z_p.to_i_s(z_p.timeout_sql);sw=SET_PLUS_NULL_5;break;}
       if(z_p.e2s_b(s,"_TMP")){w_s=z_p.get_tmp_path_s(z_p.dir_s);sw=SET_NULL_6;break;}

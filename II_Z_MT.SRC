@@ -9,12 +9,13 @@
 //SS using System.Collections.Generic;
 //SS using System.IO;
 #if IMENU
-//SS using System.Drawing;
-#if XAMARIN
-//SS using Xamarin.Forms;
-#else
+#if GTK
+//SS using Gtk;
+//SS using Gdk;
+#else //GTK
 //SS using System.Windows.Forms;
-#endif
+//SS using System.Drawing;
+#endif //GTK
 #endif
 //JJ import java.awt.*;
 //JJ import java.awt.event.*;
@@ -40,6 +41,7 @@ public int sw_err=0,sw_exit=0,sw_use_job=0;
 public String window_s="00",pass_date_s="",restore_db_s="";
 public ii_socket_l socket_n= null ;
 public ii_z_l z_p;
+public String tilde_s=""; //VER37.8.0.21
 void set_v(ii_z_l z_ni)
 {z_p=z_ni;
 db_n=new ii_db_l(z_p);

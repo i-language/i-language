@@ -481,19 +481,20 @@ for(i=0;i<name_sx.Length;i++)
         write_v("<Project Sdk=\"Microsoft.NET.Sdk\">");
         write_v("  <PropertyGroup>");
         write_v("    <RuntimeIdentifier>"+("W"==wu_si?"win":"linux")+"-x64</RuntimeIdentifier>");
-        write_v("    <DefineConstants>"+wu_si+";"+def_s+";DOTNET;ODP"+define_s+(def_s.StartsWith("ITE")?";XAMARIN":"")+"</DefineConstants>");
+        write_v("    <DefineConstants>"+wu_si+";"+def_s+";DOTNET;ODP"+define_s+("U"==wu_si?";GTK":"")+"</DefineConstants>");
         write_v("    <EnableDefaultItems>false</EnableDefaultItems>");
-        if(def_s.StartsWith("IME")||def_s.StartsWith("IP")||def_s.StartsWith("ICH"))
+        if((def_s.StartsWith("IME")||def_s.StartsWith("IP")||def_s.StartsWith("ICH"))&&"W"==wu_si)
           {write_v("    <UseWindowsForms>true</UseWindowsForms>");
            if(!def_s.StartsWith("ITI"))write_v("    <OutputType>WinExe</OutputType>");
 //         write_v("    <TargetFramework>net"+net_s+".0-windows</TargetFramework>");
-           write_v("    <TargetFramework>net"+net_s+"-windows</TargetFramework>");
+//           write_v("    <TargetFramework>net"+net_s+"-windows</TargetFramework>");
           } 
         else 
           {write_v("    <OutputType>Exe</OutputType>");
- //          write_v("    <TargetFramework>net"+net_s+".0</TargetFramework>");
-          write_v("    <TargetFramework>net"+net_s+"-windows</TargetFramework>");
+//         write_v("    <TargetFramework>net"+net_s+".0</TargetFramework>");
+//         write_v("    <TargetFramework>net"+net_s+"-windows</TargetFramework>");
           }
+        write_v("    <TargetFramework>net"+net_s+("W"==wu_si?"-windows":"")+"</TargetFramework>");
         if(def_s.StartsWith("ITI"))write_v("    <OutputType>Exe</OutputType>");
 //         write_v("    <TargetFramework>netcoreapp5.0</TargetFramework>");
 //        write_v("    <TargetFramework>net5.0"+("W"==wu_si?"-windows":"")+"</TargetFramework>");
@@ -521,8 +522,9 @@ for(i=0;i<name_sx.Length;i++)
         if(def_s.StartsWith("IRO"))
            write_v("    <None Include=\"IROOT.EXE.MANIFEST\" />");
         for(int ii=0;w1_sa.Count>ii;ii++)
-          if("W"==wu_s){if("!"!=w1_sa[ii])write_package_v(w1_sa[ii],w2_sa[ii]);}
+          if("W"==wu_si){if("!"!=w1_sa[ii])write_package_v(w1_sa[ii],w2_sa[ii]);}
           else         {if("!"!=u1_sa[ii])write_package_v(u1_sa[ii],u2_sa[ii]);}
+ //       if("U"==wu_si)write_package_v("GtkSharp","*");
  //       if(def_s.StartsWith("ITE")){write_package_v("Xamarin.Forms","*");write_package_v("System.Drawing.Common","*");
 //                                   write_package_v("Microsoft.Maui","6.0.100-preview.5.794");
 //                                   write_package_v("CommunityToolkit.Maui","*");

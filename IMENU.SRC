@@ -23,9 +23,17 @@
 //PP #include "imenu.h"
 //SS using System;
 //SS using System.Collections.Generic;
-//SS using System.Drawing;
 //SS using System.IO;
+#if GTK
+//SS using Gtk;
+//SS using Gdk;
+//SS using Keys=Gdk.Key;
+//SS using Form=Gtk.Window;
+//SS using PreviewKeyDownEventArgs=Gtk.KeyPressEventArgs; 
+#else //GTK
 //SS using System.Windows.Forms;
+#endif //GTK
+//SS using System.Drawing;
 //SS using System.Threading;
 //JJ import java.awt.*;
 //JJ import java.awt.event.*;
@@ -117,7 +125,9 @@ public void close_v()//全終了命令。
 //SS }
 //###############################################################################################################
 //SS public class ii_menu_l
+#if !GTK
 //SS :ScrollableControl //ScrollableControlを継承。（日本語入力対応）
+#endif //GTK
 //SS {
 public String zzzz_arg_sleep_s="",zzzz_arg_retry_s="";
 public ii_scroll_l x_scroll_n;public ii_scroll_l y_scroll_n; 
@@ -446,7 +456,7 @@ for(;;)
       if(-1==z_p.sw_program)break;//処理中はfinへ。
      }//if(FETCH>=sw)
    if(MODORI>=sw)
-     {if('M'==z_mt_n.program_c&&1==z_p.sw_program){z_mt_n.program_c='S';z_p.sw_program=0;}//メニューからジョブ起動へ移動
+     {if('M'==z_mt_n.program_c&&1==z_p.sw_program){z_mt_n.program_c='S';z_p.sw_program=0;z_mt_n.tilde_s="";}//メニューからジョブ起動へ移動 //VER37.8.0.21
       int save_sw_program=z_p.sw_program;//z_p.sw_programをsave_sw_programに転送。
       bool sw_exit_b=false; //最初のENDのEXIT()は有効とする。
       for(;z_p.count_pr_i(z_mt_n.program_list_n.pr_a)>save_sw_program;)//使用していた領域を戻るプログラムの次まで解放を繰り返す
@@ -937,7 +947,13 @@ z_p.sw_printer=0;//プリンタ印刷終了。
 //JJ public void mouseEntered(MouseEvent e_ni){}
 //JJ public void mouseClicked(MouseEvent e_ni){}
 //HP void wheelEvent(QWheelEvent *e_ni)
-//SS void mouse_wheel_v(Object o_ni,MouseEventArgs e_ni)
+//SS void mouse_wheel_v(Object o_ni,
+#if GTK
+//SS Gtk.ScrollArgs
+#else //GTK
+//SS MouseEventArgs
+#endif //GTK
+//SS  e_ni)
 //JJ public void mouseWheelMoved(MouseWheelEvent e_ni)
 {z_p.t_v(z_p.ME,"mouse_move(");
 //HP Point p_nn=e_ni.pixelDelta();  //VER36.1
@@ -976,7 +992,13 @@ int x_mouse_i=0,y_mouse_i=0,mouse_button=0;
 }
 //=*****(  マウス ダウン 1/2)************
 //HP void mousePressEvent(QMouseEvent *e_ni)
-//SS void mouse_down_v(Object o_ni,MouseEventArgs e_ni)
+//SS void mouse_down_v(Object o_ni,
+#if GTK
+//SS Gtk.ButtonPressEventArgs
+#else //GTK
+//SS MouseEventArgs 
+//SS e_ni)
+#endif
 //JJ public void mousePressed(MouseEvent e_ni)
 {z_p.t_v(z_p.ME,"mouse_press(");
 //JJ if(1==sw_popup_menu)imenu_p.repaint();
@@ -990,7 +1012,13 @@ z_p.sw_mouse=1;//マウスが押された。
 //---------------------------------------------------------------------
 //=*****(  マウス の移動 )************
 //HP void mouseMoveEvent(QMouseEvent *e_ni)
-//SS void mouse_move_v(Object o_ni,MouseEventArgs e_ni)
+//SS void mouse_move_v(Object o_ni,
+#if GTK
+//SS Gtk.MotionNotifyEventArgs
+#else //GTK
+//SS MouseEventArgs
+#endif //GTK
+//SS e_ni)
 //JJ public void mouseDragged(MouseEvent e_ni)
 {z_p.t_v(z_p.ME,"mouse_move(");
 mouse_point_v(e_ni);
@@ -1044,7 +1072,13 @@ return;
 //---------------------------------------------------------------------
 //=*****(  マウス アップ 3/3)************
 //HP void mouseReleaseEvent(QMouseEvent *e_ni)
-//SS void mouse_up_v(Object o_ni,MouseEventArgs e_ni)
+//SS void mouse_up_v(Object o_ni,
+#if GTK
+//SS Gtk.ButtonReleaseEventArgs
+#else //GTK
+//SS MouseEventArgs 
+#endif //GTK
+//SS e_ni)
 //JJ public void mouseReleased(MouseEvent e_ni)
 {z_p.t_v(z_p.ME,"mouse_release(");
 mouse_point_v(e_ni);

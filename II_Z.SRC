@@ -8,12 +8,14 @@
 //SS using System.Collections.Generic;
 //SS using System.IO;
 #if IMENU||ICHART||IPRINT||ISETUP||IPAPER||ICHART2
-//SS using System.Drawing;
-#if XAMARIN
-//SS using Xamarin.Forms;
-#else
+#if GTK
+//SS using Gtk;
+//SS using Gdk;
+//SS using Keys=Gdk.Key;
+#else //GTK
 //SS using System.Windows.Forms;
-#endif
+//SS using System.Drawing;
+#endif //GTK
 #endif
 //JJ import java.awt.*;
 //JJ import java.awt.event.*;

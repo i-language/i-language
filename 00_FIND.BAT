@@ -1,3 +1,3 @@
 @echo off
-find  "SPACE" *.* > __FIND.TMP 
+find  "mouse_wheel_v" *.* > __FIND.TMP 
 start notepad __FIND.TMP

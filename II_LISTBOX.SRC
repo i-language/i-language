@@ -8,13 +8,15 @@
 //SS using System;
 //SS using System.Collections.Generic;
 //SS using System.IO;
-#if XAMARIN
-//SS using Xamarin.Forms;
-////SS using System.Drawing.Common;
-#else
+#if GTK
+//SS using Gtk;
+//SS using Gdk;
+//SS using Keys=Gdk.Key;
+//SS using Form=Gtk.Window;
+#else //GTK
 //SS using System.Windows.Forms;
 //SS using System.Drawing;
-#endif
+#endif //GTK
 //JJ import java.awt.*;
 //JJ import java.awt.event.*;
 //JJ import java.io.*;

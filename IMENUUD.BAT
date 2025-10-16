@@ -1,0 +1,6 @@
+@ECHO OFF
+SET I_LOG_U=D:\HARASAWA\I37_WORK\TMP_CSC_COMPILE_U.TXT
+IF "%1"=="" CALL C_SOURCE.BAT
+wsl dotnet build /mnt/d/HARASAWA/I37_WORK/IMENUUD.csproj > %I_LOG_U%
+notepad %I_LOG_U%
+pause
