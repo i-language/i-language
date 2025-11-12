@@ -1,0 +1,63 @@
+//SS using System;
+//SS using System.Speech.Recognition;
+
+class Program
+{
+static void Main()
+{
+//SS SpeechRecognitionEngine sre_n=new SpeechRecognitionEngine(/*new System.Globalization.CultureInfo("ja-JP")*/);
+//SS Choices c_n=new Choices();
+//SS c_n.Add(new String[]{"ESCAPE","F1","F2","F3","F4","F5","F6","F7","F8","SHIFTF5","SHIFTF6","SHIFTF7","SHIFTF8","INSERT","DELETE","CONTROLDELETE","HOME","END","PAGEUP","PAGEDOWN"});
+//SS for (int i=0;i<=9;i++)c_n.Add(i.ToString());
+//SS c_n.Add(new String[]{"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"});
+//SS c_n.Add(new String[]{"!","DOUBLEQUOTED","#","$","%","&","'","(",")","=","~","|","-","^","\\","`","{","+","*","}","<",">","?","_","@","[",";",":","]",",",".","/","\\"});
+//SS c_n.Add(new String[]{"BACK","CONTROLBACK","TAB","SHIFTTAB","ENTER","CONTROLP","CONTROLA","CONTROLV"});
+//SS c_n.Add(new String[]{"LEFT","CONTROLLEFT","CONTROLSHIFTLEFT","RIGHT","CONTROLRIGHT","CONTROLSHIFTRIGHT"});
+//SS c_n.Add(new String[]{"UP","SHIFTUP","CONTROLUP","CONTROLSHIFTUP","DOWN","SHIFTDOWN","CONTROLDOWN","CONTROLSHIFTDOWN"});
+//SS GrammarBuilder gb_n=new GrammarBuilder();
+
+//SS gb_n.Append(c_n);
+//SS sre_n.LoadGrammar(new Grammar(gb_n));
+//SS sre_n.SpeechRecognized+=(o_i,e_ni)=>
+//SS {/*ii_z_l z_p=new ii_z_l(); 
+//SS Key k;bool shift_b=false,control_b=false,alter_b=false;
+//SS String s=e_ni.Result.Text;
+//SS if     (z_p.start_with_b(s,"CONTROLSHIFT")){control_b=true;shift_b=true;}
+//SS else if(z_p.start_with_b(s,"CONTROL")){control_b=true;}
+//SS else if(z_p.start_with_b(s,"SHIFT")){shift_b=true;}
+//SS if     (z_p.ends_with_b(s,"ENTER"))k=Keys.Enter;
+//SS else if(z_p.ends_with_b(s,"ESCAPE"))k=Keys.Escape;
+//SS else if(z_p.ends_with_b(s,"TAB"))k=Keys.Tab;
+//SS else if(z_p.ends_with_b(s,"UP"))k=Keys.Up;
+//SS else if(z_p.ends_with_b(s,"DOWN"))k=Keys.Down;
+//SS else if(z_p.ends_with_b(s,"BACK"))k=Keys.Back;
+//SS else if(z_p.ends_with_b(s,"LEFT"))k=Keys.Left;
+//SS else if(z_p.ends_with_b(s,"RIGHT"))k=Keys.Right;
+//SS else if(z_p.ends_with_b(s,"INSERT"))k=Keys.Insert;
+//SS else if(z_p.ends_with_b(s,"DELETE"))k=Keys.Delete;
+//SS else if(z_p.ends_with_b(s,"PAGEDOWN"))k=Keys.PageDown;
+//SS else if(z_p.ends_with_b(s,"PAGEUP"))k=Keys.PageUp;
+//SS else if(z_p.ends_with_b(s,"HOME"))k=Keys.Home;
+//SS else if(z_p.ends_with_b(s,"END"))k=Keys.End;
+//SS else if(z_p.ends_with_b(s,"F1"))k=Keys.F1;
+//SS else if(z_p.ends_with_b(s,"F2"))k=Keys.F2;
+//SS else if(z_p.ends_with_b(s,"F3"))k=Keys.F3;
+//SS else if(z_p.ends_with_b(s,"F4"))k=Keys.F4;
+//SS else if(z_p.ends_with_b(s,"F5"))k=Keys.F5;
+//SS else if(z_p.ends_with_b(s,"F6"))k=Keys.F6;
+//SS else if(z_p.ends_with_b(s,"F7"))k=Keys.F7;
+//SS else if(z_p.ends_with_b(s,"F8"))k=Keys.F8;
+//SS else
+//SS   {Console.WriteLine("認識結果: " + e_ni.Result.Text);
+//SS    return;
+//SS   }
+*/
+//SS  Console.WriteLine("制御文字: " + e_ni.Result.Text);
+//SS };
+//SS Console.WriteLine("話しかけてみてね！（終了するには Ctrl+C）");
+//SS sre_n.SetInputToDefaultAudioDevice();
+//SS sre_n.RecognizeAsync(RecognizeMode.Multiple);
+//SS             Console.ReadLine();
+//for(;;)
+}
+}

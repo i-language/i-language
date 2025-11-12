@@ -8,6 +8,7 @@
 //SS using System.Drawing;
 //SS using System.IO;
 //SS using Microsoft.Win32;
+//SS using System.Threading;
 //SS using System.Threading.Tasks;
 //SS using System.Speech.Synthesis; //VER8.0.13
 //JJ import java.awt.*;
@@ -1546,6 +1547,17 @@ else if(z_p.e2s_b(s,"READ_OPEN"))
      {if(CONTINUE_NORMAL_0!=sw_skip){sw=LOOP_2;continue;}  //スキップ中　 
 //SS  if(null==speak_n)speak_n=new SpeechSynthesizer();
 //SS  speak_n.Speak(opt1_s);
+////PP  QCoreApplication a();
+////PP  QTextToSpeech *speak_p=new QTextToSpeech(&a);
+////PP  speak_p->say(opt1_s);
+////PP  delete speak_p;
+      sw=CHECK_RC_10;continue;
+     }
+ else if(z_p.e2s_b(s,"SPEAK_THREAD"))//VER10.0.0
+     {if(CONTINUE_NORMAL_0!=sw_skip){sw=LOOP_2;continue;}  //スキップ中　 
+//SS  if(null==speak_n)speak_n=new SpeechSynthesizer();
+//SS  Thread t = new Thread(new ThreadStart(()=>{speak_n.Speak(opt1_s);}));
+//SS  t.Start();
 ////PP  QCoreApplication a();
 ////PP  QTextToSpeech *speak_p=new QTextToSpeech(&a);
 ////PP  speak_p->say(opt1_s);

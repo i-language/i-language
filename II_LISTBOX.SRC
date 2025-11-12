@@ -13,6 +13,9 @@
 //SS using Gdk;
 //SS using Keys=Gdk.Key;
 //SS using Form=Gtk.Window;
+//SS using MouseEventArgs=Gtk.ButtonPressEventArgs;
+//SS using KeyEventArgs=Gtk.KeyReleaseEventArgs;
+
 #else //GTK
 //SS using System.Windows.Forms;
 //SS using System.Drawing;
@@ -69,19 +72,25 @@ listbox2_n=new ii_listbox2_l(z_p,z_mt_p);//リストボックス作成
 //JJ  Panel_n.add(ScrollPane_n);//スクロールバーをリスト一覧表示パネルに追加。
 //}
 //----------------------------------------------
+#if GTK
+//SS listbox2_n.AddEvents((int)(Gdk.EventMask.KeyReleaseMask|Gdk.EventMask.KeyPressMask|Gdk.EventMask.ButtonPressMask|Gdk.EventMask.FocusChangeMask));
+//SS listbox2_n.ButtonPressEvent+=listbox_mouse_down_v;
+//SS listbox2_n.KeyReleaseEvent+=listbox_key_up_v;
+#else //GTK
 //SS  listbox2_n.MouseDown+=new MouseEventHandler(listbox_mouse_down_v);//マウスリスナー有効化。
 //JJ  listbox2_n.addMouseListener(this);//マウスリスナー有効化。
 //SS   listbox2_n.KeyUp+=new KeyEventHandler(listbox_key_up_v);//キーリスナー有効化。
 //JJ   listbox2_n.addKeyListener(this);//キーリスナー有効化。
+#endif //GTK
 z_p.t_v(z_p.LI,"ii_listbox_l)");
 }
 //----------------------------------------------
 //HP public void mouseRelease_v(int i_i)
-#if XAMARIN
-//SS void listbox_mouse_down_v(object o_ni,EventArgs e_ni)
-#else
+//#if GTK
+////SS void listbox_mouse_down_v(object o_ni,Gtk.ButtonPressEventArgs e_ni)
+//#else //GTK
 //SS void listbox_mouse_down_v(object o_ni,MouseEventArgs e_ni)
-#endif
+//#endif //GTK
 //JJ public void mouseReleased(MouseEvent e_ni)
 {z_p.t_v(z_p.LI,"mouse_release(");
 //HP now_cnt=i_i;
@@ -93,11 +102,11 @@ z_p.t_v(z_p.LI,"mouse_release)");
 //----------------------------------------------
 //JJ public void keyPressed (KeyEvent e_ni){}
 //JJ public void keyTyped   (KeyEvent e_ni){}
-#if XAMARIN
-//SS void listbox_key_up_v(object o_ni,EventArgs e_ni)
-#else
+//#if GTK
+////SS void listbox_key_up_v(object o_ni,Gtk.KeyReleaseEventArgs e_ni)
+//#else //GTK
 //SS void listbox_key_up_v(object o_ni,KeyEventArgs e_ni)
-#endif
+//#endif //GTK
 //JJ public void keyReleased(KeyEvent e_ni)
 //SJ {z_p.t_v(z_p.LI,"key_release(");
 //SS Keys keys_n=new Keys(); keys_n=e_ni.KeyCode;

@@ -1,0 +1,20 @@
+#if GTK
+//II_GTK.SRC 
+//SS using System;
+//SS public class ii_brush_l
+//SS {public float    f1=0;
+//SS  public float    f2=0;
+//SS  public float    f3=0;
+//SS public ii_brush_l(float f1_fi,float f2_fi,float f3_fi){f1=f1_fi;f2=f2_fi;f3=f3_fi;} 
+//SS }
+//SS public class ii_font_l
+//SS {public String s="";
+//SS  public int    i=0;
+//SS public ii_font_l(String s_i,int i_i){s=s_i;i=i_i;}
+//SS }
+//SS public class ii_pen_l
+//SS {public String s="";
+//SS  public int    i=0;
+//SS public ii_pen_l(){}
+//SS }
+#endif

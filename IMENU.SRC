@@ -24,12 +24,13 @@
 //SS using System;
 //SS using System.Collections.Generic;
 //SS using System.IO;
+//SS using System.Speech.Recognition;
+//SS using System.Threading.Tasks;
 #if GTK
 //SS using Gtk;
 //SS using Gdk;
 //SS using Keys=Gdk.Key;
 //SS using Form=Gtk.Window;
-//SS using PreviewKeyDownEventArgs=Gtk.KeyPressEventArgs; 
 #else //GTK
 //SS using System.Windows.Forms;
 #endif //GTK
@@ -106,7 +107,9 @@ public void close_v()//全終了命令。
 //JJ dispose();
     }catch(Exception){}
 }
+#if !GTK
 //SS ii_menu_l menu_n;
+#endif //!GTK
 //SS public imenu_l(ii_z_l z_ni) //imenu_l開始処理
 //SS {
 #if DOTNET
@@ -117,18 +120,20 @@ public void close_v()//全終了命令。
 //SS  =new System.ComponentModel.ComponentResourceManager(typeof(imenu_l)); //アイコン読み込み
 //SS Icon=((Icon)(resources.GetObject("$this.Icon"))); //アイコン設定
 #endif //DOTNET
-//SS menu_n=new ii_menu_l(z_ni,this); //日本語入力対応の為ScrollableControlを使用。
+#if !GTK
+//SS menu_n=new //日本語入力対応の為ScrollableControlを使用。
+#endif //!GTK
+//SS            ii_menu_l(z_ni,this); 
 //SS menu_n.Dock=DockStyle.Fill; //フォームのすべての辺とドッキングさせる。
 //SS BackColor=Color.FromArgb(z_ni.N_COLOR,z_ni.N_COLOR,z_ni.N_COLOR);//背景塗りつぶし。
 //SS this.Controls.Add(menu_n); //コントロールとして追加。
 //SS }
+#if !GTK
 //SS }
 //###############################################################################################################
-//SS public class ii_menu_l
-#if !GTK
-//SS :ScrollableControl //ScrollableControlを継承。（日本語入力対応）
-#endif //GTK
-//SS {
+//SS public class ii_menu_l:ScrollableControl
+//SS { //ScrollableControlを継承。（日本語入力対応）
+#endif //!GTK
 public String zzzz_arg_sleep_s="",zzzz_arg_retry_s="";
 public ii_scroll_l x_scroll_n;public ii_scroll_l y_scroll_n; 
 int line_cnt=0,column_cnt=0,cnt,x_mouse_down=0,x_mouse_start=0,x_mouse_stop=0,x_offset=0
@@ -149,7 +154,11 @@ ii_z_l z_p;
 //JJ java.util.Timer Timer_udp_n;  //UDP用タイマー
 //---------------------------------------------------------------------
 //JP public imenu_l(ii_z_l z_ni) //imenu_l開始処理
-//SS public ii_menu_l(ii_z_l z_ni,imenu_l imenu_ni)
+//SS public 
+#if GTK
+//SS void
+#endif //GTK
+//SS ii_menu_l(ii_z_l z_ni,imenu_l imenu_ni)
 {
 //SS Timer_n.AutoReset=false;
 //SS Timer_udp_n.AutoReset=false;
@@ -214,6 +223,20 @@ if(z_p.Y_MAX>z_mt_n.form_y_desktop)
 z_mt_n.window_size_v(z_p.lang_x_width*(z_p.X_MAX+2),z_p.lang_y_high*(z_p.Y_MAX));//画面サイズ決定。//VER24.1
 //HP resize(z_mt_n.x_window_size,z_mt_n.y_window_size);
 //=*****(  各種EventHandler設定  )******************
+#if GTK
+//SS AddEvents((int)(Gdk.EventMask.KeyPressMask|Gdk.EventMask.KeyReleaseMask|
+//SS   Gdk.EventMask.ButtonPressMask|Gdk.EventMask.ButtonReleaseMask|Gdk.EventMask.ScrollMask|
+//SS   Gdk.EventMask.PointerMotionMask|Gdk.EventMask.FocusChangeMask|Gdk.EventMask.ConfigerMask));
+//SS KeyPressEvent+=key_down_v;
+//SS KeyReleaseEvent+=key_press_v;
+//SS ButtonPressEvent+=mouse_down_v;
+//SS ButtonReleaseEvent+=mouse_up_v;
+//SS MotionNotifyEvent+=mouse_wheel_v;
+//SS ScrollEvent+=mouse_move_v;
+//SS FocusInEvent += focus_in_event_v;
+//SS FocusOutEvent += focus_out_event_v;
+//SS ConfigureEvent+=configure_event_v;
+#else //GTK
 //SS MouseWheel+=new MouseEventHandler(mouse_wheel_v);
 //JJ addMouseWheelListener(this);
 //SS MouseDown+=new MouseEventHandler(mouse_down_v);
@@ -225,6 +248,7 @@ z_mt_n.window_size_v(z_p.lang_x_width*(z_p.X_MAX+2),z_p.lang_y_high*(z_p.Y_MAX))
 //SS KeyPress +=new KeyPressEventHandler(key_press_v);
 //JJ addKeyListener(this);
 //JJ addWindowListener(this);
+#endif //GTK
 String keep_person_security_s="";
 if(z_p.SW_OFF_0!=z_mt_n.sw_err)
   {
@@ -247,11 +271,13 @@ for(i=1;i<z_p.count_s_i(z_p.s_arg_a);i++)//コマンドラインパラメータ�
         if(0<z_p.count_sx_i(z_p.parameter_sx))z_p.timeout_connect=z_p.to_int_check(z_p.parameter_sx[0],'+',30,0);
         if(1<z_p.count_sx_i(z_p.parameter_sx))z_p.timeout_sql=z_p.to_int_check(z_p.parameter_sx[1],'+',600,0);
         if(2<z_p.count_sx_i(z_p.parameter_sx))
-           {if(z_p.e2s_b(z_p.parameter_sx[2],"TRACE"))z_p.sw_trace_s="1";//3番目が"TRACE"はトレースする
+           {if     (z_p.e2s_b(z_p.parameter_sx[2],"TRACE"))z_p.sw_trace_s="1";//3番目が"TRACE"はトレースする
+            else if(z_p.e2s_b(z_p.parameter_sx[2],"SPEAK"))z_p.sw_speak=1;//3番目が"SPEAK"は音声入力する
             else z_p.form_percent=z_p.to_int_check(z_p.parameter_sx[2],'+',0,0);
            }
         if(3<z_p.count_sx_i(z_p.parameter_sx))
-           {if(z_p.e2s_b(z_p.parameter_sx[3],"TRACE"))z_p.sw_trace_s="1";//4番目が"TRACE"はトレースする
+           {if     (z_p.e2s_b(z_p.parameter_sx[3],"TRACE"))z_p.sw_trace_s="1";//4番目が"TRACE"はトレースする
+            else if(z_p.e2s_b(z_p.parameter_sx[3],"SPEAK"))z_p.sw_speak=1;//4番目が"SPEAK"は音声入力する
             else z_p.form_percent=z_p.to_int_check(z_p.parameter_sx[3],'+',0,0);
            }
       if(0!=z_p.form_percent&&100!=z_p.form_percent)//VER24.1
@@ -342,7 +368,8 @@ for(i=1;i<z_p.count_s_i(z_p.s_arg_a);i++)//コマンドラインパラメータ�
        {s=z_p.upper_s(z_p.at_s(z_p.s_arg_a,i));//大文字化
         if(z_p.starts_with_b(s,"TEST"))
            {z_p.test_s=z_p.real_test_s="TEST";}//"TEST”で始まっている場合は_REAL_TESTを"TEST”に変更。
-        if(z_p.ends_with_b(s,"TRACE"))z_p.sw_trace_s="1";//"TRACE”で終わっている場合はトレースを実行。
+        if     (z_p.ends_with_b(s,"TRACE"))z_p.sw_trace_s="1";//"TRACE”で終わっている場合はトレースを実行。
+        else if(z_p.ends_with_b(s,"SPEAK"))z_p.sw_speak=1;  //"SPEAK”で終わっている場合は音声入力。
         continue;
        }
     }
@@ -400,8 +427,89 @@ if('F'!=z_mt_n.program_c)//ファイル起動処理では無い。
 main_v(Keys.None,false,-1); //メイン処理実行
 //JJ  setVisible(true);//実際に画面表示。
 //HP show();  // sw_show=1; //実際に画面表示。
+if(1==z_p.sw_speak)  //キーボードと並行して音声でも入力出来るようにする。
+  {
+//SS imenu_p.Load+=speak_v;
+  }
 return;
 }
+//SS public SpeechRecognitionEngine sre_n;
+//SS void speak_v(object o_i,EventArgs e_ni)
+//SS {
+//SS try{sre_n=new SpeechRecognitionEngine(/*new System.Globalization.CultureInfo("ja-JP")*/);
+//SS     sre_n.SetInputToDefaultAudioDevice();
+//SS     Choices c_n=new Choices();
+//SS     c_n.Add(new String[]{"ESCAPE","F1","F2","F3","F4","F5","F6","F7","F8","SHIFTF5","SHIFTF6","SHIFTF7","SHIFTF8","INSERT","DELETE","CONTROLDELETE","HOME","END","PAGEUP","PAGEDOWN"});
+//SS     for (int iii=0;iii<=9;iii++)c_n.Add(iii.ToString());
+//SS     c_n.Add(new String[]{"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"});
+//SS     c_n.Add(new String[]{"!","DOUBLEQUOTED","#","$","%","&","'","(",")","=","~","|","-","^","\\","`","{","+","*","}","<",">","?","_","@","[",";",":","]",",",".","/","\\"});
+//SS     c_n.Add(new String[]{"BACK","BACKSPACE","CONTROLBACK","CONTROLBACKSPCE","TAB","SHIFTTAB","ENTER","CONTROLP","CONTROLA","CONTROLV","CONTROLC"});
+//SS     c_n.Add(new String[]{"LEFT","CONTROLLEFT","CONTROLSHIFTLEFT","RIGHT","CONTROLRIGHT","CONTROLSHIFTRIGHT"});
+//SS     c_n.Add(new String[]{"UP","SHIFTUP","CONTROLUP","CONTROLSHIFTUP","DOWN","SHIFTDOWN","CONTROLDOWN","CONTROLSHIFTDOWN"});
+//SS     c_n.Add(new String[]{"DUBLEQUOTATION","SINGLEQUOTATION","SPACE"});
+//SS     GrammarBuilder gb_n=new GrammarBuilder();
+//SS     gb_n.Append(c_n);
+//SS     sre_n.LoadGrammar(new Grammar(gb_n));
+//SS     sre_n.SpeechRecognized+=(o_i,e_ni)=>
+//SS       {
+//SS        this.Invoke((MethodInvoker)delegate
+//SS          {
+//SS           if(0==z_mt_n.sw_keyboard){z_p.beep_v();return;} //キーボード入力指示無い時は無視。
+//SS            z_mt_n.sw_keyboard=2;
+//SS            z_mt_n.program_p.keyboard_n.caret_v(0);//キー処理中
+//SS           Keys k;bool shift_b=false,control_b=false,alter_b=false;
+//SS           String s=e_ni.Result.Text;
+//SS           if     (z_p.starts_with_b(s,"CONTROLSHIFT")){control_b=true;shift_b=true;}
+//SS           else if(z_p.starts_with_b(s,"CONTROL")){control_b=true;}
+//SS           else if(z_p.starts_with_b(s,"SHIFT")){shift_b=true;}
+//SS           if     (z_p.ends_with_b(s,"ENTER"))k=Keys.Enter;
+//SS           else if(z_p.ends_with_b(s,"ESCAPE"))k=Keys.Escape;
+//SS           else if(z_p.ends_with_b(s,"TAB"))k=Keys.Tab;
+//SS           else if(z_p.ends_with_b(s,"UP"))k=Keys.Up;
+//SS           else if(z_p.ends_with_b(s,"DOWN"))k=Keys.Down;
+//SS           else if(z_p.ends_with_b(s,"BACK")||z_p.ends_with_b(s,"BACKSPACE"))k=Keys.Back;
+//SS           else if(z_p.ends_with_b(s,"LEFT"))k=Keys.Left;
+//SS           else if(z_p.ends_with_b(s,"RIGHT"))k=Keys.Right;
+//SS           else if(z_p.ends_with_b(s,"INSERT"))k=Keys.Insert;
+//SS           else if(z_p.ends_with_b(s,"DELETE"))k=Keys.Delete;
+//SS           else if(z_p.ends_with_b(s,"PAGEDOWN"))k=Keys.PageDown;
+//SS           else if(z_p.ends_with_b(s,"PAGEUP"))k=Keys.PageUp;
+//SS           else if(z_p.ends_with_b(s,"HOME"))k=Keys.Home;
+//SS           else if(z_p.ends_with_b(s,"END"))k=Keys.End;
+//SS           else if(z_p.ends_with_b(s,"F1"))k=Keys.F1;
+//SS           else if(z_p.ends_with_b(s,"F2"))k=Keys.F2;
+//SS           else if(z_p.ends_with_b(s,"F3"))k=Keys.F3;
+//SS           else if(z_p.ends_with_b(s,"F4"))k=Keys.F4;
+//SS           else if(z_p.ends_with_b(s,"F5"))k=Keys.F5;
+//SS           else if(z_p.ends_with_b(s,"F6"))k=Keys.F6;
+//SS           else if(z_p.ends_with_b(s,"F7"))k=Keys.F7;
+//SS           else if(z_p.ends_with_b(s,"F8"))k=Keys.F8;
+//SS           else if(z_p.ends_with_b(s,"CONTROLP")){print_v();caret_set_v();return;} //Ctrl+P(印刷）
+//SS           else if(z_p.ends_with_b(s,"CONTROLA")){copy_v();caret_set_v();return;} //Ctrl+A（コピー）
+//SS           else if(z_p.ends_with_b(s,"CONTROLV")){paste_v();caret_set_v();return;} //Ctrl+V（ペースト）
+//SS           else if(z_p.ends_with_b(s,"CONTROLC")){z_mt_n.program_p.keyboard_n.ctrl_c_v();caret_set_v();return;}
+//SS           else
+//SS             {char c=s[0]; 
+//SS              if     (z_p.ends_with_b(s,"DUBLEQUOTATION"))c='"';
+//SS              else if(z_p.ends_with_b(s,"SINGLEQUOTATION"))c='\'';
+//SS              else if(z_p.ends_with_b(s,"SPACE"))c=' ';
+//SS              if(0==z_mt_n.sw_keyboard||true==control_b)return;//キー入力中で無い場合は無視。 
+//SS              key_press_v(c);
+////SS            e_ni.Handled=true;
+//SS              try{if(1==z_mt_n.program_p.keyboard_n.sw_surrogate)return;} //サロゲートペア２文字目受取
+//SS              catch(Exception){}
+//SS              keyboard_scroll_v();//キーボードスクロール実施
+//SS              caret_set_v();
+//SS              return;
+//SS             }
+//SS           key_down_v(k,shift_b,control_b,alter_b); //キーダウン処理
+//SS           caret_set_v();//カレット表示。
+//SS          });
+//SS       };
+//SS     sre_n.RecognizeAsync(RecognizeMode.Multiple);
+//SS    }
+//SS catch(Exception ee_ni){MessageBox.Show("ERROR SPEAK: "+ee_ni.Message);}
+//SS }
 void abort_v() //戻り値は意味なし。
 {z_mt_n.sw_err=z_p.SW_ABORT_9;z_p.sw_program=-9; //異常終了。
 fin_v();//終了処理実行
@@ -517,7 +625,11 @@ void caret_set_v(){try{if( null != z_mt_n.program_p)z_mt_n.program_p.keyboard_n.
 //HP public void inputMethodEvent(QInputMethodEvent *e_ni) //VER36.1 //IME入力
 //HP {z_mt_n.program_p.keyboard_n.auto_v(0,e_ni.commitString());} //VER36.1
 //HP public void keyPressEvent(QKeyEvent *e_ni)
+#if GTK
+//SS public void key_down_v(Object o_i,KeyPressEventArgs e_ni)
+#else //GTK
 //SS public void key_down_v(Object o_i,PreviewKeyDownEventArgs e_ni)
+#endif //GTK
 //JJ public void keyPressed(KeyEvent e_ni)
 {z_p.t_v(z_p.ME,"key_Press(");
 //JJ if(1==sw_popup_menu)imenu_p.repaint();
@@ -949,7 +1061,7 @@ z_p.sw_printer=0;//プリンタ印刷終了。
 //HP void wheelEvent(QWheelEvent *e_ni)
 //SS void mouse_wheel_v(Object o_ni,
 #if GTK
-//SS Gtk.ScrollArgs
+//SS Gtk.ScrollEventArgs
 #else //GTK
 //SS MouseEventArgs
 #endif //GTK
@@ -972,6 +1084,7 @@ int y_mouse(int y_ii){int i=(y_ii-z_p.lang_y_mouse)/z_p.lang_y_high+1;if(1>i)i=1
 int x_mouse(int x_ii){int i=(x_ii-z_p.lang_x_mouse+z_p.lang_x_width/2)/z_p.lang_x_width;if(1>i)i=1;return i;}
 //---------------------------------------------------------------------
 int x_mouse_i=0,y_mouse_i=0,mouse_button=0;
+#if !GTK
 //HP void mouse_point_v( QMouseEvent *e_ni)
 //SS void mouse_point_v(MouseEventArgs e_ni)
 //JJ void mouse_point_v(MouseEvent e_ni)
@@ -990,6 +1103,7 @@ int x_mouse_i=0,y_mouse_i=0,mouse_button=0;
 //JJ  else if(MouseEvent.BUTTON3==e_ni.getButton())mouse_button=3;
 //SJ  else mouse_button=0;
 }
+#endif //!GTK
 //=*****(  マウス ダウン 1/2)************
 //HP void mousePressEvent(QMouseEvent *e_ni)
 //SS void mouse_down_v(Object o_ni,
@@ -997,12 +1111,19 @@ int x_mouse_i=0,y_mouse_i=0,mouse_button=0;
 //SS Gtk.ButtonPressEventArgs
 #else //GTK
 //SS MouseEventArgs 
+#endif //GTK
 //SS e_ni)
-#endif
 //JJ public void mousePressed(MouseEvent e_ni)
 {z_p.t_v(z_p.ME,"mouse_press(");
 //JJ if(1==sw_popup_menu)imenu_p.repaint();
+#if GTK
+//SS x_mouse_i=e_ni.   X;  y_mouse_i=e_ni.   Y;
+//SS  if     (MouseButtons.Left==e_ni.Button)  mouse_button=1;
+//SS  else if(MouseButtons.Middle==e_ni.Button)mouse_button=2;
+//SS  else if(MouseButtons.Right==e_ni.Button) mouse_button=3;
+#else //GTK
 mouse_point_v(e_ni);//マウスが押された位置を特定。
+#endif //GTK
 if(0==mouse_button)return;  //ボタンが押されていない時は終了。
 x_mouse_down=x_mouse(x_mouse_i);y_mouse_down=y_mouse(y_mouse_i);//x_mouse_down，y_mouse_downは押された時の位置。
 if(z_p.FOCUS_ON_TO_ON_1>z_mt_n.sw_focus)//フォーカスオン直後のクリック処理は無視する。
@@ -1021,7 +1142,14 @@ z_p.sw_mouse=1;//マウスが押された。
 //SS e_ni)
 //JJ public void mouseDragged(MouseEvent e_ni)
 {z_p.t_v(z_p.ME,"mouse_move(");
-mouse_point_v(e_ni);
+#if GTK
+//SS x_mouse_i=e_ni.   X;  y_mouse_i=e_ni.   Y;
+//SS  if     (MouseButtons.Left==e_ni.Button)  mouse_button=1;
+//SS  else if(MouseButtons.Middle==e_ni.Button)mouse_button=2;
+//SS  else if(MouseButtons.Right==e_ni.Button) mouse_button=3;
+#else //GTK
+mouse_point_v(e_ni);//マウスが押された位置を特定。
+#endif //GTK
 //JJ mouse_button=1;
 int x,i;
 if(1!=mouse_button)return;//左ボタンで無い。
@@ -1081,7 +1209,14 @@ return;
 //SS e_ni)
 //JJ public void mouseReleased(MouseEvent e_ni)
 {z_p.t_v(z_p.ME,"mouse_release(");
-mouse_point_v(e_ni);
+#if GTK
+//SS x_mouse_i=e_ni.   X;  y_mouse_i=e_ni.   Y;
+//SS  if     (MouseButtons.Left==e_ni.Button)  mouse_button=1;
+//SS  else if(MouseButtons.Middle==e_ni.Button)mouse_button=2;
+//SS  else if(MouseButtons.Right==e_ni.Button) mouse_button=3;
+#else //GTK
+mouse_point_v(e_ni);//マウスが押された位置を特定。
+#endif //GTK
 if(0==mouse_button)return;//マウスが押されていない時は無視。
 //HP if(3==mouse_button){popup_menu_n->move(e_ni->globalPos());popup_menu_n->exec();return;}//ポップアップメニュー表示。 
 //JJ if(3==mouse_button){popup_menu_n.show(e_ni.getComponent(),e_ni.getX(),e_ni.getY());sw_popup_menu=1;return;}//ポップアップメニュー表示。 
@@ -1118,8 +1253,8 @@ if(z_p.e3s_b(z_mt_n.program_p.now_kind_s,"START","SET"))  //START及びSETの場
    if((z_p.e2s_b(z_mt_n.program_p.program_s,"OUTPUT")&&0!=z_mt_n.program_p.CONTROL_IX[z_mt_n.program_p.C_0])
      ||(z_p.e2s_b(z_mt_n.program_p.program_s,"INPUT")&&0!=z_mt_n.program_p.CONTROL_IX[z_mt_n.program_p.C_2]))
       if((cnt+(z_mt_n.program_p.page_now-1)*z_mt_n.program_p.form_max)
-         >z_mt_n.program_p.record_max){mouse_ng_v(e_ni);return;}//?go to ng;
-   if(1>line_cnt||z_mt_n.program_p.line_occurs<line_cnt){mouse_ng_v(e_ni);return;}//?go to ng;
+         >z_mt_n.program_p.record_max){mouse_ng_v(/*e_ni*/);return;}//?go to ng;
+   if(1>line_cnt||z_mt_n.program_p.line_occurs<line_cnt){mouse_ng_v(/*e_ni*/);return;}//?go to ng;
    z_mt_n.program_p.click_line_cnt=line_cnt;
    z_mt_n.program_p.click_column_cnt=column_cnt;
    if(z_p.e2s_b(z_mt_n.program_p.now_kind_s,"SET"))
@@ -1132,22 +1267,22 @@ if(z_p.e3s_b(z_mt_n.program_p.now_kind_s,"START","SET"))  //START及びSETの場
    if(z_mt_n.program_p.line_cnt==z_mt_n.program_p.click_line_cnt
      &&z_mt_n.program_p.column_cnt==z_mt_n.program_p.click_column_cnt)
      {if(!(z_p.e2s_b(z_mt_n.program_p.program_s,"INPUT")&&0!=z_mt_n.program_p.CONTROL_IX[z_mt_n.program_p.C_0]))
-         if(!z_p.e2s_b(z_mt_n.program_p.program_s,"OUTPUT")){mouse_ng_v(e_ni);return;}
+         if(!z_p.e2s_b(z_mt_n.program_p.program_s,"OUTPUT")){mouse_ng_v(/*e_ni*/);return;}
       key_press_v('0');//選択処理
       mouse_fin_v();return;//?go to fin;
      }
    z_mt_n.program_p.sw_click_program_b=true;
    key_down_single_v(Keys.None,false,false,false);
-   if(!z_p.e2s_b(z_mt_n.program_p.program_s,"OUTPUT")){mouse_ng_v(e_ni);return;}
+   if(!z_p.e2s_b(z_mt_n.program_p.program_s,"OUTPUT")){mouse_ng_v(/*e_ni*/);return;}
    key_press_v('0');//選択処理
    mouse_fin_v();return;//?go to fin;
   }
-mouse_ng_v(e_ni);
+mouse_ng_v(/*e_ni*/);
 return;
 }
-//HP public void mouse_ng_v(QMouseEvent *e_ni)
-//SS public void mouse_ng_v(MouseEventArgs e_ni)
-//JJ public void mouse_ng_v(MouseEvent e_ni)
+//HP public void mouse_ng_v(/*QMouseEvent *e_ni*/)
+//SS public void mouse_ng_v(/*MouseEventArgs e_ni*/)
+//JJ public void mouse_ng_v(/*MouseEvent e_ni*/)
 {if(z_p.e2s_b(z_mt_n.program_p.now_kind_s,"START")&&1<y_mouse_down  //"START"マウスのクリック位置まで移動。
   &&z_mt_n.program_p.click_data_top>y_mouse_down)
  {key_down_single_v(Keys.Left,false,false,false);mouse_fin_v();return;}//?go to fin;} //setに戻る
@@ -1270,7 +1405,11 @@ if(1==sw_ii||z_mt_n.program_p.sw_x_scroll!=z_p.scroll_x_now
 //----------------------------------------------------------------------
 //=**(  画面サイズが変更された )***
 //HP void resizeEvent(QResizeEvent *e_ni)
+#if GTK
+//SS void configure_event_v(object o_i, Gtk.ConfigureEventArgs e_ni)
+#else //GTK
 //SS protected override void OnResize(EventArgs e_i)
+#endif //GTK
 //JJ public void actionPerformed(ActionEvent e_ni)
 {z_p.t_v(z_p.ME,"resize(");
 if(sw_load_b)resize_v(1);
@@ -1279,7 +1418,11 @@ if(sw_load_b)resize_v(1);
 //JJ public void update(Graphics Graphics_nni){paint(Graphics_nni);} //ちらつき防止。
 //=**(  再表示処理 )***
 //HP void paintEvent(QPaintEvent *e_ni)
+#if GTK
+//SS protected override bool OnDrawn(Cairo.Context e_ni)
+#else //GTK
 //SS protected override void OnPaint(PaintEventArgs e_ni)
+#endif //GTK
 //JJ public void paint(Graphics Graphics_nni)
 {z_p.t_v(z_p.ME,"on_paint(");
 //HP if(1==z_p->sw_printer)return; //印刷中は無視。
@@ -1314,7 +1457,11 @@ if((z_p.SW_ABORT_9==z_mt_n.sw_err&&'J'!=z_mt_n.program_c)||-9==z_p.sw_program)
 //---------------------------------------------------------------------
 //=**( フォーカスがなくなった )***
 //HP void focusOutEvent(QFocusEvent *e_ni)
+#if GTK
+//SS void focus_out_event_v(object o_i, Gtk.FocusOutEventArgs e_ni)
+#else //GTK
 //SS protected override void OnLostFocus(EventArgs e_ni)
+#endif //GTK
 //JJ public void windowDeactivated(WindowEvent e_ni)
 {z_p.t_v(z_p.ME,"focus_off(");
 //HP if(1==z_mt_n.sw_listbox)return; //リストボックス表示中は無視。
@@ -1328,7 +1475,11 @@ catch(Exception){}
 //---------------------------------------------------------------------
 //=**( フォーカスが設定された )***
 //HP void focusInEvent(QFocusEvent *e_ni)
+#if GTK
+//SS void focus_in_event_v(object o_i, Gtk.FocusInEventArgs e_ni)
+#else //GTK
 //SS protected override void OnGotFocus(EventArgs e_ni)
+#endif //GTK
 //JJ public void windowActivated(WindowEvent e_ni)
 {z_p.t_v(z_p.ME,"focus_on(");
 on_focus_v();
@@ -1421,7 +1572,11 @@ public void timer_udp_v()
 //HP QAction *action_n[17];int action=0;
 //HP QListWidget *context_list_widget_n=new QListWidget();
 //HP QMenu     * popup_menu_n;
+#if GTK
+//SS Gtk.Menu popup_menu_n=new Gtk.Menu();
+#else //GTK
 //SS ContextMenuStrip popup_menu_n=new ContextMenuStrip(); //VER32.1
+#endif //GTK
 ////SS ContextMenu popup_menu_n=new ContextMenu(); //VER32.1
 //JJ PopupMenu   popup_menu_n=new PopupMenu();
 void context_menu_v()
@@ -1684,5 +1839,5 @@ z_mt_n.imenu_p.repaint_v();//再表示
 z_mt_n.program_p.keyboard_n.caret_set_v(); //VER36.6.0.3
 }
 }
-#endif
+#endif //IMENU
 //HH #endif //IMENU_H

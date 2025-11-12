@@ -10,6 +10,9 @@
 #if GTK
 //SS using Gtk;
 //SS using Gdk;
+//SS using Graphics=Cairo.Context;
+//SS using Font=ii_font_l;
+//SS using Brush=ii_brush_l;
 #else //GTK
 //SS using System.Windows.Forms;
 //SS using System.Drawing;

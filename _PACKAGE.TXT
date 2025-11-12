@@ -2,8 +2,8 @@ IBM.Data.DB2.Core * IBM.Data.DB2.Core-lnx *
 MySqlConnector * = 
 Npgsql * = 
 Oracle.ManagedDataAccess.Core * = 
-System.Text.Encoding.CodePages * = 
-Microsoft.Win32.Registry * !
+*System.Text.Encoding.CodePages * = 
+*Microsoft.Win32.Registry * !
 System.Windows.Forms.DataVisualization 1.0.0-prerelease.20110.1 =
 # # obfuscar
 Microsoft.Data.SqlClient * =

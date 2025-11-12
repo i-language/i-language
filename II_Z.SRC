@@ -12,6 +12,11 @@
 //SS using Gtk;
 //SS using Gdk;
 //SS using Keys=Gdk.Key;
+//SS using Graphics=Cairo.Context;
+//SS using Font=ii_font_l;
+//SS using Pen=ii_pen_l;
+//SS using Brush=ii_brush_l;
+
 #else //GTK
 //SS using System.Windows.Forms;
 //SS using System.Drawing;
@@ -177,6 +182,19 @@ font_s=lang_font_org_s;
 //HP Brush_nx.push_back(QBrush(QColor::fromRgb(255,191,127),Qt::SolidPattern)); //E
 //HP Brush_nx.push_back(QBrush(QColor::fromRgb(192,128,255),Qt::SolidPattern));//P
 //SJ Brush_nx=new Brush [11];
+#if GTK
+//S Brush_nx[0]=new ii_brash_l(255.0/255,255.0/255,255.0/255);
+//S Brush_nx[1]=new ii_brash_l(224.0/255,224.0/255,224.0/255); //L
+//S Brush_nx[2]=new ii_brash_l(210.0/255,210.0/255,210.0/255); //N
+//S Brush_nx[3]=new ii_brash_l(128.0/255,128.0/255,128.0/255); //D
+//S Brush_nx[4]=new ii_brash_l(0,0,0);       //X
+//S Brush_nx[5]=new ii_brash_l(255.0/255,255.0/255,128.0/255); //Y
+//S Brush_nx[6]=new ii_brash_l(255.0/255,128.0/255,192.0/255); //R
+//S Brush_nx[7]=new ii_brash_l(128.0/255,255.0/255,128.0/255); //G
+//S Brush_nx[8]=new ii_brash_l(128.0/255,192.0/255,255.0/255); //B
+//S Brush_nx[9]=new ii_brash_l(255.0/255,191.0/255,127.0/255); //E
+//S Brush_nx[10]=new ii_brash_l(192.0/255,128.0/255,255.0/255);//P
+#else //GTK
 //SJ Brush_nx[0]=new SolidBrush(Color.FromArgb(255,255,255)); //W(★JAVA★ は(new Color(255,255,255))に修正で対応。
 //SJ Brush_nx[1]=new SolidBrush(Color.FromArgb(224,224,224)); //L
 //SJ Brush_nx[2]=new SolidBrush(Color.FromArgb(N_COLOR,N_COLOR,N_COLOR)); //N（VER9で変更）
@@ -188,7 +206,8 @@ font_s=lang_font_org_s;
 //SJ Brush_nx[8]=new SolidBrush(Color.FromArgb(128,192,255)); //B
 //SJ Brush_nx[9]=new SolidBrush(Color.FromArgb(255,191,127)); //E
 //SJ Brush_nx[10]=new SolidBrush(Color.FromArgb(192,128,255));//P
-#endif
+#endif //GTK
+#endif //IMENU||IPRINT
 //#if IMENU||ITIME||ISRVC||ICHART||IROOT //TEST
 //String version2_s=to_i_s(version_n.VERSION2); //VER36.000600003
 //if(length(version2_s)<9)version2_s="0"+version2_s; //VER36.000600003
@@ -1199,7 +1218,7 @@ public List<ii_data_l> da_security_a=new List<ii_data_l>();
 #endif
 public bool sw_click_b=false;
 public int sw_program=-1; //0<処理中のプログラム番号,0=初期値,-1=処理続行中,-2=選択処理(次へ),-9=異常終了
-public int sw_exe=0,sw_setup=0,sw_mouse=-1,sw_job_use=0
+public int sw_exe=0,sw_setup=0,sw_mouse=-1,sw_job_use=0,sw_speak=0
 ,sw_return_sql=0,scroll_x_now=0,x_now=0,scroll_y_now=0,y_now=0,timer=0,sw_beep=0,sw_beep_udp=0
 ,sql_limit=0,sql_count_123=0,split_count=0,timeout_connect=30,timeout_sql=600,form_percent=0;
 public String person_security_s="",setup_s="",hh_s="",mm_s=""

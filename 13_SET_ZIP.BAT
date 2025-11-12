@@ -76,11 +76,11 @@ REM ********( buildファイル削除 )**************************
 IF EXIST %I_TMP_ZIP%\i-language\--SELF-CONTAINED.--SELF-CONTAINED ERASE /Q %I_TMP_ZIP%\i-language\--SELF-CONTAINED.--SELF-CONTAINED
 REM ********( %I_TMP_ZIP%.zipのzip圧縮ファイル作成  )**************************
 IF EXIST %I_TMP_ZIP%.zip ERASE %I_TMP_ZIP%.zip >NUL
-IF EXIST %I_BIN%\IMENUW%I_FRAMEWORK%.EXE GOTO OK
+rem IF EXIST %I_BIN%\IMENUW%I_FRAMEWORK%.EXE GOTO OK
 COPY ..\%I_VER%_BIN\CLIENT_W%I_FRAMEWORK%\IMENUW%I_FRAMEWORK%.* %I_BIN% 
 COPY I_LANG??W.TXT %I_BIN%
 COPY I_MENU.*      %I_BIN%
-:OK
+rem :OK
 %I_BIN%\IMENUW%I_FRAMEWORK%.EXE SET_ZIP.TXT dir=%I_ZIP%
 REM COPY %I_TMP_ZIP%.zip ..\%I_VER%_ZIP\ 
 COPY %I_TMP_ZIP%.zip ..\ 

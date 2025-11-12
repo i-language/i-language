@@ -483,7 +483,7 @@ for(i=0;i<name_sx.Length;i++)
         write_v("    <RuntimeIdentifier>"+("W"==wu_si?"win":"linux")+"-x64</RuntimeIdentifier>");
         write_v("    <DefineConstants>"+wu_si+";"+def_s+";DOTNET;ODP"+define_s+("U"==wu_si?";GTK":"")+"</DefineConstants>");
         write_v("    <EnableDefaultItems>false</EnableDefaultItems>");
-        if((def_s.StartsWith("IME")||def_s.StartsWith("IP")||def_s.StartsWith("ICH"))&&"W"==wu_si)
+        if((def_s.StartsWith("ITE")||def_s.StartsWith("IME")||def_s.StartsWith("IP")||def_s.StartsWith("ICH"))&&"W"==wu_si)
           {write_v("    <UseWindowsForms>true</UseWindowsForms>");
            if(!def_s.StartsWith("ITI"))write_v("    <OutputType>WinExe</OutputType>");
 //         write_v("    <TargetFramework>net"+net_s+".0-windows</TargetFramework>");

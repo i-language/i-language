@@ -1,8 +1,148 @@
-//public class Program
-//{
-//static void Main()
-//{
-System.Console.WriteLine("hello world");
-//}
-//}
+using System;
+using System.Windows.Forms;
+using System.Speech.Recognition;
 
+public partial class MainForm : Form
+{
+public static void Main(String[] arg_sxi)
+{Application.Run(new MainForm());}
+public MainForm()
+{ii_menu_l man_n=new ii_menu_l(this);
+}
+public class ii_menu_l:ScrollableControl
+{private SpeechRecognitionEngine sre_n;
+public ii_menu_l(MainForm imenu_ni)
+        {
+            imenu_ni.Load += MainForm_Load;
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+//SS try{sre_n=new SpeechRecognitionEngine(/*new System.Globalization.CultureInfo("ja-JP")*/);
+//SS     sre_n.SetInputToDefaultAudioDevice();
+
+/*
+//SS     Choices c_n=new Choices();
+//SS     c_n.Add(new String[]{"ESCAPE","F1","F2","F3","F4","F5","F6","F7","F8","SHIFTF5","SHIFTF6","SHIFTF7","SHIFTF8","INSERT","DELETE","CONTROLDELETE","HOME","END","PAGEUP","PAGEDOWN"});
+//SS     for (int iii=0;iii<=9;iii++)c_n.Add(iii.ToString());
+//SS     c_n.Add(new String[]{"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"});
+//SS     c_n.Add(new String[]{"!","DOUBLEQUOTED","#","$","%","&","'","(",")","=","~","|","-","^","\\","`","{","+","*","}","<",">","?","_","@","[",";",":","]",",",".","/","\\"});
+//SS     c_n.Add(new String[]{"BACK","BACKSPACE","CONTROLBACK","CONTROLBACKSPCE","TAB","SHIFTTAB","ENTER","CONTROLP","CONTROLA","CONTROLV","CONTROLC"});
+//SS     c_n.Add(new String[]{"LEFT","CONTROLLEFT","CONTROLSHIFTLEFT","RIGHT","CONTROLRIGHT","CONTROLSHIFTRIGHT"});
+//SS     c_n.Add(new String[]{"UP","SHIFTUP","CONTROLUP","CONTROLSHIFTUP","DOWN","SHIFTDOWN","CONTROLDOWN","CONTROLSHIFTDOWN"});
+//SS     GrammarBuilder gb_n=new GrammarBuilder();
+//SS     gb_n.Append(c_n);
+*/
+////SS     sre_n.LoadGrammar(new Grammar(gb_n));
+//SS       sre_n.LoadGrammar(new DictationGrammar());
+//SS     sre_n.SpeechRecognized+=(o_i,e_ni)=>
+//SS      {
+/*
+//SS        this.Invoke((MethodInvoker)delegate
+//SS          {
+*/
+////SS           System.Console.WriteLine("speech="+e_ni.Result.Text);
+/*
+//SS           if(0==z_mt_n.sw_keyboard){z_p.beep_v();return;} //キーボード入力指示無い時は無視。
+//SS            z_mt_n.sw_keyboard=2;
+//SS            z_mt_n.program_p.keyboard_n.caret_v(0);//キー処理中
+//SS           Keys k;bool shift_b=false,control_b=false,alter_b=false;
+//SS           String s=e_ni.Result.Text;
+//SS           if     (z_p.starts_with_b(s,"CONTROLSHIFT")){control_b=true;shift_b=true;}
+//SS           else if(z_p.starts_with_b(s,"CONTROL")){control_b=true;}
+//SS           else if(z_p.starts_with_b(s,"SHIFT")){shift_b=true;}
+//SS           if     (z_p.ends_with_b(s,"ENTER"))k=Keys.Enter;
+//SS           else if(z_p.ends_with_b(s,"ESCAPE"))k=Keys.Escape;
+//SS           else if(z_p.ends_with_b(s,"TAB"))k=Keys.Tab;
+//SS           else if(z_p.ends_with_b(s,"UP"))k=Keys.Up;
+//SS           else if(z_p.ends_with_b(s,"DOWN"))k=Keys.Down;
+//SS           else if(z_p.ends_with_b(s,"BACK")||z_p.ends_with_b(s,"BACKSPACE"))k=Keys.Back;
+//SS           else if(z_p.ends_with_b(s,"LEFT"))k=Keys.Left;
+//SS           else if(z_p.ends_with_b(s,"RIGHT"))k=Keys.Right;
+//SS           else if(z_p.ends_with_b(s,"INSERT"))k=Keys.Insert;
+//SS           else if(z_p.ends_with_b(s,"DELETE"))k=Keys.Delete;
+//SS           else if(z_p.ends_with_b(s,"PAGEDOWN"))k=Keys.PageDown;
+//SS           else if(z_p.ends_with_b(s,"PAGEUP"))k=Keys.PageUp;
+//SS           else if(z_p.ends_with_b(s,"HOME"))k=Keys.Home;
+//SS           else if(z_p.ends_with_b(s,"END"))k=Keys.End;
+//SS           else if(z_p.ends_with_b(s,"F1"))k=Keys.F1;
+//SS           else if(z_p.ends_with_b(s,"F2"))k=Keys.F2;
+//SS           else if(z_p.ends_with_b(s,"F3"))k=Keys.F3;
+//SS           else if(z_p.ends_with_b(s,"F4"))k=Keys.F4;
+//SS           else if(z_p.ends_with_b(s,"F5"))k=Keys.F5;
+//SS           else if(z_p.ends_with_b(s,"F6"))k=Keys.F6;
+//SS           else if(z_p.ends_with_b(s,"F7"))k=Keys.F7;
+//SS           else if(z_p.ends_with_b(s,"F8"))k=Keys.F8;
+//SS           else if(z_p.ends_with_b(s,"CONTROLP")){print_v();caret_set_v();return;} //Ctrl+P(印刷）
+//SS           else if(z_p.ends_with_b(s,"CONTROLA")){copy_v();caret_set_v();return;} //Ctrl+A（コピー）
+//SS           else if(z_p.ends_with_b(s,"CONTROLV")){paste_v();caret_set_v();return;} //Ctrl+V（ペースト）
+//SS           else if(z_p.ends_with_b(s,"CONTROLC")){z_mt_n.program_p.keyboard_n.ctrl_c_v();caret_set_v();return;}
+//SS           else
+//SS             { 
+//SS              if(0==z_mt_n.sw_keyboard||true==control_b)return;//キー入力中で無い場合は無視。 
+//SS              key_press_v(s[0]);
+////SS            e_ni.Handled=true;
+//SS              try{if(1==z_mt_n.program_p.keyboard_n.sw_surrogate)return;} //サロゲートペア２文字目受取
+//SS              catch(Exception){}
+//SS              keyboard_scroll_v();//キーボードスクロール実施
+//SS              caret_set_v();
+//SS              return;
+//SS             }
+//SS           key_down_v(k,shift_b,control_b,alter_b); //キーダウン処理
+//SS           caret_set_v();//カレット表示。
+//SS          });
+*/
+//SS      };
+////SS    System.Console.WriteLine("RecognizeAsync(RecognizeMode.Multiple");
+//SS    sre_n.RecognizeAsync(RecognizeMode.Multiple);
+////SS             Console.ReadLine();
+////SS });
+//SS }
+//SS      catch (Exception ex)
+//SS             {
+//SS                 MessageBox.Show("音声認識の初期化に失敗しました: " + ex.Message);
+//SS             }
+//SS }
+
+/*
+            try
+            {
+                recognizer = new SpeechRecognitionEngine();
+                recognizer.SetInputToDefaultAudioDevice();
+
+                // 文法の設定（ここでは自由入力）
+                recognizer.LoadGrammar(new DictationGrammar());
+
+                // 認識結果を受け取るイベント
+                recognizer.SpeechRecognized += Recognizer_SpeechRecognized;
+
+                // 非同期で認識開始
+                recognizer.RecognizeAsync(RecognizeMode.Multiple);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("音声認識の初期化に失敗しました: " + ex.Message);
+            }
+        }
+
+        private void Recognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
+        {
+            // 認識されたテキストを表示
+            MessageBox.Show("認識された音声: " + e.Result.Text);
+        }
+
+*/
+/*
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            // 終了時に認識を停止
+            if (recognizer != null)
+            {
+                recognizer.RecognizeAsyncStop();
+                recognizer.Dispose();
+            }
+            base.OnFormClosing(e);
+        }
+*/
+    }
+}

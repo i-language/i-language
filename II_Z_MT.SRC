@@ -12,6 +12,9 @@
 #if GTK
 //SS using Gtk;
 //SS using Gdk;
+//SS using Graphics=Cairo.Context;
+//SS using Font=ii_font_l;
+//SS using Brush=ii_brush_l;
 #else //GTK
 //SS using System.Windows.Forms;
 //SS using System.Drawing;
@@ -65,7 +68,12 @@ public bool sw_font_fix=false;
 public bool sw_on_listbox_b=false;
 //HP public int sw_listbox=0;
 public ii_paint_l mouse_paint_p= null ;
-public ii_menu_l menu_p;
+//JP public imenu_l menu_p;
+#if GTK
+//SS public imenu_l menu_p;
+#else //GTK
+//SS public ii_menu_l menu_p;
+#endif
 public imenu_l imenu_p;
 public int sw_focus=-2
 ,font_height
@@ -83,12 +91,16 @@ String window_file_s="";
 ii_write_l window_write_n;
 public ii_listbox_l listbox_n;
 public ii_format_l format_n;
+#if !GTK
 //SS StringFormat StringFormat_n;
+#endif //!GTK
 //---------------------------------------------------------------------
 //=****( 基本情報設定 )*****
 public ii_z_mt_l(ii_menu_l menu_ni,imenu_l imenu_ni,ii_z_l z_pi)
 {set_v(z_pi);
+#if !GTK
 //SS StringFormat_n=new StringFormat();
+#endif //!GTK
 //===(new)===
 window_write_n=new ii_write_l(z_p);
 format_n=new ii_format_l(z_p,this);
@@ -191,12 +203,15 @@ if(z_p.e2s_b(s_si,""))return(true);
 public bool text_renderer2_b(Graphics Graphics_ni,String s_si,float x_left_text_fi,float y_top_text_fi,Font Font_ni,Color Color_Color_ni)
 {
 try{
+#if GTK
+#else //GTK
 //SS if('W'!=z_p.os_c)
 //SS      Graphics_ni.DrawString(s_si,Font_ni,(Color.Black==Color_Color_ni?Brushes.Black:Brushes.White)
 //SS          ,x_left_text_fi+z_p.lang_x_offset,y_top_text_fi+z_p.lang_y_offset,StringFormat_n);
 //SS else 
 //SS     TextRenderer.DrawText(Graphics_ni,s_si,Font_ni,new Point((int )x_left_text_fi+z_p.lang_x_offset
 //SS         ,(int )(y_top_text_fi+z_p.lang_y_offset)),Color_Color_ni,TextFormatFlags.NoPrefix);
+#endif //GTK
 //HP if(1==z_p.sw_on_paint||1==z_p.sw_printer)
 //JP        draw_string_geta_v(Graphics_ni,s_si,Font_ni,Color_Color_ni,(int )x_left_text_fi,(int )(y_top_text_fi));
     return true;
@@ -214,7 +229,10 @@ try{
 //HP   z_p.Graphics_p.setFont(Font_ni);
 //HP   z_p.Graphics_p.setPen(Brush_ni);
 //HP   z_p.Graphics_p.drawText(x_left_fi+z_p.lang_x_offset,y_left_fi+z_p.lang_y_high+z_p.lang_y_offset,s_si);
+#if GTK
+#else //GTK
 //SS Graphics_ni.DrawString(s_si,Font_ni,Brush_ni,x_left_fi+z_p.lang_x_offset,y_left_fi+z_p.lang_y_offset,StringFormat_n);
+#endif //GTK
 //JJ Graphics_ni.setFont(Font_ni);Graphics_ni.setColor(Brush_ni);
 //JJ Graphics_ni.drawString(s_si,(int )(x_left_fi+z_p.lang_x_offset),(int )(y_left_fi+z_p.lang_y_high+z_p.lang_y_offset));
    }

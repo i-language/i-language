@@ -11,6 +11,7 @@
 #if GTK
 //SS using Gtk;
 //SS using Gdk;
+//SS using PreviewKeyDownEventArgs=Gtk.KeyPressEventArgs;
 #else //GTK
 //SS using System.Windows.Forms;
 //SS using System.Drawing;
@@ -24,11 +25,7 @@
 public class ii_listbox2_l
 //HH :public
 //HH  QListWidget
-#if XAMARIN
-//SS :ListView
-#else
 //SS :ListBox
-#endif
 //JJ extends java.awt.List implements FocusListener
 {
 //COPY $II_DIR
@@ -42,9 +39,6 @@ public int sw_listbox_focus=0;
 public ii_listbox2_l(ii_z_l z_ni,ii_z_mt_l z_mt_ni)
 {
 z_p=z_ni;z_mt_p=z_mt_ni;
-#if XAMARIN
-//SS Focused    +=new FocusedEventHandler(OnGotFocus);
-#endif
 z_p.t_v(z_p.LI,"ii_listbox2_l()");
 //HP setFocusPolicy(Qt::StrongFocus); //Focus有効化。
 //HP setWindowFlags(Qt::WindowStaysOnTopHint|Qt::WindowTitleHint|Qt::CustomizeWindowHint);
@@ -56,11 +50,7 @@ z_p.t_v(z_p.LI,"ii_listbox2_l()");
 //HP void mouseReleaseEvent(QMouseEvent *e_ni)
 //HP {z_p.t_v(z_p.LI,"ii_listbox2_l(mouseReleaseEvent()");if(Qt::LeftButton==e_ni->button()){z_mt_p.listbox_n.mouseRelease_v(currentRow());}}
 //HP void keyPressEvent(QKeyEvent *e_ni)
-#if XAMARIN
-//SS void key_down_v(Object o_i,EventArgs e_ni)
-#else
 //SS void key_down_v(Object o_i,PreviewKeyDownEventArgs e_ni)
-#endif
 //JJ public void keyPressed(KeyEvent e_ni)
 {z_p.t_v(z_p.LI,"ii_listbox2_l(keyPress(");
 z_mt_p.menu_p.
@@ -69,11 +59,11 @@ z_mt_p.menu_p.
 //JJ keyPressed(e_ni);
 }
 //HP void focusInEvent(QFocusEvent *e_ni)
-#if XAMARIN
-//SS protected void OnGotFocus(EventArgs e_ni)
-#else
+#if GTK
+//SS protected void OnGotFocus(object o_i, Gtk.FocusInEventArgs e_ni)
+#else //GTK
 //SS protected override void OnGotFocus(EventArgs e_ni)
-#endif
+#endif //GTK
 //JJ public void focusGained(FocusEvent e_ni)
 {z_p.t_v(z_p.LI,"ii_listbox2_l(focusGained()");
 if(focus_count>sw_listbox_focus)//最初はFocusを親に戻す。

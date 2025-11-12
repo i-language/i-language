@@ -11,6 +11,8 @@
 #if GTK
 //SS using Gtk;
 //SS using Gdk;
+//SS using ScrollBar=Gtk.ScrolledWindow;
+//SS using EventArgs=Gtk.ScrollEventArgs;
 #else //GTK
 //SS using System.Windows.Forms;
 //SS using System.Drawing;
@@ -33,11 +35,7 @@ public class  ii_scroll_l
 //COPY *BEGIN
 public //(PP対応) 
 ii_z_mt_l scroll_z_mt_p;ii_z_l scroll_z_p;char xy_c;
-#if XAMARIN
-//SS public ScrollView  scroll_n;
-#else
 //SS public ScrollBar  scroll_n;
-#endif
 //JJ Scrollbar  scroll_n;
 public ?void? ii_scroll_l(char xy_ci,ii_z_mt_l z_mt_ni,ii_z_l z_ni)
 {xy_c=xy_ci;scroll_z_mt_p=z_mt_ni;scroll_z_p=z_ni;
@@ -57,7 +55,12 @@ if('X'==xy_c)
 //JJ Scrollbar(Scrollbar.VERTICAL);
       }
 //HP setParent(scroll_z_mt_p.imenu_p);
+#if GTK
+//SS scroll_n.AddEvents((int)(Gdk.EventMask.ScrollMask));
+//SS scroll_n.ScrollEvent+=scrool_v;
+#else //GTK
 //SS scroll_n.Scroll+=new ScrollEventHandler(scroll_v);
+#endif //GTK
 //JJ scroll_n.addAdjustmentListener(this);//スクロールイベント有効化。
 //JJ scroll_n.addFocusListener(this);//フォーカスリスナー有効化。
 }
@@ -132,11 +135,7 @@ public int  get_max()
 //---------------------------------------------------------------------
 //=**( バーが操作された )***
 //HP void sliderChange(SliderChange change_nn)
-#if XAMARIN
 //SS private void scroll_v(Object o_ni,EventArgs e_ni)
-#else
-//SS private void scroll_v(Object o_ni,ScrollEventArgs e_ni)
-#endif
 //JJ public void adjustmentValueChanged(AdjustmentEvent e_ni)
 {if('X'==xy_c)scroll_z_mt_p.program_p.scroll_x_v(get_value());
  else {scroll_z_mt_p.program_p.scroll_y_v(get_value()+1,2);

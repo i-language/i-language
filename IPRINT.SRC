@@ -1680,6 +1680,7 @@ return s;
 //HP return  QPageSize(QPageSize::Custom); 
 //JJ return  null ;
 //JP }
+//SS [System.Obsolete("このメソッドは非推奨です。")]
 //SS protected override void OnClosed(EventArgs e){}
 //=======(e.t.c)=======================================================================
 //JJ public void keyTyped(KeyEvent e_ni){}
