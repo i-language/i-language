@@ -694,6 +694,15 @@ public void keyboard_v(ii_data_l data_ni,int line_ii,int column_ii,int sw_caret_
 key_copy_start=-1;
 line=line_ii+data_ni.line;column=column_ii+data_ni.column;data_p=data_ni;sw_insert_b=false;
 type_s=(z_p.e3s_b(data_p.type1_s," ","")?(z_p.e2s_b(kind_si,"SET")?"/":"S"):data_p.type1_s);
+if(z_p.e3s_b(type_s,"+","-"))   //数値情報で小数点以下が全て0は小数点から後を取ります。　VER37.10.0.0.1　　
+  {int ii=z_p.length(data_p.data_s)-1;int jj=-1;int kk=-1;char cc;
+   for(;0<ii;ii--)
+     {cc=z_p.at_s_c(data_p.data_s,ii);
+      if('0'==cc){if(-1==kk)jj=ii;continue;}
+      if('.'==cc){if(-1==kk)jj=ii;if(-1!=jj)data_p.data_s=z_p.substring3_s(data_p.data_s,0,jj);break;}
+      kk=ii;
+     }
+  }  
 set_key_s(data_p.data_s,0,sw_caret_keep_ii);
 if(z_p.e6s_b(type_s,"+","-","D","T","E"))display_v();
 z_mt_p.sw_on_keyboard=z_p.SW_ON_1;caret_v();

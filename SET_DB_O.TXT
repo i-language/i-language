@@ -10,6 +10,16 @@
 =WRITE{1,'ALTER DATABASE OPEN;'};
 =IF{_DB_SOFT<'O12'}JUMP{J};
 =WRITE{1,'ALTER PLUGGABLE DATABASE ALL OPEN;'};
+=J:IF_NOT{_DB_SOFT/'O26'}JUMP{J};
+=WRITE{1,'alter session set container=?WC.INSTANCE?;'};
+=WRITE{1,'grant select on ALL_ALL_TABLES to public;'};
+=WRITE{1,'grant select on ALL_OBJECTS to public;'};
+=WRITE{1,'grant select on ALL_VIEWS to public;'};
+=WRITE{1,'grant select on ALL_SOURCE to public;'};
+=WRITE{1,'grant select on ALL_TAB_COLUMNS to public;'};
+=WRITE{1,'grant select on ALL_INDEXES to public;'};
+=WRITE{1,'grant select on ALL_IND_COLUMNS to public;'};
+=WRITE{1,'grant select on ALL_TAB_PRIVS to public;'};
 =J:
 =WRITE{1,'EXIT'};
 =WRITE_CLOSE{1};

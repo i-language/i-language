@@ -10,7 +10,7 @@ IPROGRAMのDNAを引き継ぎ、文法を全て再設計して更に簡単にし
 メールアドレス=harasawa@mis.janis.or.jp
 （定年退職してるので時間は幾らでも有ります、どんな事でも良いので気軽にメールで質問下さい）
 URL=http://www.mis.janis.or.jp/~harasawa/
-(URLはIPROGRAM　HOMEPAGEでここからI言語ホームページにリンクしています）
+(URLはIPROGRAM　HOMEPAGEでここからI言語ホームページ[https://ilanguage.iinaa.net/]にリンクしています）
 提供者住所=長野県飯田市
 （飯田市近辺で有れば、メールで連絡頂ければ説明に伺いますのでよろしくお願いします）
 提供者氏名=原沢信道
@@ -21,14 +21,14 @@ URL=http://www.mis.janis.or.jp/~harasawa/
 改造した物を他人に配布は出来ません。
 
 4.動作環境
-推奨環境としてはWindowsにSQL Severと.NET8.0をインターネットからダウンロードしインストールして使用します。
+推奨環境としてはWindowsにSQL Severと.NET10.0をインターネットからダウンロードしインストールして使用します。
 RDBMSがIBM DB2,Oracle,PostgreSQL,MariaDBでも動きます。
-開発言語はC#ですが、JavaとC++でも開発してあります、ただし、全機能が実現している訳では無く、
+開発言語はC#ですが、JavaとC++でも開発してあります、ただし、JavaとC++は全機能が実現している訳では無く、
 最新環境での動作確認は完全にはしていないので、使う場合は動作確認をしてから使って下さい。
-尚、C++はネイティブでなくODBC接続しているのが原因か、IBM DB2とOracleとPostgreSQLは問題が有り動かないプログラムが幾つか有ります。 
+尚、C++はネイティブでなくODBC接続しているのが原因か、IBM DB2はデータを更新出来ません。 
 
 5.インストール・アンインストール方法
-インストール方法：WindowsにSQL Server2022ExpressEdition(推奨)と.NET8.0をインターネットからダウンロードしインストール後に、
+インストール方法：WindowsにSQL Server2022ExpressEdition(推奨)と.NET10.0をインターネットからダウンロードしインストール後に、
 エクスプローラでSETUP_JA.BATを起動してインストールします。
 補足：運用環境と開発環境もインストールで構築するので、色々な入力操作が必要です、画面の指示に従って操作して下さい。
 （難読化をしますが、再コンパイルが必要なので、評価のみが目的の場合は、難読化しなくても評価は出来ます）
@@ -43,10 +43,11 @@ RDBMSがIBM DB2,Oracle,PostgreSQL,MariaDBでも動きます。
 6.作者以外の著作物。（i-downloadディレクトリ内に有ります）
 6.1 db2jcc4.jar---Java用IBM　DB2接続ライブラリ（提供者：IBM)
 6.2 jna.jar---Java用シリアルポート接続ライブラリ1/2(バージョン名を取った名前にリネーム、元はjna-4.4.2.jar)
-6.3 mariadb-java-client-2.7.3.jar---Java用MaraDB接続ライブラリ
-6.4 obfuscar.Console.exe---C#用難読化プログラム。(提供者：www.nuget.org)
-6.5 ojdbc7.jar---Java用Oracle接続ライブラリ（提供者：Oracle)
-6.6 postgresql-42.2.18.jar---Java用PostgreSQL接続ライブラリ
-6.7 purejavacomm.jar---Java用シリアルポート接続ライブラリ2/2(提供者:https://github.com/nyholku/purejavacomm)
-6.8 sqljdbc42.jar---Java用SQL Server接続ライブラリ（提供者：Microsoft)
+6.3 mariadb-java-client-3.5.6.jar---Java用MaraDB接続ライブラリ
+6.4 mssql-jdbc-13.2.0.jre11.jar---Java用SQL Server接続ライブラリ（提供者：Microsoft)
+6.5 Obfuscar.Console.exe---C#用難読化プログラム。(提供者：www.nuget.org)
+6.6 ojdbc11.jar---Java用Oracle接続ライブラリ（提供者：Oracle)
+6.7 postgresql-42.7.2.jar---Java用PostgreSQL接続ライブラリ
+6.8 purejavacomm.jar---Java用シリアルポート接続ライブラリ2/2(提供者:https://github.com/nyholku/purejavacomm)
 6.9 その他C#のコンパイルで作られたdllがI37_BIN以下に置かれています。
+

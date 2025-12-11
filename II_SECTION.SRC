@@ -1556,8 +1556,8 @@ else if(z_p.e2s_b(s,"READ_OPEN"))
  else if(z_p.e2s_b(s,"SPEAK_THREAD"))//VER10.0.0
      {if(CONTINUE_NORMAL_0!=sw_skip){sw=LOOP_2;continue;}  //スキップ中　 
 //SS  if(null==speak_n)speak_n=new SpeechSynthesizer();
-//SS  Thread t = new Thread(new ThreadStart(()=>{speak_n.Speak(opt1_s);}));
-//SS  t.Start();
+//SS  Thread t_n=new Thread(new ThreadStart(()=>{speak_n.Speak(opt1_s);}));
+//SS  t_n.Start();
 ////PP  QCoreApplication a();
 ////PP  QTextToSpeech *speak_p=new QTextToSpeech(&a);
 ////PP  speak_p->say(opt1_s);

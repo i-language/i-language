@@ -225,15 +225,15 @@ JA	ZZZZ	01	03	27	INPUT	ZZZZ	ZZ	X							トランザクション処理1
 JA	ZZZZ	01	03	28	OUTPUT	ZZZZ	ZZ	X							トランザクション処理2
 JA	ZZZZ	01	03	29	INPUT	ZZZZ	ZZ	A							和暦-西暦テーブル作成(最初)
 JA	ZZZZ	01	03	30	INPUT	ZZZY	ZZ	X							和暦-西暦変換(年月補正非対応)
-JA	ZZZZ	01	03	32	INPUT	ZZZY	ZZ	X							麻雀参加者更新      (準備1/2)
-JA	ZZZZ	01	03	33	INPUT	ZZZY	ZZ	X							麻雀点数表作成      (準備2/2)
-JA	ZZZZ	01	03	34	INPUT	ZZZY	ZZ	X							麻雀結果更新        (処理1/2)
-JA	ZZZZ	01	03	35	OUTPUT	ZZZY	ZZ	X							麻雀結果表示        (処理2/2)
-JA	ZZZZ	01	03	36	OUTPUT	ZZZY	ZZ	X							麻雀結果FILEに出力
-JA	ZZZZ	01	03	37	INPUT	ZZZY	ZZ	X							麻雀サーバー同期
-JA	ZZZZ	01	03	38	INPUT	ZZZY	ZZ	X							麻雀結果更新        (手動対応)
-JA	ZZZZ	01	03	39	OUTPUT	ZZZY	ZZ	X							麻雀対戦者表示
-JA	ZZZZ	01	03	40	INPUT	ZZZZ	ZZ	A							麻雀テーブル作成    (最初)
+JA	ZZZZ	01	03	32	INPUT	ZZZY	ZZ	X							麻雀参加者更新     (準備 1/2)
+JA	ZZZZ	01	03	33	INPUT	ZZZY	ZZ	X							麻雀組合せ表作成　 (準備 2/2)
+JA	ZZZZ	01	03	34	OUTPUT	ZZZY	ZZ	X							麻雀点数計算        (点棒必要)
+JA	ZZZZ	01	03	35	INPUT	ZZZY	ZZ	X							麻雀終局で点数入力  (点棒必要)
+JA	ZZZZ	01	03	36	INPUT	ZZZY	ZZ	X							麻雀一局毎結果入力　(点棒不要)
+JA	ZZZZ	01	03	37	OUTPUT	ZZZY	ZZ	X							麻雀結果表示          {UDP<97}
+JA	ZZZZ	01	03	38	OUTPUT	ZZZY	ZZ	X							麻雀結果FILEに出力
+JA	ZZZZ	01	03	39	INPUT	ZZZY	ZZ	X							麻雀結果サーバー同期  {UDP<96}
+JA	ZZZZ	01	03	40	INPUT	ZZZZ	ZZ	A							麻雀テーブル作成    (初期設定)
 JA	ZZZZ	01	04	00		ZZZZ									システム 管理 メニュー
 JA	ZZZZ	01	04	01	OUTPUT	ZZZZ	ZZ	X							テンプファイル表示
 JA	ZZZZ	01	04	03	OUTPUT	ZZZZ	ZZ	P		ZZZZ010246					プログラム更新日 検索
@@ -270,7 +270,7 @@ JA	ZZZZ	01	04	38	OUTPUT	ZZZZ	ZZ	J	HALT						本番テーブル使用権の再設
 JA	ZZZZ	01	04	39	INPUT	ZZZZ	ZZ	A		ZZZZ010239	ZZZZZZZZZZ				本番 オブジェクト 許可 の更新
 JA	ZZZZ	01	04	40	INPUT	ZZZZ	ZZ	A							(CREATE VIEW)(ZZZZ010541 SET)
 JA	ZZZZ	01	05	00		ZZZZ									システム 運用 メニュー
-JA	ZZZZ	01	05	01	OUTPUT	ZZZZ	ZZ	X							時間起動最新状態(1画面のみ可)
+JA	ZZZZ	01	05	01	OUTPUT	ZZZZ	ZZ	X							時間起動最新状態      {UDP<99}
 JA	ZZZZ	01	05	02	INPUT	ZZZZ	ZZ	X							システム起動状況(SERVER ONLY)
 JA	ZZZZ	01	05	03	OUTPUT	ZZZZ	ZZ	X							時間起動履歴の検索
 JA	ZZZZ	01	05	05	OUTPUT	ZZZZ	ZZ	P		ZZZZ010525	ZZZZ010543				許可,許可区分,テーブル略称検索
@@ -333,8 +333,8 @@ JA	ZZZZ	01	07	13	OUTPUT	ZZZZ	ZY	P							雛型給与基本情報検索(使用）
 JA	ZZZZ	01	07	14	OUTPUT	ZZZZ	ZY	P							雛型給与標準報酬検索(使用）
 JA	ZZZZ	01	07	16	OUTPUT	ZZZZ	ZY	X							雛型 WEB API 検索(駅データ.JP)
 JA	ZZZZ	01	07	17	OUTPUT	ZZZZ	ZY	X							雛型 WEB API 検索(KOSOKU.JP)
-JA	ZZZZ	01	07	19	OUTPUT	ZZZZ	ZY	X							雛型 UDP(RECEIVE) 受信 (1/2)
-JA	ZZZZ	01	07	20	OUTPUT	ZZZZ	ZY	X							雛型 UDP(SEND)    送信 (2/2)
+JA	ZZZZ	01	07	19	OUTPUT	ZZZZ	ZY	X							雛型(RECEIVE)受信(1/2){UDP<98}
+JA	ZZZZ	01	07	20	OUTPUT	ZZZZ	ZY	X							雛型(SEND)   送信(2/2){UDP>98}
 JA	ZZZZ	01	07	21	INPUT	ZZZZ	ZY	J							雛型電話帳更新
 JA	ZZZZ	01	07	23	INPUT	ZZZZ	ZY	J							雛型予約管理
 JA	ZZZZ	01	07	25	INPUT	ZZZZ	ZY	J							雛型郵便番号WEBサーバより更新

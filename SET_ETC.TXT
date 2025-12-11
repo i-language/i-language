@@ -7,7 +7,7 @@ ZZZZZZ_@	ZZZZZZ_PERMISSION_NO2	ZZZY	ZZZY
 ZZZZZZ_@	ZZZZZZ_VERSION_CHART	2	VERSION(2) ICHART
 ZZZZZZ_@	ZZZZZZ_VERSION_PRINT	14	VERSION(14) IPRINT
 ZZZZZZ_@	ZZZZZZ_VERSION1	37	VERSION1(37) IMENU,ITIME
-ZZZZZZ_@	ZZZZZZ_VERSION2	001000000	VERSION2(001000000) IMENU,ITIME
+ZZZZZZ_@	ZZZZZZ_VERSION2	001000001	VERSION2(001000001) IMENU,ITIME
 ZZZZZZ_COPY	ZZZZZZ_SQL               00100	%ZZZZZZ_SQL_SELECT+REPEAT=_SELECT_COUNT	
 ZZZZZZ_COPY	ZZZZZZ_SQL               00200	%ZZZZZZ_SQL_SELECT+SQL=?_SELECT##?	
 ZZZZZZ_COPY	ZZZZZZ_SQL               00300	%ZZZZZZ_SQL_SELECT+REPEAT=	
@@ -325,7 +325,7 @@ ZZZZZZ_PROGRAM	//BEGIN_END//                2	BEGIN_END	M/G
 ZZZZZZ_PROGRAM	//CHECK=//                   1	CHECK=XXX,YYY,(XXX,YYY)	M/ED    -C1
 ZZZZZZ_PROGRAM	//CHECK1=//                  1	CHECK1=XXX,YYY,(XXX,YYY)	M/ED    -C1
 ZZZZZZ_PROGRAM	//CHECK2=//                  1	CHECK2=XXX,YYY	M/ED    -C2
-ZZZZZZ_PROGRAM	//CLICK=//                   1	CLICK=(PROGRAM)	M/E     +LG
+ZZZZZZ_PROGRAM	//CLICK=//                   1	CLICK=(PROGRAM)	M/W     +LG
 ZZZZZZ_PROGRAM	//COLOR//                    1	COLOR	M/G
 ZZZZZZ_PROGRAM	//COMMA=//                   1	COMMA=&X2,?_MM?_YYY_TABLE,&X1,0-9*	M/B     2AL   =TB   =AL   =0A
 ZZZZZZ_PROGRAM	//COMMENT_BEGIN//            1	COMMENT_BEGIN	//P
@@ -355,7 +355,7 @@ ZZZZZZ_PROGRAM	//I+//                       1	I+(IBM DB2)	//
 ZZZZZZ_PROGRAM	//INNER=//                   1	INNER=&X2,?_MM?_YYY_TABLE,&X1,0-9*	//B     2AL   =TB   =AL   =0A
 ZZZZZZ_PROGRAM	//INNER2=//                  1	INNER2=&X2,?_MM?_YYY_TABLE,&X1,0-9*	//B     2AL   =TB   =AL   =0A
 ZZZZZZ_PROGRAM	//INPUT+//                   1	INPUT+	M/
-ZZZZZZ_PROGRAM	//INPUT=//                   1	INPUT=(PROGRAM)	M/ED    +LG
+ZZZZZZ_PROGRAM	//INPUT=//                   1	INPUT=(PROGRAM)	M/WD    +LG
 ZZZZZZ_PROGRAM	//JA+//                      1	JA+(JAPANESE)	//
 ZZZZZZ_PROGRAM	//JOB_PART=//                1	JOB_PART=ZZ	//E     -PA
 ZZZZZZ_PROGRAM	//JOB_PERMISSION=//          1	JOB_PERMISSION=ZZZZ	//E     -PM
@@ -412,6 +412,7 @@ ZZZZZZ_PROGRAM	//STOP_AFTER//               1	STOP_AFTER	M/G
 ZZZZZZ_PROGRAM	//STOP_BEFORE//              1	STOP_BEFORE	M/G
 ZZZZZZ_PROGRAM	//TABLE=//                   1	TABLE=&X2,?_MM?_YYY_TABLE	//E     2AL   =TB
 ZZZZZZ_PROGRAM	//TEST+//                    1	TEST+	//
+ZZZZZZ_PROGRAM	//TILDE=//                   1	TILDE=NAME	//E
 ZZZZZZ_PROGRAM	//TITLE=//                   1	TITLE=(TITLE)	M/ED    ***
 ZZZZZZ_PROGRAM	//U+//                       1	U+(LINUX)	//
 ZZZZZZ_PROGRAM	//W+//                       1	W+(WINDOWS)	//
@@ -968,6 +969,7 @@ ZZZZZZ_PROGRAM	UN _SYSTEM
 ZZZZZZ_PROGRAM	UN _SYSTEM_NAME	R	
 ZZZZZZ_PROGRAM	UN _T	R	
 ZZZZZZ_PROGRAM	UN _TABLE	R	
+ZZZZZZ_PROGRAM	UN _TILDE	R	
 ZZZZZZ_PROGRAM	UN _TIMEOUT_CONNECT	R	
 ZZZZZZ_PROGRAM	UN _TIMEOUT_SQL	R	
 ZZZZZZ_PROGRAM	UN _TMP	R	
@@ -1840,7 +1842,7 @@ ZZZZZZ_SYSTEM	ZZZZZZ_REGISTRY_PROXY	SYSTEM\CURRENTCONTROLSET\SERVICES\NLASVC\PAR
 ZZZZZZ_SYSTEM	ZZZZZZ_TIME_LIMIT	17:30	SYSTEM TIME LIMIT (HH:MM)[17:30]
 ZZZZZZ_SYSTEM	ZZZZZZ_TIME_START	08:30	SYSTEM START TIME (HH:MM)[08:30]
 ZZZZZZ_SYSTEM	ZZZZZZ_Z_CANCEL_DELETE	31	Z_CANCEL DELETE -(DAY)[31]
-ZZZZZZ_URL_VERSION	#D	https://dotnet.microsoft.com/download/dotnet/10.0/	,"#version_0">,10.0.0
+ZZZZZZ_URL_VERSION	#D	https://dotnet.microsoft.com/download/dotnet/10.0/	,"#version_0">,10.0.1
 ZZZZZZ_URL_VERSION	#G	https://www.nuget.org/packages/gtksharp/	,GtkSharp ,3.24.24.95
 ZZZZZZ_URL_VERSION	#J	https://jdk.java.net/archive/	,GA/jdk,25
 ZZZZZZ_URL_VERSION	#J--	24	23,22
@@ -1853,7 +1855,7 @@ ZZZZZZ_URL_VERSION	DJ	*ttp://www.firebirdsql.org/en/jdbc-driver/	,Jaybird-,3.0.8
 ZZZZZZ_URL_VERSION	DJ--	3.0.0	
 ZZZZZZ_URL_VERSION	DN	*ttp://www.firebirdsql.org/en/additional-downloads	/,FirebirdClient-,7.1.1
 ZZZZZZ_URL_VERSION	IN	https://www.nuget.org/packages/IBM.Data.DB2.Core/	,content="IBM.Data.DB2.Core ,3.1.0.600
-ZZZZZZ_URL_VERSION	L#	https://downloads.mariadb.org/	,downloads.mariadb.org/mariadb/,11.8.4
+ZZZZZZ_URL_VERSION	L#	https://downloads.mariadb.org/	,downloads.mariadb.org/mariadb/,11.8.5
 ZZZZZZ_URL_VERSION	L#--	12.	
 ZZZZZZ_URL_VERSION	L#*	*https://downloads.mariadb.org/	,downloads.mariadb.org/mariadb/,11.6.2
 ZZZZZZ_URL_VERSION	L#--*	*11.7.1/">11.7.1 RC	11.8.0/">11.8.0 preview
@@ -1862,14 +1864,14 @@ ZZZZZZ_URL_VERSION	LJ	https://mariadb.org/connector-java/all-releases/	,8;rel=,3
 ZZZZZZ_URL_VERSION	LJ*	*https://mariadb.org/connector-java/all-releases/	,old=">,2.7.3
 ZZZZZZ_URL_VERSION	LJ--*	*3.0.0</a></td><td>2021-05-05</td><td>Alpha	
 ZZZZZZ_URL_VERSION	LJ**	https://mariadb.com/kb/en/about-mariadb-connector-	J/,>MariaDB Connector/J ,3.5.3
-ZZZZZZ_URL_VERSION	LN	https://www.nuget.org/packages/MySqlConnector/	,content="MySqlConnector ,2.4.0
+ZZZZZZ_URL_VERSION	LN	https://www.nuget.org/packages/MySqlConnector/	,content="MySqlConnector ,2.5.0
 ZZZZZZ_URL_VERSION	MJ	https://docs.microsoft.com	
 ZZZZZZ_URL_VERSION	MJ*	*ttps://www.microsoft.com/ja-jp/download/details.a	spx?id=11774,JDBC Driver ,6.0
 ZZZZZZ_URL_VERSION	MJ++	/ja-jp/sql/connect/jdbc/download-microsoft-jdbc-dr	iver-for-sql-server,<p>バージョン ,13.2
-ZZZZZZ_URL_VERSION	MN	https://www.nuget.org/packages/Microsoft.Data.SqlC	lient,content="Microsoft.Data.SqlClient ,6.1.2
+ZZZZZZ_URL_VERSION	MN	https://www.nuget.org/packages/Microsoft.Data.SqlC	lient,content="Microsoft.Data.SqlClient ,6.1.3
 ZZZZZZ_URL_VERSION	OJ	https://www.oracle.com/jp/database/technologies/ap	pdev/jdbc-downloads.html,219/ojdbc,11
 ZZZZZZ_URL_VERSION	ON	https://www.nuget.org/packages/Oracle.ManagedDataA	ccess.Core,Oracle.ManagedDataAccess.Core ,23.26.0
-ZZZZZZ_URL_VERSION	P#	https://www.postgresql.org/	,><strong>,18.0
+ZZZZZZ_URL_VERSION	P#	https://www.postgresql.org/	,><strong>,18.1
 ZZZZZZ_URL_VERSION	PJ	http://www.postgresql.org/applications-v2.xml	,>edb_pgjdbc<,<version>,42.7.2-
-ZZZZZZ_URL_VERSION	PN	https://www.nuget.org/packages/Npgsql	,content="Npgsql ,9.0.4
+ZZZZZZ_URL_VERSION	PN	https://www.nuget.org/packages/Npgsql	,content="Npgsql ,10.0.0
 ZZZZZZ_URL_VERSION	PN*	*http://www.postgresql.org/applications-v2.xml	,>edb_npgsql<,<version>,3.2.6-

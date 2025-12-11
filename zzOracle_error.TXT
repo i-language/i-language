@@ -38,10 +38,13 @@ alter user system identified by パスワード;
 select name, open_mode from v$pdbs;
 プラガブルDBへの切り替え。
 alter session set container=XEPDB1;
+　　　　　　　 　(23ai以降はFREEPDB1）
 ◎ORA-28001が発生(コマンドプロンプト上で）
 sqlplus / as sysdba
 alter session set container=XEPDB1;
+　　　　　　　 　(23ai以降はFREEPDB1）
 ALTER PROFILE DEFAULT LIMIT PASSWORD_LIFE_TIME UNLIMITED;
 ALTER USER ユーザー名　ACCOUNT UNLOCK;
 ALTER USER ユーザー名 IDENTIFIED BY パスワード;
-
+◎リスナーのステータスを確認するコマンド。
+lsnrctl status

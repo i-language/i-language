@@ -10,7 +10,7 @@ ECHO ●[2/5]===(SDKの最新が[ %I_VER2SDK% ]で有る事 )======( I_VER2SDK,_BEGIN_VER
 DOTNET --version
 ECHO ●[3/5](Desktop.Appの最新が[ %I_VER2RUN% ]で有る事)====( I_VER2RUN,_BEGIN_VER2.BAT )===========
 DOTNET --list-runtimes | find "Desktop"
-ECHO ●[4/5]========(1か所が[ %I_VER2RUN:~0,3% ]で有る事)==========( I_VER2RUN,_BEGIN_VER2.BAT )==========
+ECHO ●[4/5]========(1か所が[ %I_VER2RUN:~0,4% ]で有る事)==========( I_VER2RUN,_BEGIN_VER2.BAT )==========
 ECHO                          %I_VER2NET%                     ( I_VER2NET,_BEGIN_VER2.BAT ) 
 ECHO ●[5/5]===============(4か所が[ 000%I_VER2RUN:~0,1%0%I_VER2RUN:~2,1%0%I_VER2RUN:~-2% ](.は0と見なす）で有る事)====================================
 FIND "ZZZZZZ_VERSION2" SET_ETC.TXT
