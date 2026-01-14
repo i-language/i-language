@@ -667,7 +667,7 @@ return 0;
 public int set_table_da_i(List<ii_data_l> da_ai,String name_si,String table_si,String usr_si,int sw_ii)
 {int i,j,rc=0,cnt=0,data_cnt=0,index_cnt=0,all_cnt=0,key_cnt=0;
 String s="",all_s="",datas_s="",create_s="",data_creates_s="",key_creates_s="";
-String unique_s="",work_s="",works_s="",works_key_s="",works_data_s="";
+String unique_s="",work_s="",works_s="",works_key_s="",works_data_s="",works_data_define_s="";
 String key_s="",keys_s="",key_data_s="",index_s="",type_long_s="",type_short_s="";
 if(-1!=z_p.index2c_i(name_si,' ')) {z_p.err_s="find space alias";return 5;}//VER28.1
 if(-1!=z_p.index2c_i(table_si,' ')){z_p.err_s="find space table";return 5;}//VER28.1
@@ -698,6 +698,7 @@ for(i=0,j=1;z_p.count_s_i(s_table_a)>i;j++,i+=23)
       datas_s+=(z_p.e2s_b(datas_s,"")?"":",")+z_p.at_s(s_table_a,i);
       data_creates_s+=(z_p.e2s_b(data_creates_s,"")?"":",")+z_p.at_s(s_table_a,i)+create_s;
       works_data_s+=(z_p.e2s_b(works_data_s,"")?"":",")+work_s; 
+      works_data_define_s+=(z_p.e2s_b(works_data_define_s,"")?"":",")+work_s+"=";   //VER38.10.0.2 
      }
    else
     {cnt=++key_cnt;key_s="K";key_data_s="KEY_";
@@ -726,6 +727,7 @@ if(0==sw_ii)
   {set_table_add_da_v(da_ai,name_si+"ALL",all_s,"");
    set_table_add_da_v(da_ai,name_si+"WORK",works_s,"");
    set_table_add_da_v(da_ai,name_si+"WORK_DATA",works_data_s,"");
+   set_table_add_da_v(da_ai,name_si+"WORK_DATA_DEFINE",works_data_define_s,""); //VER37.10.0.2
    set_table_add_da_v(da_ai,name_si+"WORK_KEY",works_key_s,"");
    set_table_add_da_v(da_ai,name_si+"KEY",keys_s,"");
    set_table_add_da_v(da_ai,name_si+"DATA",datas_s,"");

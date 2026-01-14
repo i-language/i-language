@@ -225,15 +225,21 @@ JA	ZZZZ	01	03	27	INPUT	ZZZZ	ZZ	X							トランザクション処理1
 JA	ZZZZ	01	03	28	OUTPUT	ZZZZ	ZZ	X							トランザクション処理2
 JA	ZZZZ	01	03	29	INPUT	ZZZZ	ZZ	A							和暦-西暦テーブル作成(最初)
 JA	ZZZZ	01	03	30	INPUT	ZZZY	ZZ	X							和暦-西暦変換(年月補正非対応)
-JA	ZZZZ	01	03	32	INPUT	ZZZY	ZZ	X							麻雀参加者更新     (準備 1/2)
-JA	ZZZZ	01	03	33	INPUT	ZZZY	ZZ	X							麻雀組合せ表作成　 (準備 2/2)
-JA	ZZZZ	01	03	34	OUTPUT	ZZZY	ZZ	X							麻雀点数計算        (点棒必要)
+JA	ZZZZ	01	03	31	INPUT	ZZZY	ZZ	X							麻雀参加者更新     (準備 1/2)
+JA	ZZZZ	01	03	32	INPUT	ZZZY	ZZ	X							麻雀組合せ表作成　 (準備 2/2)
+JA	ZZZZ	01	03	33	INPUT	ZZZY	ZZ	X		ZZZZ010343	ZZZZ010334	ZZZZ010344	ZZZZ010334		麻雀役による点数計算(点棒必要)
+JA	ZZZZ	01	03	34	OUTPUT	ZZZY	ZZ	X							麻雀翻による点数計算(点棒必要)
 JA	ZZZZ	01	03	35	INPUT	ZZZY	ZZ	X							麻雀終局で点数入力  (点棒必要)
-JA	ZZZZ	01	03	36	INPUT	ZZZY	ZZ	X							麻雀一局毎結果入力　(点棒不要)
+JA	ZZZZ	01	03	36	INPUT	ZZZY	ZZ	X		ZZZZ010334	ZZZZ010341	ZZZZ010335	ZZZZ010342		麻雀一局毎結果入力　(点棒不要)
 JA	ZZZZ	01	03	37	OUTPUT	ZZZY	ZZ	X							麻雀結果表示          {UDP<97}
-JA	ZZZZ	01	03	38	OUTPUT	ZZZY	ZZ	X							麻雀結果FILEに出力
+JA	ZZZZ	01	03	38	OUTPUT	ZZZY	ZZ	X		ZZZZ010337					麻雀結果FILEに出力
 JA	ZZZZ	01	03	39	INPUT	ZZZY	ZZ	X							麻雀結果サーバー同期  {UDP<96}
-JA	ZZZZ	01	03	40	INPUT	ZZZZ	ZZ	A							麻雀テーブル作成    (初期設定)
+JA	ZZZZ	01	03	40	INPUT	ZZZZ	ZZ	A		ZZZZ010345					麻雀テーブル作成    (初期設定)
+JA	ZZZZ	01	03	41		ZZZY	ZZ								麻雀一局毎結果入力SUB1/2
+JA	ZZZZ	01	03	42		ZZZY	ZZ								麻雀一局毎結果入力SUB2/2
+JA	ZZZZ	01	03	43		ZZZY	ZZ								麻雀局役による計算SUB1/2
+JA	ZZZZ	01	03	44		ZZZY	ZZ								麻雀局役による計算SUB2/2
+JA	ZZZZ	01	03	45		ZZZZ	ZZ								麻雀作成SUB(ZZZZ010333 作成）
 JA	ZZZZ	01	04	00		ZZZZ									システム 管理 メニュー
 JA	ZZZZ	01	04	01	OUTPUT	ZZZZ	ZZ	X							テンプファイル表示
 JA	ZZZZ	01	04	03	OUTPUT	ZZZZ	ZZ	P		ZZZZ010246					プログラム更新日 検索

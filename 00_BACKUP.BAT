@@ -22,7 +22,7 @@ IF EXIST %DRV%:\i-language_BACKUP_B1 ROBOCOPY    %DRV%:\i-language_BACKUP_B1 %DR
 ROBOCOPY D:\HARASAWA\i-language                  %DRV%:\i-language_BACKUP_B1 %ARG%>>%TMP%
 ROBOCOPY %SystemDrive%\inetpub\wwwroot\          %DRV%:\wwwroot-BACKUP       %ARG%>>%TMP%
 ROBOCOPY %USERPROFILE%\Documents\‚Í‚ª‚«ì‰Æ\     %DRV%:\‚Í‚ª‚«ì‰Æ-BACKUP    %ARG%>>%TMP%
-ROBOCOPY D:\software\_fujitsu\                   %DRV%:\_fujitsu-BACKUP      %ARG%>>%TMP%
+rem ROBOCOPY D:\software\_fujitsu\                   %DRV%:\_fujitsu-BACKUP      %ARG%>>%TMP%
 ROBOCOPY %USERPROFILE%\Desktop\                  %DRV%:\Desktop-BACKUP       %ARG%>>%TMP%
 TYPE %TMP%
 PAUSE

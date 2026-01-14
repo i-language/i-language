@@ -1496,6 +1496,7 @@ for(;;)
         }
       if(z_p.e2s_b(w_s_n.s,"")){z_p.err_s="data name is null";sw=ERR_21;break;}//VER18.1
       if(find_name_b(w_s_n.s)){z_p.err_s="same (data name) \""+w_s_n.s+"\"";sw=ERR_21;break;}
+      z_mt_p.trace_v(0,"DEFINE_NAME="+w_s_n.s);
       da_work_data_p.name_s=w_s_n.s;
       data_name_s=z_p.dot_string_s(da_work_data_p.name_s);
       i=z_p.index2c_i(data_name_s,'_'); //VER24.1

@@ -1,5 +1,5 @@
 M mssql-jdbc-13.2.0.jre11.jar
-L mariadb-java-client-3.5.6.jar
+L mariadb-java-client-3.5.7.jar
 P postgresql-42.7.2.jar
 O ojdbc11.jar
 I db2jcc4.jar
