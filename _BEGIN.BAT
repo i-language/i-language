@@ -15,7 +15,8 @@ rem SET I_VER_C=6.6.3
 rem SET I_VER_C=6.7.3
 rem SET I_VER_C=6.8.1
 rem SET I_VER_C=6.9.0
-SET I_VER_C=6.10.0
+rem SET I_VER_C=6.10.0
+SET I_VER_C=6.10.2
 REM ===( dir )===
 SET I_DIR_J=%SystemDrive%
 rem SET I_DIR_WC=%SystemDrive%
