@@ -1,3 +1,3 @@
 @echo off
-find  "Z_CANCEL" *.* > __FIND.TMP 
+find  "X_MAX" *.* > __FIND.TMP 
 start notepad __FIND.TMP
