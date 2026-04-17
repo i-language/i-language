@@ -1,6 +1,6 @@
 //===== II_DB.CS db author nobumich.harasawa
 //データベース クラス
-#if IMENU||ITIME
+#if IMENU||IMTEST||ITIME
 //HH #include "ii_include_hh.h"
 //PP #include "ii_include_pp.h"
 //SS using Microsoft.Data.SqlClient; //VER37.8.0.12
@@ -8,7 +8,7 @@
 //SS using System.Collections.Generic;
 //SS using System.Drawing;
 //SS using System.IO;
-#if IMENU
+#if IMENU||IMTEST
 ////SS using System.Windows.Forms;
 #endif
 //JJ import java.awt.*;

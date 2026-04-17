@@ -1,6 +1,6 @@
 // II_READ.SRC read class author nobumichi harasawa
 //ファイル 読み込み クラス
-//#if IMENU||ITIME||IPRINT||ISRVC||ISETUP||IPAPER||ICHART||ICHART2
+//#if IMENU||IMTEST||ITIME||IPRINT||ISRVC||ISETUP||IPAPER||ICHART||ICHART2
 //HH #include "ii_include_hh.h"
 //PP #include "ii_include_pp.h"
 //SS using Microsoft.Data.SqlClient; //VER37.8.0.12
@@ -53,7 +53,7 @@ public int read()
 //JJ if(1==at_end||0==sw_data&&-1==ii){read_data_s="";return 1;}// at end
 //JJ if(-1==ii)at_end=1;
 //SJ    }
-//SJ catch(Exception e_ni){read_z_p.err_s=read_z_p.message_s(e_ni);read_close_v();return 5;}
+//SJ catch(Exception e_ni){read_z_p.err_s="[READ]"+read_z_p.message_s(e_ni);read_close_v();return 5;}
 return 0;
 }
 //----------------------------------------------
@@ -80,7 +80,7 @@ read_file_s=file_si;
 //JJ          StreamReader_n=new InputStreamReader(read_FileStream_n);
 //JJ     else StreamReader_n=new InputStreamReader(read_FileStream_n,(read_z_p.e2s_b(encoding_si,"")?"UTF-8":encoding_si));
 //SJ    }
-//SJ catch(Exception e_ni){read_z_p.err_s=read_z_p.message_s(e_ni);read_close_v();return false;}
+//SJ catch(Exception e_ni){read_z_p.err_s="[OPEN]"+read_z_p.message_s(e_ni);read_close_v();return false;}
 //JJ sw_first=0;sw_end=0;
 return true;
 }

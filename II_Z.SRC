@@ -1,27 +1,42 @@
 //= II_Z.SRC e.t.c class author nobumichi harasawa
 //= 共有クラス
-//#if IMENU||ITIME||ISRVC||ICHART||IPRINT||ISETUP||IPAPER||ICHART2||IROOT||ITEST
+//#if IMENU||IMTEST||ITIME||ISRVC||ICHART||IPRINT||ISETUP||IPAPER||ICHART2||IROOT||ITEST
 //HH #include "ii_include_hh.h"
 //PP #include "ii_include_pp.h"
 //SS using Microsoft.Data.SqlClient; //VER37.8.0.12
 //SS using System;
 //SS using System.Collections.Generic;
 //SS using System.IO;
-#if IMENU||ICHART||IPRINT||ISETUP||IPAPER||ICHART2
+#if IMENU||IMTEST||ICHART||IPRINT||IPAPER||ICHART2
+#if AUI
+//SS using MsBox.Avalonia;
+//SS using MsBox.Avalonia.Enums;
+//SS using System.Globalization;
+//SS using Avalonia;
+//SS using Avalonia.Controls;
+//SS using Avalonia.Controls.ApplicationLifetimes;
+//SS using Avalonia.Controls.Primitives;
+//SS using Avalonia.Input;
+//SS using Avalonia.Layout;
+//SS using Keys=Avalonia.Input.Key;
+//SS using Avalonia.Media;
+////SS using Color=Avalonia.Media.Colors;
+////SS using Brush=Avalonia.Media.SolidColorBrush;
+//SS using Avalonia.Media.Imaging;
+//SS using Avalonia.Platform;
+//SS using Avalonia.Threading;
+#else //AUI
 #if GTK
 //SS using Gtk;
 //SS using Gdk;
 //SS using Keys=Gdk.Key;
 //SS using Graphics=Cairo.Context;
-//SS using Font=ii_font_l;
-//SS using Pen=ii_pen_l;
-//SS using Brush=ii_brush_l;
-
 #else //GTK
 //SS using System.Windows.Forms;
 //SS using System.Drawing;
 #endif //GTK
-#endif
+#endif //AUI
+#endif //IMENU||IMTEST||ICHART||IPRINT||IPAPER||ICHART2
 //JJ import java.awt.*;
 //JJ import java.awt.event.*;
 //JJ import java.io.*;
@@ -35,10 +50,15 @@ public class ii_z_l
 public enum prog_e
 {BEGIN
 //###(END以前をトレースし標準出力に書きます。)#############
-  ,END
+#if !AUI
+,END
+#endif //!AUI
+#if AUI
+//SS ,END
+#endif //AUI
       ,AA  //全部に共通
-      ,KE  //KEYBOARD
       ,ME  //MENU	　
+      ,KE  //KEYBOARD
       ,PR  //PROGRAM
       ,SE  //SECTION
       ,LI  //LISTOX
@@ -63,9 +83,9 @@ console_write_v(s+"/"+s_i);
 //SJ public int LI=(int)prog_e.LI.ordinal(),LI2=(int)prog_e.LI.ordinal(),PR=(int)prog_e.PR.ordinal(),PR2=(int)prog_e.PR2.ordinal();
 //SJ public int SE=(int)prog_e.SE.ordinal(),SE2=(int)prog_e.SE2.ordinal();
 public int lang_font_org=
-//HP 12
-//SS 12   //初期値(.NET Framework) 
-//JJ 20   //初期値(Java）          
+//HP 11
+//SS 11   //初期値(.NET) 
+//JJ 15   //初期値(Java）          
 ;
 public readonly String DUMMY_S="";
 public char os_c=' ';
@@ -77,6 +97,18 @@ public readonly char FRAMEWORK_C=
 //SS        '4';
 #endif //DOTNET
 //JJ        'J';
+public int x_caret=-1,y_caret=-1;
+public String caret_s="";
+#if IMENU||IMTEST||ICHART||IPRINT||IPAPER||ICHART2
+public Font caret_font_n;
+//#if AUI
+////SS public SolidColorBrush caret_brush_n;
+//#else //AUI
+public Brush caret_brush_n,black_brush_n,white_brush_n;
+//#endif //AUI
+public String caret_pen_s;
+#endif  //IMENU||IMTEST||ICHART||IPRINT||IPAPER||ICHART2
+public char caret_type2_c;
 public String main_program_s="";
 public String dir_s="";
 public String rm_s="";
@@ -91,17 +123,15 @@ public String font_s=
                      "MS Gothic";
 //#if IPAPER
 //#else
-//#if IMENU||ITIME||IPRINT||ICHART
+//#if IMENU||IMTEST||ITIME||IPRINT||ICHART
 public ii_version_l version_n;
 //#endif MENU||TIME||PRINT||CHART
 //#endif
 public List<String> s_arg_a=new List<String>(); 
-//HP public int sw_on_paint=0;
+public int sw_on_paint=0;
 public int sw_printer=0;
-#if IMENU
+#if IMENU||IMTEST||IPRINT
 readonly String COLOR_S="WLNDXYRGBEP";
-#endif
-#if IMENU||IPRINT
 public int lang_x_offset=0;//横表示位置
 public int lang_y_offset=0;//縦表示位置
 public int lang_x_offset2=0;//横枠位置補正 //VER31.1
@@ -111,8 +141,12 @@ public int lang_y_geta=0;//画面縦方向補正。//VER24.1
 public int lang_x_mouse=0;//横マウス位置補正 //VER31.1
 public int lang_y_mouse=0;//縦マウス位置補正 //VER31.1
 readonly public int N_COLOR=210;
-//SJ public Brush [] Brush_nx;
-//HP public QVector<QBrush> Brush_nx;
+//#if AUI
+////S public SolidColorBrush [] brush_nx;
+//#else //AUI
+//SJ public Brush [] brush_nx;
+////#endif //AUI
+//HP public QVector<QBrush> brush_nx;
 public readonly int WHITE=0,LIGHTGRAY=1,BACKCOLOR=2,DARKGRAY=3,BLACK=4,YELOW=5,RED=6,GREEN=7,BLUE=8;
 public int x_geta_printer=0; 
 public int y_geta_printer=0; 
@@ -124,7 +158,7 @@ public float get_y_offset2_f()
 return lang_y_offset2+(1==sw_printer?y_geta_printer:0);
 }
 #endif //MENU
-#if IMENU||ITIME||ISRVC||ISETUP
+#if IMENU||IMTEST||ITIME||ISRVC||ISETUP||IPRINT
 public ii_password_l password_n;
 #endif
 //HP public ii_z_l(String main_program_si,int arg_i,char** arg_cci)
@@ -138,14 +172,56 @@ prog_n=new ii_zz_l();prog_s_n=new ii_zz_l();prog_c_n=new ii_zz_l();
 sub_v(main_program_si);
 }
 public ii_z_l(String main_program_si){sub_v(main_program_si);}
+#if IMENU||IMTEST||IPRINT
+int brush_cnt;
+public Color black_color_n()
+{return
+#if AUI
+//SS  Colors.Black;
+#else //AUI
+//SS   Color.Black; 
+#endif //AUI
+//JJ   Color.BLACK;
+//HP     Qt::black;
+}
+public Color white_color_n()
+{return
+#if AUI
+//SS  Colors.White;
+#else //AUI
+//SS   Color.White;   
+#endif //AUI
+//JJ   Color.WHITE;
+//HP     Qt::white;
+}
+public Brush set_brush_n(int r,int g,int b)
+{return
+//HP QBrush(QColor::fromRgb(r,g,b),Qt::SolidPattern);
+#if AUI
+//SS new SolidColorBrush(Color.FromRgb((byte)r,(byte)g,(byte)b)); 
+#else //AUI 
+#if GTK
+//SS new ii_brash_l(r/255.0,g/255.0,b/255.0);
+#else //GTK
+//SS new SolidBrush(Color.FromArgb(r,g,b)); 
+#endif //GTK
+#endif //AUI
+//JJ new Color(r,g,b); 
+}
+void brush_v(int r,int g,int b)
+{
+//HP brush_nx.push_back(set_brush_n(r,g,b));
+//SJ brush_nx[brush_cnt++]=set_brush_n(r,g,b); 
+}
+#endif //IMENU||IMTEST||IPRINT
 void sub_v(String main_program_si)
 { 
-#if IMENU||ITIME||ISRVC||ISETUP
+#if IMENU||IMTEST||ITIME||ISRVC||ISETUP
 password_n=new ii_password_l(this);
 #endif
 //#if IPAPER
 //#else
-//#if IMENU||ITIME||IPRINT||ICHART
+//#if IMENU||IMTEST||ITIME||IPRINT||ICHART
 version_n=new ii_version_l(this);
 //#endif MENU||TIME||PRINT||CHART
 //#endif
@@ -163,52 +239,34 @@ main_program_s=main_program_si;
 //SS os_c=((2<s.Length&&':'==s[1])?'W':'U');//.NET FrameworkのOS判定。 
 //JJ os_c=(e2s_b(System.getProperty("file.separator"),"\\")?'W':'U');//JAVAのOS判定。
 ////int i;
-#if IMENU||IPRINT
+#if IMENU||IMTEST||IPRINT
 //HP Font font(lang_font_org_s,lang_font_org);
-//HP Font_n=font;
-//SJ Font_n=new Font(lang_font_org_s,
+//HP my_font_n=font;
+//SJ my_font_n=new Font(lang_font_org_s,
 //JJ 0,
 //SJ     lang_font_org);
 font_s=lang_font_org_s;
-//HP Brush_nx.push_back(QBrush(QColor::fromRgb(255,255,255),Qt::SolidPattern)); //W(★JAVA★ は(new Color(255,255,255))に修正で対応。
-//HP Brush_nx.push_back(QBrush(QColor::fromRgb(224,224,224),Qt::SolidPattern)); //L
-//HP Brush_nx.push_back(QBrush(QColor::fromRgb(N_COLOR,N_COLOR,N_COLOR),Qt::SolidPattern)); //N（VER9で変更）
-//HP Brush_nx.push_back(QBrush(QColor::fromRgb(128,128,128),Qt::SolidPattern)); //D
-//HP Brush_nx.push_back(QBrush(QColor::fromRgb(0,0,0),Qt::SolidPattern));       //X
-//HP Brush_nx.push_back(QBrush(QColor::fromRgb(255,255,128),Qt::SolidPattern)); //Y
-//HP Brush_nx.push_back(QBrush(QColor::fromRgb(255,128,192),Qt::SolidPattern)); //R
-//HP Brush_nx.push_back(QBrush(QColor::fromRgb(128,255,128),Qt::SolidPattern)); //G
-//HP Brush_nx.push_back(QBrush(QColor::fromRgb(128,192,255),Qt::SolidPattern)); //B
-//HP Brush_nx.push_back(QBrush(QColor::fromRgb(255,191,127),Qt::SolidPattern)); //E
-//HP Brush_nx.push_back(QBrush(QColor::fromRgb(192,128,255),Qt::SolidPattern));//P
-//SJ Brush_nx=new Brush [11];
-#if GTK
-//S Brush_nx[0]=new ii_brash_l(255.0/255,255.0/255,255.0/255);
-//S Brush_nx[1]=new ii_brash_l(224.0/255,224.0/255,224.0/255); //L
-//S Brush_nx[2]=new ii_brash_l(210.0/255,210.0/255,210.0/255); //N
-//S Brush_nx[3]=new ii_brash_l(128.0/255,128.0/255,128.0/255); //D
-//S Brush_nx[4]=new ii_brash_l(0,0,0);       //X
-//S Brush_nx[5]=new ii_brash_l(255.0/255,255.0/255,128.0/255); //Y
-//S Brush_nx[6]=new ii_brash_l(255.0/255,128.0/255,192.0/255); //R
-//S Brush_nx[7]=new ii_brash_l(128.0/255,255.0/255,128.0/255); //G
-//S Brush_nx[8]=new ii_brash_l(128.0/255,192.0/255,255.0/255); //B
-//S Brush_nx[9]=new ii_brash_l(255.0/255,191.0/255,127.0/255); //E
-//S Brush_nx[10]=new ii_brash_l(192.0/255,128.0/255,255.0/255);//P
-#else //GTK
-//SJ Brush_nx[0]=new SolidBrush(Color.FromArgb(255,255,255)); //W(★JAVA★ は(new Color(255,255,255))に修正で対応。
-//SJ Brush_nx[1]=new SolidBrush(Color.FromArgb(224,224,224)); //L
-//SJ Brush_nx[2]=new SolidBrush(Color.FromArgb(N_COLOR,N_COLOR,N_COLOR)); //N（VER9で変更）
-//SJ Brush_nx[3]=new SolidBrush(Color.FromArgb(128,128,128)); //D
-//SJ Brush_nx[4]=new SolidBrush(Color.FromArgb(0,0,0));       //X
-//SJ Brush_nx[5]=new SolidBrush(Color.FromArgb(255,255,128)); //Y
-//SJ Brush_nx[6]=new SolidBrush(Color.FromArgb(255,128,192)); //R
-//SJ Brush_nx[7]=new SolidBrush(Color.FromArgb(128,255,128)); //G
-//SJ Brush_nx[8]=new SolidBrush(Color.FromArgb(128,192,255)); //B
-//SJ Brush_nx[9]=new SolidBrush(Color.FromArgb(255,191,127)); //E
-//SJ Brush_nx[10]=new SolidBrush(Color.FromArgb(192,128,255));//P
-#endif //GTK
-#endif //IMENU||IPRINT
-//#if IMENU||ITIME||ISRVC||ICHART||IROOT //TEST
+//#if AUI
+////SS brush_nx=new SolidColorBrush [11];
+//#else //AUI
+//SJ brush_nx=new Brush [11];
+//#endif //AUI
+brush_cnt=0;
+brush_v(255,255,255); //W[0](★JAVA★ は(new Color(255,255,255))に修正で対応。
+brush_v(224,224,224); //L[1]
+brush_v(N_COLOR,N_COLOR,N_COLOR); //N[2]（VER9で変更）
+brush_v(128,128,128); //D[3]
+brush_v(0,0,0);       //X[4](黒)
+brush_v(255,255,128); //Y[5]
+brush_v(255,128,192); //R[6]
+brush_v(128,255,128); //G[7]
+brush_v(128,192,255); //B[8]
+brush_v(255,191,127); //E[9]
+brush_v(192,128,255); //P[10]
+black_brush_n=brush_n('X');
+white_brush_n=brush_n('W');
+#endif //IMENU||IMTEST||IPRINT
+//#if IMENU||IMTEST||ITIME||ISRVC||ICHART||IROOT //TEST
 //String version2_s=to_i_s(version_n.VERSION2); //VER36.000600003
 //if(length(version2_s)<9)version2_s="0"+version2_s; //VER36.000600003
 //if(length(version2_s)<9)version2_s="0"+version2_s; //VER36.000600003
@@ -253,7 +311,7 @@ int ii=length(exe_name_s)-1; //VER33
 for(;0<ii;ii--)if(e2s_b(substring3_s(exe_name_s,ii,1),dir_s))break; //VER33
 bin_path_s=substring3_s(exe_name_s,0,ii+1); //VER33
 //JJ frc_n=new FontRenderContext(new AffineTransform(),true,true); 
-//#if IMENU||IPRINT
+//#if IMENU||IMTEST||IPRINT
 ////SS   StringFormat_n=new StringFormat();
 //#endif 
 }
@@ -388,7 +446,7 @@ public String upper_s(String si)
 //SS si.ToUpper();
 //JJ si.toUpperCase();
 }
-//#if IMENU||ITIME
+//#if IMENU||IMTEST||ITIME
 ////HP public void      to_daa_v(da_l* da_out_ni,da_l* da_in_ni)
 ////SJ public List<ii_data_l> to_daa_daa(List<ii_data_l> da_i)
 //{
@@ -665,12 +723,12 @@ public int count_b_i(List<byte> b_ai)
 public int count_c_i(List<char> c_ai)
 //HP   {return (int )c_ai->n.size();}
 //SJ   {return  c_ai.Count;}
-#if IMENU
+#if IMENU||IMTEST
 public int count_pa_i(List<ii_paint_l> pa_ai)
 //HP   {return (int )pa_ai->n.size();}
 //SJ   {return pa_ai.Count;}
 #endif
-#if IMENU||ITIME
+#if IMENU||IMTEST||ITIME
 public int count_da_i(List<ii_data_l> da_ai)
 //HP   {return (int )da_ai->n.size();}
 //SJ   {return da_ai.Count;}
@@ -731,13 +789,13 @@ public ii_print_l add_p(List<ii_print_l> p_ai,ii_print_l n_i)
 //SS   {p_ai.Add(n_i);return(p_ai[p_ai.Count-1]);} 
 //JJ   {p_ai.add(n_i);return(p_ai.get(p_ai.size()-1));}
 #endif
-#if IMENU
+#if IMENU||IMTEST
 public ii_paint_l  add_pa(List<ii_paint_l> pa_ai,ii_paint_l n_i)
 //HP  {pa_ai->n.push_back(n_i);return pa_ai->n.back();}
 //SS  {pa_ai.Add(n_i);return(pa_ai[pa_ai.Count-1]);} 
 //JJ  {pa_ai.add(n_i);return(pa_ai.get(pa_ai.size()-1));}
 #endif
-#if IMENU||ITIME
+#if IMENU||IMTEST||ITIME
 public ii_data_l add_da(List<ii_data_l> da_ai,ii_data_l n_i)
 //HP        {da_ai->n.push_back(n_i);return da_ai->n.back();}
 //SS        {da_ai.Add(n_i);return(da_ai[da_ai.Count-1]);} 
@@ -751,7 +809,7 @@ public ii_xml_json_l add_xm(List<ii_xml_json_l> xm_ai,ii_xml_json_l n_i)
 //SS  {xm_ai.Add(n_i);return(xm_ai[xm_ai.Count-1]);} 
 //JJ  {xm_ai.add(n_i);return(xm_ai.get(xm_ai.size()-1));}
 #endif
-#if IMENU||IPRINT
+#if IMENU||IMTEST||IPRINT
 public Pen add_pe(List<Pen> pe_ai,Pen n_i)
 //HP   {pe_ai->n.push_back(n_i);return pe_ai->n.back();}
 //SS   {pe_ai.Add(n_i);return(pe_ai[pe_ai.Count-1]);} 
@@ -786,12 +844,12 @@ public void clear_f_v(List<float> f_ai)
 public void clear_i_v(List<int>   i_ai)
 //HP {i_ai->n.clear();}
 //SJ {i_ai.Clear();}
-#if IMENU
+#if IMENU||IMTEST
 public void clear_pa_v(List<ii_paint_l> pa_ai)
 //HP {for(int i=0;i<count_pa_i(pa_ai);i++)delete at_pa(pa_ai,i);pa_ai->n.clear();}
 //SJ {pa_ai.Clear();}
 #endif
-#if IMENU||ITIME
+#if IMENU||IMTEST||ITIME
 public void clear_da_v(List<ii_data_l>     da_ai)
 //HP {for(int i=0;i<count_da_i(da_ai);i++)delete at_da(da_ai,i);da_ai->n.clear();}
 //SJ {da_ai.Clear();}
@@ -802,7 +860,7 @@ public void clear_xm_v(List<ii_xml_json_l> xm_ai)
 //HP {for(int i=0;i<count_xm_i(xm_ai);i++)delete at_xm(xm_ai,i);xm_ai->n.clear();}
 //SJ {xm_ai.Clear();}
 #endif
-#if IMENU||IPRINT
+#if IMENU||IMTEST||IPRINT
 public void clear_pe_v(List<Pen>  pe_ai)
 //HP   {/*for(int i=0;i<count_pe_i(pe_ai);i++)delete at_pe(pe_ai,i);*/pe_ai->n.clear();}
 //SJ   {pe_ai.Clear();}
@@ -829,12 +887,12 @@ public void remove_c_v(List<char> c_ai ,int ii)
 public void remove_i_v(List<int> i_ai ,int ii)  
 //HP {i_ai->n.erase( i_ai->n.begin()+ii);}
 //SJ {try{i_ai.RemoveAt(ii);}catch(Exception){}}
-#if IMENU
+#if IMENU||IMTEST
 public void remove_pa_v(List<ii_paint_l>  pa_ai,int ii)
 //HP {delete at_pa(pa_ai,ii);pa_ai->n.erase(pa_ai->n.begin()+ii);}
 //SJ {try{pa_ai.RemoveAt(ii);}catch(Exception){}}
 #endif
-#if IMENU||ITIME
+#if IMENU||IMTEST||ITIME
 public void remove_da_v(List<ii_data_l> da_ai,int ii)
 //HP {delete at_da(da_ai,ii);da_ai->n.erase(da_ai->n.begin()+ii);}
 //SJ {try{da_ai.RemoveAt(ii);}catch(Exception){}}
@@ -864,7 +922,7 @@ public void remove_range_c_v(List<char> c_ai,int start_ii,int end_ii)
 public void  insert_c_v(List<char> c_ai ,int ii,char ci)  
 //HP {c_ai->n.insert(c_ai->n.begin()+ii,ci);}
 //SJ {c_ai.Insert(ii,ci);}
-#if IMENU
+#if IMENU||IMTEST
 public void insert_pa_v(List<ii_paint_l> pa_ai,int ii,ii_paint_l ni)
 //HP {pa_ai->n.insert(pa_ai->n.begin()+ii,ni);}
 //SJ {pa_ai.Insert(ii,ni);}
@@ -884,7 +942,7 @@ public int           at_i(List<int> i_ai ,int ii)
 //HP {if((int )i_ai->n.size() >ii) return(i_ai->n[ii]);else return(0);}
 //SS {if(i_ai.Count >ii)return(i_ai[ii]);    else return(0);}
 //JJ {if(i_ai.size()>ii)return(i_ai.get(ii));else return(0);}
-#if IMENU
+#if IMENU||IMTEST
 ////SJ public Brush         at_br(List<Brush> ai,int ii)
 ////SS {if(ai.Count >ii)return(ai[ii]);    else return(null);}
 ////JJ {if(ai.size()>ii)return(ai.get(ii));else return(null);}
@@ -893,7 +951,7 @@ public ii_paint_l    at_pa(List<ii_paint_l> pa_ai,int ii)
 //SS {if(pa_ai.Count >ii)return(pa_ai[ii]);    else return(null);}
 //JJ {if(pa_ai.size()>ii)return(pa_ai.get(ii));else return(null);}
 #endif
-#if IMENU||ITIME
+#if IMENU||IMTEST||ITIME
 public ii_data_l     at_da(List<ii_data_l> da_ai,int ii)
 //HP {if((int )da_ai->n.size() >ii)return(da_ai->n[ii]);else return( null );}
 //SS {if(da_ai.Count >ii)return(da_ai[ii]);    else return(null);}
@@ -911,7 +969,7 @@ public float         at_f(List<float> f_ai,int ii)
 //HP {if((int )f_ai->n.size()>ii) return(f_ai->n[ii]);else return(0.0f);}
 //SS {if(f_ai.Count >ii)return(f_ai[ii]);    else return(0.0f);}
 //JJ {if(f_ai.size()>ii)return(f_ai.get(ii));else return(0.0f);}
-#if IMENU||IPRINT
+#if IMENU||IMTEST||IPRINT
 public Pen           at_pe(List<Pen> pe_ai,int ii)
 //HP {if((int )pe_ai->n.size() >ii)return(pe_ai->n[ii]);/*else return(  null );*/}
 //SS {if(pe_ai.Count >ii)return(pe_ai[ii]);    else return(null);}
@@ -980,7 +1038,7 @@ public bool low_code_b(String si,int ii)
 ////SS Char.IsHighSurrogate(ci);
 ////JJ Character.isHighSurrogate(ci);
 //}
-#if IMENU||IPRINT
+#if IMENU||IMTEST||IPRINT
 public bool e2k_b(Keys s_ni,Keys x1_ni)
 {
 if(s_ni==x1_ni)return true;
@@ -1213,7 +1271,7 @@ public String iv_s,inp_out_s="INP";
 public String receive_lang_s="",receive_system_s="",receive_job_s="",receive_person_s=""
 ,receive_computer_name_s="",receive_s="",receive_sw_s="0";
 public String[] parameter_sx; 
-#if IMENU||ITIME
+#if IMENU||IMTEST||ITIME
 public List<ii_data_l> da_security_a=new List<ii_data_l>();
 #endif
 public bool sw_click_b=false;
@@ -1247,7 +1305,7 @@ public readonly String CHECK2_TYPE1_DECIMAL_S="+,{Numeric}.[0-9],-,{Numeric}-.[0
 ,CHECK2_TYPE2_CHAR_S=",Normal,I,[^IO],L,[a-z],R,[a-z](Reverse),*,Display *,#,Display *[a-z],X,[^{}]";           //RをVER15.1で追加。
 public String begin_program_s="NOT",page_sw_s="";
 public int db_record_cnt=0,db_column_cnt=0,db_affected_cnt=0,db_cancel=-1;
-#if IMENU||ITIME
+#if IMENU||IMTEST||ITIME
 public List<ii_data_l> da_common_a=new List<ii_data_l>();
 public List<ii_data_l> da_fix_a=new List<ii_data_l>();
 public List<ii_data_l> da_sw_a=new List<ii_data_l>();
@@ -1265,58 +1323,78 @@ public readonly int FOCUS_START_M2=-2,FOCUS_OFF_M1=-1,FOCUS_OFF_TO_ON_0=0,FOCUS_
 public readonly int SW_OFF_0=0,SW_ON_1=1,SW_ERROR_5=5,SW_ABORT_9=9;
 public ii_zz_l prog_n;public ii_zz_l prog_s_n;public ii_zz_l prog_c_n;
 public readonly int COMBINING_0=0,HALF_1=1,FULL_2=2,KANA_3=3,HIGH_SURROGATE_4=4,LOW_SURROGATE_5=5;
-#if IMENU||IPRINT
-public Font Font_n;
-public Font Font_now_n;
-public Graphics Graphics_n;
-//HP public QPainter *Graphics_p = nullptr;
-public Brush Brush_now_n;
+#if IMENU||IMTEST||IPRINT
+public Font my_font_n;
+public Font font_now_n;
+#if AUI
+//SS public DrawingContext gui_n;
+#else //AUI
+public Graphics gui_n;
+#endif //AUI
+//HP public QPainter *GUI_p = nullptr;
+public Brush                brush_now_n;
 public float old_xx_f,old_yy_f,old_x_f,end_x_f;
 public float y_left_f,x_len_f,y_len_f,xx_f,yy_f,left_f,right_f;
 public int x_len,x_left,x,y;
 public int x_font_size(String si)//フォント幅X計算
 {
-//HP QFontMetrics fontMetrics(Font_n);
+//HP QFontMetrics fontMetrics(my_font_n);
 ////HP return fontMetrics.width(si); //VER36.1
 //HP QRect rect_nn=fontMetrics.boundingRect(si); //VER36.1
 //HP return rect_nn.y(); //VER36.1
-//SJ try{return 
-//SS TextRenderer.MeasureText(Graphics_n,si,Font_n).Width;
-//JJ Graphics_n.getFontMetrics(Font_n).stringWidth(si);
+//SJ try{
+#if AUI
+//SS FormattedText FormattedText_n=new FormattedText(si,CultureInfo.CurrentCulture,FlowDirection.LeftToRight,
+//SS         new Typeface(my_font_n.s),my_font_n.i,null);
+//SS return (int)FormattedText_n.Width;
+#else //AUI
+//SJ return 
+//SS        TextRenderer.MeasureText(gui_n,si,my_font_n).Width;
+#endif //AUI
+//JJ gui_n.getFontMetrics(my_font_n).stringWidth(si);
 //SJ    }catch(Exception){return 0;}
 }
-public void fill_rect_v(Graphics Graphics_ni,Brush Brush_ni,float x_left_fi,float y_left_fi,float x_len_fi,float y_len_fi)
+public void fill_rect_v(Brush brush_ni,float x_left_fi,float y_left_fi,float x_len_fi,float y_len_fi)
 {
 //HP if(1==sw_on_paint||1==sw_printer)
-//HP   {Graphics_p.setBrush(Brush_ni);
-//HP    Graphics_p.setPen(Qt::NoPen);
-//HP       Graphics_p.drawRect(x_left_fi,y_left_fi,x_len_fi,y_len_fi);
+//HP   {GUI_p.setBrush(brush_ni);
+//HP    GUI_p.setPen(Qt::NoPen);
+//HP    GUI_p.drawRect(x_left_fi,y_left_fi,x_len_fi,y_len_fi);
 //HP   }
 //SJ try{
-//SS Graphics_ni.FillRectangle(Brush_ni,x_left_fi,y_left_fi,x_len_fi,y_len_fi);
-//JJ Graphics_ni.setColor(Brush_ni);
-//JJ Graphics_ni.fillRect((int )x_left_fi,(int )y_left_fi,(int )x_len_fi,(int )y_len_fi);
+#if AUI
+//SS if(1==sw_on_paint)gui_n.FillRectangle(brush_ni,new Rect(x_left_fi,y_left_fi,x_len_fi,y_len_fi));
+#else //AUI
+//SS gui_n.FillRectangle(brush_ni,x_left_fi,y_left_fi,x_len_fi,y_len_fi);
+#endif //AUI
+//JJ gui_n.setColor(brush_ni);
+//JJ gui_n.fillRect((int )x_left_fi,(int )y_left_fi,(int )x_len_fi,(int )y_len_fi);
 //SJ    }catch(Exception){}
 }
-#endif //MENU||PRINT
-#if IMENU
 public int lang_x_width=8,lang_y_high=16;  //VER24.1
 //=***( ブラシ色設定 )*****
-public Brush Brush_n(char color_ci)
-{int i;for(i=0;length(COLOR_S)>i;i++)if(color_ci==at_s_c(COLOR_S,i))return Brush_nx[i];
- return Brush_nx[BACKCOLOR];
+//#if AUI
+////SS public SolidColorBrush brush_n(char color_ci)
+//#else
+public Brush brush_n(char color_ci) 
+//#endif
+   
+{int i;for(i=0;length(COLOR_S)>i;i++)if(color_ci==at_s_c(COLOR_S,i))return brush_nx[i];
+ return brush_nx[BACKCOLOR];
 }
-#endif //MENU
+#endif //IMENU||IMENUTEST||IPRINT
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-#if IMENU||IPRINT
+#if IMENU||IMTEST||IPRINT
 //=***( ビープ音発生 )*****
 ////SS [SupportedOSPlatform("windows")]
 public void beep_v()
 {
 #if W
 //SS #pragma warning disable CA1416
+#if !AUI
 //SS   System.Media.SystemSounds.Beep.Play();
+#endif //!AUI
 //SS #pragma warning restore CA1416
 #endif //W
 //JJ java.awt.Toolkit.getDefaultToolkit().beep();
@@ -1328,7 +1406,7 @@ public int change_dir(String s_si)
 {
 //HP if(QDir::setCurrent(s_si))return 0;else return 5;
 //SS try{Directory.SetCurrentDirectory(s_si);}
-//SS catch(Exception e_ni){err_s=message_s(e_ni);return 5;}
+//SS catch(Exception e_ni){err_s="[CD]"+message_s(e_ni);return 5;}
 //SS return 0;
 //JJ err_s="not use (java) CHANGE_DIR{"+s_si+"}";return 5;
 }
@@ -1823,11 +1901,11 @@ return to1_i_s(j);
 public int kind_code(char c_ci)
 {
 //SS if(System.Globalization.UnicodeCategory.NonSpacingMark==Char.GetUnicodeCategory(c_ci)
-//JJ if(Font_n.getStringBounds("A"+String.valueOf(c_ci),frc_n).getWidth()
-//JJ  ==Font_n.getStringBounds("A",frc_n).getWidth()
+//JJ if(my_font_n.getStringBounds("A"+String.valueOf(c_ci),frc_n).getWidth()
+//JJ  ==my_font_n.getStringBounds("A",frc_n).getWidth()
 //SJ     )return COMBINING_0;
-#if IMENU||IPRINT
-//HP    QFontMetrics fm_pp(Font_n);
+#if IMENU||IMTEST||IPRINT
+//HP    QFontMetrics fm_pp(my_font_n);
 //HP    if(fm_pp.horizontalAdvance("A"+(QString)c_ci)==fm_pp.horizontalAdvance("A"))return COMBINING_0;
 #endif
 if(
@@ -1932,7 +2010,7 @@ if(true==b_bi){
 //HP  int rc=process_nn.exitCode(); //VER37.8.0.12
 //SP  if(rc!=0){err_s="Exit Code="+rc;return 5;}  //VER37.8.0.12 
               }
-//SJ    }catch(Exception e_ni){err_s=message_s(e_ni);return 5;}
+//SJ    }catch(Exception e_ni){err_s="[EXE]"+message_s(e_ni);return 5;}
 return 0;
 }
 //---------------------------------------------------------------------
@@ -2066,7 +2144,7 @@ if('-'!=type_ci&&0>i){if(1==sw_ii)err_s="not plus \""+s_si+"\"";return_b=false;r
 if('0'==type_ci&&0==i){if(1==sw_ii)err_s="bad zero \""+s_si+"\"";return_b=false;return i;}
 return_b=true;return i;
 }
-#if IMENU||ITIME||IPRINT //TEST
+#if IMENU||IMTEST||ITIME||IPRINT //TEST
 //---------------------------------------------------------------------
 //=****( List<char>を文字列化する)*****
 public String to_ca_s(List<char> c_ai)
@@ -2084,7 +2162,7 @@ if(0==rc)rc=ww_read_n.read();data_ni.s=ww_read_n.read_data_s;ww_read_n.read_clos
 return rc;
 }
 #endif //MENU||TIME||PRINT
-#if IMENU||ITIME||IPRINT //TEST
+#if IMENU||IMTEST||ITIME||IPRINT //TEST
 //---------------------------------------------------------------------
 //=***( write ファイルに書き出す)*****
 public bool write_b(String file_si,String append_si,String encoding_si,String data_si)
@@ -2205,13 +2283,13 @@ public String message_s(Exception e_ni)
 //JJ e_ni.getMessage();
 }
 //---------------------------------------------------------------------
-#if IMENU||IPRINT
+#if IMENU||IMTEST||IPRINT
 public Font font_n(String si,float fi)
 {
 //HP Font font(si,fi);return font;
 //SJ return new Font(si,
-//JJ 0,(int )
-//SJ     fi);
+//JJ 0,
+//SJ   (int )fi);
 }
 #endif
 public bool copy_file_b(String in_si,String out_si,String error_si)
@@ -2290,28 +2368,7 @@ public void sleep_v(int ii)
 //JJ Thread.sleep(ii);
 //SJ    }catch(Exception){}
 }
-#if IMENU
-public void set_clipboard_v(String si)
-{
-//HP QClipboard *clipboard=QApplication::clipboard();
-//HP clipboard->setText(si); 
-//SJ try{
-//SS Clipboard.SetDataObject(si,true);
-//JJ Toolkit.getDefaultToolkit().getSystemClipboard()
-//JJ     .setContents(new java.awt.datatransfer.StringSelection(si), null );
-//SJ     }catch(Exception){}
-}
-public String get_clipboard_s()
-{
-//HP return QApplication::clipboard()->text();
-//SJ try{
-//SS IDataObject IDataObject_n=Clipboard.GetDataObject();
-//SS if(!IDataObject_n.GetDataPresent(DataFormats.UnicodeText))return "";
-//SS return (String)IDataObject_n.GetData(DataFormats.UnicodeText);
-//JJ return (String)Toolkit.getDefaultToolkit().getSystemClipboard()
-//JJ  .getData(java.awt.datatransfer.DataFlavor.stringFlavor);
-//SJ    }catch(Exception){return "";}
-} 
+#if IMENU||IMTEST
 //SP public void dialog_box_error_v(String message_si,String title_si)
 //JJ public void dialog_box_error_v(ii_z_mt_l z_mt_ni,String message_si,String title_si)
 {for(;!dialog_box_b(
@@ -2334,6 +2391,12 @@ message_si,title_si,0);
 //HP messagebox_nn.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
 //HP messagebox_nn.setDefaultButton(QMessageBox::No);
 //HP if(QMessageBox::Yes==messagebox_nn.exec())return true;else return false;
+#if AUI
+//SS var rc=MessageBoxManager
+//SS    .GetMessageBoxStandard(title_si,message_si,ButtonEnum.YesNo,(0==error_i?Icon.Info:Icon.Error))
+//SS    .ShowAsync().GetAwaiter().GetResult();
+//SS return(rc==ButtonResult.Yes?true:false);
+#else //AUI
 //SS if(
 //SS  (0==error_i?DialogResult.Yes:DialogResult.OK)==MessageBox.Show(
 //SS       message_si,title_si,
@@ -2342,6 +2405,7 @@ message_si,title_si,0);
 //SS         ,MessageBoxDefaultButton.Button2
 //SS     ))return true;
 //SS return false;
+#endif //AUI
 //JJ dialog_l dialog_n=new dialog_l(z_mt_ni,message_si,title_si,error_i);return dialog_n.return_b;
 }
 #endif
@@ -2387,7 +2451,7 @@ message_si,title_si,0);
 public void srvc_log_file_v(int i_ii,String error_si) //VER31.1
 {log_file_v(i_ii,service_name_s+(9==i_ii?" Error ":" ")+error_si,"ISRVC.TXT");} //VER37.6.0.9
 #endif //SRVC||TEST
-#if IMENU||ITIME||ISRVC //TEST
+#if IMENU||IMTEST||ITIME||ISRVC //TEST
 //---------------------------------------------------------------------
 String log_file_s="",log_add_s="OT";
 public void log_file_v(int err_ii,String msg_si,String file_si)

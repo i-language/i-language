@@ -1,6 +1,6 @@
 //= II_Z_MT.SRC MENU||TIME e.t.c class author nobumichi harasawa
 //= MENU,TIME 共有クラス
-#if IMENU||ITIME //TEST 
+#if IMENU||IMTEST||ITIME //TEST 
 //HH #include "ii_include_hh.h"
 //PP #include "ii_include_pp.h"
 //HH #include "imenu.h"
@@ -8,18 +8,33 @@
 //SS using System;
 //SS using System.Collections.Generic;
 //SS using System.IO;
-#if IMENU
+#if IMENU||IMTEST
+#if AUI
+//SS using System.Globalization;
+//SS using Avalonia;
+//SS using Avalonia.Controls;
+//SS using Avalonia.Controls.ApplicationLifetimes;
+//SS using Avalonia.Controls.Primitives;
+//SS using Avalonia.Input;
+//SS using Avalonia.Input.Platform; 
+//SS using Avalonia.Layout;
+//SS using Avalonia.Media;
+////SS using Color=Avalonia.Media.Colors;
+////SS using Brush=Avalonia.Media.SolidColorBrush;
+//SS using Avalonia.Media.Imaging;
+//SS using Avalonia.Platform;
+//SS using Avalonia.Threading;
+#else //AUI
 #if GTK
 //SS using Gtk;
 //SS using Gdk;
 //SS using Graphics=Cairo.Context;
-//SS using Font=ii_font_l;
-//SS using Brush=ii_brush_l;
 #else //GTK
 //SS using System.Windows.Forms;
 //SS using System.Drawing;
 #endif //GTK
-#endif
+#endif //AUI
+#endif //IMENU||IMTEST
 //JJ import java.awt.*;
 //JJ import java.awt.event.*;
 //JJ import java.io.*;
@@ -63,7 +78,7 @@ z_p.clear_re_v(re_read_a);z_p.clear_s_v(s_read_name_a);
 z_p.clear_wr_v(wr_write_a);z_p.clear_s_v(s_write_name_a);
 }
 //( MENU ONLY )=========================================================================
-#if IMENU
+#if IMENU||IMTEST
 public bool sw_font_fix=false;
 public bool sw_on_listbox_b=false;
 //HP public int sw_listbox=0;
@@ -73,7 +88,7 @@ public ii_paint_l mouse_paint_p= null ;
 //SS public imenu_l menu_p;
 #else //GTK
 //SS public ii_menu_l menu_p;
-#endif
+#endif //GTK
 public imenu_l imenu_p;
 public int sw_focus=-2
 ,font_height
@@ -91,16 +106,18 @@ String window_file_s="";
 ii_write_l window_write_n;
 public ii_listbox_l listbox_n;
 public ii_format_l format_n;
-#if !GTK
+#if AUI||GTK
+#else //AUI||GTK
 //SS StringFormat StringFormat_n;
-#endif //!GTK
+#endif //AUI||GTK
 //---------------------------------------------------------------------
 //=****( 基本情報設定 )*****
 public ii_z_mt_l(ii_menu_l menu_ni,imenu_l imenu_ni,ii_z_l z_pi)
 {set_v(z_pi);
-#if !GTK
+#if AUI||GTK
+#else //AUI||GTK
 //SS StringFormat_n=new StringFormat();
-#endif //!GTK
+#endif //GTK||GTK
 //===(new)===
 window_write_n=new ii_write_l(z_p);
 format_n=new ii_format_l(z_p,this);
@@ -111,28 +128,79 @@ menu_p=menu_ni;
 imenu_p=imenu_ni;
 }
 public int x_window_point=0,y_window_point=0;
+public void set_clipboard_v(String si)
+{
+//HP QClipboard *clipboard=QApplication::clipboard();
+//HP clipboard->setText(si); 
+//SJ try{
+#if AUI
+////SS if(null!=imenu_p.Clipboard)imenu_p.Clipboard.SetTextAsync(si);
+//SS TopLevel.GetTopLevel(imenu_p).Clipboard.SetTextAsync(si).Wait();
+////SS TopLevel.GetTopLevel(imenu_p).ClipboardExtensions.SetTextAsync(si).Wait();
+#else //AUI
+//SS Clipboard.SetDataObject(si,true);
+#endif //AUI
+//JJ Toolkit.getDefaultToolkit().getSystemClipboard()
+//JJ     .setContents(new java.awt.datatransfer.StringSelection(si), null );
+//SJ     }catch(Exception){}
+}
+public String get_clipboard_s()
+{
+//HP return QApplication::clipboard()->text();
+//SJ try{
+#if AUI
+////SS if(null==imenu_p.Clipboard)return "";
+////SS String s=await imenu_p.Clipboard.GetTextAsync().Result;
+////SS return (null!=s?s:""); 
+////SS return TopLevel.GetTopLevel(imenu_p).Clipboard.GetTextAsync().GetAwaiter().GetResult();
+//SS return TopLevel.GetTopLevel(imenu_p).Clipboard.TryGetTextAsync().GetAwaiter().GetResult();
+////SS return TopLevel.GetTopLevel(imenu_p).ClipboardExtensions.TryGetTextAsync().GetAwaiter().GetResult();
+#else
+//SS IDataObject IDataObject_n=Clipboard.GetDataObject();
+//SS if(!IDataObject_n.GetDataPresent(DataFormats.UnicodeText))return "";
+//SS return (String)IDataObject_n.GetData(DataFormats.UnicodeText);
+#endif //AUI
+//JJ return (String)Toolkit.getDefaultToolkit().getSystemClipboard()
+//JJ  .getData(java.awt.datatransfer.DataFlavor.stringFlavor);
+//SJ    }catch(Exception){return "";}
+} 
+
 
 public void window_point_v()
-{Point p_nn;
+{
+#if !AUI
+Point p_nn;
 try{p_nn=imenu_p.
 //HP  pos();
 //SS  DesktopLocation;      //画面現位置取得。
 //JJ  getLocationOnScreen();//画面現位置取得。
    }catch(Exception)
-     {
-      p_nn=
+     {p_nn=
 //SJ       new 
                Point (0,0);
      }
+#endif //!AUI 
 //HP x_window_point=p_nn.x();y_window_point=p_nn.y();
-//SS x_window_point=p_nn.X;  y_window_point=p_nn.Y;
+#if AUI
+//SS x_window_point=imenu_p.Position.X;y_window_point=imenu_p.Position.Y;
+#else //AUI
+//SS x_window_point=(int )p_nn.X;  y_window_point=(int )p_nn.Y;
+#endif //AUI
 //JJ x_window_point=p_nn.x;  y_window_point=p_nn.y;
 }
 public void window_size_v(int x,int y)//画面サイズ変更
 {x_window_size=x+z_p.lang_x_geta+z_p.lang_x_offset+1; // VER31.1
  y_window_size=y+z_p.lang_y_geta+1; //VER31.1
 //HP imenu_p.resize(x_window_size,y_window_size);
+#if AUI
+////SS menu_p.dock_panel_n.MinWidth=x_window_size-(20<x_window_size?20:0);
+//SS imenu_p.Width=x_window_size;imenu_p.Height=y_window_size;
+////SS menu_p.x_scroll_n.scroll_n.MinWidth=x_window_size-(600<x_window_size?600:0);
+////SS menu_p.dock_panel_n.MinWidth=x_window_size-(20<x_window_size?20:0);
+//SS menu_p.y_scroll_n.scroll_n.MinHeight=y_window_size-(20<y_window_size?20:0);
+#else //AUI
 //SS imenu_p.ClientSize=new Size(x_window_size,y_window_size);
+#endif //AUI
 //JJ             imenu_p.setSize(x_window_size,y_window_size);
 }
 public int x_desktop_size()//デスクトップXサイズ取得。
@@ -141,7 +209,11 @@ public int x_desktop_size()//デスクトップXサイズ取得。
 //HP QRect  rect=screen->geometry();
 return 
 //HP   rect.width();
+#if AUI
+//SS   (null==imenu_p.Screens.Primary?0:imenu_p.Screens.Primary.Bounds.Width);
+#else //AUI
 //SS   SystemInformation.PrimaryMonitorMaximizedWindowSize.Width;
+#endif //AUI
 //JJ   (int )GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getWidth();
 }
 public int y_desktop_size()//デスクトップYサイズ取得。
@@ -150,20 +222,23 @@ public int y_desktop_size()//デスクトップYサイズ取得。
 //HP QRect rect=screen->geometry();
 return
 //HP   rect.height();
+#if AUI
+//SS   (null==imenu_p.Screens.Primary?0:(int)(imenu_p.Screens.Primary.Bounds.Height*0.6));
+#else //AUI
 //SS   SystemInformation.PrimaryMonitorMaximizedWindowSize.Height;
+#endif //AUI
 //JJ   (int )GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getHeight();
 } 
 //---------------------------------------------------------------------
 //=****( 文字列表示 )*****
-public bool text_renderer_b(Graphics Graphics_ni,String s_si,int x_ii,int y_ii,Font Font_ni,Color Color_Color_ni,Brush Brush_ni,float left_fi,float top_fi,int len_ii)
-{return(text_renderer_b(Graphics_ni,0,s_si,x_ii,y_ii,Font_ni,Color_Color_ni,Brush_ni,left_fi,top_fi,len_ii
-        ,z_p.lang_x_width,z_p.lang_y_high));
+public bool text_renderer_b(String s_si,int x_ii,int y_ii,Font font_ni,String pen_s,Brush brush_ni,float left_fi,float top_fi,int len_ii)
+{return(text_renderer_b(0,s_si,x_ii,y_ii,font_ni,pen_s,brush_ni,left_fi,top_fi,len_ii,z_p.lang_x_width,z_p.lang_y_high));
 }
 //---------------------------------------------------------------------
-public bool text_renderer_b(Graphics Graphics_ni,int printer_ii,String s_si,int x_ii,int y_ii,Font Font_ni,Color Color_Color_ni,Brush Brush_ni,float left_fi,float top_fi,int len_ii,int xx_ii,int yy_ii)
+public bool text_renderer_b(int printer_ii,String s_si,int x_ii,int y_ii,Font font_ni,String pen_si,Brush brush_ni,float left_fi,float top_fi,int len_ii,int xx_ii,int yy_ii)
 {
-float x_left_text_f=(x_ii-1)*xx_ii+left_fi;//左端テキスト位置計算
-float y_top_frame_f=(y_ii-1)*yy_ii+top_fi;//上枠位置計算
+float x_left_text_f=(x_ii-1)*xx_ii+left_fi;//左端テキスト位置計算F
+float y_top_frame_f=(y_ii-1)*yy_ii+top_fi;//上枠位置計 
 float y_top_text_f=y_top_frame_f;//上テキスト位置計算(固定値の場合+１補正）//VER31.1
 float x_width_frame_f,x_left_frame_f;
 int len=z_p.form_length(s_si); //	テキストの画面上の長さ計算。          
@@ -174,7 +249,7 @@ else         {x_left_frame_f =xx_ii*(x_ii-1)-1+left_fi;//左端枠位置計算
               x_width_frame_f=xx_ii*(len_ii+1)-1;//枠幅計算
              }
 bool rc=true;
-fill_rect_geta_v(Graphics_ni,Brush_ni,x_left_frame_f,y_top_frame_f,x_width_frame_f,yy_ii-1);//背景塗りつぶし。
+fill_rect_geta_v(brush_ni,x_left_frame_f,y_top_frame_f,x_width_frame_f,yy_ii-1);//背景塗りつぶし。
 if(z_p.e2s_b(s_si,""))return(true);
   {int i=0,hosei=0;len=1; String s;
      for(;i<z_p.length(s_si);i+=len,len=1)//１文字づつ繰り返す。
@@ -187,54 +262,73 @@ if(z_p.e2s_b(s_si,""))return(true);
               }
 //HP    hosei=(len>2?0:xx_ii/2);  //VER37.6.0.7
         if(0==printer_ii)//１文字分表示。
-           {rc=text_renderer2_b(Graphics_ni,s,x_left_text_f+hosei,y_top_text_f,Font_ni,Color_Color_ni);
+           {rc=text_renderer2_b(s,x_left_text_f+hosei,y_top_text_f,font_ni,pen_si,brush_ni);
          //   trace_v(0,"s="+s+",hosei="+z_p.to_i_s(hosei)+",len="+z_p.to_i_s(len)+",length="+z_p.to_i_s(length)+",xx_ii="+z_p.to_i_s(xx_ii)+",font_width(s)="+z_p.to_i_s(font_width(s)));
            } 
        else 
-          {
-          draw_string_geta_v(Graphics_ni,s,Font_ni,Brushes.Black,x_left_text_f+hosei,y_top_text_f);
-          }
+          draw_string_geta_v(s,font_ni,"X",brush_ni,x_left_text_f+hosei,y_top_text_f);
         x_left_text_f+=xx_ii*length;//左位置表示文字分移動。
        }
      return rc;
   }
 }
 //---------------------------------------------------------------------
-public bool text_renderer2_b(Graphics Graphics_ni,String s_si,float x_left_text_fi,float y_top_text_fi,Font Font_ni,Color Color_Color_ni)
+public bool text_renderer2_b(String s_si,float x_left_text_fi,float y_top_text_fi,Font font_ni,String pen_si,Brush brush_ni)
 {
 try{
+//SS if (1==z_p.sw_on_paint)
+//SS   {
+#if AUI
+//SS    var fd_text_n=new FormattedText(s_si,CultureInfo.CurrentCulture,FlowDirection.LeftToRight,new Typeface(font_ni.s),
+//SS    font_ni.i,(z_p.e2s_b(pen_si,"X")?z_p.black_brush_n:z_p.white_brush_n));
+//SS    z_p.gui_n.DrawText(fd_text_n,new Point(x_left_text_fi+z_p.lang_x_offset,y_top_text_fi+z_p.lang_y_offset));
+#endif //AUI
+//SS   }
+#if !AUI
 #if GTK
 #else //GTK
 //SS if('W'!=z_p.os_c)
-//SS      Graphics_ni.DrawString(s_si,Font_ni,(Color.Black==Color_Color_ni?Brushes.Black:Brushes.White)
+//SS      z_p.gui_n.DrawString(s_si,font_ni,(z_p.e2s_b(pen_si,"X")?z_p.black_brush_n:z_p.white_brush_n)
 //SS          ,x_left_text_fi+z_p.lang_x_offset,y_top_text_fi+z_p.lang_y_offset,StringFormat_n);
 //SS else 
-//SS     TextRenderer.DrawText(Graphics_ni,s_si,Font_ni,new Point((int )x_left_text_fi+z_p.lang_x_offset
-//SS         ,(int )(y_top_text_fi+z_p.lang_y_offset)),Color_Color_ni,TextFormatFlags.NoPrefix);
+//SS     TextRenderer.DrawText(z_p.gui_n,s_si,font_ni,new Point((int )x_left_text_fi+z_p.lang_x_offset
+//SS         ,(int )(y_top_text_fi+z_p.lang_y_offset)),(z_p.e2s_b(pen_si,"X")?z_p.black_color_n():z_p.white_color_n()),TextFormatFlags.NoPrefix);
 #endif //GTK
+#endif //!AUI
 //HP if(1==z_p.sw_on_paint||1==z_p.sw_printer)
-//JP        draw_string_geta_v(Graphics_ni,s_si,Font_ni,Color_Color_ni,(int )x_left_text_fi,(int )(y_top_text_fi));
+//JP    draw_string_geta_v(s_si,font_ni,pen_si,brush_ni,(int )x_left_text_fi,(int )(y_top_text_fi));
     return true;
    }
 catch(Exception){return false;}
 }
-public void fill_rect_geta_v(Graphics Graphics_ni,Brush Brush_ni,float x_left_fi,float y_left_fi,float x_len_fi,float y_len_fi)
-{z_p.fill_rect_v(Graphics_ni,Brush_ni,x_left_fi+z_p.lang_x_offset+z_p.get_x_offset2_f(),y_left_fi+z_p.lang_y_offset+z_p.get_y_offset2_f(),x_len_fi,y_len_fi);
+ public void fill_rect_geta_v(Brush brush_ni,float x_left_fi,float y_left_fi,float x_len_fi,float y_len_fi)
+{z_p.fill_rect_v(brush_ni,x_left_fi+z_p.lang_x_offset+z_p.get_x_offset2_f(),y_left_fi+z_p.lang_y_offset+z_p.get_y_offset2_f(),x_len_fi,y_len_fi);
 }
-
-//SJ public void draw_string_geta_v(Graphics Graphics_ni,String s_si,Font Font_ni,Brush Brush_ni,float x_left_fi,float y_left_fi)
-//HP public void draw_string_geta_v(Graphics Graphics_ni,String s_si,Font Font_ni,Color Brush_ni,float x_left_fi,float y_left_fi)
+public void draw_string_geta_v(String s_si,Font font_ni,String pen_si,Brush brush_ni,float x_left_fi,float y_left_fi)
 {
 try{
-//HP   z_p.Graphics_p.setFont(Font_ni);
-//HP   z_p.Graphics_p.setPen(Brush_ni);
-//HP   z_p.Graphics_p.drawText(x_left_fi+z_p.lang_x_offset,y_left_fi+z_p.lang_y_high+z_p.lang_y_offset,s_si);
+//SS       if(z_p.e2s_b(s_si,"%"))trace_v(1,""+y_left_fi+"/"+s_si);
+//HP if(1==z_p.sw_on_paint||1==z_p.sw_printer)
+//HP   {z_p.GUI_p.setFont(font_ni);
+//HP    z_p.GUI_p.setPen((z_p.e2s_b(pen_si,"X")?z_p.black_color_n():z_p.white_color_n()));
+//HP    z_p.GUI_p.drawText(x_left_fi+z_p.lang_x_offset,y_left_fi+z_p.lang_y_high+z_p.lang_y_offset,s_si);
+//HP       if(z_p.e2s_b(s_si,"%"))trace_v(1,z_p.to_i_s(y_left_fi)+"/"+s_si);
+  
+//HP   }
+#if AUI
+//SS if(1==z_p.sw_on_paint)
+//SS   {var fd_text_n=new FormattedText(s_si,CultureInfo.CurrentCulture,FlowDirection.LeftToRight,new Typeface(z_p.lang_font_org_s),
+//SS    z_p.lang_font_org,(z_p.e2s_b(pen_si,"X")?z_p.black_brush_n:z_p.white_brush_n));
+//SS    z_p.gui_n.DrawText(fd_text_n,new Point(x_left_fi+z_p.lang_x_offset,y_left_fi+z_p.lang_y_offset));
+//SS   }
+#else //AUI
 #if GTK
 #else //GTK
-//SS Graphics_ni.DrawString(s_si,Font_ni,Brush_ni,x_left_fi+z_p.lang_x_offset,y_left_fi+z_p.lang_y_offset,StringFormat_n);
+//SS z_p.gui_n.DrawString(s_si,font_ni,(z_p.e2s_b(pen_si,"X")?z_p.black_brush_n:z_p.white_brush_n),x_left_fi+z_p.lang_x_offset,y_left_fi+z_p.lang_y_offset,StringFormat_n);
 #endif //GTK
-//JJ Graphics_ni.setFont(Font_ni);Graphics_ni.setColor(Brush_ni);
-//JJ Graphics_ni.drawString(s_si,(int )(x_left_fi+z_p.lang_x_offset),(int )(y_left_fi+z_p.lang_y_high+z_p.lang_y_offset));
+//JJ z_p.gui_n.setFont(font_ni);z_p.gui_n.setColor((z_p.e2s_b(pen_si,"X")?z_p.black_color_n():z_p.white_color_n()));
+//JJ z_p.gui_n.drawString(s_si,(int )(x_left_fi+z_p.lang_x_offset),(int )(y_left_fi+z_p.lang_y_high+z_p.lang_y_offset));
+#endif //AUI
    }
 catch(Exception){}
 }
@@ -247,7 +341,7 @@ public bool lang_b()
 {ii_read_l read_n=new ii_read_l(z_p);int rc,i;
 //String file_s=path_si+"BIN"+z_p.dir_s+z_p.iv_s+"LANG"+z_p.lang_s+z_p.to_c_s(z_p.os_c)+".TXT";
 //String file_s=z_p./*get_*/bin_path_s/*()*/+z_p.iv_s+"LANG"+z_p.lang_s+z_p.to_c_s(z_p.os_c)+".TXT"; //VER33 //VER36.000600003
-String file_s=z_p.bin_path_s+"I_LANG"+z_p.lang_s+z_p.to_c_s(z_p.os_c)+".TXT"; //VER33 //VER36.000600003
+String file_s=z_p.bin_path_s+"I_LANG_"+z_p.lang_s+"_"+z_p.to_c_s(z_p.os_c)+".TXT"; //VER33 //VER36.000600003 //VER38
 String err1_s="Tool lang file not found(";
 String err2_s="=) ";
 if(!read_n.open_b(file_s,""))return false;
@@ -347,7 +441,11 @@ text_s=window_s+" "+z_p.to1_i_s(z_p.count_pr_i(program_list_n.pr_a))+"/"+z_p.job
    +" I"+z_p.version_s+" "+exe_s;
 try{imenu_p.
 //HP setWindowTitle(
+#if AUI
+//SS Title=
+#else //AUI
 //SS Text=
+#endif //AUI
 //JJ setTitle(
               text_s
 //JP                )
@@ -388,6 +486,7 @@ rc=write_n.write_b(data_si);write_n.write_close_v();
 return rc;
 }
 //---------------------------------------------------------------------
+#if !AUI
 public void on_ime_v()
 {
 //SS menu_p.ImeMode=ImeMode.On;
@@ -399,6 +498,7 @@ public void off_ime_v()
 //JJ imenu_p.getInputContext().setCharacterSubsets( null );
 
 }
+#endif //!AUI
 //---------------------------------------------------------------------
 #endif //MENU ONLY )==========================================================
 //=( TIME ONLY )==================================================================================================
@@ -449,7 +549,6 @@ if(0!=z_p.sw_cgi)return;//CGI処理中は以下を処理せず。
 socket_n.send("99","",log_si);
 z_p.sleep_v(3000); //連続送信の場合待たせる事で相手が確実に処理できる時間を確保 
 }
-
 #endif //TIME ONLY )=================================================================================== 
 readonly String CC_S=":\\/"; 
 public String get_tmp_or_same_file_s(String si)
@@ -459,7 +558,7 @@ return (-1!=z_p.index3sc_i(si,CC_S,0)?"":z_p.get_tmp_path_s(z_p.dir_s))+si; //VE
 //===================================================================================================
 public bool menu_check_b(String op_si)
 {if(!z_p.e2s_b(z_p.menu_permission_s,"ZZZZ"))
-   if(z_p.e2s_b(z_p.main_program_s,"IMENU"))
+   if(z_p.e3s_b(z_p.main_program_s,"IMENU","IMTEST"))
      {if(!z_p.e2s_b(z_p.menu_security_s,"A"))
         {z_p.err_s="("+op_si+") _MENU_SECURITY!='A'";return false;}
      }
@@ -469,7 +568,7 @@ return true;
 public bool check_part_b(String part_si,String op_s)
 {if(!z_p.e2s_b(z_p.menu_permission_s,"ZZZZ")){z_p.err_s="("+op_s+") _MENU_PERMISSION!='ZZZZ'";      return false;}
  if(2!=z_p.length(part_si))                   {z_p.err_s="("+op_s+") @LENGTH!=2 ("+part_si+")";return false;}
- if(z_p.e2s_b(z_p.main_program_s,"IMENU"))
+ if(z_p.e3s_b(z_p.main_program_s,"IMENU","IMTEST"))
    {if(z_p.e2s_b(z_p.menu_security_s,"X"))               {z_p.err_s="("+op_s+") _MENU_SECURITY='X'";            return false;}
    } 
 return true;
@@ -477,7 +576,7 @@ return true;
 public bool check_permission_b(String permission_si,String op_s)
 {if(!z_p.e2s_b(z_p.menu_permission_s,"ZZZZ")){z_p.err_s="("+op_s+") _MENU_PERMISSION!='ZZZZ'";      return false;}
  if(4!=z_p.length(permission_si))                   {z_p.err_s="("+op_s+") @LENGTH!=4 ("+permission_si+")";return false;}
- if(z_p.e2s_b(z_p.main_program_s,"IMENU"))
+ if(z_p.e3s_b(z_p.main_program_s,"IMENU","IMTEST"))
    {if(z_p.e2s_b(z_p.menu_security_s,"X"))               {z_p.err_s="("+op_s+") _MENU_SECURITY='X'";            return false;}
     if(!z_p.e2s_b(permission_si,"ZZZZ"))
        if(!z_p.e3s_b(z_p.person_permission_s,"ZZZZ",permission_si)){z_p.err_s="("+op_s+") _PERSON_PERMISSION!='"+permission_si+"'";  return false;}
@@ -492,8 +591,8 @@ z_p.clear_s_v(z_p.s_copy_etc_name_a);
 z_p.clear_i_v(z_p.i_copy_etc_start_a);
 z_p.clear_i_v(z_p.i_copy_etc_end_a); 
 
-#if IMENU
-if(z_p.e2s_b(z_p.main_program_s,"IMENU")&&'M'==program_c)
+#if IMENU||IMTEST
+if(z_p.e3s_b(z_p.main_program_s,"IMENU","IMTEST")&&'M'==program_c)
  {z_p.inp_out_s="OUT";//メニューは処理種類はOUTPUT
 //  if(!menu_p.program_b(z_p./*get_*/bin_path_s/*()*/+z_p.iv_s+"_MENU.TXT"))return false; //メニュー処理//VER33 //VER36.000600003
   if(!menu_p.program_b(z_p.bin_path_s+"I_MENU.TXT"))return false; //メニュー処理//VER33 //VER36.000600003
@@ -774,7 +873,8 @@ public void java_exe_name_v()
 }
 //---------------------------------------------------------------------
 public int process_i(String s1_si,String s2_si,String test_si)
-{//trace_v(1,"process_i="+z_p.exe_name_s+"/"+z_p.lang_s+" "+z_p.exe_option_s+" "+s1_si+" "+test_si);
+{trace_v(1,"process_i="+z_p.exe_name_s+"/"+z_p.lang_s+" "+z_p.exe_option_s+" "+s1_si+" "+test_si);
+trace_v(1,"s1_si="+s1_si);
 
 return z_p.process(
 //SS ('U'==z_p.os_c?"mono":z_p.exe_name_s),('U'==z_p.os_c?z_p.exe_name_s+" ":"")+
@@ -941,8 +1041,8 @@ public String work_table_s(){return program_p._pmx_s("_WX",z_p.real_test_s,z_p.i
 public String work_s(){return program_p.job_permission_s+"__"+z_p.substring3_s(z_p.inp_out_s,0,1)+work_mt_s();}
 public String work_mt_s()
 {
-#if IMENU
-//JJ     if(z_p.e2s_b(z_p.main_program_s,"IMENU"))
+#if IMENU||IMTEST
+//JJ     if(z_p.e3s_b(z_p.main_program_s,"IMENU","IMTEST"))
               return "M"+z_p.computer_s+window_s;
 #else
 //JJ     else 
@@ -961,5 +1061,25 @@ int i=
      +1;
 return z_p.to_i_s(1>i?1:(i_i<i?i_i:i));
 }
+#if IMENU||IMTEST
+public void repaint_v()
+{if(0==z_p.sw_on_paint)
+  {imenu_p.repaint_v();
+#if AUI
+////SS   Dispatcher.UIThread.Post(() =>menu_p.InvalidateVisual());
+////SS z_p.console_write_v("repaint_v");
+#endif //AUI
+  }
 }
-#endif //MENU||TIME  
+public void repaint_ha_v()
+{if(0==z_p.sw_on_paint)
+   {imenu_p.repaint_ha_v();
+#if AUI
+////SS   Dispatcher.UIThread.Post(() =>menu_p.InvalidateVisual());
+////SS z_p.console_write_v("repaint_ha_v");
+#endif //AUI
+   }
+}
+#endif //IMENU||IMTEST
+}
+#endif //IMENU||IMTEST||ITIME  

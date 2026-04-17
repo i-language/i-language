@@ -10,7 +10,7 @@ SET CLASSPATH=%I_TMP%\purejavacomm.jar
 :B2
 rem if not exist %I_JAVAC% echo %I_JAVAC% not found&pause&goto B2
 if not exist %I_JAR%   echo %I_JAR%   not found&pause&goto B2
-IF "%1"=="" CALL C_SOURCE.BAT CONT 
+IF NOT "%1"=="CONT" CALL C_SOURCE.BAT CONT 
 del ..\%I_VER%_WORK\ichart_l.java  ..\%I_VER%_WORK\ichart2_l.java ..\%I_VER%_WORK\ii_chart_l.java ..\%I_VER%_WORK\itest_l.java
 rem %I_JAVAC% -encoding utf-8 -Xlint:deprecation -Xlint:unchecked -d ..\%I_VER%_WORK ..\%I_VER%_WORK\*.java 2> java0.tmp
 %I_JAVAC% -encoding utf-8 -Xlint:deprecation -Xlint:unchecked -d ..\%I_VER%_WORK ..\%I_VER%_WORK\*.java 
@@ -33,7 +33,7 @@ rem START notepad java.tmp
 rem goto fin2
 rem ==================================================================
 rem :fin
-if NOT "%1"=="" GOTO fin2
+if "%1"=="CONT" GOTO fin2
 if "%I_SET_ZIP_SW%"=="YES" goto SKIP_SET_ZIP
 %I_XCOPYF% ..\%I_VER%_BIN\JAVA\IJAVA.j* %I_BIN%
 rem %I_XCOPYF% ..\i-download\sqljdbc42.ja?      %I_BIN%

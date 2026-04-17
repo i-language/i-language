@@ -1,5 +1,5 @@
 // II_XML_JSON.SRC XML及びJSONかから値を抜き出します。
-#if IMENU||ITIME //TEST
+#if IMENU||IMTEST||ITIME //TEST
 //HH #include "ii_include_hh.h"
 //PP #include "ii_include_pp.h"
 //SS using Microsoft.Data.SqlClient; //VER37.8.0.12

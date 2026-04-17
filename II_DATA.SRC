@@ -1,11 +1,17 @@
 //= II_DATA.CS program data class author nobumichi harasawa
-#if IMENU||ITIME
+#if IMENU||IMTEST||ITIME
 //HH #include "ii_include_hh.h"
 //PP #include "ii_include_pp.h"
 //SS using Microsoft.Data.SqlClient; //VER37.8.0.12
 //SS using System;
 //SS using System.Collections.Generic;
+#if AUI
+//SS using Avalonia.Media;
+////SS using Brush=Avalonia.Media.SolidColorBrush;
+////SS using Font=ii_font_l;
+#else //AUI
 //SS using System.Drawing;
+#endif //AUI
 //SS using System.IO;
 //JJ import java.awt.*;
 //JJ import java.awt.event.*;
@@ -24,8 +30,13 @@ public String data_s="",data_save_s="",name_s="",title_s="",select_s=""
 ,section1_s=""  //section1_sはDATA=内の命令群及び＄での初期転送用。
 ,section2_s=""  //section2_sは通常の=から書かれた命令群用。
 ,check_s="",check2_s="",click_s="",message_s="",type1_s=" ",alias_s="",where_s="";
-#if IMENU
-public Font Font_n;public Brush Brush_n,org_Brush_n,save_Brush_n;
+#if IMENU||IMTEST
+public Font font_n;
+//#if AUI
+////SS public SolidColorBrush brush_n,org_brush_n,save_brush_n;
+//#else //AUI
+public Brush brush_n,org_brush_n,save_brush_n;
+//#endif
 #endif //MENU
 public String font_s;
 public int line=0,column=0,length0=0 //表示の長さ
@@ -56,8 +67,8 @@ data_s=da_ni.data_s;data_save_s=da_ni.data_save_s;name_s=da_ni.name_s;title_s=da
 select_s=da_ni.select_s;section1_s=da_ni.section1_s;section2_s=da_ni.section2_s;  
 check_s=da_ni.check_s;check2_s=da_ni.check2_s;click_s=da_ni.click_s;
 message_s=da_ni.message_s;type1_s=da_ni.type1_s;alias_s=da_ni.alias_s;where_s=da_ni.where_s;
-#if IMENU
-Font_n=da_ni.Font_n;Brush_n=da_ni.Brush_n;org_Brush_n=da_ni.org_Brush_n;save_Brush_n=da_ni.save_Brush_n;
+#if IMENU||IMTEST
+font_n=da_ni.font_n;brush_n=da_ni.brush_n;org_brush_n=da_ni.org_brush_n;save_brush_n=da_ni.save_brush_n;
 #endif //MENU
 font_s=da_ni.font_s;
 line=da_ni.line;column=da_ni.column;length0=da_ni.length0;
@@ -71,30 +82,39 @@ input_s=da_ni.input_s;type2_c=da_ni.type2_c;
 //=****( 初期設定 )*****
 void init_v(ii_z_l z_ni)
 {z_p=z_ni;
-#if IMENU
+#if IMENU||IMTEST
 font_s=z_p.font_s;
-//SS Font_n=new Font(z_p.Font_n,FontStyle.Regular);
-//SS Brush_n=(Brush )z_p.Brush_n('W').Clone();org_Brush_n=(Brush )z_p.Brush_n('W').Clone();
-//JP if(z_p.e2s_b(z_p.main_program_s,"IMENU"))
-//JP {Font_n=z_p.Font_n;Brush_n=(Brush )z_p.Brush_n('W');org_Brush_n=(Brush )z_p.Brush_n('W');}
-#endif //MENU
+#if AUI
+//SS font_n=new Font(z_p.font_s,z_p.lang_font_org);
+#else //AUI
+//SS font_n=new Font(z_p.my_font_n,FontStyle.Regular);
+#endif //AUI
+////JP if(z_p.e2s_b(z_p.main_program_s,"IMENU||IMTEST"))
+//JP font_n=z_p.my_font_n;
+brush_n=(Brush )z_p.white_brush_n
+#if !AUI
+//SS .Clone()
+#endif //!AUI 
+  ;
+org_brush_n=(Brush )z_p.white_brush_n
+#if !AUI
+//SS .Clone()
+#endif //!AUI 
+  ;
+#endif //IMENU||MTEST
 }
-#if IMENU
+#if IMENU||IMTEST
 //----------------------------------------------
 //=****( 色設定 )*****
-public Brush set_color_Brush_n(String s_si)
-{
-int j=0,k=0,r=255,g=255,b=255;
+public Brush set_color_brush_n(String s_si)
+{int j=0,k=0,r=255,g=255,b=255;
 if(5<z_p.length(s_si))
   for(int i=0;;i++)//R数G数B数指定
     {if(i==z_p.length(s_si))
        {if(3!=j)break;
         b=z_p.to_int1s_i(z_p.substring3_s(s_si,k,i-k));
         if(255<b)b=255;
-        return(
-//SJ           new SolidBrush(Color.FromArgb(r,g,b))
-//HP           QBrush(QColor(r,g,b),Qt::SolidPattern)
-               );
+        return(z_p.set_brush_n(r,g,b));
        }
      if('R'==z_p.at_s_c(z_p.upper_s(s_si),i)){if(0!=j)break;j++;k=i+1;continue;}
      if('G'==z_p.at_s_c(z_p.upper_s(s_si),i))
@@ -111,20 +131,24 @@ if(5<z_p.length(s_si))
        }
      if('0'>z_p.at_s_c(s_si,i)||'9'<z_p.at_s_c(s_si,i))break;
     }
-//SS return((Brush )z_p.Brush_n((z_p.e2s_b(s_si,"")?' ':z_p.at_s_c(s_si,0))).Clone());
-//JP return((Brush )z_p.Brush_n((z_p.e2s_b(s_si,"")?' ':z_p.at_s_c(s_si,0))));
+//#if AUI
+return ((Brush )z_p.brush_n((z_p.e2s_b(s_si,"")?' ':z_p.at_s_c(s_si,0)))
+#if !AUI
+//SS .Clone()
+#endif //!AUI 
+  );
 }
 //----------------------------------------------
 public void color_v(String s_si)
 {
-Brush_n=set_color_Brush_n(s_si);
+brush_n=set_color_brush_n(s_si);
 }
 #endif //MENU
 //=****( オリジナルの色を設定 )*****
 public void org_color_v(String s_si)
 {
-#if IMENU
-org_Brush_n=set_color_Brush_n(s_si);color_v(s_si);
+#if IMENU||IMTEST
+org_brush_n=set_color_brush_n(s_si);color_v(s_si);
 #endif //MENU
 }
 //=****( セーブデータと比較 )*****

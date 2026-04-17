@@ -1,6 +1,6 @@
 #!/bin/sh
 # $1=JA,EN $2=CS,JAVA $3=whoami 
-I_VER=I37
+I_VER=I38
 I_HOME=/home/I
 I_BIN=${I_HOME}/BIN$I_VER
 I_TMP=${I_HOME}/TMP
@@ -29,8 +29,8 @@ for i in $I_HOME $I_BIN $I_TMP
 chmod 775 $I_HOME
 chmod 777 *.SH
 #cp ..\${I_VER}_BIN_SERVER_UD\*.* $I_BIN
-cp I_*.ICO       $I_BIN
-cp I_LANG??U.TXT $I_BIN
+cp I_*.ICO         $I_BIN
+cp I_LANG_??_U.TXT $I_BIN
 if test "$2" = "JAVA";then
 #      do
       cp ../${I_VER}_BIN/JAVA/*.*       $I_BIN

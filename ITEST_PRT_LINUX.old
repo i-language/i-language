@@ -1,0 +1,48 @@
+using System;
+using Gtk;
+
+public class PrintSample : Window
+{
+    public PrintSample() : base("GTKSharp Print Sample")
+    {
+        SetDefaultSize(300, 200);
+        DeleteEvent += (o, args) => Application.Quit();
+
+        Button printButton = new Button("印刷する");
+        printButton.Clicked += OnPrintClicked;
+
+        Add(printButton);
+        ShowAll();
+    }
+
+    private void OnPrintClicked(object sender, EventArgs e)
+    {
+        PrintOperation print = new PrintOperation();
+        print.BeginPrint += OnBeginPrint;
+        print.DrawPage += OnDrawPage;
+
+        print.Run(PrintOperationAction.PrintDialog, this);
+    }
+
+    private void OnBeginPrint(object sender, BeginPrintArgs args)
+    {
+        PrintOperation op = (PrintOperation)sender;
+        op.NPages = 1; // 1ページ印刷
+    }
+
+    private void OnDrawPage(object sender, DrawPageArgs args)
+    {
+        Cairo.Context cr = args.Context.CairoContext;
+
+        cr.SetFontSize(20);
+        cr.MoveTo(50, 100);
+        cr.ShowText("GTKSharp での印刷サンプルです！");
+    }
+
+    public static void Main()
+    {
+        Application.Init();
+        new PrintSample();
+        Application.Run();
+    }
+}

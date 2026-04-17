@@ -14,7 +14,7 @@ static String define_s=";M;I;L;O;P;D;F;H";
 
 static String[] file_sx,name_sx;
 static String dir_in_s="",dir_out_s="",obfuscate_s="",in_s="",out_s="";
-static int i,sjhp,k,kk,sw,SS=0,JJ=1,HH=2,PP=3;
+static int i,sjhp,k,kk,sw,SS=0,JJ=1,HH=2,PP=3,sw_java=1;
 static String[] equal_sx={"=","=","",""};
 static String[] hairetu_sx={",","][","][","]["};
 static String[] s4x= {"SS","JJ","HH","PP"};
@@ -57,7 +57,7 @@ for(;;)
     u2_sa.Add(2<sx.Length&&"="==sx[2].Trim()?sx[1].Trim():(4>sx.Length?"*":sx[3].Trim()));
    }
 StreamReader2_n.Close();FileStream2_n.Close();
-try{file_sx=Directory.GetFiles(dir_in_s,"*.SRC");
+try{file_sx=Directory.GetFiles(dir_in_s,"*.SRC");  //ソースプログラム名ため込み
     name_sx=Directory.GetFiles(dir_in_s,"*.SRC");
     for(i=0;i<name_sx.Length;i++)
        {sjhp=name_sx[i].LastIndexOf('\\');
@@ -69,8 +69,9 @@ try{file_sx=Directory.GetFiles(dir_in_s,"*.SRC");
 catch(Exception e_t){Console.WriteLine("DIR{"+dir_in_s+"}error("+e_t.Message+")");return(9);}
 try
   {
-   for(i=0;i<file_sx.Length;i++)
-    {c=0;for(int nn=0;nn<100;nn++)nxx[nn,0]=nxx[nn,1]=-1;
+   for(i=0;i<file_sx.Length;i++)　//ソースプログラムの数実行。
+    {sw_java=(name_sx[i].EndsWith("TEST")?0:1); //JavaはTESTプログラムは対象にしない。
+     c=0;for(int nn=0;nn<100;nn++)nxx[nn,0]=nxx[nn,1]=-1;
      FileStream_n=File.Open(file_sx[i],FileMode.Open,FileAccess.Read,FileShare.ReadWrite);
      StreamReader_n=new StreamReader(FileStream_n,System.Text.Encoding.Default); 
      sjhp=file_sx[i].LastIndexOf('\\');
@@ -79,16 +80,16 @@ try
      kk=("II_SQL2"==sx[0]?9:1);//II_SQL2のCSは９個のRDBMS分対応
      for(sjhp=0;sjhp<4;sjhp++,kk=1)//(J,0=CS,1=Java,2=H,3=CPP)
        for(k=0;k<kk;k++)
-         {FileStream_nxx[sjhp,k]=File.Open(dir_out_s+"\\"+sx[0].ToLower()+(1==kk?"":sxx[k]).ToLower()
+         {if(0==sw_java&&1==sjhp)continue;//JavaのTESTはスキップ
+          FileStream_nxx[sjhp,k]=File.Open(dir_out_s+"\\"+sx[0].ToLower()+(1==kk?"":sxx[k]).ToLower()
          +(0==sjhp?".cs":(1==sjhp?"_l.java":(2==sjhp?".h":".cpp")))
            ,FileMode.Create,FileAccess.Write,FileShare.Read);
           StreamWriter_nxx[sjhp,k]=new StreamWriter(FileStream_nxx[sjhp,k]); //VER16.1
-
          } 
       int nami=0,nami_old=0,nami_end=0,func=0,func_old=0,kako_end=-1;
       if("ITIME"==sx[0]||"ISRVC"==sx[0]){nami=1;nami_old=1;nami_end=1;} //classを未使用。
       Char quote_c=' ';
-      for(;;)
+      for(;;)  //ソースプログラム全行処理。　　
        {in_s=StreamReader_n.ReadLine();c++;
         if(null==in_s)break;//終了
         sw=0;  // 現データ処理用
@@ -150,14 +151,14 @@ try
                          .Replace("bool ","boolean ")
                          .Replace("Brush ","Color ")
                          .Replace("Pen","BasicStroke")
-                         .Replace("new SolidBrush(Color.FromArgb(","(new Color(")
+                      //   .Replace("new SolidBrush(Color.FromArgb(","(new Color(")//VER38
                          .Replace(".Clear()",".clear()")
                          .Replace(".Close()",".close()")
                          .Replace(".Count;",".size();")
                          .Replace(".Insert(",".add(")
                          .Replace(".RemoveAt(",".remove(")
-                         .Replace("Color.Black","Color.BLACK")
-                         .Replace("Color.White","Color.WHITE")
+                        //.Replace("Color.Black","Color.BLACK")
+                        // .Replace("Color.White","Color.WHITE")
                          .Replace("DateTime ","java.util.Date ")
                          .Replace("decimal ","BigDecimal ")
                          .Replace("readonly ","final ")
@@ -307,7 +308,6 @@ try
                            .Replace("List<String>","s_l*") 
                            .Replace("List<ii_write_l>","wr_l*") 
                            .Replace("List<ii_xml_json_l>","xm_l*") 
-
                            .Replace(".Close()",".close()")
                            .Replace  ("ii_menu_l "                 ,"imenu_l ")
                            .Replace  (".menu_n."                   ,".imenu_n.")
@@ -347,12 +347,12 @@ try
                           .Replace   ("Keys."            ,"Qt::Key_")
                           .Replace   ("Qt::Key_Back"        ,"Qt::Key_Backspace")
                           .Replace   ("Qt::Key_Backspacetab","Qt::Key_Backtab")
-                          .Replace   ("Color.B"          ,"Qt::b")
-                          .Replace   ("Color.W"          ,"Qt::w")
-                          .Replace   ("Brushes.B"        ,"Qt::b")
-                          .Replace   ("Brushes.W"        ,"Qt::w")
+                        //  .Replace   ("Color.Black"          ,"Qt::black")
+                        //  .Replace   ("Color.White"          ,"Qt::white")
+                            .Replace   ("Brushes.B"        ,"Qt::b")
+                            .Replace   ("Brushes.W"        ,"Qt::w")
                           .Replace   ("Graphics "        ,"QPainter* ")
-                          .Replace   ("(Graphics_nn"     ,"(&Graphics_nn")
+                       //  .Replace   ("(Graphics_nn"     ,"(&Graphics_nn")
                           .Replace   ("decimal "         ,"double ")
                           .Replace   ("Keys "            ,"int ")
                           .Replace   ("readonly "        ," ")
@@ -371,14 +371,15 @@ try
                if(!out_s.StartsWith("//"))out_s=out_s.Replace("?,?",hairetu_sx[sjhp]); //２次元配列対応。"？,?"
                if(0==nami&&HH==sjhp&&"}"==out_s)out_s="};";
                out_s=out_s.Replace("?=?",equal_sx[sjhp]);     // "?=?"対応
-               StreamWriter_nxx[sjhp,k].WriteLine(out_s);
+               if(!(0==sw_java&&1==sjhp))StreamWriter_nxx[sjhp,k].WriteLine(out_s);
              }
             if(0==sw)break; 
         }
      }
      kk=("II_SQL2"==sx[0]?9:1);
      for(sjhp=0;sjhp<4;sjhp++,kk=1)for(k=0;k<kk;k++)
-        {StreamWriter_nxx[sjhp,k].Close();FileStream_nxx[sjhp,k].Close(); 
+        {if(0==sw_java&&1==sjhp)continue; //JavaのTESTはスキップ。
+         StreamWriter_nxx[sjhp,k].Close();FileStream_nxx[sjhp,k].Close(); 
         }
      StreamReader_n.Close();FileStream_n.Close();
     if(nami_end!=nami)System.Console.WriteLine(sx[0]+"{"+nami+"}"); 
@@ -407,6 +408,7 @@ try
   pro_v("U","C"); 
   pro_v("W","D");
   pro_v("U","D"); 
+  pro_v("W","A"); 
   return(0);
   }
 catch(Exception e_t){Console.WriteLine(e_t.Message);return(9);}
@@ -473,119 +475,54 @@ for(i=0;i<name_sx.Length;i++)
        }
       else //C#(.cproj)
        {
-        /*
-        if(def_s.StartsWith("IME")||def_s.StartsWith("IP")||def_s.StartsWith("ICH"))
-             write_v("<Project Sdk=\"Microsoft.NET.Sdk.WindowsDesktop\">");
-        else
-        */
         write_v("<Project Sdk=\"Microsoft.NET.Sdk\">");
         write_v("  <PropertyGroup>");
         write_v("    <RuntimeIdentifier>"+("W"==wu_si?"win":"linux")+"-x64</RuntimeIdentifier>");
-        write_v("    <DefineConstants>"+wu_si+";"+def_s+";DOTNET;ODP"+define_s+("U"==wu_si?";GTK":"")+"</DefineConstants>");
+        write_v("    <DefineConstants>"+wu_si+";"+def_s+";DOTNET;ODP"+define_s
+//                  +("U"==wu_si||"IMTEST"==def_s||"A"==cd_s?";AUI":"")+"</DefineConstants>");
+                    +("U"==wu_si||"A"==cd_s?";AUI":("G"==cd_s?";GTK":""))+"</DefineConstants>");
         write_v("    <EnableDefaultItems>false</EnableDefaultItems>");
-        if((def_s.StartsWith("ITE")||def_s.StartsWith("IME")||def_s.StartsWith("IP")||def_s.StartsWith("ICH"))&&"W"==wu_si)
+        if((def_s.StartsWith("ITE")||def_s.StartsWith("IME")||def_s.StartsWith("IP")||
+//            def_s.StartsWith("ICH"))&&"W"==wu_si&&"A"!=cd_s)
+              def_s.StartsWith("ICH"))&&"W"==wu_si&&"D"==cd_s)
           {write_v("    <UseWindowsForms>true</UseWindowsForms>");
-           if(!def_s.StartsWith("ITI"))write_v("    <OutputType>WinExe</OutputType>");
-//         write_v("    <TargetFramework>net"+net_s+".0-windows</TargetFramework>");
-//           write_v("    <TargetFramework>net"+net_s+"-windows</TargetFramework>");
+           write_v("    <OutputType>WinExe</OutputType>");
           } 
         else 
           {write_v("    <OutputType>Exe</OutputType>");
-//         write_v("    <TargetFramework>net"+net_s+".0</TargetFramework>");
-//         write_v("    <TargetFramework>net"+net_s+"-windows</TargetFramework>");
           }
         write_v("    <TargetFramework>net"+net_s+("W"==wu_si?"-windows":"")+"</TargetFramework>");
         if(def_s.StartsWith("ITI"))write_v("    <OutputType>Exe</OutputType>");
-//         write_v("    <TargetFramework>netcoreapp5.0</TargetFramework>");
-//        write_v("    <TargetFramework>net5.0"+("W"==wu_si?"-windows":"")+"</TargetFramework>");
-////        write_v("    <PublishSingleFile>true</PublishSingleFile>");
-////      write_v("    <PublishTrimmed>true</PublishTrimmed>");
         if(def_s.StartsWith("IME"))
-           write_v("    <ApplicationIcon>I_MENU.ICO</ApplicationIcon>");
+//           if("W"==wu_si)write_v("    <ApplicationIcon>I_MENU.ICO</ApplicationIcon>");
+        if("W"==wu_si&&"D"==cd_s)write_v("    <ApplicationIcon>I_MENU.ICO</ApplicationIcon>");
         if(def_s.StartsWith("IRO"))
            write_v("    <ApplicationManifest>IROOT.EXE.MANIFEST</ApplicationManifest>");
         write_v("  </PropertyGroup>");
         write_v("  <ItemGroup>");
         write_v("    <Compile Include=\""+name_sx[i].ToLower()+".cs\" />");
         write_v("    <Compile Include=\"ii_*.cs\" />");
- //       if("W"==wu_si)write_v("    <SupportedPlatform Include=\"windows\" />");
         if(def_s.StartsWith("IME"))
-          {write_v("    <Content Include=\"I_MENU.ICO\" />");
-           ////write_v("    <Compile Include=\""+name_sx[i].ToLower()+"_l.resx\" />");
-           ////write_v("    <Compile Update=\""+name_sx[i].ToLower()+".cs\" DependentUpon=\""+name_sx[i].ToLower()+"_l.resx\" AutoGen=\"True\" DesignTime=\"True\" />");
-           ////write_v("    <EmbeddedResource Update=\""+name_sx[i].ToLower()+"_l.resx\" Generator=\"ResXFileCodeGenerator\" LastGenOutput=\""+name_sx[i].ToLower()+".cs\" />");
-           ////write_v("    <EmbeddedResource Include=\""+name_sx[i].ToLower()+"_l.resx\" />");
-           ////write_v("    <Res Include=\""+name_sx[i].ToLower()+"_l.resources\" >");
-           ////write_v("    <Culture>fr</Culture>");
-           ////write_v("    </Res>");
-          }
+//         {if("W"==wu_si&&"A"!=cd_s)write_v("    <Content Include=\"I_MENU.ICO\" />");
+//           else                     write_v("    <AvaloniaResource Include=\"I_MENU.ICO\" />"); 
+           {if("W"==wu_si&&"D"==cd_s)write_v("    <Content Include=\"I_MENU.ICO\" />");
+            else if("U"==wu_si||"A"==cd_s)       write_v("    <AvaloniaResource Include=\"I_MENU.ICO\" />"); 
+           }
+//      if("IMTEST"==def_s)write_v("    <AvaloniaResource Include=\"I_MENU.ICO\" />"); 
         if(def_s.StartsWith("IRO"))
            write_v("    <None Include=\"IROOT.EXE.MANIFEST\" />");
         for(int ii=0;w1_sa.Count>ii;ii++)
-          if("W"==wu_si){if("!"!=w1_sa[ii])write_package_v(w1_sa[ii],w2_sa[ii]);}
-          else         {if("!"!=u1_sa[ii])write_package_v(u1_sa[ii],u2_sa[ii]);}
- //       if("U"==wu_si)write_package_v("GtkSharp","*");
- //       if(def_s.StartsWith("ITE")){write_package_v("Xamarin.Forms","*");write_package_v("System.Drawing.Common","*");
-//                                   write_package_v("Microsoft.Maui","6.0.100-preview.5.794");
-//                                   write_package_v("CommunityToolkit.Maui","*");
-//                                  }
-//        if(def_s.StartsWith("ISR")&&"W"==wu_si)
-//          {//write_package_v("Microsoft.Extensions.Hosting","*");
-//           write_package_v("Microsoft.Extensions.Hosting.WindowsServices","*");
-//          }
-/*
-        if(def_s.StartsWith("IME")||def_s.StartsWith("IT"))
-          {write_package_v("System.IO.Ports","*");
-           //write_v("    <PackageReference Include=\"System.IO.Ports\" Version=\"4.7.0\" />");
-           write_package_v("System.Management","*");
-           //write_v("    <PackageReference Include=\"System.Management\" Version=\"4.7.0\" />");
-           write_package_v();
-          } 
-
-           //write_v("    <PackageReference Include=\"System.Configuration\" Version=\"*\" />");
-////         if(def_s.StartsWith("ITE"))
-////           write_v("    <PackageReference Include=\"System.Configuration.Install\" Version=\"*\" />");
-          if(def_s.StartsWith("ISR")&&"W"==wu_si)
-            {write_package_v("Microsoft.Extensions.Hosting","*");
-             write_package_v("Microsoft.Extensions.Hosting.WindowsService","*");
-                          
-             ////write_v("    <PackageReference Include=\"Microsoft.Extensions.DependencyInjection\" Version=\"*\" />"); 
-             write_package_v("System.ServiceProcess.ServiceController","*");
-             //write_v("    <PackageReference Include=\"System.ServiceProcess.ServiceController\" Version=\"4.7.0\" />");
-            //////  write_v("    <PackageReference Include=\"System.ServiceBase\" Version=\"*\" />");
-            ////// write_v("    <PackageReference Include=\"System.ServiceProcess\" Version=\"*\" />");
-            ////write_v("    <PackageReference Include=\"System.Configuration.Install\" Version=\"*\" />");
-            } 
-          }
-        if(def_s.StartsWith("ICH"))
-           write_v("    <PackageReference Include=\"System.Windows.Forms.DataVisualization\" Version=\"1.0.0-prerelease.20110.1\" />");
-        if(def_s.StartsWith("IME")||def_s.StartsWith("IT"))
-          {write_package_v("Microsoft.Data.SqlClient","*"); //VER37.8.0.12
-           write_package_v("System.Data.Odbc","*");
-           //write_v("    <PackageReference Include=\"System.Data.Odbc\" Version=\"4.7.0\" />");
-          //// if(-1!=define_s.IndexOf("D"))write_v("    <Reference Include=\"FirebirdSql.Data.FirebirdClient\"><HintPath>"+dll_s+"FirebirdSql.Data.FirebirdClient.dll</HintPath></Reference>");
-          //// if(-1!=define_s.IndexOf("F"))write_v("    <Reference Include=\"Fujitsu.Symfoware\"><HintPath>"+dll_s+"Fujitsu.Symfoware.dll</HintPath></Reference>");
-          //// if(-1!=define_s.IndexOf("H"))
-          ////   {write_v("    <Reference Include=\"pddndp20x\"><HintPath>"+dll_s+"pddndp20x.dll</HintPath></Reference>");
-          ////    write_v("    <Reference Include=\"pddndpcore20x\"><HintPath>"+dll_s+"pddndpcore20x.dll</HintPath></Reference>");
-          ////   }
-          }
-*/
+          if(!("A"!=cd_s&&"U"!=wu_si&&(w1_sa[ii].StartsWith("Ava")||w1_sa[ii].StartsWith("MessageBox"))))
+          if(!("G"!=cd_s&&(w1_sa[ii].StartsWith("Gtk")||w1_sa[ii].StartsWith("iTextSharp"))))
+            if("W"==wu_si){if("!"!=w1_sa[ii])write_package_v(w1_sa[ii],w2_sa[ii]);}
+            else          {if("!"!=u1_sa[ii])write_package_v(u1_sa[ii],u2_sa[ii]);}
         write_v("  </ItemGroup>");
-//        if(def_s.StartsWith("ITE"))
-//          write_v("     <Import Project=\"$(MSBuildExtensionsPath)\\Microsoft\\WindowsXaml\\v$(VisualStudioVersion)\\Microsoft.Windows.UI.Xaml.CSharp.targets\" />");
 
         write_v("</Project>");
        } 
        StreamWriter_n.Close();FileStream_n.Close(); 
    }
 } 
-//static void write_package_v(){for(int ii=0;w_sa.Count>ii;ii++)write_package_v(("W"==wu_s?w_sa[ii]:u_sa[ii]),"*");}
-//static void write_package_v(String si)
-//{int ii=0;
-//for(;w_sa.Count>ii;ii++)if(w_sa[ii]==si)break;
-//write_package_v(si,(w_sa.Count==ii?"*":u_sa[ii]));
-//}
 static void write_package_v(String si,String s2i){write_v("    <PackageReference Include=\""+si+"\" Version=\""+s2i+"\" />");}
 static void write_v(String s_si)
 {if("U"==wu_s&&"D"==cd_s)s_si=s_si.Replace("\\","/");

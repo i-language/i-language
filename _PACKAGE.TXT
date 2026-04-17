@@ -1,3 +1,5 @@
+*WINDOWS VERSION LINUX VERSION (GUI)
+*先頭#と*はコメント、!は不採用,=は同じ
 IBM.Data.DB2.Core * IBM.Data.DB2.Core-lnx *
 MySqlConnector * = 
 Npgsql * = 
@@ -15,10 +17,18 @@ System.Speech * =
 Microsoft.Extensions.Hosting * !
 Microsoft.Extensions.Hosting.WindowsServices * !
 System.ServiceProcess.ServiceController * !
-! * GtkSharp *
-! * System.Drawing.Common *
+*以下GUIがAUI用
+Avalonia * = 
+Avalonia.Desktop * = 　 
+Avalonia.Themes.Fluent * = 
+Avalonia.Fonts.Inter * = 
+Avae.Printables * = 
+MessageBox.Avalonia * = 
+*以下GUIがGTK用
+GtkSharp * =
+iTextSharp * =
 *以下XAMARIN関連試作中
 *Xamarin.Forms * =
 *Microsoft.NETCore.UniversalWindowsPlatform * =
-*System.Drawing.Common * = 
 *microsoft.ui.xaml * =
+*System.Drawing.Common * 

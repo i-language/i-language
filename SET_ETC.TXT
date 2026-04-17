@@ -6,8 +6,8 @@ ZZZZZZ_@	ZZZZZZ_PERMISSION_NO1	ZZZZ	ZZZZ
 ZZZZZZ_@	ZZZZZZ_PERMISSION_NO2	ZZZY	ZZZY
 ZZZZZZ_@	ZZZZZZ_VERSION_CHART	2	VERSION(2) ICHART
 ZZZZZZ_@	ZZZZZZ_VERSION_PRINT	14	VERSION(14) IPRINT
-ZZZZZZ_@	ZZZZZZ_VERSION1	37	VERSION1(37) IMENU,ITIME
-ZZZZZZ_@	ZZZZZZ_VERSION2	001000005	VERSION2(001000005) IMENU,ITIME
+ZZZZZZ_@	ZZZZZZ_VERSION1	38	VERSION1(38) IMENU,ITIME
+ZZZZZZ_@	ZZZZZZ_VERSION2	001000006	VERSION2(001000006) IMENU,ITIME
 ZZZZZZ_COPY	ZZZZZZ_SQL               00100	%ZZZZZZ_SQL_SELECT+REPEAT=_SELECT_COUNT	
 ZZZZZZ_COPY	ZZZZZZ_SQL               00200	%ZZZZZZ_SQL_SELECT+SQL=?_SELECT##?	
 ZZZZZZ_COPY	ZZZZZZ_SQL               00300	%ZZZZZZ_SQL_SELECT+REPEAT=	
@@ -105,23 +105,23 @@ ZZZZZZ_PROGRAM	//=BACK//                    1	=BACK{TAG};	//1     -TG
 ZZZZZZ_PROGRAM	//=BAT_SERVER//              1	=BAT_SERVER{FILE,OPTION};	T/21    -NF,  -O3
 ZZZZZZ_PROGRAM	//=BEEP//                    1	=BEEP{};	M/1     *****
 ZZZZZZ_PROGRAM	//=COMMAND//                 1	=COMMAND{COMMAND OPTION};	M/1     -CO
-ZZZZZZ_PROGRAM	//=COMPUTE//                 1	=COMPUTE{X1.XXX=X1.YYY+X1.ZZZ,..};	//1     =CM
+ZZZZZZ_PROGRAM	//=COMPUTE//                 1	=COMPUTE{X1.XXX=X1.YYY+X1.ZZZ,..};	//1     =CM                                      *
 ZZZZZZ_PROGRAM	//=COMPUTE//                 2	=COMPUTE{X1.XXX+=X1.YYY,..};	//1     =CM
 ZZZZZZ_PROGRAM	//=COMPUTE_CUT//             1	=COMPUTE_CUT{X1.XXX=X1.YYY+X1._ZZZ,..};	//1     =CM
 ZZZZZZ_PROGRAM	//=COMPUTE_CUT//             2	=COMPUTE_CUT{.XXX+=.YYY,..};	//1     =CM
 ZZZZZZ_PROGRAM	//=COPY_FILE//               1	=COPY_FILE{OUTPUT FILE,INPUT FILE};	M/2111  -NF,  -NF
-ZZZZZZ_PROGRAM	//=COPY_TABLE//              1	=COPY_TABLE{?_WORK_TABLE?A,?_MM?_TT_TABLE	//311*  -NT,  -NT,  -SQ
+ZZZZZZ_PROGRAM	//=COPY_TABLE//              1	=COPY_TABLE{?_WORK_TABLE?A,?_MM?_TT_TABLE	//311*  -NT,  -NT,  -SQ                          *
 ZZZZZZ_PROGRAM	//=COPY_TABLE//              2	=    [,NOT,(SQL)]};	/*
 ZZZZZZ_PROGRAM	//=CREATE_INDEX//            1	=CREATE_INDEX{?_WORK_TABLE?A,1,[UNIQUE],XX_KEY1,.}	//413*  -NT,  -09,  *NC   *IX   ***   ***
 ZZZZZZ_PROGRAM	//=CREATE_OBJECT//           1	=CREATE_OBJECT{OBJECT,[VIEW,FUNC,PROC,TRIG]	//3122  -NO,  +OJ,  -SQ
 ZZZZZZ_PROGRAM	//=CREATE_OBJECT//           2	=   ,DEFINE};	/*
-ZZZZZZ_PROGRAM	//=CREATE_TABLE//            1	=CREATE_TABLE{?_WORK_TABLE?A,XX_KEY1,*,XX_KEY2,*}	//320*  -NT,  -CT   -CT
+ZZZZZZ_PROGRAM	//=CREATE_TABLE//            1	=CREATE_TABLE{?_WORK_TABLE?A,XX_KEY1,*,XX_KEY2,*}	//320*  -NT,  -CT   -CT                          *
 ZZZZZZ_PROGRAM	//=CREATE_TABLE//            2	=   {XX_DATA1,*,XX_DATA2,*};	/*
 ZZZZZZ_PROGRAM	//=CREATE_TABLE0//           1	=CREATE_TABLE0{?_WORK_TABLE?A,XX_KEY1,*,XX_KEY2,*}	//320*  -NT,  -CT   -CT
 ZZZZZZ_PROGRAM	//=CREATE_TABLE0//           2	=   {XX_DATA1,*,XX_DATA2,*};	/*
 ZZZZZZ_PROGRAM	//=CREATE_TABLE2//           1	=CREATE_TABLE2{?_WORK_TABLE?A,XX_KEY1,*,XX_KEY2,*}	//320*  -NT,  -CT   -CT
 ZZZZZZ_PROGRAM	//=CREATE_TABLE2//           2	=   {XX_DATA1,*,XX_DATA2,*};	/*
-ZZZZZZ_PROGRAM	//=CURSOR//                  1	=CURSOR{?_WORK_TABLE?A[,..]}{XXX,[A,D,]...}	//5     =NT   ***   -SQ   =OJ   -SQ
+ZZZZZZ_PROGRAM	//=CURSOR//                  1	=CURSOR{?_WORK_TABLE?A[,..]}{XXX,[A,D,]...}	//5     =NT   ***   -SQ   =OJ   -SQ              *
 ZZZZZZ_PROGRAM	//=CURSOR//                  2	=   {(SQL (WHERE))}{DATA,*,...}?{(SQL);}	/*
 ZZZZZZ_PROGRAM	//=CURSOR2//                 1	=CURSOR{?_WORK_TABLE?A[,..]}{XXX,[A,D,]...}	//5     =NT   ***   -SQ   =OJ   -SQ
 ZZZZZZ_PROGRAM	//=CURSOR2//                 2	=   {(SQL (WHERE))}{DATA,*,...}{(SQL);}	/*
@@ -132,13 +132,13 @@ ZZZZZZ_PROGRAM	//=DIR_DIR_NEXT//            2	=DIR_DIR_NEXT:DIR_DIR_NEXT{WN.D}JU
 ZZZZZZ_PROGRAM	//=DIR_DIR_NEXT//            3	=;;;	/*
 ZZZZZZ_PROGRAM	//=DIR_DIR_NEXT//            4	=BACK{DIR_DIR_NEXT};	/*
 ZZZZZZ_PROGRAM	//=DIR_DIR_NEXT//            5	=DIR_DIR_END:	/*
-ZZZZZZ_PROGRAM	//=DIR_NEXT//                2	=DIR_NEXT:DIR_NEXT{WN.FILE,WC.DATE}JUMP{DIR_END};	//1     =NW
+ZZZZZZ_PROGRAM	//=DIR_NEXT//                2	=DIR_NEXT:DIR_NEXT{WN.FILE,WC.DATE}JUMP{DIR_END};	//1     =NW                                      *
 ZZZZZZ_PROGRAM	//=DIR_NEXT//                3	=;;;	/*
 ZZZZZZ_PROGRAM	//=DIR_NEXT//                4	=BACK{DIR_NEXT};	/*
 ZZZZZZ_PROGRAM	//=DIR_NEXT//                5	=DIR_END:	/*
 ZZZZZZ_PROGRAM	//=DROP_INDEX//              1	=DROP_INDEX{?_WORK_TABLE?A,0-9};	//2111  -NT,  -09
 ZZZZZZ_PROGRAM	//=DROP_OBJECT//             1	=DROP_OBJECT{OBJECT,[VIEW,FUNC,PROC,TRIG]};	//2111  -NO,  +OJ
-ZZZZZZ_PROGRAM	//=DROP_TABLE//              1	BEGIN_END	M*
+ZZZZZZ_PROGRAM	//=DROP_TABLE//              1	BEGIN_END	M*                                               *
 ZZZZZZ_PROGRAM	//=DROP_TABLE//              2	NAME=DROP_TABLE_WORK	/*
 ZZZZZZ_PROGRAM	//=DROP_TABLE//              3	REPEAT=?_A_A?	/*
 ZZZZZZ_PROGRAM	//=DROP_TABLE//              4	=DROP_TABLE{?_WORK_TABLE??_A##?};	//1     -NT
@@ -148,21 +148,21 @@ ZZZZZZ_PROGRAM	//=DROP_TABLE//              7	BEGIN	M*
 ZZZZZZ_PROGRAM	//=DROP_TABLE//              8	=;;;	T*
 ZZZZZZ_PROGRAM	//=DROP_TABLE//              9	COPY=DROP_TABLE_WORK	T*
 ZZZZZZ_PROGRAM	//=ERASE_DIR//               1	=ERASE_DIR{DIR};	//1     -ND
-ZZZZZZ_PROGRAM	//=ERASE_FILE//              1	=ERASE_FILE{FILE};	//1     -NF
+ZZZZZZ_PROGRAM	//=ERASE_FILE//              1	=ERASE_FILE{FILE};	//1     -NF                                      *
 ZZZZZZ_PROGRAM	//=ERROR//                   1	=ERROR{MESSAGE};	//1     ***
 ZZZZZZ_PROGRAM	//=EXE//                     1	=EXE{PROGRAM[,OPTION]};	M/21**  ***,  ***
 ZZZZZZ_PROGRAM	//=EXE_I//                   1	=EXE_I{JOB[,OPTION]};	M/21**  -JB,  ***
 ZZZZZZ_PROGRAM	//=EXE_WAIT//                1	=EXE_WAIT{PROGRAM[,OPTION]}	M/21**  ***,  ***
-ZZZZZZ_PROGRAM	//=EXIT//                    1	=EXIT{[,(NAME),_END,+1,-(NUMBER),(NUMBER)]};	//1     -NE
+ZZZZZZ_PROGRAM	//=EXIT//                    1	=EXIT{[,(NAME),_END,+1,-(NUMBER),(NUMBER)]};	//1     -NE                                      *
 ZZZZZZ_PROGRAM	//=EXIT2//                   1	=EXIT2{NAME};	M/1     -NX
 ZZZZZZ_PROGRAM	//=EXIT3//                   1	=EXIT3{NAME};	M/1     -NX
 ZZZZZZ_PROGRAM	//=FIND_REPEAT//             1	=FIND_REPEAT{WC.XXX,WC.YYY};	//2111  -NR,  ***
-ZZZZZZ_PROGRAM	//=GRANT//                   1	=GRANT{(OBJECT)[,TABLE,VIEW,FUNC,PROC,TRIG]	//31*2  -NO,  +OB,  =PL
+ZZZZZZ_PROGRAM	//=GRANT//                   1	=GRANT{(OBJECT)[,TABLE,VIEW,FUNC,PROC,TRIG]	//31*2  -NO,  +OB,  =PL                          *
 ZZZZZZ_PROGRAM	//=GRANT//                   2	=   [,PUBLIC,LINK]};	/*
 ZZZZZZ_PROGRAM	//=GRANT_PERMISSION//        1	=GRANT_PERMISSION{OBJECT,ZZZY	//4113  -NO,  +OB,3 -PM 2 +LK
 ZZZZZZ_PROGRAM	//=GRANT_PERMISSION//        2	=   [,TABLE,VIEW,FUNC,PROC,TRIG][,LINK]};	/*
 ZZZZZZ_PROGRAM	//=ICHART//                  1	=ICHART{CODE,,[FILE(ADD)],[SQL;...]}...;	M/31**   CD,   FA,   S2
-ZZZZZZ_PROGRAM	//=IF//                      1	=IF{.XXX=.YYY,.XXX=.ZZZ}...;	//1     =IF
+ZZZZZZ_PROGRAM	//=IF//                      1	=IF{.XXX=.YYY,.XXX=.ZZZ}...;	//1     =IF                                      *
 ZZZZZZ_PROGRAM	//=IF_FILE//                 1	=IF_FILE{FILE}...;	//1     -NF
 ZZZZZZ_PROGRAM	//=IF_FILE_NOT//             1	=IF_FILE_NOT{FILE}...;	//1     -NF
 ZZZZZZ_PROGRAM	//=IF_NAME//                 1	=IF_NAME{DATA}...;	//1     -NW
@@ -176,16 +176,17 @@ ZZZZZZ_PROGRAM	//=INSERT_FILE//             2	=   ,[UTF-8,SHIFT_JIS,EUC-JP,/],CO
 ZZZZZZ_PROGRAM	//=IPRINT//                  1	=IPRINT{CODE,[DISPLAY],[FILE(ADD)],[SQL]}...;	M/31**   CD,   FA,  -SQ
 ZZZZZZ_PROGRAM	//=JSON//                    1	=JSON{}	//1     ***
 ZZZZZZ_PROGRAM	//=JSON_BEGIN//              1	=JSON_BEGIN{STRING,DATA[,DATA2]}	//111*  -NR,  =NW
-ZZZZZZ_PROGRAM	//=JSON_CONTINUE//           1	=JSON_CONTINUE{STRUNG}	//1100  -NR
+ZZZZZZ_PROGRAM	//=JSON_CONTINUE//           1	=JSON_CONTINUE{STRUNG}	//1100  -NR                                      *
 ZZZZZZ_PROGRAM	//=JSON_END//                1	=JSON_END{}	//1     ***
 ZZZZZZ_PROGRAM	//=JUMP//                    1	=JUMP{TAG};	//1     -TG
 ZZZZZZ_PROGRAM	//=LINK_SET//                1	=LINK_SET{WC.LINK}{SELECT ... FROM}{TABLE}{X1}	//5     ***   ***   -NT   -AL   ***
 ZZZZZZ_PROGRAM	//=LINK_SET//                2	=   {WHERE ...};	/*
 ZZZZZZ_PROGRAM	//=MESSAGE//                 1	=MESSAGE{MESSAGE};	//1     ***
 ZZZZZZ_PROGRAM	//=NOP//                     1	=NOP{};	//1     ***
-ZZZZZZ_PROGRAM	//=OUTPUT//                  1	=OUTPUT{WC.XXX,WN.YYY};	//1     =NR
+ZZZZZZ_PROGRAM	//=OUTPUT//                  1	=OUTPUT{WC.XXX,WN.YYY};	//1     =NR                                      *
 ZZZZZZ_PROGRAM	//=OUTPUT_CLEAR//            1	=OUTPUT_CLEAR{};	//1     ***
-ZZZZZZ_PROGRAM	//=PROGRAM//                 1	=PROGRAM{[0,1,2,3][,N,E,P,PE],?_MM?_TT_TABLE	//531*  -PG,  =NW,3 -NT 2 =NW   -SQ
+ZZZZZZ_PROGRAM	//=PASTE//                   1	=PASTE{XXXX};	M/1     ***
+ZZZZZZ_PROGRAM	//=PROGRAM//                 1	=PROGRAM{[0,1,2,3][,N,E,P,PE],?_MM?_TT_TABLE	//531*  -PG,  =NW,3 -NT 2 =NW   -SQ              *
 ZZZZZZ_PROGRAM	//=PROGRAM//                 2	=   ,WN.XX_DATA1,WN.XX_DATA2}	/*
 ZZZZZZ_PROGRAM	//=PROGRAM//                 3	=   {WC.XX_KEY1,WC.XX_KEY2}{[WHERE]};	/*
 ZZZZZZ_PROGRAM	//=PROGRAM2//                1	=PROGRAM2{[0,1,2,3][,N,E,P,PE],?_MM?_TT_TABLE	//531*  -PG,  =NW,3 -NT 2 =NW   -SQ
@@ -195,7 +196,7 @@ ZZZZZZ_PROGRAM	//=READ_CLOSE//              6	=READ_END1:READ_CLOSE{1};	//1     
 ZZZZZZ_PROGRAM	//=READ_NEXT//               3	=READ_NEXT1:READ_NEXT{1,WC.XX,..}JUMP{READ_END1};	//110*  -RN,  =NW
 ZZZZZZ_PROGRAM	//=READ_NEXT//               4	=;;;	/*
 ZZZZZZ_PROGRAM	//=READ_NEXT//               5	=BACK{READ_NEXT1};	/*
-ZZZZZZ_PROGRAM	//=READ_OPEN//               1	=IF_ERROR_READ_OPEN{1,FILE[,UTF-8,SHIFT_JIS,/]}	//111*  ***,  -ND,  -E1
+ZZZZZZ_PROGRAM	//=READ_OPEN//               1	=IF_ERROR_READ_OPEN{1,FILE[,UTF-8,SHIFT_JIS,/]}	//111*  ***,  -ND,  -E1                          *
 ZZZZZZ_PROGRAM	//=READ_OPEN//               2	=  ERROR{};	/*
 ZZZZZZ_PROGRAM	//=READ1_CLOSE//             6	=READ1_END:READ1_CLOSE{};	//1     ***
 ZZZZZZ_PROGRAM	//=READ1_NEXT//              3	=READ1_NEXT:READ1_NEXT{WC.XX,WN.Y}JUMP{READ1_END};	//1     =NW
@@ -212,7 +213,7 @@ ZZZZZZ_PROGRAM	//=READ2_OPEN//              2	=   ERROR{};	/*
 ZZZZZZ_PROGRAM	//=RECEIVE//                 1	=RECEIVE{NUMBER};	M/1      RC
 ZZZZZZ_PROGRAM	//=RECEIVE_BEEP//            1	=RECEIVE_BEEP{NUMBER};	M/1      RC
 ZZZZZZ_PROGRAM	//=RENAME_FILE//             1	=RENAME_FILE{OUTPUT FILE,INPUT FILE};	//1111  -NF,  -NF
-ZZZZZZ_PROGRAM	//=REPLACE_ALL//             1	=REPLACE_ALL{?&X1.TABLE?,?_WORK_TABLE?A	//642*  -NT,  -NT,  =NC   =NC   -SQ   -SQ
+ZZZZZZ_PROGRAM	//=REPLACE_ALL//             1	=REPLACE_ALL{?&X1.TABLE?,?_WORK_TABLE?A	//642*  -NT,  -NT,  =NC   =NC   -SQ   -SQ        *
 ZZZZZZ_PROGRAM	//=REPLACE_ALL//             2	=   ,?&X1.DATA?}{?&X1.KEY?}	/*
 ZZZZZZ_PROGRAM	//=REPLACE_ALL//             3	=   {*O*.OUTPUT_COLUMN...}{I.INPUT_COLUMN...};	/*
 ZZZZZZ_PROGRAM	//=REPLACE_ALL2//            1	=REPLACE_ALL2{?&X1.TABLE?,?_WORK_TABLE?A	//642*  -NT,  -NT,  =NC   =NC   -SQ   -SQ
@@ -263,7 +264,7 @@ ZZZZZZ_PROGRAM	//=SMTP//                    1	=SMTP{(SERVER)}{(PORT)}{(TO);(TO)}
 ZZZZZZ_PROGRAM	//=SMTP//                    2	=   {(FROM)}{(SUB)}{(MESSAGE)};	/*
 ZZZZZZ_PROGRAM	//=SPEAK//                   1	=SPEAK{.....};	//1     ***
 ZZZZZZ_PROGRAM	//=SPEAK_THREAD//            1	=SPEAK_THREAD{.....};	//1     ***
-ZZZZZZ_PROGRAM	//=SPLIT_CHAR//              1	=SPLIT_CHAR{WN.SPLIT}{WC.XXX,WC.YYY}{WC.XX,WC.YY};	//3     -NW    NR    NR
+ZZZZZZ_PROGRAM	//=SPLIT_CHAR//              1	=SPLIT_CHAR{WN.SPLIT}{WC.XXX,WC.YYY}{WC.XX,WC.YY};	//3     -NW    NR    NR                          *
 ZZZZZZ_PROGRAM	//=SPLIT_CHAR_VALUE//        1	=SPLIT_CHAR_VALUE{WN.SPLIT}{(STRING)}{(CHAR)};	//3     -NW    ST    CH
 ZZZZZZ_PROGRAM	//=SPLIT_FORM//              1	=SPLIT_FORM{WN.SPLIT}{WC.XXX,WC.YYY}{W0.XX};	//3     -NW    NR    NR
 ZZZZZZ_PROGRAM	//=SPLIT_FORM_VALUE//        1	=SPLIT_FORM_VALUE{WN.SPLIT}{(STRING)}{(LENGTH)};	//3     -NW    ST   -99
@@ -282,7 +283,7 @@ ZZZZZZ_PROGRAM	//=SQL_FILE2//               2	=   [,UTF-8,SHIFT_JIS,EUC-JP,/][,W
 ZZZZZZ_PROGRAM	//=SQL_REAL_TEST//           1	=SQL_REAL_TEST{(SQL)};	//1     -SQ
 ZZZZZZ_PROGRAM	//=SQL_REPEAT//              1	=SQL_REPEAT{WC.XXX,WC.YYY}{(SQL)}...;	//2     =NW   -SQ
 ZZZZZZ_PROGRAM	//=SQL_SET//                 1	=SQL_SET{WC.XXX,WC.YYY}{(SQL)}...;	//2     =NW   -SQ
-ZZZZZZ_PROGRAM	//=SQL1//                    1	=SQL1{(SQL)};	//1     -SQ
+ZZZZZZ_PROGRAM	//=SQL1//                    1	=SQL1{(SQL)};	//1     -SQ                                      *
 ZZZZZZ_PROGRAM	//=SQL1_FIRST//              1	=SQL1_FIRST{};	//1     ***
 ZZZZZZ_PROGRAM	//=SQL1_NEXT//               2	=SQL1_NEXT:SQL1_NEXT{WN.XXX,WN.YYY}JUMP{SQL1_END};	//1     =NW
 ZZZZZZ_PROGRAM	//=SQL1_NEXT//               3	=BACK{SQL1_NEXT};	/*
@@ -293,18 +294,18 @@ ZZZZZZ_PROGRAM	//=SQL2_NEXT//               2	=SQL2_NEXT:SQL2_NEXT{WN.XXX,WC.YYY
 ZZZZZZ_PROGRAM	//=SQL2_NEXT//               3	=;;;	/*
 ZZZZZZ_PROGRAM	//=SQL2_NEXT//               4	=BACK{SQL2_NEXT};	/*
 ZZZZZZ_PROGRAM	//=SQL2_NEXT//               5	=SQL2_END:	/*
-ZZZZZZ_PROGRAM	//=TIMER//                   1	=TIMER{(SEC)};	M/1     -99
+ZZZZZZ_PROGRAM	//=TIMER//                   1	=TIMER{(SEC)};	M/1     -99                                      *
 ZZZZZZ_PROGRAM	//=TIMER_BEEP//              1	=TIMER_BEEP{(SEC)};	M/1     -99
 ZZZZZZ_PROGRAM	//=UPDATE//                  1	=UPDATE{?_MM?_TT_TABLE	//431*  -NT,  =NC   =NW   -SQ
 ZZZZZZ_PROGRAM	//=UPDATE//                  2	=  ,XXX,YYY}	/*
 ZZZZZZ_PROGRAM	//=UPDATE//                  3	=  {I.XXX,I.YYY}	/*
 ZZZZZZ_PROGRAM	//=UPDATE//                  4	=  {?_M?C_YYY_TABLE I ...};	/*
-ZZZZZZ_PROGRAM	//=URL//                     1	=IF_ERROR_URL{[FILE]}{URL}ERROR{};	//2     ***   ***   ***
+ZZZZZZ_PROGRAM	//=URL//                     1	=IF_ERROR_URL{[FILE]}{URL}ERROR{};	//2     ***   ***   ***                          *
 ZZZZZZ_PROGRAM	//=URL_POST//                1	=IF_ERROR_URL_POST{[FILE]}{URL}{PARAMETER}ERROR{};	//3     ***   ***   ***   ***
 ZZZZZZ_PROGRAM	//=WEB//                     1	=WEB{(URL)};	M/1     -CO
 ZZZZZZ_PROGRAM	//=WRITE//                   3	=WRITE{1,WC.XXX,WC.YYY};	//111*  -WN,  =NR
 ZZZZZZ_PROGRAM	//=WRITE_CLOSE//             4	=WRITE_CLOSE{1};	//1     -WN
-ZZZZZZ_PROGRAM	//=WRITE_OPEN//              1	=IF_ERROR_WRITE_OPEN{1,FILE[,OT,ADD]	//1114  ***,  -NF,  +OT,  ***, #WU
+ZZZZZZ_PROGRAM	//=WRITE_OPEN//              1	=IF_ERROR_WRITE_OPEN{1,FILE[,OT,ADD]	//1114  ***,  -NF,  +OT,  ***, #WU               *
 ZZZZZZ_PROGRAM	//=WRITE_OPEN//              2	=   [,UTF-8,SHIFT_JIS,EUC-JP,/][,W,U]}ERROR{};	/*
 ZZZZZZ_PROGRAM	//=WRITE1//                  3	=WRITE1{WC.XXX,WC.YYY};	//1     =NR
 ZZZZZZ_PROGRAM	//=WRITE1_OPEN//             1	=IF_ERROR_WRITE1_OPEN{FILE}{[,OT,ADD]}	//3     -NF   =OT   -E1
@@ -315,12 +316,12 @@ ZZZZZZ_PROGRAM	//=WRITE2_OPEN//             1	=IF_ERROR_WRITE2_OPEN{FILE}{[,OT,A
 ZZZZZZ_PROGRAM	//=WRITE2_OPEN//             2	=  {[,UTF-8,SHIFT_JIS,EUC-JP,/][,W,U]}ERROR{};	/*
 ZZZZZZ_PROGRAM	//=XML//                     1	=XML_END{}	//1     ***
 ZZZZZZ_PROGRAM	//=XML_BEGIN//               1	=XML_BEGIN{STRING,DATA[,DATA2]}	//111*  -NR,  =NW
-ZZZZZZ_PROGRAM	//=XML_CONTINUE//            1	=XML_CONTINUE{STRUNG}	//1100  -NR
+ZZZZZZ_PROGRAM	//=XML_CONTINUE//            1	=XML_CONTINUE{STRUNG}	//1100  -NR                                      *
 ZZZZZZ_PROGRAM	//=XML_END//                 1	=XML_END{}	//1     ***
 ZZZZZZ_PROGRAM	//=ZIP//                     1	=ZIP{FILE.ZIP OR DIR};	//1     -ND
 ZZZZZZ_PROGRAM	//=ZZ_ADDLOGIN//             1	=ZZ_ADDLOGIN{[REAL,TEST,LINK]}{LOGIN}{E.T.C];	//3
 ZZZZZZ_PROGRAM	//1+//                       1	1+(REPEAT=)	//
-ZZZZZZ_PROGRAM	//BEGIN//                    1	BEGIN	M/G
+ZZZZZZ_PROGRAM	//BEGIN//                    1	BEGIN	M/G                                              *
 ZZZZZZ_PROGRAM	//BEGIN_END//                2	BEGIN_END	M/G
 ZZZZZZ_PROGRAM	//CHECK=//                   1	CHECK=XXX,YYY,(XXX,YYY)	M/ED    -C1
 ZZZZZZ_PROGRAM	//CHECK1=//                  1	CHECK1=XXX,YYY,(XXX,YYY)	M/ED    -C1
@@ -328,7 +329,7 @@ ZZZZZZ_PROGRAM	//CHECK2=//                  1	CHECK2=XXX,YYY	M/ED    -C2
 ZZZZZZ_PROGRAM	//CLICK=//                   1	CLICK=(PROGRAM)	M/W     +LG
 ZZZZZZ_PROGRAM	//COLOR//                    1	COLOR	M/G
 ZZZZZZ_PROGRAM	//COMMA=//                   1	COMMA=&X2,?_MM?_YYY_TABLE,&X1,0-9*	M/B     2AL   =TB   =AL   =0A
-ZZZZZZ_PROGRAM	//COMMENT_BEGIN//            1	COMMENT_BEGIN	//P
+ZZZZZZ_PROGRAM	//COMMENT_BEGIN//            1	COMMENT_BEGIN	//P                                              *
 ZZZZZZ_PROGRAM	//COMMENT_END//              1	COMMENT_END	//P
 ZZZZZZ_PROGRAM	//COMMENT2_BEGIN//           1	COMMENT2_BEGIN	//P
 ZZZZZZ_PROGRAM	//COMMENT2_END//             1	COMMENT2_END	//P
@@ -343,34 +344,34 @@ ZZZZZZ_PROGRAM	//EN+//                      1	EN+(ENGLSH)	//
 ZZZZZZ_PROGRAM	//END//                      1	END	M/G
 ZZZZZZ_PROGRAM	//ERROR//                    1	ERROR	M/G
 ZZZZZZ_PROGRAM	//F+//                       1	F+(SYMFOWARE)	//
-ZZZZZZ_PROGRAM	//FORM=//                    1	FORM=(LEFT FORM)	M/E     ***
+ZZZZZZ_PROGRAM	//FORM=//                    1	FORM=(LEFT FORM)	M/E     ***                                      *
 ZZZZZZ_PROGRAM	//FORM0=//                   1	FORM0=(LEFT FORM AND REPEAT START)	M/E     ***
 ZZZZZZ_PROGRAM	//FORM1=//                   1	FORM1=(LEFT FORM)	M/E     ***
 ZZZZZZ_PROGRAM	//FORM2=//                   1	FORM2=(RIGHT FORM)	M/E     ***
 ZZZZZZ_PROGRAM	//FROM=//                    1	FROM=&X1,?_MM?_TT_TABLE	T/B     -AL   =TB
-ZZZZZZ_PROGRAM	//FULL=//                    1	FULL=&X2,?_MM?_YYY_TABLE,&X1,0-9*	//B     2AL   =TB   =AL   =0A
+ZZZZZZ_PROGRAM	//FULL=//                    1	FULL=&X2,?_MM?_YYY_TABLE,&X1,0-9*	//B     2AL   =TB   =AL   =0A                    *
 ZZZZZZ_PROGRAM	//FULL2=//                   1	FULL2=&X2,?_MM?_YYY_TABLE,&X1,0-9*	//B     2AL   =TB   =AL   =0A
 ZZZZZZ_PROGRAM	//H+//                       1	H+(HIRDB)	//
 ZZZZZZ_PROGRAM	//I+//                       1	I+(IBM DB2)	//
-ZZZZZZ_PROGRAM	//INNER=//                   1	INNER=&X2,?_MM?_YYY_TABLE,&X1,0-9*	//B     2AL   =TB   =AL   =0A
+ZZZZZZ_PROGRAM	//INNER=//                   1	INNER=&X2,?_MM?_YYY_TABLE,&X1,0-9*	//B     2AL   =TB   =AL   =0A                    *
 ZZZZZZ_PROGRAM	//INNER2=//                  1	INNER2=&X2,?_MM?_YYY_TABLE,&X1,0-9*	//B     2AL   =TB   =AL   =0A
 ZZZZZZ_PROGRAM	//INPUT+//                   1	INPUT+	M/
-ZZZZZZ_PROGRAM	//INPUT=//                   1	INPUT=(PROGRAM)	M/WD    +LG
+ZZZZZZ_PROGRAM	//INPUT=//                   1	INPUT=(PROGRAM)	M/WD    +LG                                      *
 ZZZZZZ_PROGRAM	//JA+//                      1	JA+(JAPANESE)	//
-ZZZZZZ_PROGRAM	//JOB_PART=//                1	JOB_PART=ZZ	//E     -PA
+ZZZZZZ_PROGRAM	//JOB_PART=//                1	JOB_PART=ZZ	//E     -PA                                      *
 ZZZZZZ_PROGRAM	//JOB_PERMISSION=//          1	JOB_PERMISSION=ZZZZ	//E     -PM
 ZZZZZZ_PROGRAM	//JOIN_KEY=//                1	JOIN_KEY=XX_DATA1,XX_DATA2	//B     =NC
 ZZZZZZ_PROGRAM	//JOIN_ON=//                 1	JOIN_ON=(JOIN ON LOGIC)	//B     -SQ
 ZZZZZZ_PROGRAM	//L+//                       1	L+(MARIADB,MYSQL)	//
-ZZZZZZ_PROGRAM	//LEFT=//                    1	LEFT=&X2,?_MM?_YYY_TABLE,&X1,0-9*	//B     2AL   =TB   =AL   =0A
+ZZZZZZ_PROGRAM	//LEFT=//                    1	LEFT=&X2,?_MM?_YYY_TABLE,&X1,0-9*	//B     2AL   =TB   =AL   =0A                    *
 ZZZZZZ_PROGRAM	//LEFT2=//                   1	LEFT2=&X2,?_MM?_YYY_TABLE,&X1,0-9*	//B     2AL   =TB   =AL   =0A
 ZZZZZZ_PROGRAM	//LINE=//                    1	LINE=(COUNT)	M/E     -9S
 ZZZZZZ_PROGRAM	//M+//                       1	M+(MSSQL)	//
-ZZZZZZ_PROGRAM	//MENU_INPUT+//              1	MENU_INPUT+	M/
+ZZZZZZ_PROGRAM	//MENU_INPUT+//              1	MENU_INPUT+	M/                                               *
 ZZZZZZ_PROGRAM	//MENU_OUTPUT+//             1	MENU_OUTPUT+	M/
 ZZZZZZ_PROGRAM	//MESSAGE=//                 1	MESSAGE=(MESSAGE)	M/ES    -ME
 ZZZZZZ_PROGRAM	//MINUS=//                   1	MINUS=%(NAME)	//Y      %N
-ZZZZZZ_PROGRAM	//NAME=//                    1	NAME=[,(NAME)]	//Y=    -NM
+ZZZZZZ_PROGRAM	//NAME=//                    1	NAME=[,(NAME)]	//Y=    -NM                                      *
 ZZZZZZ_PROGRAM	//NAME2=//                   1	NAME2=[,(NAME)]	//Y=    -NM
 ZZZZZZ_PROGRAM	//NOT+//                     1	NOT+	M/
 ZZZZZZ_PROGRAM	//O+//                       1	O+(ORACLE)	//
@@ -378,15 +379,15 @@ ZZZZZZ_PROGRAM	//OUTPUT+//                  1	OUTPUT+	M/
 ZZZZZZ_PROGRAM	//P+//                       1	P+(POSTGRESQL)	//
 ZZZZZZ_PROGRAM	//PLUS=//                    1	PLUS=%(NAME)	//Y       %N
 ZZZZZZ_PROGRAM	//PROGRAM=//                 1	PROGRAM=[][,&X1][,?_MM?_TT_TABLE]	M/R     #PR   =AL   =TB
-ZZZZZZ_PROGRAM	//REPEAT=//                  1	REPEAT=[(END)][,(START)]	//1=    =RP   =RP
+ZZZZZZ_PROGRAM	//REPEAT=//                  1	REPEAT=[(END)][,(START)]	//1=    =RP   =RP                                *
 ZZZZZZ_PROGRAM	//REPEAT0=//                 1	REPEAT0=[(END)][,(START)]	//1=    =RP   =RP
 ZZZZZZ_PROGRAM	//REPEAT2=//                 1	REPEAT2=[(END)][,(START)]	//1=    =RP   =RP
-ZZZZZZ_PROGRAM	//RIGHT=//                   1	RIGHT=&X2,?_MM?_YYY_TABLE,&X1,0-9*	//B     2AL   =TB   =AL   =0A
+ZZZZZZ_PROGRAM	//RIGHT=//                   1	RIGHT=&X2,?_MM?_YYY_TABLE,&X1,0-9*	//B     2AL   =TB   =AL   =0A                    *
 ZZZZZZ_PROGRAM	//RIGHT2=//                  1	RIGHT2=&X2,?_MM?_YYY_TABLE,&X1,0-9*	//B     2AL   =TB   =AL   =0A
 ZZZZZZ_PROGRAM	//SELECT=//                  1	SELECT=SQL	M/BD    -SQ
 ZZZZZZ_PROGRAM	//SET=//                     1	SET={}SX2.?&X2.SET&XXX?	M/G     -DS
 ZZZZZZ_PROGRAM	//SQL_SELECT=//              1	SQL_SELECT=DISTINCT	M/B     -SQ
-ZZZZZZ_PROGRAM	//SQL=//                     1	%ZZZZZZ_SQL_SELECT+REPEAT=_SELECT_COUNT	M/B     -SQ
+ZZZZZZ_PROGRAM	//SQL=//                     1	%ZZZZZZ_SQL_SELECT+REPEAT=_SELECT_COUNT	M/B     -SQ                                      *
 ZZZZZZ_PROGRAM	//SQL=//                     2	%ZZZZZZ_SQL_SELECT+SQL=?_SELECT##?	M*
 ZZZZZZ_PROGRAM	//SQL=//                     3	%ZZZZZZ_SQL_SELECT+REPEAT=	M*
 ZZZZZZ_PROGRAM	//SQL=//                     4	%Z_CANCEL_SELECT+SQL=,X1.Z_CANCEL	M*
@@ -409,10 +410,10 @@ ZZZZZZ_PROGRAM	//SQL=//                     K	%ZZZZZZ_SQL_ORDER+SQL=?_ORDER##?	M
 ZZZZZZ_PROGRAM	//SQL=//                     L	%ZZZZZZ_SQL_ORDER+REPEAT=	M*
 ZZZZZZ_PROGRAM	//START//                    1	START	M/G
 ZZZZZZ_PROGRAM	//STOP_AFTER//               1	STOP_AFTER	M/G
-ZZZZZZ_PROGRAM	//STOP_BEFORE//              1	STOP_BEFORE	M/G
+ZZZZZZ_PROGRAM	//STOP_BEFORE//              1	STOP_BEFORE	M/G                                              *
 ZZZZZZ_PROGRAM	//TABLE=//                   1	TABLE=&X2,?_MM?_YYY_TABLE	//E     2AL   =TB
 ZZZZZZ_PROGRAM	//TEST+//                    1	TEST+	//
-ZZZZZZ_PROGRAM	//TILDE=//                   1	TILDE=NAME	//E
+ZZZZZZ_PROGRAM	//TILDE=//                   1	TILDE=NAME	//E                                              *
 ZZZZZZ_PROGRAM	//TITLE=//                   1	TITLE=(TITLE)	M/ED    ***
 ZZZZZZ_PROGRAM	//U+//                       1	U+(LINUX)	//
 ZZZZZZ_PROGRAM	//W+//                       1	W+(WINDOWS)	//
@@ -798,6 +799,7 @@ ZZZZZZ_PROGRAM	UN _HHMM	R
 ZZZZZZ_PROGRAM	UN _I	R	
 ZZZZZZ_PROGRAM	UN _INP_OUT	R	
 ZZZZZZ_PROGRAM	UN _INPUT	R	
+ZZZZZZ_PROGRAM	UN _INPUT_ALL	R	
 ZZZZZZ_PROGRAM	UN _INPUT_POSITION	R	
 ZZZZZZ_PROGRAM	UN _INSTANCE		
 ZZZZZZ_PROGRAM	UN _IPRINT	R	
@@ -1831,9 +1833,9 @@ ZZZZZZ_SYSTEM	ZZZZZZ_I_ERROR_TABLE_CANCEL	365*2	ZZZZZZ_I_ERROR_TABLE CANCEL -(DA
 ZZZZZZ_SYSTEM	ZZZZZZ_I_TIME_LOG_TABLE_CANCEL	365*5	ZZZZZZ_I_ERROR_TABLE CANCEL -(DAY)[365*5]
 ZZZZZZ_SYSTEM	ZZZZZZ_I_USE_TABLE_CANCEL	365*5	ZZZZZZ_I_USE_TABLE CANCEL -(DAY)[365*5]
 ZZZZZZ_SYSTEM	ZZZZZZ_INSTALL_CFG1	C,C,C,C,C	CFG1[C,C,C,C,C]
-ZZZZZZ_SYSTEM	ZZZZZZ_INSTALL_CFG2	NO,NO,NO,YES,I37,	CFG2[NO,NO,NO,YES,I36,]
+ZZZZZZ_SYSTEM	ZZZZZZ_INSTALL_CFG2	NO,NO,NO,YES,I38,	CFG2[NO,NO,NO,YES,I36,]
 ZZZZZZ_SYSTEM	ZZZZZZ_INSTALL_PATH		INSTALL PATH
-ZZZZZZ_SYSTEM	ZZZZZZ_JDBC	MSSQL-JDBC-12.10.0.JRE11.JAR	JAVA JDBC
+ZZZZZZ_SYSTEM	ZZZZZZ_JDBC	MSSQL-JDBC-13.4.0.JRE11.JAR	JAVA JDBC
 ZZZZZZ_SYSTEM	ZZZZZZ_PASSWORD_LIMIT_DATE	0	PASSWORD LIMIT DATE (DAY)[0]
 ZZZZZZ_SYSTEM	ZZZZZZ_PASSWORD_MIN_ALPHABET	1	PASSWORD MIN ALPHABET[1]
 ZZZZZZ_SYSTEM	ZZZZZZ_PASSWORD_MIN_LENGTH	7	PASSWORD MIN LENGTH[7]
@@ -1842,7 +1844,7 @@ ZZZZZZ_SYSTEM	ZZZZZZ_REGISTRY_PROXY	SYSTEM\CURRENTCONTROLSET\SERVICES\NLASVC\PAR
 ZZZZZZ_SYSTEM	ZZZZZZ_TIME_LIMIT	17:30	SYSTEM TIME LIMIT (HH:MM)[17:30]
 ZZZZZZ_SYSTEM	ZZZZZZ_TIME_START	08:30	SYSTEM START TIME (HH:MM)[08:30]
 ZZZZZZ_SYSTEM	ZZZZZZ_Z_CANCEL_DELETE	50	Z_CANCEL DELETE -(DAY)[50]
-ZZZZZZ_URL_VERSION	#D	https://dotnet.microsoft.com/download/dotnet/10.0/	,"#version_0">,10.0.5
+ZZZZZZ_URL_VERSION	#D	https://dotnet.microsoft.com/download/dotnet/10.0/	,/10.0/,10.0.6
 ZZZZZZ_URL_VERSION	#G	https://www.nuget.org/packages/gtksharp/	,GtkSharp ,3.24.24.95
 ZZZZZZ_URL_VERSION	#J	https://jdk.java.net/archive/	,GA/jdk,25
 ZZZZZZ_URL_VERSION	#J--	24	23,22
@@ -1855,23 +1857,23 @@ ZZZZZZ_URL_VERSION	DJ	*ttp://www.firebirdsql.org/en/jdbc-driver/	,Jaybird-,3.0.8
 ZZZZZZ_URL_VERSION	DJ--	3.0.0	
 ZZZZZZ_URL_VERSION	DN	*ttp://www.firebirdsql.org/en/additional-downloads	/,FirebirdClient-,7.1.1
 ZZZZZZ_URL_VERSION	IN	https://www.nuget.org/packages/IBM.Data.DB2.Core/	,content="IBM.Data.DB2.Core ,3.1.0.600
-ZZZZZZ_URL_VERSION	L#	https://downloads.mariadb.org/	,downloads.mariadb.org/mariadb/,11.8.6
-ZZZZZZ_URL_VERSION	L#--	12.	
+ZZZZZZ_URL_VERSION	L#	https://downloads.mariadb.org/	,downloads.mariadb.org/mariadb/,12.2.2
+ZZZZZZ_URL_VERSION	L#--	12.3.1/">12.3.1 RC	13.0.0/">13.0 Preview
 ZZZZZZ_URL_VERSION	L#*	*https://downloads.mariadb.org/	,downloads.mariadb.org/mariadb/,11.6.2
 ZZZZZZ_URL_VERSION	L#--*	*11.7.1/">11.7.1 RC	11.8.0/">11.8.0 preview
 ZZZZZZ_URL_VERSION	L#**	**tps://mariadb.com/kb/en/changes-improvements-in-	mariadb-11-6/,Current Version: ,11.6.2
-ZZZZZZ_URL_VERSION	LJ	https://mariadb.org/connector-java/all-releases/	,8;rel=,3.5.7
+ZZZZZZ_URL_VERSION	LJ	https://mariadb.org/connector-java/all-releases/	,8;rel=,3.5.8
 ZZZZZZ_URL_VERSION	LJ*	*https://mariadb.org/connector-java/all-releases/	,old=">,2.7.3
 ZZZZZZ_URL_VERSION	LJ--*	*3.0.0</a></td><td>2021-05-05</td><td>Alpha	
 ZZZZZZ_URL_VERSION	LJ**	https://mariadb.com/kb/en/about-mariadb-connector-	J/,>MariaDB Connector/J ,3.5.3
 ZZZZZZ_URL_VERSION	LN	https://www.nuget.org/packages/MySqlConnector/	,content="MySqlConnector ,2.5.0
 ZZZZZZ_URL_VERSION	MJ	https://docs.microsoft.com	
 ZZZZZZ_URL_VERSION	MJ*	*ttps://www.microsoft.com/ja-jp/download/details.a	spx?id=11774,JDBC Driver ,6.0
-ZZZZZZ_URL_VERSION	MJ++	/ja-jp/sql/connect/jdbc/download-microsoft-jdbc-dr	iver-for-sql-server,<p>バージョン ,13.2
-ZZZZZZ_URL_VERSION	MN	https://www.nuget.org/packages/Microsoft.Data.SqlC	lient,content="Microsoft.Data.SqlClient ,6.1.4
+ZZZZZZ_URL_VERSION	MJ++	/ja-jp/sql/connect/jdbc/download-microsoft-jdbc-dr	iver-for-sql-server,<p>バージョン ,13.4
+ZZZZZZ_URL_VERSION	MN	https://www.nuget.org/packages/Microsoft.Data.SqlC	lient,content="Microsoft.Data.SqlClient ,7.0.0
 ZZZZZZ_URL_VERSION	OJ	https://www.oracle.com/jp/database/technologies/ap	pdev/jdbc-downloads.html,219/ojdbc,11
 ZZZZZZ_URL_VERSION	ON	https://www.nuget.org/packages/Oracle.ManagedDataA	ccess.Core,Oracle.ManagedDataAccess.Core ,
-ZZZZZZ_URL_VERSION	ON++	23.26.100	
+ZZZZZZ_URL_VERSION	ON++	23.26.200	
 ZZZZZZ_URL_VERSION	P#	https://www.postgresql.org/	,><strong>,18.3
 ZZZZZZ_URL_VERSION	PJ	http://www.postgresql.org/applications-v2.xml	,>edb_pgjdbc<,<version>,42.7.2-
 ZZZZZZ_URL_VERSION	PN	https://www.nuget.org/packages/Npgsql	,content="Npgsql ,10.0.2

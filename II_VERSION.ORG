@@ -1,6 +1,6 @@
 // II_VERSION.SRC version class author nobumichi harasawa
 // 共有クラス(STATIC)
-//#if IMENU||ITIME||IPRINT||ICHART||ICHART2||IROOT||ISRVC||ISETUP||IPAPER //TEST
+//#if IMENU||IMTEST||ITIME||IPRINT||ICHART||ICHART2||IROOT||ISRVC||ISETUP||IPAPER //TEST
 //HH #include "ii_include_hh.h"
 //PP #include "ii_include_pp.h"
 //SS using Microsoft.Data.SqlClient; //VER37.8.0.12
@@ -15,12 +15,12 @@
 //JJ import java.util.*;
 public class ii_version_l
 {
-//####################( IMENU,ITIMEのバージョンアップ時変更 )###############
+//####################( IMENU||IMTEST,ITIMEのバージョンアップ時変更 )###############
 //###★注意：変更時オリジナルのZZZZZZ_ETC_TABLE,ZZZZZZ_@,ZZZZZZ_VERSION2を変更しインストール環境を再構築する事。###
-//#I言語のバージョン2      (I37用)(111122333) #####
-public readonly String VERSION2_S="001000005";
+//#I言語のバージョン2             (111122333) #####
+public readonly String VERSION2_S="001000006";
 //############################################################################
-public readonly int VERSION1=37; //i-language Version(37)
+public readonly int VERSION1=38; //i-language Version(38)
 //#########( IPRINTのバージョンアップ時変更の事 )###########################
 //###★注意：変更時オリジナルのZZZZZZ_ETC_TABLE,ZZZZZZ_@,ZZZZZZ_VERSION_PRINTを変更しインストール環境を再構築する事。###
 public readonly int VERSION_PRINT=14;  //IPRINTのバージョン      #####
@@ -32,7 +32,7 @@ ii_z_l z_p;
 public ii_version_l(ii_z_l z_ni){z_p=z_ni;}
 public bool version_b(List<String> s_arg_ai)
 {
-//#if IMENU||ITIME||IPRINT||ICHART
+//#if IMENU||IMTEST||ITIME||IPRINT||ICHART
 //パラメータが２個でどちらも”VERSION"はtrue。
 if(2!=z_p.count_s_i(s_arg_ai))return false;
 if(!z_p.e2s_b(z_p.upper_s(z_p.at_s(s_arg_ai,0)),"VERSION")||

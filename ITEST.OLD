@@ -455,7 +455,7 @@ return true;
 //*********************************************
 //***( sw_ii -2=ジョブ読み出し+(-1),-1=プログラムの解析へ、0=ジョブ開始,1ジョブ=継続 )***
 readonly int MAIN=1,ERROR_LOOP=2,NEXT=3,FETCH=4,MODORI=5,ERROR_ERROR=6;
-public void main_v(Keys Keys_ni,bool shift_bi,int sw_ii) //主処理
+public void main_v(Keys keys_ni,bool shift_bi,int sw_ii) //主処理
 {int sw=0;//プログラムスイッチ
 if(-1==sw_ii)sw=FETCH; //プログラムの解析に飛ぶ。
 ///////////（  主処理  ）///////////////////////////
@@ -464,7 +464,7 @@ for(;;)
    if(MAIN>=sw)
      {if(z_p.SW_ABORT_9!=z_mt_n.sw_err&& null !=z_mt_n.program_p)//INPUT=の入力時のエラーに対応。
         {z_mt_n.program_p.display_msg_v(z_p.at_s(z_p.s_lang_a,z_mt_n.txt_run)); //処理中表示
-         z_mt_n.program_p.main_v(Keys_ni,shift_bi,sw_ii); //プログラム主処理実行
+         z_mt_n.program_p.main_v(keys_ni,shift_bi,sw_ii); //プログラム主処理実行
         }
      }//if(MAIN>=sw)
    if(ERROR_LOOP>=sw)
@@ -525,7 +525,7 @@ for(;;)
            }
         } 
       z_p.sw_program=-1;//プログラム続行指定。
-      Keys_ni=Keys.None;sw_ii=0;
+      keys_ni=Keys.None;sw_ii=0;
       if(1==z_p.sw_return_sql)z_p.sw_return_sql=0;//_RETURN_SQLクリア（戻った時のみ実行）
 //HP  repaint();    
 //SJ  z_mt_n.program_p.paint_list_n.on_paint_v(); //画面作画  
@@ -590,9 +590,9 @@ key_down_v(keys_n,shift_b,control_b,alt_b);
 caret_set_v();//カレット表示。
 } 
 //---------------------------------------------------------------------
-void key_down_v(Keys Keys_ni,bool shift_bi,bool control_bi,bool alt_bi)
+void key_down_v(Keys keys_ni,bool shift_bi,bool control_bi,bool alt_bi)
 {bool sw_listbox_b=false;
-Keys k=Keys_ni;
+Keys k=keys_ni;
 if(z_p.e2k_b(k,Keys.Enter)){sw_listbox_b=true;}
 else if(z_p.e2k_b(k,Keys.Escape))
    {if(!z_mt_n.program_p.sw_esc_b)//ESC禁止中は処理しない。
@@ -611,10 +611,10 @@ else if(z_p.e2k_b(k,Keys.Left)){if(true==control_bi){form_move_v(-1,0,shift_bi);
 else if(z_p.e2k_b(k,Keys.Right))
    {if(true==control_bi){form_move_v(1,0,shift_bi);return;}//画面全体を右に移動。
     if(!z_p.e2s_b(z_mt_n.program_p.now_kind_s,"START")&&z_mt_n.program_p.keyboard_n.end_position_b()&&false==shift_bi)
-      {sw_listbox_b=true;Keys_ni=Keys.Tab;}//最後の位置ではリストボックス有効かつTABとする。
+      {sw_listbox_b=true;keys_ni=Keys.Tab;}//最後の位置ではリストボックス有効かつTABとする。
    }
 else if(z_p.e2k_b(k,Keys.Insert)){if(true==shift_bi){paste_v();return;}}
-else if(z_p.e2k_b(k,Keys.Delete)){if(true==shift_bi)Keys_ni=Keys.Back;}
+else if(z_p.e2k_b(k,Keys.Delete)){if(true==shift_bi)keys_ni=Keys.Back;}
 else if(z_p.e2k_b(k,Keys.PageDown)){sw_listbox_b=true;}
 else if(z_p.e2k_b(k,Keys.PageUp)){sw_listbox_b=true;}
 else if(z_p.e2k_b(k,Keys.Home)){}
@@ -646,29 +646,29 @@ else if(z_p.e2k_b(k,Keys.F8))
     return;
    }
 else {
-//HP  key_press_v(Keys_ni);
+//HP  key_press_v(keys_ni);
       z_p.t_v(z_p.ME2,"key_press_v(1)");
       return;
      }
 if(sw_listbox_b) //リストボックス表示中
   if(0!=z_mt_n.listbox_n.sw)
-   {if(!z_mt_n.listbox_n.key_down_b(Keys_ni))return;
+   {if(!z_mt_n.listbox_n.key_down_b(keys_ni))return;
    } //リストボックスのキー入力処理。
-if(0!=z_mt_n.program_p.keyboard_n.key_down_v(Keys_ni,shift_bi,control_bi))//キーを押された時のメイン処理。
+if(0!=z_mt_n.program_p.keyboard_n.key_down_v(keys_ni,shift_bi,control_bi))//キーを押された時のメイン処理。
  {if(0!=z_mt_n.listbox_n.sw)z_mt_n.listbox_n.position_b();//入力文字でリストボックス反転表示位置決定。
-  if(Keys_ni!=Keys.Up)return;//Keys.Up以外終了。
+  if(keys_ni!=Keys.Up)return;//Keys.Up以外終了。
    //Keys.Upはメイン処理実行。
  }
-main_v(Keys_ni,shift_bi,1); //メイン処理実行
+main_v(keys_ni,shift_bi,1); //メイン処理実行
 keyboard_scroll_v(); //キーボードスクロール処理
 }
 //---------------------------------------------------------------------
-void key_down_single_v(Keys Keys_ni,bool shift_bi,bool control_bi,bool alt_bi)
+void key_down_single_v(Keys keys_ni,bool shift_bi,bool control_bi,bool alt_bi)
 {for(;;){if(sw_key_down_single_b||z_mt_n.sw_keyboard!=1)if(z_p.sleep_count<10){z_p.sleep_count+=1;z_p.sleep_v(1000);continue;}//２重実行防止
          z_p.sleep_count=0;break;
         }
 sw_key_down_single_b=true;
-key_down_v(Keys_ni,shift_bi,control_bi,alt_bi);
+key_down_v(keys_ni,shift_bi,control_bi,alt_bi);
 sw_key_down_single_b=false;
 }
 //---------------------------------------------------------------------

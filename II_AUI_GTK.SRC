@@ -1,0 +1,22 @@
+#if AUI||GTK
+//II_AUI_GTK.SRC 
+//SS using System;
+#if !AUI
+//SS public class Brush
+//SS {public float    f1=0;
+//SS  public float    f2=0;
+//SS  public float    f3=0;
+//SS public Brush(float f1_fi,float f2_fi,float f3_fi){f1=f1_fi;f2=f2_fi;f3=f3_fi;} 
+//SS }
+//SS public class Pen
+//SS {public String s="";
+//SS  public int    i=0;
+//SS public Pen(String s_si,int i_i){s=s_si;i=i_i;}
+//SS }
+#endif //!AUI
+//SS public class Font
+//SS {public String s="";
+//SS  public int    i=0;
+//SS public Font(String s_i,int i_i){s=s_i;i=i_i;}
+//SS }
+#endif //AUI||GTK

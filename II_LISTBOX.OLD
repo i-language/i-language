@@ -1,0 +1,611 @@
+//II_LISTBOX.SRC list box author nobumichi.harasawa
+//リストボックス クラス1/2
+#if IMENU||IMTEST
+//==============================================
+//HH #include "ii_include_hh.h"
+//PP #include "ii_include_pp.h"
+//SS using Microsoft.Data.SqlClient; //VER37.8.0.12
+//SS using System;
+//SS using System.Collections.Generic;
+//SS using System.IO;
+#if AUI
+//SS using System.Globalization;
+//SS using Avalonia;
+//SS using Avalonia.Controls;
+//SS using Avalonia.Controls.ApplicationLifetimes;
+//SS using Avalonia.Controls.Primitives;
+//SS using Avalonia.Input;
+//SS using Keys=Avalonia.Input.Key;
+//SS using Avalonia.Interactivity;
+//SS using Avalonia.Layout;
+//SS using Avalonia.Media;
+//SS using Avalonia.Media.Imaging;
+//SS using Avalonia.Platform;
+//SS using Avalonia.Threading;
+//SS using Avalonia.Styling;
+//SS using Avalonia.Controls.Templates; 
+//SS using Avalonia.VisualTree;
+#else //AUI
+#if GTK
+//SS using Gtk;
+//SS using Gdk;
+//SS using Keys=Gdk.Key;
+//SS using Form=Gtk.Window;
+//SS using MouseEventArgs=Gtk.ButtonPressEventArgs;
+//SS using KeyEventArgs=Gtk.KeyReleaseEventArgs;
+
+#else //GTK
+//SS using System.Windows.Forms;
+//SS using System.Drawing;
+#endif //GTK
+#endif //AUI
+//JJ import java.awt.*;
+//JJ import java.awt.event.*;
+//JJ import java.io.*;
+//JJ import java.math.*;
+//JJ import java.util.*;
+public class ii_listbox_l
+#if AUI
+//SS :Window
+#else //AUI
+#if XAMARIN
+//SS :Page
+#else //XAMARIN
+//SS :Form
+#endif //XAMARIN
+#endif //AUI
+//JJ extends Dialog implements KeyListener,MouseListener,FocusListener
+{
+//COPY $II_DIR
+//COPY $II_READ
+//COPY $II_SQL2
+//COPY $II_URL
+ii_z_l z_p;ii_z_mt_l z_mt_p;
+int x=0,xl=0,y=0,yl=0,col=0,length_max=0,check_cnt=0;
+public int sw_close=0;
+char check_c;
+int[]  length_max_ix=new int[2]; //(C++対抗空白２個)//
+public List<String> s_data_a=new List<String>();
+public int offset=-1,now_cnt=-1,sw=0;
+public String comment_s="",check_s="";
+
+#if AUI
+//SS ListBox listbox2_n;
+#else //AUI
+ii_listbox2_l listbox2_n;//linux対応でフォーカス強制設定のためListboxを継承。 
+#endif //AUI
+//JJ ScrollPane ScrollPane_n;//javaスクロールバー。
+//----------------------------------------------
+#if AUI
+////SS void SyncChildLayout_v()
+////SS {
+////SSlistbox2_n.Position=this.Position;
+////SS  listbox2_n.Width=this.Bounds.Width;
+////SS listbox2_n.Height=this.Bounds.Height;
+////SS }
+////SS　int aui_index=0;
+#endif //AUI
+#if !AUI
+//SS protected override bool ShowWithoutActivation=>true; //VER38// フォーカスを設定しない。
+////SS protected override CreateParams CreateParams //VER38// マウスでクリックした時もフォーカスを設定しない
+////SS {get{CreateParams cp_n=base.CreateParams;cp_n.ExStyle|=0x08000000|0X00000080;return cp_n;}} //VER38  // WS_EX_NOACTIVATE (0x08000000) TOOLWINDOW(0X00000080)を追加
+////SS protected override void WndProc(ref Message m_n)
+////SS {if(m_n.Msg==0X0021){m_n.Result=(IntPtr)3;return;} //VER38 WM_MOUSEACTIVATE=0X0021,MA_NOACTIVATE(3)　でアクティブにしない、
+////SS  base.WndProc(ref m_n);
+////SS }
+#endif //!AUI
+public ii_listbox_l(ii_z_l z_ni,ii_z_mt_l z_mt_ni)
+{
+//JJ super(z_mt_ni.imenu_p);//子画面化。（常に親画面の上に表示）
+z_p=z_ni;z_mt_p=z_mt_ni;
+z_p.t_v(z_p.LI,"ii_listbox_l(");
+//JJ addFocusListener(this);
+#if AUI
+//SS listbox2_n=new ListBox();//リストボックス作成
+#else //AUI
+listbox2_n=new ii_listbox2_l(z_p,z_mt_p);//リストボックス作成
+#endif //AUI
+//SS this.ShowInTaskbar=false;//タスクバーに表示しない。
+#if AUI
+//SS Closing+=(s,e)=>e.Cancel=(0==sw_close?true:false);// 閉じる処理で閉じない。
+//SS Topmost=true;  //常に親画面の上に表示）
+//SS listbox2_n.Styles.Add(new Style(x=>x.OfType<ListBoxItem>()){Setters={new Setter(ListBoxItem.PaddingProperty,new Thickness(0,0))}});//文字間隔を無しに設定
+//SS listbox2_n.SelectionMode=SelectionMode.Single; // 単一選択に固定
+#if AUI
+////SS listbox2_n.ContainerPrepared+=(s,e_ni)=>
+////SS {if(e_ni.Container is ListBoxItem item_n)
+////SS   {item_n.PointerPressed+=(s,e2_ni)=>
+////SS     {aui_index=listbox2_n.IndexFromContainer(item_n);
+////SS      set_b(z_p.e3s_b(z_mt_p.program_p.now_kind_s,"START","JUDGE")?Keys.Enter:Keys.Tab);
+////SS      try{z_mt_p.program_p.keyboard_n.caret_set_v();}catch(Exception){}
+////SS     };
+////SS   }
+////SS };
+////SS void listbox_mouse_down_v(object o_ni,PointerPressedEventArgs e_ni)
+#endif //AUI
+//*//
+////SS        this.ExtendClientAreaToDecorationsHint = true;
+////SS         this.WindowDecorations = WindowDecorations.BorderOnly;
+////SS         this.WindowDecorations = WindowDecorations.None;
+////SS         this.ExtendClientAreaTitleBarHeightHint = -1; // デフォルト高さを無効化
+////SS         DockPanel dock_panel_n = new DockPanel();
+////SS         Border border_n=new Border{Height=30,Background=Brushes.LightGray,VerticalAlignment=VerticalAlignment.Top};
+////SS         DockPanel.SetDock(border_n,Dock.Top);
+////SS         TextBlock text_block_n=new TextBlock{Text="",Foreground=Brushes.Black,VerticalAlignment=VerticalAlignment.Center,Margin=new Thickness(15, 0)};
+////SS         border_n.Child = text_block_n;
+////SS         dock_panel_n.Children.Add(border_n);
+////SS         this.Content = dock_panel_n;
+////SS        border_n.PointerPressed+=(s,e_ni)=>{if(e_ni.GetCurrentPoint(this).Properties.IsLeftButtonPressed){this.BeginMoveDrag(e_ni);}};
+//*//
+////SS this.Show(z_mt_p.imenu_p);  //常に親画面の上に表示）
+////SS listbox2_n.SystemDecorations=SystemDecorations.None;//外枠無し。B
+////SS listbox2_n.Owner=parentWindow;　//親と同期
+////SS this.PositionChanged+=(s,e_ni)=>SyncChildLayout_v();
+////SS this.PropertyChanged+=(s,e_ni)=> 
+////SS {if (e_ni.Property == Window.BoundsProperty) SyncChildLayout_v();};
+////SS listbox2_n.Show();
+////SS listbox2_n.MinHeight=(double)z_p.lang_y_high-z_mt_p.z_p.lang_y_offset;//表示縦幅設定。
+////*/SS   listbox2_n.Styles.Add(new Style(x=> x.OfType<ListBoxItem>())
+////*/SS   {Setters ={new Setter(ListBoxItem.HeightProperty,(double)(z_p.lang_y_high-z_mt_p.z_p.lang_y_offset)), // ここで高さを指定
+////*/SS              new Setter(ListBoxItem.VerticalAlignmentProperty, Avalonia.Layout.VerticalAlignment.Center)
+////*/SS             }
+////*/SS   });
+//SS this.Content=listbox2_n;  
+#else //AUI
+////SS listbox2_n.TabStop=false; //VER38 //フォーカスをONにしない。
+//SS listbox2_n.BorderStyle=BorderStyle.None;//外枠無し。
+//SS ControlBox=false;//制御ボックス非表示。
+//SS ShowIcon=false;//アイコン表示しない。
+//SS MaximizeBox=false;//最大化ボタン非表示
+//SS MinimizeBox=false;//最小化ボタン非表示
+//SS listbox2_n.Location=new Point(0,1);//初期位置設定
+//SS listbox2_n.ItemHeight=z_p.lang_y_high-z_mt_p.z_p.lang_y_offset;//表示縦幅設定。
+//SS listbox2_n.Name="LISTBOX";
+//SS listbox2_n.TabIndex=0;
+//SS Controls.Add(listbox2_n);//リストボックス当画面に追加。
+//SS ResumeLayout();//表示。
+//SS z_mt_p.imenu_p.AddOwnedForm(this);//親画面に追加。
+#endif //AUI
+//JJ  ScrollPane_n=new ScrollPane();//スクロールバー作成。
+//JJ  Panel Panel_n=new Panel();//リスト一覧表示パネル作成。
+//JJ  Panel_n.add(ScrollPane_n);//スクロールバーをリスト一覧表示パネルに追加。
+//}
+//----------------------------------------------
+#if AUI
+//SS listbox2_n.KeyDown       +=listbox_key_up_v;//キーリスナー有効化。
+////SS listbox2_n.PointerPressed+=listbox_mouse_down_v;//マウスリスナー有効化。
+////SS listbox2_n.KeyDown       +=listbox_key_up_v;//キーリスナー有効化。
+////SS listbox2_n.GotFocus      +=z_mt_p.menu_p.activated_v;
+////SS PointerPressed+=listbox_mouse_down_v;//マウスリスナー有効化。
+////SS KeyDown+=listbox_key_up_v;//キーリスナー有効化。
+////SS KeyDown+=z_mt_p.menu_p.key_down_v;
+////SS Activated  +=z_mt_p.menu_p.activated_v;
+////SS GotFocus   +=z_mt_p.menu_p.activated_v;
+#else //AUI
+#if GTK
+//SS listbox2_n.AddEvents((int)(Gdk.EventMask.KeyReleaseMask|Gdk.EventMask.KeyPressMask|Gdk.EventMask.ButtonPressMask|Gdk.EventMask.FocusChangeMask));
+//SS listbox2_n.ButtonPressEvent+=listbox_mouse_down_v;
+//SS listbox2_n.KeyReleaseEvent+=listbox_key_up_v;
+#else //GTK
+//SS  listbox2_n.MouseDown+=new MouseEventHandler(listbox_mouse_down_v);//マウスリスナー有効化。
+//JJ  listbox2_n.addMouseListener(this);//マウスリスナー有効化。
+//SS   listbox2_n.KeyUp+=new KeyEventHandler(listbox_key_up_v);//キーリスナー有効化。
+//JJ   listbox2_n.addKeyListener(this);//キーリスナー有効化。
+#endif //GTK
+#endif //AUI
+z_p.t_v(z_p.LI,"ii_listbox_l)");
+}
+//----------------------------------------------
+//HP public void mouseRelease_v(int i_i)
+#if AUI
+//SS List<String> items_sa=new List<String>();
+//SS int aui_index=-1;
+//SS protected override void OnPointerReleased(PointerReleasedEventArgs e_ni)
+#else //AUI
+//#if GTK
+////SS void listbox_mouse_down_v(object o_ni,Gtk.ButtonPressEventArgs e_ni)
+//#else //GTK
+//SS void listbox_mouse_down_v(object o_ni,MouseEventArgs e_ni)
+//#endif //GTK
+#endif //AUI
+//JJ public void mouseReleased(MouseEvent e_ni)
+{z_p.t_v(z_p.LI,"mouse_release(");
+#if AUI
+//SS Visual visual_n=e_ni.Source as Visual;
+//SS if (null==visual_n)return;
+//SS ListBoxItem item_n=visual_n.FindAncestorOfType<ListBoxItem>();
+//SS if(null==item_n)return;
+//SS String text_s=item_n.Content?.ToString();
+//SS if(null==text_s)return;
+//SS for(aui_index=z_p.count_s_i(items_sa)-1;-1<aui_index;aui_index--)if(z_p.e2s_b(text_s,items_sa[aui_index]))break;
+#endif //AUI
+//HP now_cnt=i_i;
+set_b(z_p.e3s_b(z_mt_p.program_p.now_kind_s,"START","JUDGE")?Keys.Enter:Keys.Tab);
+try{z_mt_p.program_p.keyboard_n.caret_set_v();}catch(Exception){}
+z_p.t_v(z_p.LI,"mouse_release)");
+}
+//----------------------------------------------
+//JJ public void keyPressed (KeyEvent e_ni){}
+//JJ public void keyTyped   (KeyEvent e_ni){}
+#if AUI
+//SS void listbox_key_up_v(object o_ni,KeyEventArgs e_ni)
+#else
+//#if GTK
+////SS void listbox_key_up_v(object o_ni,Gtk.KeyReleaseEventArgs e_ni)
+//#else //GTK
+//SS void listbox_key_up_v(object o_ni,KeyEventArgs e_ni)
+//#endif //GTK
+#endif //AUI
+//JJ public void keyReleased(KeyEvent e_ni)
+//SJ {z_p.t_v(z_p.LI,"key_release(");
+//SS Keys keys_n=new Keys();
+#if AUI
+#else //AUI
+//SS keys_n=e_ni.KeyCode;
+#endif //AUI
+//JJ Keys keys_n=e_ni.getKeyCode();
+//SJ if(Keys.Escape==keys_n)
+//SJ    {
+//SJ     z_mt_p.imenu_p.set_focus_v();
+//SJ     z_mt_p.sw_focus=z_p.FOCUS_ON_TO_ON_1;
+//SJ    } //Escでフォーカスを本体に戻す。
+//SJ else set_b((Keys.Enter!=keys_n?Keys.None:Keys.Enter)); //入力位置データを入力する。
+//SJ z_p.t_v(z_p.LI,"key_release(");
+//SJ }
+//----------------------------------------------
+public bool key_down_b(Keys keys_ni)
+{z_p.t_v(z_p.LI,"key_down_b(");
+int cnt;
+if(Keys.Escape==keys_ni){z_mt_p.menu_p.main_v(keys_ni,false,1);return true;}
+if(0>offset)return false;
+if(0==offset)return check_b();
+if(Keys.PageDown==keys_ni) //PageDown
+ {cnt=(++now_cnt)*offset;
+  if(z_p.count_s_i(s_data_a)<=cnt)cnt=now_cnt=0;
+ }
+else if(Keys.PageUp==keys_ni) //PageUp
+ {cnt=(--now_cnt)*offset;
+  if(0>cnt){cnt=z_p.count_s_i(s_data_a)-offset;now_cnt=cnt/offset;}
+ }
+// else if(Keys.Enter==keys_ni||Keys.Tab==keys_ni||Keys.Down==keys_ni)return set_b(keys_ni); // VER37.8.0.9
+else if(Keys.Enter==keys_ni||Keys.Tab==keys_ni||Keys.Down==keys_ni||z_mt_p.program_p.skip_cnt!=-1)return set_b(keys_ni); // VER37.8.0.9
+else {set_index_v(0);return set_b(Keys.None);}
+if(!z_p.e2s_b(z_p.at_s(s_data_a,now_cnt),"\0"))set_index_v(now_cnt);
+else return true;
+return set_b(Keys.None);
+}
+//----------------------------------------------
+//入力された文字で表示反転位置（SelectedIndex）決定。
+public bool position_b()
+{z_p.t_v(z_p.LI,"position_b(");
+int i;String s=z_mt_p.program_p.keyboard_n.get_key_s();
+comment_s="";
+if(1==sw){z_p.t_v(z_p.LI,"position_b)1");return check_b();}
+for(i=0;z_p.count_s_i(s_data_a)>i;i+=offset)
+  if(z_p.e2s_b(z_p.at_s(s_data_a,i),s))
+   {set_index_v(now_cnt=i/offset);
+    if(2==offset&&z_p.count_s_i(s_data_a)>(i+1))comment_s=z_p.at_s(s_data_a,i+1);
+    z_p.t_v(z_p.LI,"position_b)2");
+   return true;
+   }
+//HP listbox2_n.setCurrentRow(get_index());
+#if AUI
+#else
+//SS try{listbox2_n.SetSelected(0,false);}
+//JJ try{listbox2_n.deselect(get_index());}
+//SJ catch(Exception){}
+#endif //AUI 
+z_p.t_v(z_p.LI,"position_b)3");
+return false;
+}
+//----------------------------------------------
+public bool set_b(Keys keys_ni)
+{z_p.t_v(z_p.LI,"set_b(");
+int i=get_index()*offset;//表示データ番号取り出し。
+if(0>i)//表示データ無。
+  {String s=z_mt_p.program_p.keyboard_n.get_key_s();//キーボード入力データ取り出し。
+   for(i=0;z_p.count_s_i(s_data_a)>i;i+=offset)if(z_p.e2s_b(s,z_p.at_s(s_data_a,i)))break;//表示データを一致データ有りはブレイク
+  }
+if(0>i||z_p.count_s_i(s_data_a)<=i)return false;//該当データ無しはfalseで終了。
+if(2==offset&&z_p.count_s_i(s_data_a)>(i+1))comment_s=z_p.at_s(s_data_a,i+1);//コメント有りはcomment_sを設定。
+else comment_s="";//コメント無はcomment_s=""を設定。
+if(z_mt_p.program_p.da_now_p.length0<z_p.length((z_p.at_s(s_data_a,i))))return false;//length0以上の長さの場合はfalseで終了。
+if(z_mt_p.program_p.da_now_p.length2>0&&z_p.length((z_p.at_s(s_data_a,i)))<z_mt_p.program_p.da_now_p.length2
+&&!z_p.e4s_b(z_mt_p.program_p.da_now_p.type1_s,"+","-","F"))return false;//文字情報でlength2以下の長さの物はfalseで終了。
+z_mt_p.program_p.keyboard_n.auto_v(1,z_p.at_s(s_data_a,i));//***(自動入力処理実行)***。
+if(keys_ni!=Keys.Enter){z_mt_p.sw_on_keyboard=1;z_p.t_v(z_p.LI2,"z_mt_p.sw_on_keyboard=1;ii_listbox/1");}//ENTERで無い場合は入力可能にしたままにする。
+if(!z_p.e2s_b(z_p.at_s(s_data_a,i),z_mt_p.program_p.keyboard_n.get_key_s()))return false;//キーボード文字と表示文字不一致はfalseで終了
+if(keys_ni!=Keys.None&&keys_ni!=Keys.Down){z_mt_p.menu_p.main_v(keys_ni,false,1);return false;}
+return true;
+}
+//----------------------------------------------
+public void clear_v()
+{z_p.t_v(z_p.LI,"clear_v(");
+if(2==sw){hide_v();z_p.sw_mouse=2;}//画面表示中止。
+ sw=0;
+#if !AUI
+listbox2_n.sw_listbox_focus=0;
+#endif //!AUI
+//HP listbox2_n.clear(); 
+z_p.t_v(z_p.LI,"clear_v)");
+}
+//----------------------------------------------
+//*****( int(0,1,5,9) listbox(line,column) )*****
+public int listbox(int line,int column,Keys keys_ni)
+{z_p.t_v(z_p.LI,"listbox(");
+int i,j,rc=0;
+ii_zz_l ww_s_n=new ii_zz_l();
+//JJ listbox2_n.removeAll(); //VER13.0 clear();
+clear_v();z_p.clear_s_v(s_data_a);comment_s="";check_s="";now_cnt=offset=-1;
+length_max_ix[0]=length_max_ix[1]=0;
+z_p.err2_s="["+z_mt_p.program_p.da_now_p.name_s+"]";//VER15.1
+z_p.err21_s="CHECK2="+z_mt_p.program_p.da_now_p.check2_s;//VER15.1
+try{if(!z_mt_p.edit_b(ww_s_n,z_mt_p.program_p.da_now_p.check2_s))rc=9;}
+catch(Exception){rc=9;}//z_mt_p.program_p.da_now_p.check2_sが未設定の処理VER8.3で追加。
+if(0==rc)
+  {for(;;)//break;
+     {if(!z_p.e2s_b(ww_s_n.s,"")||z_p.e2s_b(z_mt_p.program_p.now_kind_s,"START")) //check2 対応
+        {offset=2;
+         if(z_p.e_left_b("SELECT ",ww_s_n.s))
+           {if(0!=z_mt_p.sql_n.sql_usr3(s_data_a,ww_s_n.s,z_p.inp_out_s)){rc=9;break;}
+            if(0==z_p.db_record_cnt)
+              {z_p.add_s(s_data_a,"\0");if(2==z_p.db_column_cnt)z_p.add_s(s_data_a,"\0");}
+            if(1>z_p.db_column_cnt||2<z_p.db_column_cnt)
+              {z_p.err_s="select column count(1 or 2)";rc=9;break;}
+            offset=z_p.db_column_cnt;
+            break;
+           }
+        }
+      else //check対応 
+        {z_p.err21_s="CHECK="+z_mt_p.program_p.da_now_p.check_s;//VER15.1
+         if(!z_mt_p.edit_b(ww_s_n,z_mt_p.program_p.da_now_p.check_s)){rc=9;break;}
+         if(z_p.e2s_b(ww_s_n.s,"")){rc=1;break;}
+         if(-1!=z_p.index2c_i(ww_s_n.s,'(')){check_s=ww_s_n.s+"}";sw=1;offset=0;rc=1;break;}
+         offset=1;
+        }
+      String[] sx=z_p.split_sx(ww_s_n.s,',');
+      for(i=0;z_p.count_sx_i(sx)>i;i++)z_p.add_s(s_data_a,z_p.trim_s(sx[i]));
+      break;
+     }//for(;;)
+  }//if(0==rc)
+//HP delete ww_s_n; 
+if(0!=rc){z_p.t_v(z_p.LI,"listbox)1");return rc;}
+//HP z_mt_p.sw_listbox=1;
+for(i=j=0;z_p.count_s_i(s_data_a)>i;i++)//表示の一番長い値を設定。
+ {length_max=z_p.form_length(z_p.at_s(s_data_a,i));
+  if(0==j&&z_p.at_s(s_data_a,i)==z_mt_p.program_p.da_now_p.data_s)now_cnt=i/offset;
+  if(length_max_ix[j]<length_max)length_max_ix[j]=length_max;
+  j++;if(j>=offset)j=0;
+ }
+length_max=length_max_ix[0]+length_max_ix[1]+1;
+if(length_max<12)length_max=12;//12文字以下の場合は１２文字にする。
+if(z_p.X_MAX<length_max)length_max=z_p.X_MAX;//最大表示文字数より多い場合は最大文字数とする。
+xl=(z_p.lang_x_width
+//JJ +z_p.lang_x_width/3
+    )*(length_max+1);//画面幅計算。
+i=z_p.count_s_i(s_data_a)/offset;//表示行数計算。
+if(i>0&&z_p.e2s_b(z_p.at_s(s_data_a,0),"\0"))i=0;//表示データ無しはi=0;
+if(21<i){col=22;xl+=z_p.lang_x_width*2;}//２２行以上は２２行でスクロールバー幅確保。
+else if(i<3)col=3;else col=i;//3行以下は３行確保。
+y=z_p.lang_y_high;
+yl=(z_p.lang_y_high
+//JJ +z_p.lang_y_high/3
+   )*col+1
+#if AUI
+//SS +z_p.lang_y_high
+#endif //AUI
+//CP +z_p.lang_y_high
+;
+if((z_p.X_MAX-length_max)>(column-z_mt_p.program_p.scroll_y_offset)||col+3<line)
+  x=z_p.lang_x_width*(z_p.X_MAX)-xl;//右端に表示。
+else x=0;//左端に表示。
+
+#if AUI
+//SS z_p.clear_s_v(items_sa);
+#else //AUI
+//SS listbox2_n.Items.Clear();//内容クリア。
+#endif //AUI
+for(i=0;z_p.count_s_i(s_data_a)>i;i+=offset)
+//SJ if(!z_p.e2s_b(z_p.at_s(s_data_a,i),"\0"))
+//HP listbox2_n.addItem  //内容追加
+#if AUI
+//SS  items_sa.Add
+#else //AUI
+//SS listbox2_n.Items.Add  //内容追加
+#endif //AUI
+//JJ listbox2_n.add  //内容追加
+        (z_p.at_s(s_data_a,i)+z_p.pad_end_s("",length_max_ix[0]-z_p.form_length(z_p.at_s(s_data_a,i)))
+         +(offset==1||z_p.count_s_i(s_data_a)<=(i+1)?"":(z_p.e2s_b(z_p.at_s(s_data_a,i+1),"")?"":"=")+z_p.at_s(s_data_a,i+1))); //VER15.1
+#if AUI
+////SS for(i=0;i<items_sa.Count;i++)z_p.console_write_v("items_sa="+items_sa[i]);
+//SS listbox2_n.ItemsSource=null;  //書き換わらないので一度nullでクリアーする。
+//SS listbox2_n.ItemsSource=items_sa;
+//SS this.Content=listbox2_n;
+//SS Title=
+#else //AUI
+//SS listbox2_n.Font=z_p.my_font_n;
+//JP listbox2_n.setFont(z_p.my_font_n);
+//HP listbox2_n.setWindowTitle(
+//SS Text=          
+//JJ setTitle(     
+#endif //AUI
+        z_mt_p.program_p.da_now_p.title_s
+//JP   )
+        ;
+//JJ add(listbox2_n);
+window_size_v(xl,yl);//画面サイズ変更。
+z_mt_p.window_point_v();//親画面の現在地読み取り。
+z_mt_p.sw_on_listbox_b=true;
+//HP listbox2_n.
+#if AUI
+//SS           Position=new PixelPoint(z_mt_p.x_window_point+x,z_mt_p.y_window_point+y);
+#else //AUI
+                SetDesktopLocation(z_mt_p.x_window_point+x,z_mt_p.y_window_point+y);    //駄目押し
+#endif //AUI
+sw=2;
+if(keys_ni!=Keys.Down)
+ {
+  show_v();//画面表示。
+  if(0<=now_cnt)set_index_v(now_cnt);
+   window_size_v(xl,yl);//画面サイズ変更。
+z_mt_p.window_point_v();//親画面の現在地読み取り。
+//HP listbox2_n.
+#if AUI
+//SS            Position=new PixelPoint(z_mt_p.x_window_point+x,z_mt_p.y_window_point+y);
+#else //AUI
+                SetDesktopLocation(z_mt_p.x_window_point+x,z_mt_p.y_window_point+y); //駄目押し
+#endif //AUI
+ }
+z_mt_p.sw_on_listbox_b=false;
+//JJ if(0==z_p.sw_on_paint)repaint();
+//HP focus_v();
+z_p.t_v(z_p.LI,"listbox)2");
+return 0;
+}
+//----------------------------------------------
+void show_v()//実際に画面表示。
+{z_p.t_v(z_p.LI,"show_v(");
+//HP z_mt_p.sw_listbox=1; //リストボックス表示中
+//HP listbox2_n.show();
+//HP focus_v();
+//SS Show();          
+//JJ setVisible(true);
+z_p.t_v(z_p.LI,"show_v)");
+}
+void hide_v()//画面表示中止。
+{z_p.t_v(z_p.LI,"hide_v(");
+//HP listbox2_n.hide();
+//HP z_mt_p.sw_listbox=0; //リストボックス非表示中
+//SS Hide();           
+//JJ setVisible(false);
+z_p.t_v(z_p.LI,"hide_v)");
+}
+int get_index()//選択情報取り出し。
+{z_p.t_v(z_p.LI,"get_index()");
+try{return 
+//HP listbox2_n.currentRow(); 
+#if AUI
+//SS aui_index;
+#else //AUI
+//SS listbox2_n.SelectedIndex;
+#endif //AUI
+//JJ listbox2_n.getSelectedIndex();
+   }catch(Exception){return 0;}
+}
+void set_index_v(int ii)//選択情報設定。
+{z_p.t_v(z_p.LI,"set_index_v()");
+try{
+//HP  listbox2_n.setCurrentRow(ii);
+#if AUI
+//SS  listbox2_n.SelectedIndex=-1; //現在の選択状態をクリアーする。
+//SS  listbox2_n.SelectedIndex=ii;
+//SS  aui_index=ii;
+#else //AUI
+//SS  listbox2_n.SetSelected(ii,true);
+#endif //AUI
+//JJ  listbox2_n.select(ii);
+   }catch(Exception){}
+}
+public void  move_v()//画面位置移動。
+{z_p.t_v(z_p.LI,"move_v()");
+if(0==sw)return;
+z_mt_p.window_point_v();
+#if AUI
+//SS Position=new PixelPoint(z_mt_p.x_window_point+x,z_mt_p.y_window_point+y);
+#else //AUI
+//SJ SetDesktopLocation(z_mt_p.x_window_point+x,z_mt_p.y_window_point+y);
+#endif //AUI
+}
+//----------------------------------------------
+bool check_word_b(ii_zz_l s_ni,String s_si)
+{z_p.t_v(z_p.LI,"check_word_b(");
+int i=check_cnt;
+if(-1==(check_cnt=z_p.index3sc_i(check_s,s_si,i)))return false;
+check_c=z_p.at_s_c(check_s,check_cnt);
+s_ni.s=z_p.substring3_s(check_s,i,check_cnt-i);
+check_cnt++;
+return true;
+}
+//---( チェック z_mt_p.program_p.keyboard_n.get_key_s()をcheck_sで判定）-------------------------------------------
+bool check_b()
+{z_p.t_v(z_p.LI,"check_b(");
+int rc;check_c=' ';check_cnt=0;
+if(z_p.e2s_b(check_s,"")){z_p.t_v(z_p.LI,"check_b)1");return true;}
+int sw=2;//check2
+ii_zz_l ww_s_n=new ii_zz_l();ii_zz_l ww2_s_n=new ii_zz_l(); 
+bool b=true;
+for(;;)
+  { // check_j;
+   for(;;)
+    { // check2;
+     if(!check_word_b(ww_s_n,"(,}")){b=false;break;}
+     if('('==check_c)
+       {if(!z_p.e2s_b(ww_s_n.s,"")){z_p.err_s="not space ("+ww_s_n.s+")";b=false;break;}
+        if(!check_word_b(ww_s_n,",)")){b=false;break;}
+        if(!z_p.e2s_b(ww_s_n.s,""))
+          {if(0==(rc=z_p.compare(ww2_s_n,z_mt_p.program_p.keyboard_n.get_key_s(),z_p.at_s_c(z_mt_p.program_p.da_now_p.type1_s,0)
+              ,0,0,1,ww_s_n.s)))
+             {if(!check_word_b(ww_s_n,")")){b=false;break;} //左不一致、右スキップ
+              break;
+             }
+           if(9==rc){b=false;break;}
+          }
+        if(','==check_c)
+          {if(!check_word_b(ww_s_n,")")){b=false;break;}
+           if(!z_p.e2s_b(ww_s_n.s,""))
+             {if(0==(rc=z_p.compare(ww2_s_n,z_mt_p.program_p.keyboard_n.get_key_s(),z_p.at_s_c(z_mt_p.program_p.da_now_p.type1_s,0)
+                 ,1,0,0,ww_s_n.s)))break;
+              if(9==rc){b=false;break;}
+             }
+           z_p.t_v(z_p.LI,"check_b)2");
+           return true;//大小比較該当終了
+          }
+        break;
+       }
+     if(0==(rc=z_p.compare(ww2_s_n,z_mt_p.program_p.keyboard_n.get_key_s(),z_p.at_s_c(z_mt_p.program_p.da_now_p.type1_s,0)
+            ,0,1,0,ww_s_n.s))){z_p.t_v(z_p.LI,"check_b)3");return true;}//一致該当終了。
+     if(9==rc){b=false;break;}
+     if(','==check_c){sw=0;break;}//check_jへ戻る
+     b=false;break;
+    }//for() check2;
+   if(false==b)break; 
+   if(2==sw)
+     {if(!check_word_b(ww_s_n,",}")){b=false;break;}
+      if(!z_p.e2s_b(ww_s_n.s,"")){z_p.err_s="not space("+ww_s_n.s+")";b=false;break;}
+     }
+  }//for check_j;
+//HP delete ww_s_n;delete ww2_s_n; 
+z_p.t_v(z_p.LI,"check_b)4");
+return b;
+}
+public void window_size_v(int x,int y)//画面サイズ変更
+{z_p.t_v(z_p.LI,"window_size_v(");
+//HP listbox2_n.resize(x,y);
+#if AUI
+//SS Width=x;Height=y;//listbox2_n.Width=x;listbox2_n.Height=y;
+#else //AUI
+//SS ClientSize=new Size(x,y);listbox2_n.ClientSize=new Size(x,y);
+#endif //AUI
+//JJ             setSize(x+getInsets().left+getInsets().right+20,y+getInsets().top+getInsets().bottom+8);
+//JJ  listbox2_n.setSize(x+20,y+8);
+
+}
+//JJ public void mouseClicked (MouseEvent e_ni){set_b(Keys.Enter);}
+//JJ public void mouseEntered (MouseEvent e_ni){}
+//JJ public void mouseExited  (MouseEvent e_ni){}
+//JJ public void mouseMoved   (MouseEvent e_ni){}
+//JJ public void mousePressed (MouseEvent e_ni){}
+//HP public void focus_v()
+//JJ public void focusGained(FocusEvent e_ni)
+//JP {z_p.t_v(z_p.LI,"focus_v()");
+//JJ  if(listbox2_n.focus_count>listbox2_n.sw_listbox_focus)//最初はFocusを親に戻す。
+//JP    {listbox2_n.sw_listbox_focus+=1;
+//JP     z_mt_p.imenu_p.set_focus_v();
+//JP     z_mt_p.sw_focus=z_p.FOCUS_ON_TO_ON_1;z_p.sw_mouse=2;
+//JP    }
+//JP }
+//JJ public void focusLost(FocusEvent e_ni){}
+//HP public void close_v(){z_p.t_v(z_p.LI,"close_v()");listbox2_n.close();}
+//COPY $II_WRITE
+}
+#endif

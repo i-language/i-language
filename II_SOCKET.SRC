@@ -1,6 +1,6 @@
 //II_SOCKET.SRC socket read author nobumichi.harasawa
 //## int(1=error end,0=nomal end,-1=error anser) ii_socke.read(s,filockete_s,z_n)
-#if IMENU||ITIME||ISRVC //TEST
+#if IMENU||IMTEST||ITIME||ISRVC //TEST
 //HH #include "ii_include_hh.h"
 //PP #include "ii_include_pp.h"
 //SS using Microsoft.Data.SqlClient; //VER37.8.0.12
@@ -24,11 +24,11 @@ public class ii_socket_l
 ii_z_l z_p;
 public ii_socket_l(ii_z_l z_ni)
 {z_p=z_ni;
-#if IMENU
+#if IMENU||IMTEST
 //SS Thread_receive4_n= null ;
 #endif
 }
-#if IMENU
+#if IMENU||IMTEST
      Thread Thread_receive6_n;
 //SS Thread Thread_receive4_n;
 int  sw_receive6=0; 
@@ -88,7 +88,7 @@ if(0!=receive6_n.rc)
 return rc;
 }
 #endif //MENU
-#if IMENU||ITIME
+#if IMENU||IMTEST||ITIME
 //--------------------------------------------------------
 //*****( UDP送信 )*********
 public int send(String no2_si,String name_si,String message_si)
@@ -138,7 +138,7 @@ for(int sw=0;;)
 //SS        }
 //JJ      DatagramSocket_n=new DatagramSocket();
 //SJ     }
-//SJ      catch(Exception e_ni){z_p.err_s+="("+computer_name_s+")"+z_p.message_s(e_ni);rc=1;sw=FIN_NOT_CONNECT_2;continue;}
+//SJ      catch(Exception e_ni){z_p.err_s+="["+computer_name_s+"]"+z_p.message_s(e_ni);rc=1;sw=FIN_NOT_CONNECT_2;continue;}
 //SS  if( null ==Socket_n||!Socket_n.Connected){z_p.err_s+="("+computer_name_s+")"+"send{} Connect()";rc=1;sw=FIN_NOT_CONNECT_2;continue;} 
       put_s=z_p.fix_form_length_s(z_p.lang_s,2)+z_p.fix_form_length_s(z_p.test_s,4)
             +z_p.fix_form_length_s(z_p.system_s,8)+z_p.fix_form_length_s(z_p.job_s,10)
@@ -154,7 +154,7 @@ for(int sw=0;;)
 //SS       Socket_n.Send(put_yx,put_yx.Length,SocketFlags.None);
 //JJ      DatagramSocket_n.send(DatagramPacket_n);
 //SJ         }
-//SJ      catch(Exception e_ni){z_p.err_s+="("+computer_name_s+")"+z_p.message_s(e_ni);rc=1;continue;}
+//SJ      catch(Exception e_ni){z_p.err_s+="["+computer_name_s+"]"+z_p.message_s(e_ni);rc=1;continue;}
      }//if(LOOP>=sw)
    if(FIN_1>=sw)
      {
@@ -177,7 +177,7 @@ for(int sw=0;;)
 return rc;
 }
 #endif //MENU||TIME
-#if IMENU||ITIME||ISRVC
+#if IMENU||IMTEST||ITIME||ISRVC
 //--------------------------------------------------------
 //*****( 読み込み )************************
 //HP public int read(Socket *Socket_ni,String file_si)
@@ -200,7 +200,7 @@ int sw=0;
 //SS BinaryReader_n=new BinaryReader(socket_FileStream_n);
 //JJ FileInputStream_n=new FileInputStream(file_si);
 //SJ   }
-//SJ catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);rc=-1;sw=1;}
+//SJ catch(Exception e_ni){z_p.err_s="[SOCKET_OPEN]"+z_p.message_s(e_ni);rc=-1;sw=1;}
 for(;0>=sw;)
   {
 //HP   put_yx=socket_FileStream_n.read(1024);put_yx.insert(0,'0');//フィル読み込み、先頭に'0'を付加。	
@@ -210,7 +210,7 @@ for(;0>=sw;)
 //JJ   put_length=FileInputStream_n.read(put_yx,1,1024)+1;//２バイト目からフィル読み込み
 //JJ   if(0==put_length)put_length=1; //Javaはデータ無しで-1と成るため。
 //SJ      }
-//SJ  catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);rc=-1;break;}
+//SJ  catch(Exception e_ni){z_p.err_s="[SOKET_READ]"+z_p.message_s(e_ni);rc=-1;break;}
 //HP  sw_event=0;Socket_ni.write(put_yx);//送信 
 //HP  for(;0==sw_event&&0==sw_error;)z_p.sleep_v(1000);//完了待ち。
 //HP  if(0!=sw_error){rc=1;break;}//エラー有り。
@@ -222,7 +222,7 @@ for(;0>=sw;)
 //SS   get_length=Socket_ni.Receive(get_yx,1026,SocketFlags.None);//データ受信
 //JJ   get_length=DataInputStream_ni.read(get_yx,0,1026);//データ受信
 //SJ      }
-//SJ   catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);rc=1;break;}
+//SJ   catch(Exception e_ni){z_p.err_s="[SOCKET_RECIVE]"+z_p.message_s(e_ni);rc=1;break;}
 //HP   if('0'!=get_yx.at(0))
 //SJ   if(zero_y!=get_yx[0]) //先頭0以外エラー
          {if(1<get_length)z_p.err_s=z_p.to_utf8_s(get_yx,1,get_length-1);
@@ -262,7 +262,7 @@ for(;0==rc;)
 //SS   get_length=Socket_ni.Receive(get_yx,1026,SocketFlags.None);//受信
 //JJ   get_length=DataInputStream_ni.read(get_yx,0,1026);//受信
 //SJ      }
-//SJ   catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);rc=1;break;}
+//SJ   catch(Exception e_ni){z_p.err_s="[SOKECT_RECIVE]"+z_p.message_s(e_ni);rc=1;break;}
 //HP   if('0'!=get_yx.at(0))
 //SJ   if(zero_y!=get_yx[0])
          {if(1<get_length)z_p.err_s=z_p.to_utf8_s(get_yx,1,get_length-1);
@@ -279,7 +279,7 @@ for(;0==rc;)
 //SS          socket_FileStream_n=new FileStream(file_si,FileMode.Create,FileAccess.Write,FileShare.Read);
 //SS          BinaryWriter_n=new BinaryWriter(socket_FileStream_n);
 //JJ          FileOutputStream_n=new FileOutputStream(file_si);
-//SJ         }catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);rc=-1;break;}
+//SJ         }catch(Exception e_ni){z_p.err_s="[SOCKET_WRITE]"+z_p.message_s(e_ni);rc=-1;break;}
           sw_file_create_b=true;
          }
        if(1>=get_length)break;
@@ -288,7 +288,7 @@ for(;0==rc;)
 //SS   BinaryWriter_n.Write(  get_yx,1,get_length-1);//ファイル書き込み(先頭１バイト削除） 
 //JJ   FileOutputStream_n.write(get_yx,1,get_length-1);//ファイル書き込み(先頭１バイト削除）
 //SJ      }
-//SJ   catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);rc=-1;break;}
+//SJ   catch(Exception e_ni){z_p.err_s="[SOCKET_WRITE]"+z_p.message_s(e_ni);rc=-1;break;}
 //HP  sw_event=0;Socket_ni.write(put_yx);//送信 
 //HP  for(;0==sw_event&&0==sw_error;)z_p.sleep_v(1000);//完了待ち。
 //HP  if(0!=sw_error){rc=1;break;}//エラー有り。
@@ -296,7 +296,7 @@ for(;0==rc;)
 //SS   Socket_ni.Send(put_yx,put_length,SocketFlags.None);//送信
 //JJ   DataOutputStream_ni.write(put_yx,0,put_length);//送信
 //SJ    }
-//SJ   catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);rc=1;break;}
+//SJ   catch(Exception e_ni){z_p.err_s="[SOCKET_WRITE]"+z_p.message_s(e_ni);rc=1;break;}
   }//for(;;)
 //SJ try{
 //HP if( null !=socket_FileStream_n){socket_FileStream_n.close();delete socket_FileStream_n;}
@@ -310,7 +310,7 @@ return rc;
 #endif //MENU||TIME||SRVC
 //HP QUdpSocket *USocket_n;
 //HP QTcpSocket *Socket_n; 
-#if IMENU||ITIME //TEST//
+#if IMENU||IMTEST||ITIME //TEST//
 //--------------------------------------------------------
 //***( クライアント処理 TCP )***
 public int client(String cmd_si,String path_si,String file_si,ii_z_mt_l z_mt_ni)
@@ -345,7 +345,7 @@ for(;;)
 //SS      {System.Net.IPEndPoint IPEndPoint_n=new System.Net.IPEndPoint(hostEntry.AddressList[i],z_p.SERVICE_PORT_NO);
 //SS       Socket Socket_temp_n=new Socket(IPEndPoint_n.AddressFamily,SocketType.Stream,ProtocolType.Tcp);
 //SS       try{Socket_temp_n.Connect(IPEndPoint_n);}
-//SS       catch(Exception e_ni){if(i>=0)continue;z_p.err_s=z_p.message_s(e_ni);rc=1;sw=FIN_NOT_CONNECT_2;break;}
+//SS       catch(Exception e_ni){if(i>=0)continue;z_p.err_s="[SOCKET_CONNECT]"+z_p.message_s(e_ni);rc=1;sw=FIN_NOT_CONNECT_2;break;}
 //SS       if(Socket_temp_n.Connected){Socket_n=Socket_temp_n;sw=OK;break;}
 //SS       else continue;
 //SS      }
@@ -355,7 +355,7 @@ for(;;)
 //SJ   if(OK!=sw)break; //for内のbreak;対応
 //SS   if(0>i){z_p.err_s="Connect("+computer_name_s+")";rc=1;sw=FIN_NOT_CONNECT_2;break;}
 //SJ       }
-//SJ    catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);rc=1;sw=FIN_NOT_CONNECT_2;break;}
+//SJ    catch(Exception e_ni){z_p.err_s="[SOCKET]"+z_p.message_s(e_ni);rc=1;sw=FIN_NOT_CONNECT_2;break;}
 //SS if( null ==Socket_n||!Socket_n.Connected){z_p.err_s="Connected("+hostEntry.AddressList[i]+")";rc=1;sw=FIN_NOT_CONNECT_2;break;} 
       put_s="0"+cmd_si+" "+path_si+z_mt_p.bat_param_s()+file_si; //VER17
       put_s="0"+z_p.password_n.pwd15_server_name_s(put_s+z_p.substring3_s(z_mt_p.sql_n.sql_time_s(),8,6))+put_s;//暗号文字追加
@@ -367,7 +367,7 @@ for(;;)
 //SS   Socket_n.Send(put_yx,put_yx.Length,SocketFlags.None); //送信
 //JJ   DataOutputStream_n.write(put_yx,0,put_yx.length); //送信
 //SJ      }
-//SJ   catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);rc=1;sw=FIN_1;break;}
+//SJ   catch(Exception e_ni){z_p.err_s="[SOCKET_WRITE]"+z_p.message_s(e_ni);rc=1;sw=FIN_1;break;}
    if(z_p.e3s_b(cmd_si,"SERVER_PUT","SERVER_BAT"))
      {
 //HP get_yx=Socket_n.read(1026);get_length=get_yx.size();//受信 
@@ -375,7 +375,7 @@ for(;;)
 //SJ try{
 //SS     get_length=Socket_n.Receive(get_yx,1026,SocketFlags.None);//受信
 //JJ     get_length=DataInputStream_n.read(get_yx,0,1026);//受信
-//SJ    }catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);rc=1;sw=FIN_1;break;}
+//SJ    }catch(Exception e_ni){z_p.err_s="[SOCKET_READ]"+z_p.message_s(e_ni);rc=1;sw=FIN_1;break;}
 //HP    if('0'!=get_yx.at(0))
 //SJ    if(zero_y!=get_yx[0])
            {if(1<get_length)z_p.err_s=z_p.to_utf8_s(get_yx,1,get_length-1);
@@ -402,7 +402,7 @@ for(;;)
 //SJ     try{
 //SS         Socket_n.Send(put_yx,put_yx.Length,SocketFlags.None);
 //JJ         DataOutputStream_n.write(put_yx,0,put_yx.length);
-//SJ        }catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);rc=1;sw=FIN_1;break;} 
+//SJ        }catch(Exception e_ni){z_p.err_s="[SOCKET_WRITE]"+z_p.message_s(e_ni);rc=1;sw=FIN_1;break;} 
         }
    else if(z_p.e2s_b(cmd_si,"SERVER_PUT"))
      {
@@ -413,7 +413,7 @@ for(;;)
 //SS      get_length=Socket_n.Receive(get_yx,1026,SocketFlags.None);
 //JJ      get_length=DataInputStream_n.read(get_yx,0,1026);
 //SJ        }
-//SJ      catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);rc=1;sw=FIN_1;break;}
+//SJ      catch(Exception e_ni){z_p.err_s="[SOCKET_READ]"+z_p.message_s(e_ni);rc=1;sw=FIN_1;break;}
 //HP      if(0==get_length){sw=FIN_1;break;}//HPは最後受信出来ず。
 //HP      if('0'!=get_yx.at(0))
 //SJ      if(zero_y!=get_yx[0])

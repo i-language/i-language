@@ -1,5 +1,5 @@
 //= II_PROGRAM_LIST.CS program list main class author nobumichi harasawa
-#if IMENU||ITIME //ITEST
+#if IMENU||IMTEST||ITIME //ITEST
 //HH #include "ii_include_hh.h"
 //PP #include "ii_include_pp.h"
 //SS using Microsoft.Data.SqlClient; //VER37.8.0.12
@@ -7,7 +7,7 @@
 //SS using System.Collections.Generic;
 //SS using System.Drawing;
 //SS using System.IO;
-#if IMENU
+#if IMENU||IMTEST
 ////SS using System.Windows.Forms;
 #endif
 //JJ import java.awt.*;
@@ -40,10 +40,10 @@ if(0<z_p.count_pr_i(pr_a))
 //SS          z_mt_p.program_p.serialport_nx[i]= null ;
     }
    z_p.remove_pr_v(pr_a,z_p.count_pr_i(pr_a)-1);//最後のリストを削除
-#if IMENU
+#if IMENU||IMTEST
    z_mt_p.mouse_paint_p= null ;//表示データクリア
 //SS   z_mt_p.socket_n.receive_cancel();//reciveをキャンセル。
-#endif //IMENU
+#endif //IMENU||IMTEST
   }
 z_mt_p.program_p=(0<z_p.count_pr_i(pr_a)?(ii_program_l )z_p.at_pr(pr_a,z_p.count_pr_i(pr_a)-1):(ii_program_l ) null );//z_mt_p.program_nに現在値を設定。
 
@@ -54,11 +54,11 @@ public void add_last_v()
 {z_mt_p.program_p=
  z_p.add_pr(pr_a,new ii_program_l(z_p,z_mt_p,0<z_p.count_pr_i(pr_a)?(ii_program_l )z_p.at_pr(pr_a,z_p.count_pr_i(pr_a)-1):(ii_program_l ) null ));
   //リストの最後に追加。
-#if IMENU
+#if IMENU||IMTEST
 z_mt_p.mouse_paint_p= null ;//表示データクリア
 //SS z_mt_p.socket_n.receive_cancel();//reciveをキャンセル。
-#endif //IMENU
+#endif //IMENU||IMTEST
 }
 //COPY $II_WRITE
 }
-#endif //IMENU||ITIME
+#endif //IMENU||IMTEST||ITIME

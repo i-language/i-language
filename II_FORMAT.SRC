@@ -2,7 +2,7 @@
 //= フォーマット クラス（画面の自動配置）
 //=( z_mt_p.program_p.program_s )"OUTPUT"=(出力用),"INPUT"=(入力処理)
 //==========( z_p.con_0==9 選択処理 )====================
-#if IMENU
+#if IMENU||IMTEST
 //HH #include "ii_include_hh.h"
 //PP #include "ii_include_pp.h"
 //SS using Microsoft.Data.SqlClient; //VER37.8.0.12
@@ -211,7 +211,7 @@ for(;9!=sw_list;)//for()list_0:(9!=sw_list)(((((((((((((((((((((((((((((((((((
             z_mt_p.program_p.scroll_y_line_top=form_line_offset+id_cnt+2;
             z_mt_p.program_p.paint_list_n.add_v(w_s,form_line_offset+id_cnt+1
             ,z_mt_p.program_p.form_column_offset+w_data_n.column,w_data_n.length0
-            ,z_p.font_s,z_p.Font_n,z_p.Brush_nx[z_mt_p.BACKCOLOR]);
+            ,z_p.font_s,z_p.my_font_n,z_p.brush_nx[z_mt_p.BACKCOLOR]);
             if(z_mt_p.program_p.column_max<(z_mt_p.program_p.form_column_offset+w_data_n.column+w_data_n.length0))
                z_mt_p.program_p.column_max=(z_mt_p.program_p.form_column_offset+w_data_n.column+w_data_n.length0);
             w_s="";
@@ -222,7 +222,7 @@ for(;9!=sw_list;)//for()list_0:(9!=sw_list)(((((((((((((((((((((((((((((((((((
                   ,('O'==w_data_n.mark2_c||z_p.e2s_b(z_mt_p.program_p.program_s,"OUTPUT")?'=':'#'));
             z_mt_p.program_p.paint_list_n.add_v(w_s,form_line_offset+id_cnt+z_mt_p.program_p.line_occurs+2
             ,z_mt_p.program_p.form_column_offset+w_data_n.column,w_data_n.length0
-            ,z_p.font_s,z_p.Font_n,z_p.Brush_nx[z_mt_p.BACKCOLOR]);
+            ,z_p.font_s,z_p.my_font_n,z_p.brush_nx[z_mt_p.BACKCOLOR]);
             //==(見出し位置計算)
             length=z_p.form_length(w_data_n.title_s);
             k=z_mt_p.program_p.form_column_offset+w_data_n.column;
@@ -235,7 +235,7 @@ for(;9!=sw_list;)//for()list_0:(9!=sw_list)(((((((((((((((((((((((((((((((((((
               }
            if((z_mt_p.program_p.form_right_max+1)>=(k+length))
              {z_mt_p.program_p.paint_list_n.add_v(w_data_n.title_s,form_line_offset+i,k,length
-              ,z_p.font_s,z_p.Font_n,z_p.Brush_nx[z_mt_p.BACKCOLOR]);
+              ,z_p.font_s,z_p.my_font_n,z_p.brush_nx[z_mt_p.BACKCOLOR]);
               form_column_ix[i]=k+length+1;
              }
            if(z_mt_p.program_p.scroll_x_line_top>(form_line_offset+i-1))
@@ -297,7 +297,7 @@ for(;9!=sw_list;)//for()list_0:(9!=sw_list)(((((((((((((((((((((((((((((((((((
     if(1==psw&&!z_p.e2s_b(z_mt_p.program_p.program_s,"NOT"))//(1==pswはfin_11実行済)
       {w_s=z_p.pad_end_s("",z_p.X_MAX,'=');//" ========================================"を表示
        z_mt_p.program_p.paint_list_n.add_v(w_s,form_line_offset-1,1,z_p.X_MAX,z_p.font_s
-       ,z_p.Font_n,z_p.Brush_nx[z_mt_p.BACKCOLOR]);
+       ,z_p.my_font_n,z_p.brush_nx[z_mt_p.BACKCOLOR]);
       }
     if(z_p.e2s_b(z_mt_p.program_p.program_s,"INPUT"))
       {list_column=11;(z_p.at_da(z_mt_p.program_p.da_data_a,0)).length0=1;(z_p.at_da(z_mt_p.program_p.da_data_a,0)).length1=1;
@@ -351,7 +351,7 @@ for(;9!=sw_list;)//for()list_0:(9!=sw_list)(((((((((((((((((((((((((((((((((((
        w_data_n.line=list_line;w_data_n.column=list_column+1;
        list_column+=w_data_n.length0+w_data_n.filler+1;
        if(1==psw&&!z_p.e2s_b(work_name_s,""))z_mt_p.program_p.paint_list_n.add_v(work_name_s,form_line_offset+list_line_2//(1==pswはfin_11実行済)
-         ,list_column_2,length+1,z_p.font_s,z_p.Font_n,z_p.Brush_nx[z_mt_p.BACKCOLOR]);
+         ,list_column_2,length+1,z_p.font_s,z_p.my_font_n,z_p.brush_nx[z_mt_p.BACKCOLOR]);
       }
    if(0==psw)//(0==pswは下記処理実行前)
      {if(!z_p.e2s_b(z_mt_p.program_p.program_s,"NOT"))//"OUTPUT","INPUT"
@@ -390,7 +390,7 @@ for(;9!=sw_list;)//for()list_0:(9!=sw_list)(((((((((((((((((((((((((((((((((((
       z_mt_p.program_p.line_offset=list_line+2;
       w_s=z_p.pad_end_s("",z_p.X_MAX,'=');
       z_mt_p.program_p.paint_list_n.add_v(w_s,form_line_offset-1,1,z_p.X_MAX
-      ,z_p.font_s,z_p.Font_n,z_p.Brush_nx[z_mt_p.BACKCOLOR]);
+      ,z_p.font_s,z_p.my_font_n,z_p.brush_nx[z_mt_p.BACKCOLOR]);
       z_mt_p.program_p.click_data_bottom=form_line_offset-1;
       if(z_mt_p.program_p.form_y_max!=(z_mt_p.program_p.click_data_bottom+1))
          if(0==z_mt_p.program_p.CONTROL_IX[z_mt_p.program_p.C_HIGH_23])//縦固定指定無し。

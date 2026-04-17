@@ -1,0 +1,81 @@
+using System;
+using Gtk;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using System.IO;
+
+public class PdfSample : Window
+{
+    public PdfSample() : base("PDF 生成サンプル")
+    {
+        SetDefaultSize(300, 200);
+        DeleteEvent += (o, args) => Application.Quit();
+
+        Button pdfButton = new Button("PDF を作成する");
+        pdfButton.Clicked += OnPdfClicked;
+
+        Add(pdfButton);
+        ShowAll();
+    }
+
+    private void OnPdfClicked(object sender, EventArgs e)
+    {
+        // 保存先を GTK のファイルダイアログで選択
+        FileChooserDialog dialog = new FileChooserDialog(
+            "PDF の保存先を選択",
+            this,
+            FileChooserAction.Save,
+            "キャンセル", ResponseType.Cancel,
+            "保存", ResponseType.Accept
+        );
+
+        dialog.CurrentName = "sample.pdf";
+
+        if (dialog.Run() == (int)ResponseType.Accept)
+        {
+            string path = dialog.Filename;
+            dialog.Destroy();
+
+            CreatePdf(path);
+
+            MessageDialog msg = new MessageDialog(
+                this,
+                DialogFlags.Modal,
+                MessageType.Info,
+                ButtonsType.Ok,
+                "PDF を保存しました:\n" + path
+            );
+            msg.Run();
+            msg.Destroy();
+        }
+        else
+        {
+            dialog.Destroy();
+        }
+    }
+
+    private void CreatePdf(string path)
+    {
+        Document doc = new Document(PageSize.A4);
+
+        using (FileStream fs = new FileStream(path, FileMode.Create))
+        {
+            PdfWriter writer = PdfWriter.GetInstance(doc, fs);
+            doc.Open();
+
+            // PDF に文字を書き込む
+            doc.Add(new Paragraph("PDF 生成サンプル"));
+            doc.Add(new Paragraph("GTKSharp + iTextSharp を使用しています。"));
+            doc.Add(new Paragraph("System.Windows.Forms は使用していません。"));
+
+            doc.Close();
+        }
+    }
+
+    public static void Main()
+    {
+        Application.Init();
+        new PdfSample();
+        Application.Run();
+    }
+}

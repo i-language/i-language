@@ -249,10 +249,12 @@ today_s=z_p.substring3_s(z_p.date_time_s(z_p.date_time_now_s(),1),0,10);
 read_n=new ii_read_l(z_p);//読み込みファイル用インスタンス作成。
 black_n=
 //HP QBrush(QColor::       fromRgb(0,0,0),Qt::SolidPattern);
-//SJ new SolidBrush(Color.FromArgb(0,0,0));       //黒色設定。
+//SS new SolidBrush(Color.FromArgb(0,0,0));       //黒色設定。
+//JJ new                     Color(0,0,0);       //黒色設定。
 red_n=
 //HP QBrush(QColor::       fromRgb(255,128,192),Qt::SolidPattern);
-//SJ new SolidBrush(Color.FromArgb(255,128,192)); //赤色設定。
+//SS new SolidBrush(Color.FromArgb(255,128,192)); //赤色設定。
+//JJ new                     Color(255,128,192); //赤色設定。
 font_n=new_font_n(default_font_s,4,"");//デフォルトフォント設定。
 default_font_n=new_font_n(default_font_s,4,"");//デフォルトフォント設定。
 //HP resize(form_size,form_size);//Formのサイズ設定。
@@ -902,7 +904,7 @@ String exe_s=z_p.exe_name_s;
 if(sw_error!=0)//エラー時エラー内容出力。
   {
    if(0==sw_printer)
-     {z_p.fill_rect_v(Graphics_n,red_n,0,0,(int )(form_size+x_geta_f()),(int )(form_size+y_geta_f()));
+     {z_p.gui_n=Graphics_n;z_p.fill_rect_v(red_n,0,0,(int )(form_size+x_geta_f()),(int )(form_size+y_geta_f()));//VER38
 //JJ  Graphics_n.setColor(Color.black);
      }
    float x=10,y=10;

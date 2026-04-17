@@ -1,5 +1,5 @@
 //= II_ZIP.SRC zip class author nobumichi harasawa
-#if IMENU||ITIME
+#if IMENU||IMTEST||ITIME
 //HH #include "ii_include_hh.h"
 //PP #include "ii_include_pp.h"
 //SS using System;

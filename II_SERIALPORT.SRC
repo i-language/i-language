@@ -1,5 +1,5 @@
 // II_SERIALPORT.SRC serialport class author nobumichi harasawa
-#if IMENU||ITIME //TEST
+#if IMENU||IMTEST||ITIME //TEST
 //HH #include "ii_include_hh.h"
 //PP #include "ii_include_pp.h"
 //SS using Microsoft.Data.SqlClient; //VER37.8.0.12
@@ -35,7 +35,7 @@ public bool write_b(String data_si)
 //SS SerialPort_n.Write(data_si);
 //JJ OutputStream out_nn=SerialPort_n.getOutputStream();
 //JJ out_nn.write(z_p.to_encode_yx(data_si,encode_s));
-//SJ    }catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);close_v();return false;}
+//SJ    }catch(Exception e_ni){z_p.err_s="[SIRIAL_PORT]"+z_p.message_s(e_ni);close_v();return false;}
 return true;
 }
 //----------------------------------------------
@@ -61,7 +61,7 @@ if(0==sw_SerialPort){z_p.err_s="not open serialport";return 5;}
 //JJ        SerialPort_n.notifyOnDataAvailable(true);
 //JJ        }
 //SS     data_s=z_p.to_cx_s(cx,i_ii);
-//SJ    }catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);close_v();return 5;}
+//SJ    }catch(Exception e_ni){z_p.err_s="[SERIL_READ]"+z_p.message_s(e_ni);close_v();return 5;}
 //JJ for(;2==sw_SerialPort;)try{Thread.sleep(2000);}catch(InterruptedException e){} //読み込み完了待ち。
 //JJ sw_SerialPort=2;
 return 0;
@@ -150,7 +150,7 @@ s=(4<z_p.count_sx_i(sx)?z_p.upper_s(sx[4]):"ONE");
 //JJ     SerialPort_n=(SerialPort)id_nn.open(z_p.main_program_s,10000);
 //JJ     SerialPort_n.setSerialPortParams(rate,data_bit,stop_bit,parity_bit);
 //JJ     SerialPort_n.setFlowControlMode(SerialPort.FLOWCONTROL_NONE ); //フロー制御はしない
-//SJ    }catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);close_v();return false;}
+//SJ    }catch(Exception e_ni){z_p.err_s="SIRIAL_PORT]"+z_p.message_s(e_ni);close_v();return false;}
 sw_SerialPort=1;
 return true;
 }

@@ -36,8 +36,8 @@ RDBMSがIBM DB2,Oracle,PostgreSQL,MariaDBでも動きます。
 補足:SETUP_JA_JAVA.SHはLinux用ですが最新版での動作確認はしていないので、問題が出た場合は自力で対処する必要が有ります。
 補足:SETUP_JA_MONO.SHはLinux用ですがMONOのGUIであるwindows.formsが.NETへの移行を想定していないので、コンパイル停止中で動きません。
 
-アンインストール方法：エクスプローラでC:\I\に移動しI37UNINSTALL.BATを起動し実行する事でRDBMSのデータも含めアンインストールされます。
-補足：複数システムをインストール出来る関係でサービスはアンインストールされません、I37SRVCWD_REMOVE.BATでサービスをアンインストール出来ます。
+アンインストール方法：エクスプローラでC:\I\に移動しI38UNINSTALL.BATを起動し実行する事でRDBMSのデータも含めアンインストールされます。
+補足：複数システムをインストール出来る関係でサービスはアンインストールされません、I38SRVCWD_REMOVE.BATでサービスをアンインストール出来ます。
 補足：全てのファイルを消すわけでは無いので、全く不要に成った場合は、それぞれのドライブの\Iのディレクトリ以下を手動で消して下さい。
 
 6.作者以外の著作物。（i-downloadディレクトリ内に有ります）
@@ -49,5 +49,5 @@ RDBMSがIBM DB2,Oracle,PostgreSQL,MariaDBでも動きます。
 6.6 ojdbc11.jar---Java用Oracle接続ライブラリ（提供者：Oracle)
 6.7 postgresql-42.7.2.jar---Java用PostgreSQL接続ライブラリ
 6.8 purejavacomm.jar---Java用シリアルポート接続ライブラリ2/2(提供者:https://github.com/nyholku/purejavacomm)
-6.9 その他C#のコンパイルで作られたdllがI37_BIN以下に置かれています。
+6.9 その他C#のコンパイルで作られたdllがI38_BIN以下に置かれています。
 

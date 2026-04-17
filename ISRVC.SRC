@@ -33,7 +33,7 @@
 //SS using System.ServiceProcess;
 //HP /* void dummy(){ */ //プログラム変換で下記CPP側に定義設定の為設定
 //HP ii_z_l z_n;ii_z_l z_p;
-//HP SERVICE_TABLE_ENTRY ServiceTable[]={{TEXT("I37SRVC"),ServiceMain},{NULL,NULL}};
+//HP SERVICE_TABLE_ENTRY ServiceTable[]={{TEXT("I38SRVC"),ServiceMain},{NULL,NULL}};
 //HP BOOL run_b=TRUE;
 //HP BOOL stop_b=FALSE;
 //HP BOOL start_b=TRUE;
@@ -113,7 +113,7 @@
 //HP  service_status_nn.dwCheckPoint=1;
 //HP  service_status_nn.dwWaitHint=1000;
 //HP  service_status_nn.dwControlsAccepted=SERVICE_ACCEPT_STOP;
-//HP  service_status_handle_nn=RegisterServiceCtrlHandlerEx(TEXT("I37SRVC"),HandlerEx,NULL);
+//HP  service_status_handle_nn=RegisterServiceCtrlHandlerEx(TEXT("I38SRVC"),HandlerEx,NULL);
 //HP  if(0==service_status_handle_nn){z_p.srvc_log_file_v(9,"ERROR ServiceMain/1");return;}
 //HP  service_status_nn.dwCurrentState=SERVICE_START_PENDING;
 //HP  rc_b=SetServiceStatus(service_status_handle_nn,&service_status_nn);

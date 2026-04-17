@@ -1,5 +1,5 @@
 // II_SECTION.SRC section class author nobumichi harasawa
-#if IMENU||ITIME //TEST
+#if IMENU||IMTEST||ITIME //TEST
 //HH #include "ii_include_hh.h"
 //PP #include "ii_include_pp.h"
 //SS using Microsoft.Data.SqlClient; //VER37.8.0.12
@@ -20,7 +20,9 @@
 //SS using System.Net.Mail;
 public class ii_section_l
 {
+#if !AUI
 //SS SpeechSynthesizer speak_n=null; //VER8.0.13 
+#endif //!AUI
 //COPY $II_DIR
 //COPY $II_READ
 //COPY $II_SQL2
@@ -632,6 +634,14 @@ for(;CONTINUE_17>=sw;)//CONTINUE_17(17)>=swの場合のみ繰り返す。（ABOR
             z_mt_p.sw_exit=(z_p.e2s_b(cmd2_s,"EXIT2")?2:3);//EXIT?{データ名};有効化。
             sw=RETURN0_29;continue;//該当データに行く
          }
+     else if(z_p.e2s_b(s,"PASTE")) //VER38
+         {  if('T'==z_mt_p.program_c){sw=ABORT_MENU_23;continue;} 
+            if(CONTINUE_NORMAL_0!=sw_skip){sw=LOOP_2;continue;}  //スキップ中 
+#if IMENU||IMTEST
+            if(1==z_mt_p.sw_keyboard)z_mt_p.program_p.keyboard_n.paste_v(opt1_s);  //ペースト
+#endif //IMENU||IMTEST
+            sw=CHECK_RC_10;continue;
+         }
      else if(z_p.e2s_b(s,"SQL"))
          {  if('M'==z_mt_p.program_c){sw=ABORT_MENU_23;continue;} 
             if(CONTINUE_NORMAL_0!=sw_skip){sw=LOOP_2;continue;}  //スキップ中 
@@ -769,8 +779,8 @@ for(;CONTINUE_17>=sw;)//CONTINUE_17(17)>=swの場合のみ繰り返す。（ABOR
           ii_zz_l s_n=new ii_zz_l();s_n.s=opt1_s;
             rc=z_p.command(z_p.replace_rn_s(s_n.s,' '));
           if(0!=rc&&""==z_p.err_s)z_p.err_s="error (COMMAND{"+s_n.s+"})";
-#if IMENU
-          if(z_p.e2s_b(z_p.main_program_s,"IMENU"))z_mt_p.imenu_p.repaint_v();
+#if IMENU||IMTEST
+          if(z_p.e3s_b(z_p.main_program_s,"IMENU","IMTEST"))z_mt_p.repaint_v();
 #endif //MENU
           sw=CHECK_RC_10;continue;
          } 
@@ -872,8 +882,8 @@ for(;CONTINUE_17>=sw;)//CONTINUE_17(17)>=swの場合のみ繰り返す。（ABOR
  else if(z_p.e2s_b(s,"MESSAGE"))
      {z_mt_p.program_p.sw_text_b=false;
       if(CONTINUE_NORMAL_0!=sw_skip){sw=LOOP_2;continue;}  //スキップ中 
-#if IMENU
-      if(z_p.e2s_b(z_p.main_program_s,"IMENU"))
+#if IMENU||IMTEST
+      if(z_p.e3s_b(z_p.main_program_s,"IMENU","IMTEST"))
           z_mt_p.program_p.display_msg_v((z_p.e2s_b(opt1_s,"")?z_p.err_s:
             z_p.replace_rn_s(opt1_s,' ')));
 #else //MENU_ELSE
@@ -937,7 +947,7 @@ for(;CONTINUE_17>=sw;)//CONTINUE_17(17)>=swの場合のみ繰り返す。（ABOR
         }
       sw_sql=1;sw=CHECK_RC_10;continue;
      }
-#if IMENU
+#if IMENU||IMTEST
  else if(z_p.e3s_b(s,"TIMER_BEEP","TIMER"))
      {if('T'==z_mt_p.program_c){sw=ABORT_PROGRAM_19;continue;}  
       if(CONTINUE_NORMAL_0!=sw_skip){sw=LOOP_2;continue;}  //スキップ中 
@@ -1012,8 +1022,8 @@ for(;CONTINUE_17>=sw;)//CONTINUE_17(17)>=swの場合のみ繰り返す。（ABOR
         }
       if('T'==z_mt_p.program_c){sw=ABORT_PROGRAM_19;continue;}  
       if(CONTINUE_NORMAL_0!=sw_skip){sw=LOOP_2;continue;}  //スキップ中 
-#if IMENU
-      if(z_p.e2s_b(z_p.main_program_s,"IMENU"))
+#if IMENU||IMTEST
+      if(z_p.e3s_b(z_p.main_program_s,"IMENU","IMTEST"))
         {z_mt_p.socket_n.receive_cancel();
          i=z_p.to_int_check(opt1_s,'-',0,0);
          if(!z_p.return_b){z_p.err_s="not numeric ("+w_cmd_s_n.s+"{"+opt1_s+"})";rc=z_p.SW_ERROR_5;sw=CHECK_RC_10;continue;}
@@ -1027,7 +1037,7 @@ for(;CONTINUE_17>=sw;)//CONTINUE_17(17)>=swの場合のみ繰り返す。（ABOR
  else if(z_p.e2s_b(s,"BEEP"))
      {z_mt_p.program_p.sw_text_b=false;
       if(CONTINUE_NORMAL_0!=sw_skip){sw=LOOP_2;continue;}  //スキップ中 
-#if IMENU //VER33.1
+#if IMENU||IMTEST //VER33.1
       z_p.beep_v();
 #endif //MENU VER33.1
       sw=CHECK_RC_10;continue;//VER17
@@ -1545,8 +1555,11 @@ else if(z_p.e2s_b(s,"READ_OPEN"))
      }
  else if(z_p.e2s_b(s,"SPEAK"))//VER8.0.13
      {if(CONTINUE_NORMAL_0!=sw_skip){sw=LOOP_2;continue;}  //スキップ中　 
+#if AUI
+#else //AUI
 //SS  if(null==speak_n)speak_n=new SpeechSynthesizer();
 //SS  speak_n.Speak(opt1_s);
+#endif //AUI
 ////PP  QCoreApplication a();
 ////PP  QTextToSpeech *speak_p=new QTextToSpeech(&a);
 ////PP  speak_p->say(opt1_s);
@@ -1555,9 +1568,12 @@ else if(z_p.e2s_b(s,"READ_OPEN"))
      }
  else if(z_p.e2s_b(s,"SPEAK_THREAD"))//VER10.0.0
      {if(CONTINUE_NORMAL_0!=sw_skip){sw=LOOP_2;continue;}  //スキップ中　 
+#if AUI
+#else //AUI
 //SS  if(null==speak_n)speak_n=new SpeechSynthesizer();
 //SS  Thread t_n=new Thread(new ThreadStart(()=>{speak_n.Speak(opt1_s);}));
 //SS  t_n.Start();
+#endif //AUI
 ////PP  QCoreApplication a();
 ////PP  QTextToSpeech *speak_p=new QTextToSpeech(&a);
 ////PP  speak_p->say(opt1_s);
@@ -2283,7 +2299,7 @@ else if(z_p.e2s_b(s,"READ_OPEN"))
 //SS               {z_p.err_s="(@ZZZZZZ_SMTP_SERVER) not found";rc=z_p.SW_ERROR_5;sw=CHECK_RC_10;continue;}
 //SS             opt1_s=z_p.lower_s(z_mt_p.program_p.da_find_name_data_p.data_s);
 //SS            } 
-#if IMENU
+#if IMENU||IMTEST
 //SS          int port=0;
 #endif //MENU 
 //SS          opt1_s=z_p.lower_s(opt1_s);
@@ -2293,14 +2309,14 @@ else if(z_p.e2s_b(s,"READ_OPEN"))
 //SS               {z_p.err_s="(@ZZZZZZ_SMTP_PORT) not found";rc=z_p.SW_ERROR_5;sw=CHECK_RC_10;continue;}
 //SS                opt2_s=z_p.lower_s(z_mt_p.program_p.da_find_name_data_p.data_s);
 //SS            }
-#if IMENU
+#if IMENU||IMTEST
 #endif //MENU 
 //SS          if(!z_p.return_b){z_p.err_s="port not numeric";rc=z_p.SW_ERROR_5;sw=CHECK_RC_10;continue;}
 //SS          opt3_s=z_p.lower_s(opt3_s);
 //SS          opt4_s=z_p.lower_s(opt4_s);
 //SS          if(!z_p.e2s_b(z_p.real_test_s,"REAL")){opt5_s="*(TEST)*"+opt5_s;opt6_s="*(TEST)*"+opt6_s;}
-#if IMENU
-//SS          if(z_p.e2s_b(z_p.main_program_s,"IMENU"))
+#if IMENU||IMTEST
+//SS          if(z_p.e3s_b(z_p.main_program_s,"IMENU","IMTEST"))
 //SS            {if(0==z_mt_p.program_p.CONTROL_IX[z_mt_p.program_p.C_SMTP_15])
 //SS             if(!z_p.dialog_box_yes_no_b("To="+opt3_s+"\nFrom="+opt4_s+"\nSubject="
 //SS              +opt5_s+"\nBody="+opt6_s,"SMTP")){sw=CHECK_RC_10;continue;}//VER17
@@ -2311,7 +2327,7 @@ else if(z_p.e2s_b(s,"READ_OPEN"))
 //SS            w_s_n.s=(-1==j?z_p.substring2_s(opt3_s,i):z_p.trim_s(z_p.substring3_s(opt3_s,i,j-i)));
 //SS            try{if(!z_p.e2s_b(w_s_n.s,""))
 //SS                   {
-#if IMENU
+#if IMENU||IMTEST
 ///////////////////////(  Virus Error BEGIN )///////////////////////////////////////////////////
 //SS                    System.Net.Mail.MailMessage MailMessage_n=
 //SS                       new System.Net.Mail.MailMessage(opt4_s,w_s_n.s,opt5_s,opt6_s);
@@ -2321,7 +2337,7 @@ else if(z_p.e2s_b(s,"READ_OPEN"))
 #endif //MENU
 //SS                  }
 //SS               }
-//SS             catch(Exception e_ni){z_p.err_s=e_ni.Message;rc=z_p.SW_ERROR_5;sw=CHECK_RC_10;continue;}
+//SS             catch(Exception e_ni){z_p.err_s="[MAIL]"+e_ni.Message;rc=z_p.SW_ERROR_5;sw=CHECK_RC_10;continue;}
 //SS            i=j+1;
 //SS            if(-1==j||z_p.length(opt3_s)<=i)break;
 //SS           }//for(;;)-----------------------------------------------------------------
@@ -2431,8 +2447,8 @@ else if(z_p.e2s_b(s,"READ_OPEN"))
        for(;;)//--------------------------------------------------------
          {if(z_p.count_s_i(s_sql_a)<=z_mt_p.program_p.sql_cnt_ix[sql_cnt])
             {
-#if IMENU
-              if(z_p.e2s_b(z_p.main_program_s,"IMENU"))z_p.err_s=z_p.at_s(z_p.s_lang_a,z_mt_p.txt_not_found);
+#if IMENU||IMTEST
+              if(z_p.e3s_b(z_p.main_program_s,"IMENU","IMTEST"))z_p.err_s=z_p.at_s(z_p.s_lang_a,z_mt_p.txt_not_found);
 #endif //MENU
              if(0==z_mt_p.program_p.CONTROL_IX[z_mt_p.program_p.C_IF_ERROR_7]
                 &&z_p.e3s_b(cmd2_s,"SQL_REPEAT","SQL_SET"))sw=CHECK_RC_10;//VER17
@@ -2677,7 +2693,7 @@ for(int sw2=0;;)//////( sw2 w1_n.sが左辺)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 //SS                 try{Microsoft.Win32.RegistryKey key=Microsoft.Win32.Registry.LocalMachine.OpenSubKey(w2_s_n.s);　//VER33.1
 //SS                     w3_s_n.s=z_p.registry_s=key.GetValue(w_s_n.s).ToString();
 //SS                     if( null ==w3_s_n.s)w3_s_n.s=z_p.registry_s="";  
-//SS                    }catch(Exception e_ni){sw_error=z_p.SW_ERROR_5;error_s=e_ni.Message;w2_s_n.s="";}
+//SS                    }catch(Exception e_ni){sw_error=z_p.SW_ERROR_5;error_s="[REG]"+e_ni.Message;w2_s_n.s="";}
 //SS                 z_p.registry_key_s=w2_s_n.s;
 //JJ                 z_p.dialog_box_error_v(z_mt_p,z_p.upper_s(w1_s_n.s)+" does not work by the JAVA","JAVA");     
 //SS #pragma warning restore CA1416
@@ -2701,7 +2717,7 @@ for(int sw2=0;;)//////( sw2 w1_n.sが左辺)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 //SS                  try{o=Convert.ToInt32(w_s_n.s);}catch(Exception){o=w_s_n.s;} 
 //SS                  try{Microsoft.Win32.RegistryKey key=Microsoft.Win32.Registry.LocalMachine.CreateSubKey(z_p.registry_key_s); //VER33.1
 //SS                      key.SetValue(w2_s_n.s,o);
-//SS                      }catch(Exception e_ni){sw_error=z_p.SW_ERROR_5;error_s=e_ni.Message;}
+//SS                      }catch(Exception e_ni){sw_error=z_p.SW_ERROR_5;error_s="[REG]"+e_ni.Message;}
 //JJ                  z_p.dialog_box_error_v(z_mt_p,z_p.upper_s(w1_s_n.s)+" does not work by the JAVA","JAVA");     
 //SS #pragma warning restore CA1416
 #endif //W
@@ -2858,9 +2874,9 @@ for(int sw2=0;;)//////( sw2 w1_n.sが左辺)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                            }
                     else if(z_p.e2s_b(s_s,"@COLOR"))
                            {
-#if IMENU
+#if IMENU||IMTEST
                        //z_p.console_write_v(z_p.main_program_s+"/"+w_kind_s+"/"+w2_s_n.s);
-                            if(z_p.e2s_b(z_p.main_program_s,"IMENU"))
+                            if(z_p.e3s_b(z_p.main_program_s,"IMENU","IMTEST"))
                             if(z_p.e3s_b(w_kind_s,"SET","DATA"))
                               {w_data_n.color_v(w2_s_n.s);z_mt_p.program_p.display_v(2,w_data_n,w_kind_s);}
 #endif //MENU
@@ -2873,7 +2889,7 @@ for(int sw2=0;;)//////( sw2 w1_n.sが左辺)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
              else
                {s_s=z_p.upper_s(w1_s_n.s); 
                 if(z_p.e2s_b(s_s,"_AND_SPACE")){w3_s_n.s=z_mt_p.program_p.and_space_s=w2_s_n.s;}
-#if IMENU
+#if IMENU||IMTEST
                 else if(z_p.e2s_b(s_s,"_CLICK"))
                       {w3_s_n.s=w2_s_n.s;z_mt_p.program_p.keyboard_n.auto_v(1,w2_s_n.s);if(z_p.e2s_b(in_kind_s,"CLICK"))z_p.sw_click_b=true;}
 #endif //MENU
@@ -2951,14 +2967,14 @@ for(int sw2=0;;)//////( sw2 w1_n.sが左辺)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                 else if(z_p.e2s_b(s_s,"_JOB"))
                       {   if(z_p.e3c_b(z_mt_p.program_c,'M','F'))
                            {w3_s_n.s=z_p.job_s=w2_s_n.s;
-#if IMENU
+#if IMENU||IMTEST
                             z_mt_p.title_bar_v();
 #endif //MENU
                            }
                          else {z_p.err_s="not use (not menu-job,file-job) \"_JOB\"";sw=ABORT_24;sw_continue_b=true;break;}
                          
                       } 
-#if IMENU
+#if IMENU||IMTEST
                 else if(z_p.e2s_b(s_s,"_HEAD"))
                       {if(z_p.e3c_b(z_mt_p.program_c,'M','F'))
                                 {w3_s_n.s=z_p.job_name_s=w2_s_n.s;z_mt_p.title_bar_v();}
@@ -2982,7 +2998,7 @@ for(int sw2=0;;)//////( sw2 w1_n.sが左辺)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                 else if(z_p.e2s_b(s_s,"_SERVER_NAME")){w3_s_n.s=z_p.server_name_s=w2_s_n.s;z_mt_p.set_db_v();}
                 else if(z_p.e2s_b(s_s,"_SYSTEM"))
                        {w3_s_n.s=z_p.system_s=w2_s_n.s;z_mt_p.set_db_v();
-#if IMENU
+#if IMENU||IMTEST
                         if(z_p.e3c_b(z_mt_p.program_c,'M','F'))z_mt_p.title_bar_v();
 #endif //MENU
                         z_p.exe_option_s=z_p.exe_param_s+" I_"+z_p.server_name_s+"_"+z_p.system_s+".I"; 
@@ -3089,7 +3105,7 @@ else
 //JJ           else if('/'==compute_c)decimal1_d=decimal1_d.divide(decimal2_d,length2,(0==compute_cut_ii?RoundingMode.HALF_UP:RoundingMode.DOWN));//VER28.1
 //SS           else if('%'==compute_c)decimal1_d%=decimal2_d;
 //JJ           else if('%'==compute_c)decimal1_d=decimal1_d.subtract(decimal2_d.multiply(decimal1_d.divide(decimal2_d,RoundingMode.DOWN)));//VER28.1
-//SJ          }catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);{rc=5;break;}}
+//SJ          }catch(Exception e_ni){z_p.err_s="[COMPUTE]"+z_p.message_s(e_ni);{rc=5;break;}}
 //SJ       if(0==compute_cut_ii)//COMPUTE(四捨五入）
 //HP          {                                       //VER37.8.0.12
 ////SS          decimal1_d=decimal.Round(decimal1_d,length2);//四捨五入 //VER37.8.0.12
@@ -3288,8 +3304,8 @@ if(z_p.e3s_b(z_mt_p.program_p.program_s,"INPUT","OUTPUT")&&z_p.e2s_b(w_kind_s,"D
      }
 rc=w_data_n.set_i(s_si);
 z_mt_p.trace_v(0,":"+w_name_top_s+w_data_n.name_s+"=\""+w_data_n.data_s+"\""); //VER15.1で修正。
-#if IMENU
-if(z_p.e2s_b(z_p.main_program_s,"IMENU"))
+#if IMENU||IMTEST
+if(z_p.e3s_b(z_p.main_program_s,"IMENU","IMTEST"))
    if(9!=rc)
      {if(!z_p.e3s_b(w_kind_s,"WORK","KEEP"))z_mt_p.program_p.display_v(2,w_data_n,w_kind_s);
       if(z_p.e2s_b(w_kind_s,"SET")&&!z_p.e2s_b(z_mt_p.program_p.now_kind_s,"SET"))w_data_n.data_save_s=w_data_n.data_s;//セーブも変更 

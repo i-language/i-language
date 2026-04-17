@@ -49,7 +49,7 @@ cp IXXCLIENT.SH                  $I_HOME/SHARE/LINUX/CLIENT${I_VER}CLIENT.SH
 cp CONVERT.TX?                   $I_HOME/SHARE/LINUX/CLIENT 
 cp $I_HOME/TMP/$6*               $I_HOME/SHARE/LINUX/CLIENT 
 #cp I.IC?                         $I_HOME/SHARE/LINUX/BIN${I_VER} 
-cp I_LANG??U.TXT                 $I_HOME/SHARE/LINUX/BIN${I_VER} 
+cp I_LANG_??_U.TXT               $I_HOME/SHARE/LINUX/BIN${I_VER} 
 cp ../${I_VER}_BIN/CLIENT_UD/*.* $I_HOME/SHARE/LINUX/BIN${I_VER}D 
 cp ../${I_VER}_BIN/JAVA/*.*      $I_HOME/SHARE/LINUX/BIN${I_VER}J 
 cp ../i-download/*.ar            $I_HOME/SHARE/LINUX/BIN${I_VER}J 
@@ -60,7 +60,7 @@ cp IXXCLIENT.JS                  $I_HOME/SHARE/WINDOWS/CLIENT/${I_VER}CLIENT.JS
 cp CONVERT.TX?                   $I_HOME/SHARE/WINDOWS/CLIENT 
 cp $I_HOME/TMP/$6*               $I_HOME/SHARE/WINDOWS/CLIENT 
 cp I.IC?                         $I_HOME/SHARE/WINDOWS/BIN${I_VER} 
-cp I_LANG??W.TXT                 $I_HOME/SHARE/WINDOWS/BIN${I_VER} 
+cp I_LANG_??_W.TXT               $I_HOME/SHARE/WINDOWS/BIN${I_VER} 
 cp ../${I_VER}_BIN/CLIENT_WD/*.* $I_HOME/SHARE/WINDOWS/BIN${I_VER}D 
 cp ../${I_VER}_BIN/JAVA/*.*      $I_HOME/SHARE/WINDOWS/BIN${I_VER}J 
 cp ../i-download/*.jar           $I_HOME/SHARE/WINDOWS/BIN${I_VER}J 

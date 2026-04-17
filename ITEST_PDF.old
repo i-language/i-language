@@ -1,0 +1,52 @@
+using System;
+using Gtk;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using System.IO;
+public class PdfSample : Window
+{public PdfSample() : base("PDF 生成サンプル")
+  {SetDefaultSize(300, 200);
+   DeleteEvent += (o, args) => Application.Quit();
+   Button pdfButton = new Button("PDF を作成する");
+   pdfButton.Clicked += OnPdfClicked;
+   Add(pdfButton);
+   ShowAll();
+  }
+private void OnPdfClicked(object sender, EventArgs e)
+ {// 保存先を GTK のファイルダイアログで選択
+ FileChooserDialog dialog = new FileChooserDialog(
+ "PDF の保存先を選択",this,FileChooserAction.Save,"Cancel",ResponseType.Cancel,"Save",ResponseType.Accept);
+ dialog.CurrentName="print.pdf";
+ if(dialog.Run()==(int)ResponseType.Accept)
+        {string path = dialog.Filename;dialog.Destroy();CreatePdf(path);
+         MessageDialog msg = new MessageDialog(this,DialogFlags.Modal,MessageType.Info,ButtonsType.Ok,"Save\n"+path);
+         msg.Run(); msg.Destroy();
+        }else{dialog.Destroy();}
+ }
+private void CreatePdf(string path)
+ {Document doc = new Document(PageSize.A4);
+  using (FileStream fs = new FileStream(path, FileMode.Create))
+        {PdfWriter writer = PdfWriter.GetInstance(doc, fs);
+         doc.Open();
+            // PDF に文字を書き込む
+    PdfContentByte cb = writer.DirectContent;
+
+    // ★ ここに位置指定の文字描画や背景色塗りを「書く」 ★
+    cb.BeginText();
+    cb.SetFontAndSize(BaseFont.CreateFont(), 12);
+    cb.SetTextMatrix(100, 700);
+    cb.ShowText("ここに文字を書く");
+    cb.EndText();
+
+    cb.SetColorFill(BaseColor.YELLOW);
+    cb.Rectangle(100, 680, 200, 20);
+    cb.Fill();
+//            doc.Add(new Paragraph("PDF 生成サンプル"));
+//            doc.Add(new Paragraph("GTKSharp + iTextSharp を使用しています。"));
+//            doc.Add(new Paragraph("System.Windows.Forms は使用していません。"));
+            doc.Close();
+        }
+    }
+
+public static void Main(){Application.Init();new PdfSample();Application.Run();}
+}

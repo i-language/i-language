@@ -1,6 +1,6 @@
 //II_RECEIVE.SRC socket read author nobumichi.harasawa
 //## int(1=error end,0=nomal end,-1=error anser) ii_socke.read(s,filockete_s,z_n)
-#if IMENU||ITIME||ISRVC //TEST
+#if IMENU||IMTEST||ITIME||ISRVC //TEST
 //HH #include "ii_include_hh.h"
 //PP #include "ii_include_pp.h"
 //SS using Microsoft.Data.SqlClient; //VER37.8.0.12
@@ -16,7 +16,7 @@
 //SS using System.Net.Sockets;
 //SS using System.Threading;
 //JJ import java.net.*;
-#if IMENU
+#if IMENU||IMTEST
 //====================================================
 //*****(  UDP受信 )***************************
 public class ii_receive_l
@@ -55,7 +55,7 @@ try{
 //JJ  DatagramSocket_n=new DatagramSocket(receive_port);
 //JJ  DatagramPacket_n=new DatagramPacket(get_yx,get_yx.length);
    }
-catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);rc=1;close_v();return;}
+catch(Exception e_ni){z_p.err_s="[RUN]"+z_p.message_s(e_ni);rc=1;close_v();return;}
 for(;;)
   {
 //SS if(0!=sw_abort)break; //VER35.1 
@@ -88,7 +88,7 @@ for(;;)
 //HP     z_mt_p.sw_receive=1; //HPは別スレッドではタイマーを起動できない為１で対応。(VER31.1)
 //SJ     z_mt_p.menu_p.timer_udp_v(); //タイマーにキーエンター実行を依頼。
          break;
-//SJ    }catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);rc=1;break;}
+//SJ    }catch(Exception e_ni){z_p.err_s="[RECEIVE]"+z_p.message_s(e_ni);rc=1;break;}
   }
 close_v();
 //HP if(1!=z_mt_p.sw_receive)z_mt_p.sw_receive=-1;//無処理終了。
@@ -118,5 +118,5 @@ public void close_v()
 //HH private slots:
 //HP void event_v(){sw_event=1;}
 }
-#endif //IMENU
+#endif //IMENU||IMTEST
 #endif

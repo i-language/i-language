@@ -2,7 +2,7 @@
 REM ===( SET_ZIP 開始処理 )====
 REM ===( 最新バージョンを設定 )============================
 REM ===( I言語 VER1 )===
-SET I_VER=I37
+SET I_VER=I38
 REM ===( I言語 VER2 )===
 CALL _BEGIN_VER2.BAT 
 REM ===( Java )===
@@ -40,7 +40,7 @@ SET I_QT_SERVER_SW=NO
 REM ===( I_DB 5 RDBMS )=============
 SET I_DB=;M;I;L;O;P
 REM ====( e.t.c )==================================
-SET I_XCOPYF=XCOPY /C /D /H /I /K /R /V /Y
+SET I_XCOPYF=XCOPY /C /D /H /I /K /R /V /Y /Q
 SET I_XCOPYD=%I_XCOPYF% /E
 SET I_HOME=%SystemDrive%\I
 SET I_BIN=%I_HOME%\BIN%I_VER%

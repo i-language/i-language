@@ -1,5 +1,5 @@
 // II_SQL.SRC sql share class author nobumichi harasawa
-#if IMENU||ITIME //TEST
+#if IMENU||IMTEST||ITIME //TEST
 //HH #include "ii_include_hh.h"
 //PP #include "ii_include_pp.h"
 //SS using Microsoft.Data.SqlClient; //VER37.8.0.12
@@ -146,7 +146,7 @@ try{
     ,(z_p.e2s_b(real_s,"")?z_mt_p.program_p.login_password_s:z_mt_p.password_s(real_s))
      ,sql_si,file_si,add_si,encording_si,login_si);
    }
-catch(Exception e_ni){z_p.err_s=z_p.message_s(e_ni);rc=z_p.SW_ERROR_5;}
+catch(Exception e_ni){z_p.err_s="[SQL]"+z_p.message_s(e_ni);rc=z_p.SW_ERROR_5;}
 return rc;
 }
 //SS void      sql_mssql(){sql2m_n=new ii_sql2m_l(z_p,z_mt_p);sql_g=new sql_sql(sql2m_n.sql_sql);close_g=new close_v(sql2m_n.close_v);}
@@ -1259,7 +1259,7 @@ for(i=0;z_p.count_s_i(s_sql_a)>i;i+=2)
 return 0;
 }
 //--------------------------------------------------------
-#if IMENU
+#if IMENU||IMTEST
 //----------------------------------------------
 //=***( 削除で他テーブルに有るか判定 control=1_table)***
 public int table_1(String program_name_key_si,String table_si)

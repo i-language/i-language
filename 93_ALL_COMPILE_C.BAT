@@ -12,7 +12,8 @@ ECHO START>%I_LOG%
 ECHO START>%I_LOG_W%
 ECHO START>%I_LOG_U%
 SET I_PROGRAMS=IROOT IPRINT IMENU
-IF "%I_QT_SERVER_SW%"=="YES" SET I_PROGRAMS=%I_PROGRAMS% ISETUP ISRVC ITIME 
+IF "%I_QT_SERVER_SW%"=="YES" SET I_PROGRAMS=%I_PROGRAMS% ISETUP ISRVC ITIME
+IF NOT "%I_QT_COMPILE%"==""  SET I_PROGRAMS=%I_QT_COMPILE% 
 FOR %%I IN (%I_PROGRAMS%) DO ( 
    FOR %%J IN (h cpp o) DO (
    IF EXIST release\*.%%J ERASE /Q release\*.%%J  
@@ -24,7 +25,7 @@ REM =====( qmake w )=====
    rem  %I_QT_TOOLS%\mingw32-make -j6 >NUL 2>>%I_LOG%
 REM =====( make w )=====
 REM  %I_MAKE_W% -j6 >>%I_LOG_W% 2>>%I_LOG%
-  %I_MAKE_W% >>%I_LOG_W% 2>>%I_LOG%
+  %I_MAKE_W% -j8 >>%I_LOG_W% 2>>%I_LOG%
    IF EXIST *.o ERASE /Q *.o  
    %I_XCOPYF% release\%%IWC.EXE ..\%I_VER%_BIN\CLIENT_WC
    if "%%I"=="IROOT" copy IROOT.EXE.MANIFEST ..\%I_VER%_BIN\CLIENT_WC\IROOT.EXE.MANIFEST
@@ -37,6 +38,7 @@ rem   if not "%%I"=="IROOT" WSL sh %I_DIR_WSL%/i-language/_COMPILE_C.SH %I_DIR_W
    )
    IF EXIST Makefile ERASE /Q Makefile
 REM =====( qmake/make u )=====
+IF NOT "%I_QT_COMPILE%"=="" GOTO SKIP
 rem   if not "%%I"=="IROOT" WSL sh ../i-language/C_COMPILE_C.SH ../%I_VER%_WORK %I_QMAKE_U% %%IUC.pro 2>>%I_LOG%
    if not "%%I"=="IROOT" WSL sh ../i-language/C_COMPILE_C.SH ../%I_VER%_WORK %I_QMAKE_U% %%IUC.pro %I_LOG_U% %I_LD_LIB_U% 2>>%I_LOG%
    if not "%%I"=="IROOT" %I_XCOPYF% %%IUC ..\%I_VER%_BIN\CLIENT_UC 
@@ -45,6 +47,7 @@ rem   if not "%%I"=="IROOT" WSL sh ../i-language/C_COMPILE_C.SH ../%I_VER%_WORK 
 rem FOR %%J IN (h cpp o) DO (
 rem    IF EXIST release\*.%%J ERASE /Q release\*.%%J  
 rem )
+:SKIP
 FIND "error:" %I_LOG%
 POPD
 IF "%1"=="" %I_XCOPYF% ..\%I_VER%_BIN\CLIENT_WC\*C.exe %I_BIN%

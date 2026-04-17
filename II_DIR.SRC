@@ -1,6 +1,6 @@
 // II_DIR.SRC file class author nobumichi harasawa
 //ファイル 一覧 クラス
-#if IMENU||ITIME||ISRVC||ISETUP
+#if IMENU||IMTEST||ITIME||ISRVC||ISETUP
 //HH #include "ii_include_hh.h"
 //PP #include "ii_include_pp.h"
 //SS using Microsoft.Data.SqlClient; //VER37.8.0.12
@@ -65,7 +65,7 @@ try{
 //JJ if(!f_n.isDirectory()){dir_z_p.err_s="not directory";return false;}
 //JJ File_nx=f_n.listFiles();
    }
-   catch  (Exception e_ni){dir_z_p.err_s=dir_z_p.message_s(e_ni);return false;}
+   catch  (Exception e_ni){dir_z_p.err_s="[Open]"+dir_z_p.message_s(e_ni);return false;}
 sw=1;
 return true;
 }

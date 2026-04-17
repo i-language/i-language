@@ -1,13 +1,26 @@
 //= II_SCROLL.SRC i menu author nocumichi.harasawa
 //= メニュー及びファイル起動ジョブ開始
 //=***********( using )**********************
-#if IMENU
+#if IMENU||IMTEST
 //HH #include "ii_include_hh.h"
 //PP #include "ii_include_pp.h"
 //SS using Microsoft.Data.SqlClient; //VER37.8.0.12
 //SS using System;
 //SS using System.Collections.Generic;
 //SS using System.IO;
+#if AUI
+//SS using System.Numerics;
+//SS using System.Globalization;
+//SS using Avalonia.Controls;
+//SS using Avalonia.Controls.ApplicationLifetimes;
+//SS using Avalonia.Controls.Primitives;
+//SS using Avalonia.Input;
+//SS using Avalonia.Layout;
+//SS using Avalonia.Media;
+//SS using Avalonia.Media.Imaging;
+//SS using Avalonia.Platform;
+//SS using Avalonia.Threading;
+#else //AUI
 #if GTK
 //SS using Gtk;
 //SS using Gdk;
@@ -17,6 +30,7 @@
 //SS using System.Windows.Forms;
 //SS using System.Drawing;
 #endif //GTK
+#endif //AUI
 //JJ import java.awt.*;
 //JJ import java.awt.event.*;
 //JJ import java.io.*;
@@ -36,37 +50,81 @@ public class  ii_scroll_l
 public //(PP対応) 
 ii_z_mt_l scroll_z_mt_p;ii_z_l scroll_z_p;char xy_c;
 //SS public ScrollBar  scroll_n;
-//JJ Scrollbar  scroll_n;
+//JJ Scrollbar         scroll_n;
+#if AUI
+//SS double value_b;
+////SS int sw_first=0;
+#endif //AUI
 public ?void? ii_scroll_l(char xy_ci,ii_z_mt_l z_mt_ni,ii_z_l z_ni)
 {xy_c=xy_ci;scroll_z_mt_p=z_mt_ni;scroll_z_p=z_ni;
+#if AUI
+////SS if(0==sw_first)
+////SS  {sw_first=1;
+////SS   panel_n=new Panel();
+////SS   panel_n.RowDefinitions.Add(new RowDefinition(GridLength.Star));      // メイン領域
+////SS   panel_n.RowDefinitions.Add(new RowDefinition(GridLength.Auto));      // 横バー用
+////SS   panel_n.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));   // メイン領域
+////SS   panel_n.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto)); // 縦バー用
+////SS  } 
+#endif //AUI
 if('X'==xy_c)
    {
 //HP setOrientation(Qt::Horizontal);
-//SJ scroll_n=new 
+//SJ scroll_n=new
+#if AUI
+//SS ScrollBar{Orientation=Orientation.Horizontal,Width=double.NaN,Height=18,HorizontalAlignment=HorizontalAlignment.Stretch};
+//SS  DockPanel.SetDock(scroll_n,Dock.Bottom);
+////SS scroll_n.Orientation = Orientation.Horizontal;
+////SS scroll_n.Height = 20; // 太さ
+////SS Grid.SetRow(scroll_n,1);
+////SS Grid.SetColumn(scroll_n,0);
+#else //AUI
 //SS HScrollBar();
 //SS scroll_n.Anchor=AnchorStyles.Left|AnchorStyles.Bottom|AnchorStyles.Right;//横スクロール下端に設定。
+#endif //AUI
 //JJ Scrollbar(Scrollbar.HORIZONTAL);
    }
  else {
 //HP setOrientation(Qt::Vertical);
 //SJ scroll_n=new 
+#if AUI
+//SS ScrollBar(){Orientation=Orientation.Vertical,Width=18,Height=double.NaN,VerticalAlignment=VerticalAlignment.Stretch};
+//SS DockPanel.SetDock(scroll_n,Dock.Right);
+////SS scroll_n.Orientation = Orientation.Horizontal;
+////SS scroll_n.Height = 20; // 太さ
+////SS Grid.SetRow(scroll_n,0);
+////SS Grid.SetColumn(scroll_n,1);
+#else //AUI
 //SS VScrollBar();
 //SS scroll_n.Anchor=AnchorStyles.Top|AnchorStyles.Bottom|AnchorStyles.Right;//縦スクロール右端に設定。
+#endif //AUI
 //JJ Scrollbar(Scrollbar.VERTICAL);
       }
 //HP setParent(scroll_z_mt_p.imenu_p);
+#if AUI
+//SS scroll_n.SetValue(ScrollBar.AllowAutoHideProperty,false);//常に表示
+//SS scroll_n.Focusable=false;
+//SS scroll_n.Scroll+=scroll_v;
+#else //AUI
 #if GTK
 //SS scroll_n.AddEvents((int)(Gdk.EventMask.ScrollMask));
 //SS scroll_n.ScrollEvent+=scrool_v;
 #else //GTK
 //SS scroll_n.Scroll+=new ScrollEventHandler(scroll_v);
 #endif //GTK
+#endif //AUI
 //JJ scroll_n.addAdjustmentListener(this);//スクロールイベント有効化。
 //JJ scroll_n.addFocusListener(this);//フォーカスリスナー有効化。
+
 }
 //======================================================
 public void show_v()//スクロールバー表示
 {
+#if AUI
+////SS scroll_z_p.console_write_v("scroll show");
+//SS scroll_n.IsVisible=true;
+////SS if('Y'==xy_c)scroll_z_mt_p.menu_p.resize_v(1);
+#else //AUI
 //HP if('X'==xy_c)
 //HP      setGeometry(0,scroll_z_mt_p.y_window_size-scroll_z_p.lang_y_high,scroll_z_mt_p.x_window_size-scroll_z_p.lang_x_width*2,scroll_z_p.lang_y_high);
 //HP else setGeometry(scroll_z_mt_p.x_window_size-scroll_z_p.lang_x_width*2,0,scroll_z_p.lang_x_width*2,scroll_z_mt_p.y_window_size);
@@ -74,9 +132,13 @@ public void show_v()//スクロールバー表示
 //SS scroll_z_mt_p.menu_p.Controls.Add(scroll_n);
 //JJ if('X'==xy_c)scroll_z_mt_p.menu_p.add(scroll_n,BorderLayout.SOUTH);
 //JJ else         scroll_z_mt_p.menu_p.add(scroll_n,BorderLayout.EAST);
+#endif //AUI
 }
 public void hide_v()//スクロールバー非表示
 {try{ 
+#if AUI
+//SS scroll_n.IsVisible=false;
+#else //AUI
 //HP hide();
 //SS scroll_z_mt_p.menu_p.Controls.Remove(scroll_n);
 //JJ scroll_z_mt_p.menu_p.remove(scroll_n);
@@ -88,39 +150,64 @@ public void hide_v()//スクロールバー非表示
 //SJ scroll_n.
 //SS    Maximum=0;
 //JJ setMaximum(0);
+#endif //AUI
     }catch(Exception){}
 }
-//----------------------------------------------------------------------
+//-----------------------------------------------   -----------------------
 public void set_value_v(int ii)
 {
+//HP sw_not_scroll=1; //VER38
 //HP setValue(ii);
-//HP repaint();
+//HP update();
+#if AUI
+////SS  scroll_n.Offset=new Vector<double>((double)('X'==xy_c?ii:0),(double)('X'==xy_c?0:ii));
+#else //AUI
 //SJ scroll_n.
 //SS    Value=ii;
+#endif //AUI
 //JJ setValue(ii-1);
 }
 public void set_max_large_v(int max_ii,int large_ii)
 {
+//HP sw_not_scroll=2; //VER38
 //HP  setMaximum(max_ii);
+#if AUI
+//SS if('X'==xy_c)scroll_n.MaxWidth =max_ii;
+//SS else         scroll_n.MaxHeight=max_ii;     
+#else //AUI
 //SJ scroll_n.
 //SS     Maximum=max_ii;
+#endif //AUI
 //JJ  setMaximum(max_ii);
 //HP  setPageStep     (large_ii);
+#if AUI
+////SS var largeChangeStyle = new Style(x => x.Parent().OfType<ScrollViewer>().Child().OfType<ScrollBar>());
+////SS largeChangeStyle.Setters.Add(new Setter(ScrollBar.LargeChangeProperty,lage_ii));
+////SS scroll_n.Styles.Add(largeChangeStyle);
+#else //AUI
 //SJ scroll_n.
 //SS  LargeChange=     large_ii;
+#endif //AUI
 //JJ  setVisibleAmount(large_ii);
 //JJ  scroll_n.setBlockIncrement(large_ii);
 }
 public int get_value()
 {return 
 //HP value();
+#if AUI
+//SS (int )value_b;
+#else //AUI 
 //SJ scroll_n. 
 //SS  Value;
+#endif //AUI
 //JJ  getValue()+1; //(0>scroll_n.getValue()?0:scroll_n.getValue());
 }
 public int get_large()
 {return 
 //HP  pageStep();
+#if AUI
+//SS (int) 
+#endif //AUI
 //SJ  scroll_n.
 //SS  LargeChange;
 //JJ  getVisibleAmount();
@@ -128,16 +215,32 @@ public int get_large()
 public int  get_max()
 {return 
 //HP  maximum();
+#if AUI
+//SS ('X'==xy_c?(int)scroll_n.MaxWidth:(int)scroll_n.MaxHeight);     
+#else //AUI
 //SJ scroll_n.
 //SS  Maximum;
+#endif //AUI
 //JJ  getMaximum();
 }
 //---------------------------------------------------------------------
 //=**( バーが操作された )***
+//HP int sw_not_scroll=0; //VER38
 //HP void sliderChange(SliderChange change_nn)
+//***(スクロールした )***
+#if AUI
+//SS private void scroll_v(object sender, ScrollEventArgs e_ni)
+#else //AUI
 //SS private void scroll_v(Object o_ni,EventArgs e_ni)
+#endif //AUI
 //JJ public void adjustmentValueChanged(AdjustmentEvent e_ni)
-{if('X'==xy_c)scroll_z_mt_p.program_p.scroll_x_v(get_value());
+{
+//HP if(2==sw_not_scroll){sw_not_scroll=1;return;} // VER38 //スクロール禁止
+//HP if(1==sw_not_scroll){sw_not_scroll=0;return;} // VER38 //スクロール禁止
+#if AUI
+//SS value_b=e_ni.NewValue;
+#endif
+if('X'==xy_c)scroll_z_mt_p.program_p.scroll_x_v(get_value());
  else {scroll_z_mt_p.program_p.scroll_y_v(get_value()+1,2);
        if(scroll_z_p.SW_ABORT_9==scroll_z_mt_p.sw_err)scroll_z_mt_p.menu_p.fin_v();
       }
@@ -149,4 +252,4 @@ public int  get_max()
 //COPY $II_WRITE
 }
 //---------------------------------------------------------------------
-#endif
+#endif //IMENU||IMTEST

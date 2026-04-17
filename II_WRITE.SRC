@@ -1,5 +1,5 @@
 // II_WRITE.SRC read class author nobumichi harasawa
-//#if IMENU||ITIME||IPRINT||IROOT||ISRVC||ISETUP||IPAPER||ICHART||ICHART2 //TEST
+//#if IMENU||IMTEST||ITIME||IPRINT||IROOT||ISRVC||ISETUP||IPAPER||ICHART||ICHART2 //TEST
 //HH #include "ii_include_hh.h"
 //PP #include "ii_include_pp.h"
 //SS using Microsoft.Data.SqlClient; //VER37.8.0.12
