@@ -24,7 +24,8 @@ for(S in SF)
    var ARG=A(1)+" "+A(2)+" "+A(3)+" "+A(4);
   if(A(6)=="J")
     {PROGRAM="javaw.exe";
-     ARG="-cp "+PATH2+"purejavacomm.jar;"+PATH2+"jna.jar;"+PATH2+A(7)+";"+PATH2+"IJAVA.jar imenu_l "+ARG;
+//     ARG="-cp "+PATH2+"purejavacomm.jar;"+PATH2+"jna.jar;"+PATH2+A(7)+";"+PATH2+"IJAVA.jar imenu_l "+ARG;
+       ARG="-cp \""+PATH2+"*\" imenu_l "+ARG;      
     }
    SHORTCUT(WS,SF[S],PATH1,PROGRAM,ARG,A(5));
   }

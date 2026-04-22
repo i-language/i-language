@@ -2,7 +2,7 @@
 SET I_NAME=IMTEST
 IF "%1"=="" CALL C_SOURCE.BAT
 dotnet clean
-dotnet build -c Release -r win-x64 --self-contained true ..\%I_VER%_WORK\%I_NAME%WD.CSPROJ
+dotnet build -c Release -r win-x64 --no-self-contained ..\%I_VER%_WORK\%I_NAME%WD.CSPROJ
 if errorlevel 1 goto FIN
 IF NOT "%1"=="" GOTO FIN
 IF NOT EXIST %I_BIN% GOTO FIN 

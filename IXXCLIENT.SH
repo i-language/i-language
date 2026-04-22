@@ -40,12 +40,13 @@ do
  echo "[Desktop Entry]">$fl
  echo "Name=$7">>$fl
  if test "$8" = "D" ; then i_exec="mono /home/I/BIN$1/IMENUUD.EXE" ;fi
- if test "$8" = "J" ; then i_exec="java -cp /home/I/BIN$1/purejavacomm.jar:/home/I/BIN$1/jna.jar:/home/I/BIN$1/IJAVA.jar:/home/I/BIN$1/$9 imenu_l" ;fi
+##VER38 if test "$8" = "J" ; then i_exec="java -cp /home/I/BIN$1/purejavacomm.jar:/home/I/BIN$1/jna.jar:/home/I/BIN$1/IJAVA.jar:/home/I/BIN$1/$9 imenu_l" ;fi
+ if test "$8" = "J" ; then i_exec="java -cp \"/home/I/BIN$1/*\" imenu_l" ;fi
  if test "$8" = "C" ; then i_exec="/home/I/BIN$1/IMENUUC" ;fi
  echo "Exec= $i_exec $3 $4 $5 $6">>$fl
  echo "Icon=/home/I/BIN$1/I_MENU.ICO">>$fl
 #echo "StartupNotify=true">>$fl
  echo "Terminal=false">>$fl
  echo "Type=Application">>$fl
- chmod 777 $fl
+ chmod 775 $fl
 done

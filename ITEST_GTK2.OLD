@@ -1,0 +1,136 @@
+using System;
+using System.IO;
+using Gtk;
+using Cairo;
+
+public class PrintSample
+{
+    class TextFormat
+    {
+        public double X;
+        public double Y;
+        public string Font;
+        public double Size;
+    }
+
+    class LineFormat
+    {
+        public double X1;
+        public double Y1;
+        public double X2;
+        public double Y2;
+    }
+
+    static TextFormat[] textFormats;
+    static LineFormat[] lineFormats;
+    static string[] dataLines;
+    static int dataIndex = 0;
+
+    public static void Main(string[] args)
+    {
+        Application.Init();
+
+        LoadFormatFile("format.txt");
+        dataLines = File.ReadAllLines("data.txt");
+
+        PrintOperation op = new PrintOperation();
+        op.BeginPrint += new BeginPrintHandler(OnBeginPrint);
+        op.DrawPage += new DrawPageHandler(OnDrawPage);
+
+        // 最初は 1 ページだけ用意
+        op.NPages = 1;
+
+  //      op.Run(PrintOperationAction.PrintDialog, null);
+          op.Run(PrintOperationAction.Print, null);
+
+
+        Application.Run();
+    }
+
+    static void LoadFormatFile(string path)
+    {
+        string[] lines = File.ReadAllLines(path);
+        System.Collections.ArrayList tlist = new System.Collections.ArrayList();
+        System.Collections.ArrayList llist = new System.Collections.ArrayList();
+
+        int i;
+        for (i = 0; i < lines.Length; i++)
+        {
+            string line = lines[i].Trim();
+            if (line.Length == 0) continue;
+
+            string[] sp = line.Split(',');
+
+            if (sp[0] == "TEXT")
+            {
+                TextFormat tf = new TextFormat();
+                tf.X = double.Parse(sp[1]);
+                tf.Y = double.Parse(sp[2]);
+                tf.Font = sp[3];
+                tf.Size = double.Parse(sp[4]);
+                tlist.Add(tf);
+            }
+            else if (sp[0] == "LINE")
+            {
+                LineFormat lf = new LineFormat();
+                lf.X1 = double.Parse(sp[1]);
+                lf.Y1 = double.Parse(sp[2]);
+                lf.X2 = double.Parse(sp[3]);
+                lf.Y2 = double.Parse(sp[4]);
+                llist.Add(lf);
+            }
+        }
+
+        textFormats = (TextFormat[])tlist.ToArray(typeof(TextFormat));
+        lineFormats = (LineFormat[])llist.ToArray(typeof(LineFormat));
+    }
+
+    static void OnBeginPrint(object obj, BeginPrintArgs args)
+    {
+        // GtkSharp では BeginPrintArgs に NPages が無いので何もしない
+    }
+static void OnDrawPage(object obj, DrawPageArgs args)
+{
+    PrintOperation op = (PrintOperation)obj;
+    Context cr = args.Context.CairoContext;
+
+    int i;
+
+    // 文字描画
+    for (i = 0; i < textFormats.Length; i++)
+    {
+        if (dataIndex >= dataLines.Length)
+            break;
+
+        TextFormat tf = textFormats[i];
+        string text = dataLines[dataIndex];
+
+        // Pango を使うと日本語が確実に出る
+        Pango.Layout layout = Pango.CairoHelper.CreateLayout(cr);
+        layout.FontDescription = Pango.FontDescription.FromString(tf.Font + " " + tf.Size);
+        layout.SetText(text);
+
+        cr.MoveTo(tf.X, tf.Y);
+        Pango.CairoHelper.ShowLayout(cr, layout);
+
+        dataIndex++;
+    }
+
+    // 罫線描画
+    for (i = 0; i < lineFormats.Length; i++)
+    {
+        LineFormat lf = lineFormats[i];
+        cr.MoveTo(lf.X1, lf.Y1);
+        cr.LineTo(lf.X2, lf.Y2);
+        cr.Stroke();
+    }
+
+    // ★ここが重要：return の前に次ページ追加判定を行う
+    if (dataIndex < dataLines.Length)
+    {
+        op.NPages = op.NPages + 1;
+    }
+}
+
+
+}

@@ -6,5 +6,6 @@ if test `whoami` != "root" ;then
 fi 
 export MONO_MWF_SCALING=disable
 umask 0000
-java -cp /home/I/BIN${i_ver}/purejavacomm.jar:/home/I/BIN${i_ver}/jna.jar:/home/I/BIN${i_ver}/IJAVA.jar imenu_l JA 30/600/trace ${i_ver}RESCUE.TXT
+#VER38 java -cp /home/I/BIN${i_ver}/purejavacomm.jar:/home/I/BIN${i_ver}/jna.jar:/home/I/BIN${i_ver}/IJAVA.jar imenu_l JA 30/600/trace ${i_ver}RESCUE.TXT
+java -cp "/home/I/BIN${i_ver}/*" imenu_l JA 30/600/trace ${i_ver}RESCUE.TXT
 

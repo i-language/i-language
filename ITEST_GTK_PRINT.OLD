@@ -1,0 +1,103 @@
+using System;
+using Gtk;
+using Cairo;
+using Pango;
+
+public class InvoicePrinter
+{
+    public static void Main(string[] args)
+    {
+        Application.Init();
+        PrintInvoice();
+        Application.Run();
+    }
+
+    public static void PrintInvoice()
+    {
+        PrintOperation print = new PrintOperation();
+
+        print.BeginPrint += new BeginPrintHandler(OnBeginPrint);
+        print.DrawPage += new DrawPageHandler(OnDrawPage);
+
+        print.Run(PrintOperationAction.PrintDialog, null);
+    }
+
+    private static void OnBeginPrint(object sender, BeginPrintArgs args)
+    {
+        PrintOperation print = (PrintOperation)sender;
+        print.NPages = 2;   // 固定 2 ページ
+    }
+
+    private static void OnDrawPage(object sender, DrawPageArgs args)
+    {
+        PrintContext context = args.Context;
+
+        // Cairo.Context を明示
+        Cairo.Context cr = context.CairoContext;
+
+        int page = args.PageNr;
+
+        DrawHeader(cr, page);
+        DrawTable(cr, page);
+    }
+
+    private static void DrawHeader(Cairo.Context cr, int page)
+    {
+        // ★ Pango.Layout を完全修飾名で書く
+        Pango.Layout layout = Pango.CairoHelper.CreateLayout(cr);
+        layout.FontDescription = FontDescription.FromString("Sans 16");
+
+        layout.SetText("納品書   Page " + (page + 1));
+        cr.MoveTo(50, 40);
+        Pango.CairoHelper.ShowLayout(cr, layout);
+
+        layout.FontDescription = FontDescription.FromString("Sans 12");
+        layout.SetText("株式会社テスト商事");
+        cr.MoveTo(50, 70);
+        Pango.CairoHelper.ShowLayout(cr, layout);
+    }
+
+    private static void DrawTable(Cairo.Context cr, int page)
+    {
+        cr.LineWidth = 1.0;
+        cr.SetSourceRGB(0, 0, 0);
+
+        int left = 50;
+        int top = 120;
+        int width = 500;
+        int rowHeight = 30;
+
+        // 外枠
+        cr.Rectangle(left, top, width, rowHeight * 10);
+        cr.Stroke();
+
+        // 横線
+        int i;
+        for (i = 1; i < 10; i++)
+        {
+            cr.MoveTo(left, top + rowHeight * i);
+            cr.LineTo(left + width, top + rowHeight * i);
+            cr.Stroke();
+        }
+
+        // 縦線
+        cr.MoveTo(left + 300, top);
+        cr.LineTo(left + 300, top + rowHeight * 10);
+        cr.Stroke();
+
+        // ★ Pango.Layout を完全修飾名で書く
+        Pango.Layout layout = Pango.CairoHelper.CreateLayout(cr);
+        layout.FontDescription = FontDescription.FromString("Sans 12");
+
+        for (i = 0; i < 10; i++)
+        {
+            layout.SetText("商品名サンプル " + (i + 1 + page * 10));
+            cr.MoveTo(left + 10, top + rowHeight * i + 5);
+            Pango.CairoHelper.ShowLayout(cr, layout);
+
+            layout.SetText(((i + 1) * 2) + " 個");
+            cr.MoveTo(left + 310, top + rowHeight * i + 5);
+            Pango.CairoHelper.ShowLayout(cr, layout);
+        }
+    }
+}

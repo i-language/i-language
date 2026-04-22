@@ -409,6 +409,8 @@ try
   pro_v("W","D");
   pro_v("U","D"); 
   pro_v("W","A"); 
+  pro_v("W","G"); 
+  pro_v("U","G"); 
   return(0);
   }
 catch(Exception e_t){Console.WriteLine(e_t.Message);return(9);}

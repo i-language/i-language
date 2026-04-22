@@ -1,5 +1,5 @@
 @echo off
-REM .cs コンパイル　%1=ソースネーム %2=CLIENT,SERVER
+REM .cs コンパイル　%1=ソースネーム %2=CLIENT,SERVER %3=NO_SELF_CONTAINED
 IF "%I_VER%"=="" CALL C_BEGIN.BAT
 :B1
 IF "%1"==""  ECHO %0 ARG-1 NULL&PAUSE&GOTO B1
@@ -18,10 +18,10 @@ SET I_OS=W
 SET I_OS2=win
 :LOOP
 SET I_DOTNET=--no-self-contained
-IF "%I_SET_ZIP_SW%"=="YES" GOTO NOT_BUILD
-IF         "%I_OS%"=="U"   GOTO NOT_BUILD
+IF "%I_SET_ZIP_SW%"=="YES" GOTO NO_SELF_CONTAINED
+IF NOT "%3"==""  GOTO NO_SELF_CONTAINED
 SET I_DOTNET=--self-contained true
-:NOT_BUILD
+:NO_SELF_CONTAINED
 REM =====( dotnet )=====
 REM ECHO =====( %1 %2 )=====( %I_build% %I_OS2% )=====
 ECHO ==========( %1 %2 )==========( %I_DOTNET% %I_OS2% )==========

@@ -6,24 +6,13 @@ I_VER=$1
 I_HOME=/home/I
 I_SYSTEM_DIR=$I_HOME/I.$2
 file=$I_HOME/TMP/SETUP_$2_END.TXT
-for i in $I_HOME $I_HOME/SHARE $I_HOME/SHARE/LINUX $I_HOME/SHARE/WINDOWS $I_HOME/SHARE/MESSAGE $I_SYSTEM_DIR  $I_SYSTEM_DIR/BAT
+for i in $I_HOME $I_HOME/SHARE $I_HOME/SHARE/MESSAGE $I_SYSTEM_DIR  $I_SYSTEM_DIR/BAT
    do
    if test ! -d $i;then
       mkdir         $i 2>>$file
       chmod 775     $i
       chgrp i_group $i
    fi
-   done
-for i in $I_HOME/SHARE/LINUX $I_HOME/SHARE/WINDOWS  
-   do
-   for j in CLIENT BIN${I_VER} BIN${I_VER}D BIN${I_VER}J BIN${I_VER}C 
-      do  
-      if test ! -d $i$j;then
-         mkdir         $i/$j 2>>$file
-         chmod 775     $i/$j
-         chgrp i_group $i/$j
-       fi
-      done
    done
 for i in DATA TMP
     do
@@ -46,32 +35,31 @@ for i in 1 2 3 4 5 6 7 8 9
    done
 # ===HOME===
 #cp ${I_VER}RESCCUE.*    $I_HOME 
-cp IXXUNINSTALL.TXT      $I_HOME/${I_VER}UNINSTALL.TXT 
-#cp IXXUNINSTALL_JAVA.SH $I_HOME/${I_VER}UNINSTALL_JAVA.SH 
-cp IXXUNINSTALL.SH       $I_HOME/${I_VER}UNINSTALL.SH 
-#cp IXXUNINSTALL_MONO.SH $I_HOME/${I_VER}UNINSTALL_MONO.SH 
+cp IXXUNINSTALL.TXT     $I_HOME/${I_VER}UNINSTALL.TXT 
+cp IXXUNINSTALL_JAVA.SH $I_HOME/${I_VER}UNINSTALL_JAVA.SH 
+cp IXXUNINSTALL_MONO.SH $I_HOME/${I_VER}UNINSTALL_MONO.SH 
 #cp ${I_VER}SRVC*.SH      $I_HOME 
 # ===SERVER==== 
-cp *ZBACKUP $I_HOME/I.$2/BAT 
-cp *ZCPTR   $I_HOME/I.$2/BAT 
-cp *ZETC    $I_HOME/I.$2/BAT 
-cp *ZTIME   $I_HOME/I.$2/BAT 
+cp *ZBACKUP $I_HOME/I.$1/BAT 
+cp *ZCPTR   $I_HOME/I.$1/BAT 
+cp *ZETC    $I_HOME/I.$1/BAT 
+cp *ZTIME   $I_HOME/I.$1/BAT 
 # ====SHARE====
-cp IXXCLIENT.SH                  $I_HOME/SHARE/LINUX/CLIENT/${I_VER}CLIENT.SH 
+cp IXXCLIENT.SH                  $I_HOME/SHARE/LINUX/CLIENT${I_VER}CLIENT.SH 
 cp CONVERT.TX?                   $I_HOME/SHARE/LINUX/CLIENT 
 cp $I_HOME/TMP/$6*               $I_HOME/SHARE/LINUX/CLIENT 
-cp I_MENU.IC?                    $I_HOME/SHARE/LINUX/BIN${I_VER} 
+#cp I.IC?                         $I_HOME/SHARE/LINUX/BIN${I_VER} 
 cp I_LANG_??_U.TXT               $I_HOME/SHARE/LINUX/BIN${I_VER} 
-#cp ../${I_VER}_BIN/CLIENT_UD/*.* $I_HOME/SHARE/LINUX/BIN${I_VER}D 
+cp ../${I_VER}_BIN/CLIENT_UD/*.* $I_HOME/SHARE/LINUX/BIN${I_VER}D 
 cp ../${I_VER}_BIN/JAVA/*.*      $I_HOME/SHARE/LINUX/BIN${I_VER}J 
-cp ../i-download/*.jar           $I_HOME/SHARE/LINUX/BIN${I_VER}J 
-cp ../${I_VER}_BIN/CLIENT_UC/*   $I_HOME/SHARE/LINUX/BIN${I_VER}C 
+cp ../i-download/*.ar            $I_HOME/SHARE/LINUX/BIN${I_VER}J 
+cp ../${I_VER}_BIN/CLIENT_UC/*.* $I_HOME/SHARE/LINUX/BIN${I_VER}C 
 
-cp IXXCLIENT.BAT                 $I_HOME/SHARE/WINDOWS/CLIENT/${I_VER}CLIENT.BAT 
+cp IXXCLIENT.BAT                 $I_HOME/SHARE/WINDOWS/CLIENT\${I_VER}CLIENT.BAT 
 cp IXXCLIENT.JS                  $I_HOME/SHARE/WINDOWS/CLIENT/${I_VER}CLIENT.JS 
 cp CONVERT.TX?                   $I_HOME/SHARE/WINDOWS/CLIENT 
 cp $I_HOME/TMP/$6*               $I_HOME/SHARE/WINDOWS/CLIENT 
-cp I_MENU.IC?                    $I_HOME/SHARE/WINDOWS/BIN${I_VER} 
+cp I.IC?                         $I_HOME/SHARE/WINDOWS/BIN${I_VER} 
 cp I_LANG_??_W.TXT               $I_HOME/SHARE/WINDOWS/BIN${I_VER} 
 cp ../${I_VER}_BIN/CLIENT_WD/*.* $I_HOME/SHARE/WINDOWS/BIN${I_VER}D 
 cp ../${I_VER}_BIN/JAVA/*.*      $I_HOME/SHARE/WINDOWS/BIN${I_VER}J 
@@ -94,18 +82,19 @@ chmod 777 $I_SYSTEM_DIR/DATA_TEST
 # if test "$9" = "J";then 
 #  cp $I_HOME/SHARE/LINUX/BINI$1/I$1JAVA.jar $I_HOME/SERVICE/I$1JAVA.jar 2>>$file
 #  cp $I_HOME/SHARE/LINUX/BINI$1/I$1JAVA.jar $I_SYSTEM_DIR/BIN/I$1JAVA.jar   2>>$file
-#fi
+fi
 for i in LINUX WINDOWS
    do
    cp -r $I_SYSTEM_DIR/BAT/*.I $I_HOME/SHARE/$i/CLIENT 2>>$file
    chmod 775 $I_HOME/SHARE/$i/CLIENT/*.I
    done
-###( at install )###
-apt install -y at
-systemctl enable --now atd
-###( amba install )###
-sudo apt install -y samba
+if test ! -r /etc/init.d/atd;then
+   apt-get -y install at
+fi
 smb=/etc/samba/smb.conf
+if test ! -f $smb;then
+   apt-get -y install samba
+fi
 if test -f $smb;then 
    grep '^[[]I_SHARE[]]$' $smb 2>/dev/null
    if test $? = 1;then
@@ -114,6 +103,7 @@ if test -f $smb;then
       echo read only = Yes >> $smb
       echo guest ok = Yes >> $smb
     fi 
+    #NET SHARE $2.I=$I_SYSTEM_DIR/DATA_TEST /REMARK:"I_$2_TEST" 2>>$file
     grep  '^[[]I.'$2'[]]$' $smb 2>/dev/null
     if test $? = 1;then
        echo [I.$2] >> $smb
@@ -122,22 +112,42 @@ if test -f $smb;then
        echo inherit acls = Yes >> $smb
        echo guest ok = Yes >> $smb
     fi
+    if test -f /sbin/chkconfig;then 
+       sbin/chkconfig smb on
+    else
+       if test -r /etc/init.d/smb   ;then /usr/lib/insserv/insserv smb;fi
+       if test -r /etc/init.d/samba ;then /usr/lib/insserv/insserv samba;fi
+    fi
+    service smb restart
+    if test $? != 0 ;then
+       if test -r /etc/init.d/smb   ;then /etc/init.d/smb   restart;fi
+       if test -r /etc/init.d/samba ;then /etc/init.d/samba restart;fi
+    fi
 fi
-sudo systemctl enable --now smbd
-sudo systemctl enable --now nmbd
-###( my Service )###
-i_sc=/etc/systemd/system/isrvcxxx.service
-echo [Unit] >$i_sc
-echo Description=My Custom Application >>$i_sc
-echo After=network.target >>$i_sc
-echo [Service] >>$i_sc
-echo Type=simple >>$i_sc
-echo ExecStart=java -cp "\"/home/I/BIN$1/*\"" isrvc_l >>$i_sc
-echo Restart=on-failure >>$i_sc
-echo WorkingDirectory=/home/I/TMP >>$i_sc
-echo [Install] >>$i_sc
-echo WantedBy=multi-user.target >>$i_sc
-systemctl enable --now isrvcxxx
+if test -f /sbin/chkconfig;then 
+    sbin/chkconfig atd on
+else  
+    /usr/lib/insserv/insserv atd
+fi
+service atd restart
+if test $? != 0 ;then /etc/init.d/atd restart;fi
+if test "$8" = "J";then
+  i_service=i$1srvcuj
+  cp $I_HOME/I$1SRVCUJ /etc/init.d/$i_service
+elif test "$8" = "C";then
+  i_service=i$1srvcuc
+  cp $I_HOME/I$1SRVCUC /etc/init.d/$i_service
+else
+  i_service=i$1srvcud
+  cp $I_HOME/I$1SRVCUD /etc/init.d/$i_service
+fi
+chmod 775 /etc/init.d/$i_service
+if test -f /sbin/chkconfig;then 
+  /sbin/chkconfig $i_service on
+else
+  /usr/lib/insserv/insserv $i_service
+fi
+/etc/init.d/$i_service restart
 ls -d /home/I/I.* | grep -c '^/home/I/I.' > $I_HOME/TMP/SET_END_$2.TMP
 chmod 777                                   $I_HOME/TMP/SET_END_$2.TMP
 ############( SHIFT/1)####################################
@@ -158,7 +168,8 @@ for i in `ls /root/.config /home/*/.config -d 2>/dev/null`
       fl=$dr/${I_VER}SERVER_$2_$j.desktop
       echo "[Desktop Entry]">$fl
       echo "Name=${I_VER}SERVER_$1_$j">>$fl
-      if test "$9" = "J";then i_exec="java -cp $I_HOME/BINI$I_V/purejavacomm.jar:$I_HOME/BINI$I_V/jna.jar:$I_HOME/BIN${I_VER}/IJAVA.jar:$I_HOME/BINI$I_V/$9 imenu_l"
+#VER38      if test "$9" = "J";then i_exec="java -cp $I_HOME/BINI$I_V/purejavacomm.jar:$I_HOME/BINI$I_V/jna.jar:$I_HOME/BIN${I_VER}/IJAVA.jar:$I_HOME/BINI$I_V/$9 imenu_l"
+      if test "$9" = "J";then i_exec="java -cp \"$I_HOME/BINI$I_V/*\" imenu_l"
       else                    i_exec="mono $I_HOME/BIN${I_VER}/IMENUU4.EXE";fi
       echo "Exec=$i_exec $4 $5 $6 ZZZZ0105$j REAL ZZZZZZ_ARG_SLEEP=30 ZZZZZZ_ARG_RETRY=3">>$fl
 #    #echo "StartupNotify=true">>$fl

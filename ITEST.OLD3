@@ -1,0 +1,69 @@
+using System;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Layout;
+using Avalonia.Media;
+using Avae.Printables;   // ← これが印刷ライブラリ
+
+class App : Application
+{
+    public override void OnFrameworkInitializationCompleted()
+    {
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            var button = new Button
+            {
+                Content = "印刷する（現在の画面）",
+                Width = 220,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+
+            var window = new Window
+            {
+                Width = 500,
+                Height = 300,
+                Title = ".NET 10 / Avalonia 12 印刷サンプル",
+                Content = new StackPanel
+                {
+                    Margin = new Thickness(20),
+                    Children =
+                    {
+                        new TextBlock
+                        {
+                            Text = "Avae.Printables を使ったクロスプラットフォーム印刷サンプルです。",
+                            TextWrapping = TextWrapping.Wrap,
+                            Margin = new Thickness(0,0,0,20)
+                        },
+                        button
+                    }
+                }
+            };
+
+            button.Click += async (_, _) =>
+            {
+                // 現在のウィンドウ内容をそのまま印刷
+                // OS ネイティブの印刷ダイアログが出ます（環境依存）
+                await Printable.PrintVisualAsync(window);
+            };
+
+            desktop.MainWindow = window;
+        }
+
+        base.OnFrameworkInitializationCompleted();
+    }
+
+    public static void Main(string[] args)
+    {
+        BuildAvaloniaApp()
+            .StartWithClassicDesktopLifetime(args);
+    }
+
+    public static AppBuilder BuildAvaloniaApp()
+        => AppBuilder.Configure<App>()
+            .UsePlatformDetect()
+            .WithInterFont()
+            .LogToTrace()
+            .UsePrintables();   // ← Avae.Printables を有効化
+}

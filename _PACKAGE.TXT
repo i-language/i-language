@@ -26,7 +26,7 @@ Avae.Printables * =
 MessageBox.Avalonia * = 
 *以下GUIがGTK用
 GtkSharp * =
-iTextSharp * =
+#iTextSharp * =
 *以下XAMARIN関連試作中
 *Xamarin.Forms * =
 *Microsoft.NETCore.UniversalWindowsPlatform * =

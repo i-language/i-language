@@ -1,7 +1,7 @@
 @ECHO OFF
 SET I_NAME=IMENU
 IF "%1"=="" CALL C_SOURCE.BAT
-dotnet build -c Release -r win-x64 --self-contained true ..\%I_VER%_WORK\%I_NAME%WA.csproj 
+dotnet build -c Release -r win-x64 --no-self-contained ..\%I_VER%_WORK\%I_NAME%WA.csproj 
 if errorlevel 1 pause
 IF NOT "%1"=="" GOTO FIN
 IF NOT EXIST %I_BIN% GOTO FIN 

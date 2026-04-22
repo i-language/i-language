@@ -333,6 +333,7 @@ else if(i<3)col=3;else col=i;//3行以下は３行確保。
 y=z_p.lang_y_high;
 yl=(z_p.lang_y_high
 //JJ +z_p.lang_y_high/3
+//JJ +('W'==z_p.os_c?0:5)  //Linux不足分確保
    )*col+1
 #if AUI
 //SS +z_p.lang_y_high

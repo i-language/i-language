@@ -16,7 +16,7 @@ TIMEOUT_CONNECT=30;TIMEOUT_SQL=600
 if test "$6" = "NEXT";then NEXT=$7;HH=99;MM=99;
 else                       NEXT="";HH=$4;MM=$5;fi
 if test -f /home/I/BIN${i_ver}/IJAVA.jar
-  then mono_java="java -cp /home/I/BIN${i_ver}/IJAVA.jar:/home/I/BIN${i_ver}/$9 itime_l"
+  then mono_java="java -cp \"/home/I/BIN${i_ver}/*\" itime_l"
   else mono_java="mono /home/I/I.$2/BIN/ITIMEU4.EXE"
 fi 
 if test "$6" = "TODAY" -o  "$6" = "NEXT"

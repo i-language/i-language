@@ -72,12 +72,12 @@ MKDIR    %I_TMP_ZIP%
 %I_XCOPYD%  ..\i-download\obfuscar             %I_TMP_ZIP%\i-download\obfuscar
 %I_XCOPYF%  ..\i-language\*.*                  %I_TMP_ZIP%\%i-language 
 %I_XCOPYD%  ..\%I_VER%_BIN                     %I_TMP_ZIP%\%I_VER%_BIN 
-%I_XCOPYF%  ..\i-language\SETUP_JA*.*          %I_TMP_ZIP% 
-%I_XCOPYF%  ..\i-language\VERSIONUP_JA*.*      %I_TMP_ZIP% 
-%I_XCOPYF%  ..\i-language\ALTER_PASSWORD_JA*.* %I_TMP_ZIP% 
+%I_XCOPYF%  ..\i-language\SETUP_JA.*           %I_TMP_ZIP% 
+%I_XCOPYF%  ..\i-language\VERSIONUP_JA.*       %I_TMP_ZIP% 
+%I_XCOPYF%  ..\i-language\ALTER_PASSWORD_JA.*  %I_TMP_ZIP% 
 %I_XCOPYF%  ..\i-language\利用者向け説明書.*   %I_TMP_ZIP% 
 REM ********( 難読化ファイル削除 )**************************
-IF EXIST %I_TMP_ZIP%\i-language\II_OBFUSCATE.OBFUSCATE            ERASE /Q %I_TMP_ZIP%\i-language\II_OBFUSCATE.OBFUSCATE
+IF EXIST %I_TMP_ZIP%\i-language\II_OBFUSCATE.OBFUSCATE ERASE /Q %I_TMP_ZIP%\i-language\II_OBFUSCATE.OBFUSCATE
 REM ********( buildファイル削除 )**************************
 IF EXIST %I_TMP_ZIP%\i-language\--SELF-CONTAINED.TXT ERASE /Q %I_TMP_ZIP%\i-language\--SELF-CONTAINED.TXT
 REM ********( %I_TMP_ZIP%.zipのzip圧縮ファイル作成  )**************************

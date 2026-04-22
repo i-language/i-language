@@ -81,10 +81,8 @@ if test "$5" = "NOP";then
 fi
 #==( PERMISSION )==
 if test "$5" = "PERMISSION";then
-   do
    cp $tmp/Z_PERMISSION.CFG /home/I/I.$3/BAT/
    rm $tmp/Z_PERMISSION.CFG 
-   done
 #   exit 0
 fi
 #==( TYPE_ERROR_TIME 6=out_file )==
@@ -103,7 +101,8 @@ if test "$5" = "WRITE_MESSAGE";then
    if test -f              /home/I/BIN$i_ver/${i_ver}MENUUC
       then  cpp_mono_java="/home/I/BIN$i_ver/${i_ver}MENUUC"        
    elif test -f                    /home/I/BIN$i_ver/purejavacomm.jar
-      then cpp_mono_java="java -cp /home/I/BIN$i_ver/purejavacomm.jar:/home/I/BIN$i_ver/jna.jar:/home/I/BIN$i_ver/IJAVA.jar imenu_l" 
+#VER38      then cpp_mono_java="java -cp /home/I/BIN$i_ver/purejavacomm.jar:/home/I/BIN$i_ver/jna.jar:/home/I/BIN$i_ver/IJAVA.jar imenu_l" 
+        then cpp_mono_java="java -cp \"/home/I/BIN$i_ver/*\" imenu_l" 
    else
       cpp_mono_java="mono /home/I/BIN$i_ver/${i_ver}MENUU4.EXE" 
    fi 
@@ -118,7 +117,8 @@ if test "$5" = "SETUP_CLIENT";then
    if   test "$8" = "C" 
       then cpp_mono_java="/home/I/BIN$i_ver/${i_ver}MENUUC" 
    elif test "$8" = "J" 
-      then cpp_mono_java="java -cp /home/I/BIN$i_ver/purejavacomm.jar:/home/I/BIN$i_ver/jna.jar:/home/I/BIN$i_ver/IJAVA.jar:/home/I/BIN$i_ver/$9 imenu_l" 
+#VER38      then cpp_mono_java="java -cp /home/I/BIN$i_ver/purejavacomm.jar:/home/I/BIN$i_ver/jna.jar:/home/I/BIN$i_ver/IJAVA.jar:/home/I/BIN$i_ver/$9 imenu_l" 
+   then cpp_mono_java="java -cp \"/home/I/BIN$i_ver/*\" imenu_l" 
    else
       cpp_mono_java="mono /home/I/BIN$i_ver/${i_ver}MENUU4.EXE" 
    fi
@@ -148,8 +148,9 @@ if test "$5" = "SETUP_CLIENT";then
 fi
 if test "$5" = "TASKLIST";then
    if test -f /home/I/BIN$i_ver/purejavacomm.jar
-      then ps x -o command | grep "java -cp /home/I/BIN$i_ver/purejavacomm.jar:/home/I/BIN$i_ver/jna.jar:/home/I/I.$3/BIN/${i_ver}JAVA.jar">$tmp/$6 
-      else ps x -o command | grep "mono /home/I/I.$3/BIN/${i_ver}TIMEU4.EXE"  >$tmp/$6 
+#VER38      then ps x -o command | grep "java -cp /home/I/BIN$i_ver/purejavacomm.jar:/home/I/BIN$i_ver/jna.jar:/home/I/I.$3/BIN/${i_ver}JAVA.jar">$tmp/$6 
+      then ps x -o command | grep "java -cp \"/home/I/BIN$i_ver/*\" itime_l">$tmp/$6 
+      else ps x -o command | grep "mono /home/I/I.$3/BIN/ITIMEU4.EXE"  >$tmp/$6 
    fi
 #   exit 0
 fi

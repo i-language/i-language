@@ -1,69 +1,692 @@
 using System;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Layout;
-using Avalonia.Media;
-using Avae.Printables;   // ← これが印刷ライブラリ
+using System.IO;
+using System.Collections.Generic;
+using Gtk;
+using Cairo;
+using Pango;
 
-class App : Application
+public class GtkStablePrinting
 {
-    public override void OnFrameworkInitializationCompleted()
+    // 書式データ保持用クラス
+    public class FormatItem
     {
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-        {
-            var button = new Button
-            {
-                Content = "印刷する（現在の画面）",
-                Width = 220,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center
-            };
-
-            var window = new Window
-            {
-                Width = 500,
-                Height = 300,
-                Title = ".NET 10 / Avalonia 12 印刷サンプル",
-                Content = new StackPanel
-                {
-                    Margin = new Thickness(20),
-                    Children =
-                    {
-                        new TextBlock
-                        {
-                            Text = "Avae.Printables を使ったクロスプラットフォーム印刷サンプルです。",
-                            TextWrapping = TextWrapping.Wrap,
-                            Margin = new Thickness(0,0,0,20)
-                        },
-                        button
-                    }
-                }
-            };
-
-            button.Click += async (_, _) =>
-            {
-                // 現在のウィンドウ内容をそのまま印刷
-                // OS ネイティブの印刷ダイアログが出ます（環境依存）
-                await Printable.PrintVisualAsync(window);
-            };
-
-            desktop.MainWindow = window;
-        }
-
-        base.OnFrameworkInitializationCompleted();
+        public string Type;
+        public double X1, Y1, X2, Y2;
+        public string FontName;
+        public double FontSize;
     }
+
+    private List<FormatItem> formatList = new List<FormatItem>();
+    private List<string> dataList = new List<string>();
+    private int itemsPerPage = 0;
 
     public static void Main(string[] args)
     {
-        BuildAvaloniaApp()
-            .StartWithClassicDesktopLifetime(args);
+        // GTKの初期化
+        Application.Init();
+        
+        GtkStablePrinting app = new GtkStablePrinting();
+        app.Execute();
+        
+        // メッセージ表示
+        Console.WriteLine("処理が完了しました。プログラムと同じフォルダの output.pdf を確認してください。");
     }
 
-    public static AppBuilder BuildAvaloniaApp()
-        => AppBuilder.Configure<App>()
-            .UsePlatformDetect()
-            .WithInterFont()
-            .LogToTrace()
-            .UsePrintables();   // ← Avae.Printables を有効化
+    public void Execute()
+    {
+        try
+        {
+            // 1. ファイル読み込み
+            if (!LoadFiles()) return;
+
+            // 2. 1ページあたりの項目数（TEXT行数）を計算
+            itemsPerPage = 0;
+            foreach (FormatItem item in formatList)
+            {
+                if (item.Type == "TEXT") itemsPerPage++;
+            }
+            if (itemsPerPage == 0) itemsPerPage = 1;
+
+            // 3. 総ページ数の計算
+            double totalDataCount = (double)dataList.Count;
+            int totalPages = (int)Math.Ceiling(totalDataCount / itemsPerPage);
+            if (totalPages == 0) totalPages = 1;
+
+            // 4. PDFサーフェスの作成（A4サイズ: 595x842 ポイント）
+            string outputFileName = "output.pdf";
+            PdfSurface surface = new PdfSurface(outputFileName, 595, 842);
+            
+            // 【修正箇所】Cairo.Context と明示して曖昧さを回避
+            Cairo.Context cr = new Cairo.Context(surface);
+
+            // 5. ページごとの描画ループ
+            int currentPage = 0;
+            while (currentPage < totalPages)
+            {
+                DrawOnePage(cr, currentPage);
+                // ページを確定させて次へ
+                cr.ShowPage();
+                currentPage++;
+            }
+
+            // 6. 後片付け（IDisposableへのキャストで確実に破棄）
+            ((IDisposable)cr).Dispose();
+            ((IDisposable)surface).Dispose();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("例外発生: " + ex.Message);
+            Console.WriteLine(ex.StackTrace);
+        }
+    }
+
+    // 【修正箇所】引数の型を Cairo.Context に明示
+    private void DrawOnePage(Cairo.Context cr, int pageNum)
+    {
+        int dataStartIndex = pageNum * itemsPerPage;
+        int currentDataOffset = 0;
+
+        foreach (FormatItem item in formatList)
+        {
+            if (item.Type == "LINE")
+            {
+                cr.SetSourceRGB(0, 0, 0);
+                cr.MoveTo(item.X1, item.Y1);
+                cr.LineTo(item.X2, item.Y2);
+                cr.LineWidth = 1.0;
+                cr.Stroke();
+            }
+            else if (item.Type == "TEXT")
+            {
+                int dataIndex = dataStartIndex + currentDataOffset;
+                if (dataIndex < dataList.Count)
+                {
+                    string text = dataList[dataIndex];
+                    
+                    // Pangoレイアウトの作成
+                    Pango.Layout layout = Pango.CairoHelper.CreateLayout(cr);
+                    Pango.FontDescription fontDesc = Pango.FontDescription.FromString(item.FontName + " " + item.FontSize);
+                    
+                    layout.FontDescription = fontDesc;
+                    layout.SetText(text);
+
+                    cr.MoveTo(item.X1, item.Y1);
+                    Pango.CairoHelper.ShowLayout(cr, layout);
+
+                    fontDesc.Dispose();
+                    layout.Dispose();
+                }
+                currentDataOffset++;
+            }
+        }
+    }
+
+    private bool LoadFiles()
+    {
+        if (!File.Exists("format.txt") || !File.Exists("data.txt"))
+        {
+            Console.WriteLine("エラー: format.txt または data.txt が見つかりません。");
+            return false;
+        }
+
+        // フォーマット読み込み
+        string[] fLines = File.ReadAllLines("format.txt");
+        foreach (string line in fLines)
+        {
+            if (string.IsNullOrWhiteSpace(line)) continue;
+            string[] parts = line.Split(',');
+            FormatItem item = new FormatItem();
+            item.Type = parts[0].Trim().ToUpper();
+            
+            if (item.Type == "TEXT" && parts.Length >= 5)
+            {
+                item.X1 = double.Parse(parts[1]);
+                item.Y1 = double.Parse(parts[2]);
+                item.FontName = parts[3].Trim();
+                item.FontSize = double.Parse(parts[4]);
+                formatList.Add(item);
+            }
+            else if (item.Type == "LINE" && parts.Length >= 5)
+            {
+                item.X1 = double.Parse(parts[1]);
+                item.Y1 = double.Parse(parts[2]);
+                item.X2 = double.Parse(parts[3]);
+                item.Y2 = double.Parse(parts[4]);
+                formatList.Add(item);
+            }
+        }
+
+        // データ読み込み
+        string[] dLines = File.ReadAllLines("data.txt");
+        foreach (string line in dLines)
+        {
+            if (!string.IsNullOrWhiteSpace(line))
+            {
+                dataList.Add(line);
+            }
+        }
+
+        return true;
+    }
 }
+
+/*
+
+
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using Gtk;
+using Cairo;
+using Pango;
+
+public class GtkPrintingApp
+{
+    public class FormatItem
+    {
+        public string Type;
+        public double X1, Y1, X2, Y2;
+        public string FontName;
+        public double FontSize;
+    }
+
+    private List<FormatItem> formatList = new List<FormatItem>();
+    private List<string> dataList = new List<string>();
+    private int itemsPerPage = 0;
+
+    public static void Main(string[] args)
+    {
+        Application.Init();
+        GtkPrintingApp app = new GtkPrintingApp();
+        app.Run();
+        Application.Run();
+    }
+
+    public void Run()
+    {
+        try
+        {
+            // ファイル読み込み
+            LoadFormat("format.txt");
+            LoadData("data.txt");
+
+            // 1ページあたりの項目数を算出
+            itemsPerPage = 0;
+            foreach (FormatItem item in formatList)
+            {
+                if (item.Type == "TEXT") itemsPerPage++;
+            }
+            if (itemsPerPage == 0) itemsPerPage = 1;
+
+            // 印刷設定の初期化
+            PrintOperation printOp = new PrintOperation();
+            printOp.JobName = "GtkPrintJob_" + DateTime.Now.ToString("yyyyMMddHHmmss");
+            
+            // 重要：デフォルトの設定を明示的に作成
+            PrintSettings settings = new PrintSettings();
+            printOp.PrintSettings = settings;
+
+            // イベントハンドラ登録（名前付きメソッド）
+            printOp.BeginPrint += OnBeginPrint;
+            printOp.DrawPage += OnDrawPage;
+            printOp.EndPrint += OnEndPrint;
+
+            // 実行
+            // Windowsでの共有違反を避けるため、まずはダイアログを表示
+            PrintOperationResult result = printOp.Run(PrintOperationAction.PrintDialog, null);
+
+            if (result == PrintOperationResult.Error)
+            {
+                Console.WriteLine("印刷エラーが発生しました。");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("例外発生: " + ex.Message);
+        }
+    }
+
+    private void OnBeginPrint(object obj, BeginPrintArgs args)
+    {
+        PrintOperation op = (PrintOperation)obj;
+        double totalData = (double)dataList.Count;
+        int totalPages = (int)Math.Ceiling(totalData / itemsPerPage);
+        op.NPages = totalPages > 0 ? totalPages : 1;
+    }
+
+    private void OnDrawPage(object obj, DrawPageArgs args)
+    {
+        PrintContext context = args.Context;
+        Cairo.Context cr = context.CairoContext;
+        int pageNum = args.PageNr;
+
+        int dataStartIndex = pageNum * itemsPerPage;
+        int currentDataOffset = 0;
+
+        foreach (FormatItem item in formatList)
+        {
+            if (item.Type == "LINE")
+            {
+                cr.SetSourceRGB(0, 0, 0);
+                cr.MoveTo(item.X1, item.Y1);
+                cr.LineTo(item.X2, item.Y2);
+                cr.LineWidth = 1.0;
+                cr.Stroke();
+            }
+            else if (item.Type == "TEXT")
+            {
+                int dataIndex = dataStartIndex + currentDataOffset;
+                if (dataIndex < dataList.Count)
+                {
+                    string text = dataList[dataIndex];
+                    
+                    Pango.Layout layout = context.CreatePangoLayout();
+                    Pango.FontDescription fontDesc = Pango.FontDescription.FromString(item.FontName + " " + item.FontSize);
+                    
+                    layout.FontDescription = fontDesc;
+                    layout.SetText(text);
+
+                    cr.MoveTo(item.X1, item.Y1);
+                    Pango.CairoHelper.ShowLayout(cr, layout);
+
+                    // 明示的な破棄でロックを防ぐ
+                    fontDesc.Dispose();
+                    layout.Dispose();
+                }
+                currentDataOffset++;
+            }
+        }
+    }
+
+    private void OnEndPrint(object obj, EndPrintArgs args)
+    {
+        // 印刷終了時にアプリケーションを終了させる場合はここで
+        // Application.Quit(); 
+    }
+
+    private void LoadFormat(string filePath)
+    {
+        if (!File.Exists(filePath)) return;
+        string[] lines = File.ReadAllLines(filePath);
+        foreach (string line in lines)
+        {
+            if (string.IsNullOrWhiteSpace(line)) continue;
+            string[] parts = line.Split(',');
+            FormatItem item = new FormatItem();
+            item.Type = parts[0];
+            if (item.Type == "TEXT" && parts.Length >= 5)
+            {
+                item.X1 = double.Parse(parts[1]);
+                item.Y1 = double.Parse(parts[2]);
+                item.FontName = parts[3];
+                item.FontSize = double.Parse(parts[4]);
+                formatList.Add(item);
+            }
+            else if (item.Type == "LINE" && parts.Length >= 5)
+            {
+                item.X1 = double.Parse(parts[1]);
+                item.Y1 = double.Parse(parts[2]);
+                item.X2 = double.Parse(parts[3]);
+                item.Y2 = double.Parse(parts[4]);
+                formatList.Add(item);
+            }
+        }
+    }
+
+    private void LoadData(string filePath)
+    {
+        if (!File.Exists(filePath)) return;
+        string[] lines = File.ReadAllLines(filePath);
+        foreach (string line in lines)
+        {
+            if (!string.IsNullOrWhiteSpace(line)) dataList.Add(line);
+        }
+    }
+}
+
+*/
+
+
+
+
+
+
+
+
+
+
+/*
+using System;
+using System.IO;
+using System.Collections.Generic;
+using Gtk;
+using Cairo;
+using Pango;
+
+public class GtkPrintingApp
+{
+    // フォーマット定義保持用
+    public class FormatItem
+    {
+        public string Type;
+        public double X1, Y1, X2, Y2;
+        public string FontName;
+        public double FontSize;
+    }
+
+    private List<FormatItem> formatList = new List<FormatItem>();
+    private List<string> dataList = new List<string>();
+    private int itemsPerPage = 0;
+
+    public static void Main(string[] args)
+    {
+        Application.Init();
+        GtkPrintingApp app = new GtkPrintingApp();
+        app.Run();
+        Application.Run();
+    }
+
+    public void Run()
+    {
+        try
+        {
+            // 1. ファイルの存在確認と読み込み
+            if (!File.Exists("format.txt") || !File.Exists("data.txt"))
+            {
+                Console.WriteLine("エラー: format.txt または data.txt が見つかりません。");
+                Application.Quit();
+                return;
+            }
+
+            LoadFormat("format.txt");
+            LoadData("data.txt");
+
+            // 2. ページあたりの項目数（TEXT行数）を計算
+            itemsPerPage = 0;
+            foreach (FormatItem item in formatList)
+            {
+                if (item.Type == "TEXT")
+                {
+                    itemsPerPage++;
+                }
+            }
+            if (itemsPerPage == 0) itemsPerPage = 1;
+
+            // 3. 印刷オペレーションの設定
+            PrintOperation printOp = new PrintOperation();
+            printOp.JobName = "GtkSharp_Dynamic_Print";
+            
+            // イベントハンドラ登録（名前付きメソッドを使用）
+            printOp.BeginPrint += OnBeginPrint;
+            printOp.DrawPage += OnDrawPage;
+
+            // Windowsでダイアログが壊れる場合は Preview を試す
+            // 成功すればGTKのプレビュー画面が立ち上がります
+            PrintOperationResult result = printOp.Run(PrintOperationAction.Preview, null);
+            
+            if (result == PrintOperationResult.Error)
+            {
+                Console.WriteLine("印刷実行中にエラーが発生しました。");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("プログラム実行中に例外が発生しました: " + ex.Message);
+        }
+    }
+
+    // ページ総数の計算
+    private void OnBeginPrint(object obj, BeginPrintArgs args)
+    {
+        PrintOperation op = (PrintOperation)obj;
+        // データの総数から必要なページ数を算出
+        double count = (double)dataList.Count;
+        int totalPages = (int)Math.Ceiling(count / itemsPerPage);
+        
+        // ページが0にならないよう最低1を設定
+        op.NPages = totalPages > 0 ? totalPages : 1;
+    }
+
+    // 描画処理
+    private void OnDrawPage(object obj, DrawPageArgs args)
+    {
+        PrintContext context = args.Context;
+        Cairo.Context cr = context.CairoContext;
+        int pageNum = args.PageNr;
+
+        int dataStartIndex = pageNum * itemsPerPage;
+        int currentDataOffset = 0;
+
+        foreach (FormatItem item in formatList)
+        {
+            if (item.Type == "LINE")
+            {
+                cr.SetSourceRGB(0, 0, 0);
+                cr.MoveTo(item.X1, item.Y1);
+                cr.LineTo(item.X2, item.Y2);
+                cr.LineWidth = 1.0;
+                cr.Stroke();
+            }
+            else if (item.Type == "TEXT")
+            {
+                int dataIndex = dataStartIndex + currentDataOffset;
+                if (dataIndex < dataList.Count)
+                {
+                    string text = dataList[dataIndex];
+                    
+                    Pango.Layout layout = context.CreatePangoLayout();
+                    Pango.FontDescription fontDesc = Pango.FontDescription.FromString(item.FontName + " " + item.FontSize);
+                    layout.FontDescription = fontDesc;
+                    layout.SetText(text);
+
+                    cr.MoveTo(item.X1, item.Y1);
+                    Pango.CairoHelper.ShowLayout(cr, layout);
+
+                    fontDesc.Dispose();
+                    layout.Dispose();
+                }
+                currentDataOffset++;
+            }
+        }
+    }
+
+    private void LoadFormat(string filePath)
+    {
+        string[] lines = File.ReadAllLines(filePath);
+        foreach (string line in lines)
+        {
+            if (string.IsNullOrWhiteSpace(line)) continue;
+            string[] parts = line.Split(',');
+            FormatItem item = new FormatItem();
+            item.Type = parts[0];
+            if (item.Type == "TEXT")
+            {
+                item.X1 = double.Parse(parts[1]);
+                item.Y1 = double.Parse(parts[2]);
+                item.FontName = parts[3];
+                item.FontSize = double.Parse(parts[4]);
+            }
+            else if (item.Type == "LINE")
+            {
+                item.X1 = double.Parse(parts[1]);
+                item.Y1 = double.Parse(parts[2]);
+                item.X2 = double.Parse(parts[3]);
+                item.Y2 = double.Parse(parts[4]);
+            }
+            formatList.Add(item);
+        }
+    }
+
+    private void LoadData(string filePath)
+    {
+        string[] lines = File.ReadAllLines(filePath);
+        foreach (string line in lines)
+        {
+            if (!string.IsNullOrWhiteSpace(line))
+            {
+                dataList.Add(line);
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+using System;
+using System.IO;
+using System.Collections.Generic;
+using Gtk;
+using Cairo;
+using Pango;
+
+public class GtkPrintingApp
+{
+    // 設定保持用のクラス
+    public class FormatItem
+    {
+        public string Type;
+        public double X1, Y1, X2, Y2;
+        public string FontName;
+        public double FontSize;
+    }
+
+    private List<FormatItem> formatList = new List<FormatItem>();
+    private List<string> dataList = new List<string>();
+    private int itemsPerPage = 0;
+
+    public static void Main(string[] args)
+    {
+        Application.Init();
+        GtkPrintingApp app = new GtkPrintingApp();
+        app.Run();
+        Application.Run();
+    }
+
+    public void Run()
+    {
+        // 1. ファイルの読み込み
+        LoadFormat("format.txt");
+        LoadData("data.txt");
+
+        // 2. 1ページあたりのデータ項目数を算出（フォーマット内のTEXT行数）
+        itemsPerPage = 0;
+        foreach (FormatItem item in formatList)
+        {
+            if (item.Type == "TEXT") itemsPerPage++;
+        }
+
+        if (itemsPerPage == 0) itemsPerPage = 1;
+
+        // 3. 印刷オペレーションの設定
+        PrintOperation printOp = new PrintOperation();
+        printOp.JobName = "GtkSharp Printing";
+        
+        // イベントハンドラを名前付きメソッドで登録（デルタ式/ラムダ式は不使用）
+        printOp.BeginPrint += OnBeginPrint;
+        printOp.DrawPage += OnDrawPage;
+
+        // 印刷ダイアログの表示
+        printOp.Run(PrintOperationAction.PrintDialog, null);
+    }
+
+    // 印刷開始時にページ数を計算して設定
+    private void OnBeginPrint(object obj, BeginPrintArgs args)
+    {
+        PrintOperation op = (PrintOperation)obj;
+        // データ総数 / 1ページあたりの項目数 でページ数を算出
+        int totalPages = (int)Math.Ceiling((double)dataList.Count / itemsPerPage);
+        op.NPages = totalPages;
+    }
+
+    // 各ページの描画処理
+    private void OnDrawPage(object obj, DrawPageArgs args)
+    {
+        PrintContext context = args.Context;
+        Cairo.Context cr = context.CairoContext;
+        int pageNum = args.PageNr;
+
+        // 単位をポイント等から適切に調整（デフォルトは画面解像度依存）
+        // ここでは単純に座標をそのまま使用します。
+
+        int dataStartIndex = pageNum * itemsPerPage;
+        int currentDataOffset = 0;
+
+        foreach (FormatItem item in formatList)
+        {
+            if (item.Type == "LINE")
+            {
+                // 線の描画
+                cr.MoveTo(item.X1, item.Y1);
+                cr.LineTo(item.X2, item.Y2);
+                cr.LineWidth = 1.0;
+                cr.Stroke();
+            }
+            else if (item.Type == "TEXT")
+            {
+                // データのインデックスが範囲内か確認
+                int dataIndex = dataStartIndex + currentDataOffset;
+                if (dataIndex < dataList.Count)
+                {
+                    string text = dataList[dataIndex];
+                    
+                    // Pangoレイアウトを使用して描画
+                    Pango.Layout layout = context.CreatePangoLayout();
+                    Pango.FontDescription fontDesc = Pango.FontDescription.FromString(item.FontName + " " + item.FontSize);
+                    layout.FontDescription = fontDesc;
+                    layout.SetText(text);
+
+                    cr.MoveTo(item.X1, item.Y1);
+                    Pango.CairoHelper.ShowLayout(cr, layout);
+
+                    fontDesc.Dispose();
+                    layout.Dispose();
+                }
+                currentDataOffset++;
+            }
+        }
+    }
+
+    private void LoadFormat(string filePath)
+    {
+        string[] lines = File.ReadAllLines(filePath);
+        foreach (string line in lines)
+        {
+            string[] parts = line.Split(',');
+            FormatItem item = new FormatItem();
+            item.Type = parts[0];
+            if (item.Type == "TEXT")
+            {
+                item.X1 = double.Parse(parts[1]);
+                item.Y1 = double.Parse(parts[2]);
+                item.FontName = parts[3];
+                item.FontSize = double.Parse(parts[4]);
+            }
+            else if (item.Type == "LINE")
+            {
+                item.X1 = double.Parse(parts[1]);
+                item.Y1 = double.Parse(parts[2]);
+                item.X2 = double.Parse(parts[3]);
+                item.Y2 = double.Parse(parts[4]);
+            }
+            formatList.Add(item);
+        }
+    }
+
+    private void LoadData(string filePath)
+    {
+        string[] lines = File.ReadAllLines(filePath);
+        foreach (string line in lines)
+        {
+            if (!string.IsNullOrEmpty(line))
+            {
+                dataList.Add(line);
+            }
+        }
+    }
+}
+*/
