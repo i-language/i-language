@@ -1606,8 +1606,8 @@ return false;
 //=****( マウスの位置判定 )**********
 bool mouse_point_b(int x_ii,ii_data_l data_ni,int x_offset_ii,int y_offset_ii)
 {if(y_mouse_down==(data_ni.line-y_offset_ii)
-   &&x_ii>=(data_ni.column-x_offset_ii-1)*z_p.lang_x_width-1
-   &&x_ii<(data_ni.column-x_offset_ii+data_ni.length0)*z_p.lang_x_width-1)return true;
+   &&(x_ii-z_p.lang_x_mouse)>=(data_ni.column-x_offset_ii-1)*z_p.lang_x_width-1   //VER38
+   &&(x_ii-z_p.lang_x_mouse)<(data_ni.column-x_offset_ii+data_ni.length0)*z_p.lang_x_width-1)return true;   //VER38
  return false;
 }
 //JJ public void mouseExited(MouseEvent e_dummy_ni){}

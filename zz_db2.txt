@@ -1,0 +1,12 @@
+**(状態確認)***
+db2cmd
+db2 get dbm cfg
+
+*( SYSADM_GROUP 設定　管理者権限)*
+db2 update dbm cfg using SYSADM_GROUP DB2SYSADM
+db2stop
+db2start
+
+*(　一般ユーザーにはCONNECT権限を与える）
+
+GRANT CONNECT ON DATABASE TO USER <username>;

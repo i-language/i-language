@@ -14,7 +14,7 @@ W-=WRITE{A,'#!/bin/sh'};
 =WRITE{A,WC.CREATEDB};
 W+=WRITE{A,'echo ==========================================='};
 =WRITE_CLOSE{A};
-W-=COMMAND{chmod 777 ?_TMP??WC.FILE?};
+W-=IF_ERROR_COMMAND{chmod 777 ?_TMP??WC.FILE?}NOP{};
 =IF_ERROR_COMMAND{?_TMP??WC.FILE?}NOP{};データベースが既に有る場合のエラー回避*
 *(PERMISSION_BEGIN)*
 =IF{_DB!='P'}JUMP{P_SKIP};

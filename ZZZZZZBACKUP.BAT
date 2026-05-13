@@ -91,6 +91,8 @@ rem )
 FOR %%I IN (LINUX WINDOWS) DO (
     XCOPY /I /Y %SystemDrive%\I\SHARE\%%I\SETUP_*.* %TMP%\%BACKUP%\I\SHARE\%%I  2>%I_EXIT%
     IF ERRORLEVEL 1 EXIT /B
+    XCOPY /I /Y %SystemDrive%\I\SHARE\%%I\CLIENT\I_*.* %TMP%\%BACKUP%\I\SHARE\%%I\CLIENT  2>%I_EXIT%
+    IF ERRORLEVEL 1 EXIT /B
 )
 rem XCOPY /I /Y %SystemDrive%\I\%I_VER%*   %TMP%\%BACKUP%\I 2>%I_EXIT%
 rem IF ERRORLEVEL 1 EXIT /B
@@ -111,7 +113,7 @@ rem IF ERRORLEVEL 1 EXIT /B
 IF "%1"=="M" GOTO M
 IF "%1"=="O" GOTO O 
 IF "%1"=="P" GOTO P
-CALL %SystemDrive%\I\I.%I_SYSTEM%\ZZZZZZPASSWORD.BAT
+CALL %SystemDrive%\I\I.%I_SYSTEM%\PASSWORD\ZZZZZZPASSWORD.BAT
 IF "%1"=="D" GOTO D 
 IF "%1"=="I" GOTO I 
 IF "%1"=="L" GOTO L 
@@ -132,7 +134,7 @@ GOTO COPY_BACKUP_DAT
 REM *****(MariaDB (L))***(ALL)**
 :L
 DIR /B %4:\I\BACKUP_LOG_L\ > %TMP%\%I_WORK%.TXT
-"%PT%\bin\mysqldump" -uI_ROOT -p%PASSWORD% --flush-logs --master-data=2 --lock-all-tables --all-databases -x > %TMP%\%BACKUP%\BACKUP_DAT\BACKUP_DAT 2>%I_EXIT%
+"%PT%\bin\mysqldump" -uI_ROOT -p%PASSWORD% --flush-logs --master-data=2 --lock-all-tables --all-databases -r %TMP%\%BACKUP%\BACKUP_DAT\BACKUP_DAT 2>%I_EXIT%
 IF ERRORLEVEL 1 EXIT /B
 GOTO COPY_BACKUP_DAT
 REM *****(Oracle (O))***(ALL)**

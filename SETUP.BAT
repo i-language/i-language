@@ -3,7 +3,7 @@ REM %1=JA,EN
 IF "%1"=="" EXIT /B
 CALL _BEGIN.BAT
 ECHO ◎I言語バージョンが(%I_VER%)で.NETが(%I_VER2RUN%)のI言語をインストールします。
-ECHO ★X64(X86-64)系CPUのWindowsOSマシンでないと動きません。
+ECHO ★X64(X86-64,AMD64)系CPUのWindowsOSマシンでないと動きません。
 ECHO ★Windowsの管理者権限を持ったユーザーで行って下さい。
 ECHO ★I言語バージョン(%I_VER%)が既に稼働している場合はプログラムを共有するので
 ECHO　 ランタイムが同じで有る必要があります、運用が難しいのでお勧めは出来ません。　

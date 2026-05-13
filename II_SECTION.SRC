@@ -1245,7 +1245,7 @@ for(;CONTINUE_17>=sw;)//CONTINUE_17(17)>=swの場合のみ繰り返す。（ABOR
    else if(z_p.e3s_b(s,"ICHART","IPRINT"))
        {  if('T'==z_mt_p.program_c){sw=ABORT_PROGRAM_19;continue;} 
          if(CONTINUE_NORMAL_0!=sw_skip){sw=LOOP_2;continue;}  //スキップ中 
-         ichart_iprint_v(opt1_sx[0],(2>z_p.count_sx_i(opt1_sx)?"":opt1_sx[1]),(3>z_p.count_sx_i(opt1_sx)?"":opt1_sx[2]),shift_comma_s(opt1_s,3));
+         ichart_iprint_v(opt1_sx[0],(2>z_p.count_sx_i(opt1_sx)?"":(z_p.e2s_b(opt1_sx[1],"")?"PRINT":opt1_sx[1])),(3>z_p.count_sx_i(opt1_sx)?"":opt1_sx[2]),shift_comma_s(opt1_s,3)); //VER38
          continue;
        }
     else if(z_p.e2s_b(s,"INSERT"))
@@ -3487,10 +3487,11 @@ z_p.sql_limit=z_mt_p.program_p.sql_limit_org;z_mt_p.program_p.sql_limit_org=0;
        for(i=1;i<cnt;i++)
            s2+=(z_p.e2s_b(s2,"")?"":" ")+z_p.get_tmp_path_s(z_p.dir_s)+z_p.job_s+z_mt_p.window_s+z_p.mm_s+cmd2_s+opt3_si+z_p.to_i_s(i)+".TXT";
        rc=z_p.process(
-//JJ                  "java"+('W'==z_p.os_c?"w":"")+" -cp "
-//JJ                   +z_p.bin_path_s+z_p.iv_s+"purejavacomm.jar"+('W'==z_p.os_c?";":":") //VER33
-//JJ                   +z_p.bin_path_s+z_p.iv_s+"jna.jar"+('W'==z_p.os_c?";":":")
-//JJ                   +z_p.bin_path_s+"IJAVA.jar "+z_p.lower_s(cmd2_s)+"_l ",
+//JJ                  "java"+('W'==z_p.os_c?"w":"")+" -cp " 
+////JJ                   +z_p.bin_path_s+z_p.iv_s+"purejavacomm.jar"+('W'==z_p.os_c?";":":") //VER33 //  //VER38VER38
+////JJ                   +z_p.bin_path_s+z_p.iv_s+"jna.jar"+('W'==z_p.os_c?";":":")    //VER38
+////JJ                   +z_p.bin_path_s+"IJAVA.jar "+z_p.lower_s(cmd2_s)+"_l ",       //VER38
+//JJ                   +z_p.bin_path_s+"* "+z_p.lower_s(cmd2_s)+"_l ",       //VER38
 //SS                   ('U'==z_p.os_c?"mono":z_p.bin_path_s+cmd2_s+z_p.os_c+z_p.FRAMEWORK_C+".EXE"),
 //SS                   ('U'==z_p.os_c?       z_p.bin_path_s+cmd2_s+z_p.os_c+z_p.FRAMEWORK_C+".EXE ":"")+
 //HP                    z_p.bin_path_s+cmd2_s+z_p.os_c+z_p.FRAMEWORK_C+".EXE ",

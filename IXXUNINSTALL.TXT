@@ -40,7 +40,8 @@ CHECK1=?WSYSTEM?
 =IF{_FRAMEWORK='J'}IF{#SYSTEM=}JUMP{EXE};
 =IF{_DB='I',_DB='O'}EXIT{};
 =EXIT{LOGIN_ID};
-=EXE:EXE{java,-cp /home/I/BIN?_IV?/purejavacomm.jar:/home/I/BIN?_IV?/jna.jar:/home/I/BIN?_IV?/?JAR?:/home/I/BIN?_IV?/IJAVA.jar imenu_l JA 30/600/trace ?_IV?UNINSTALL.TXT SYSTEM=?SYSTEM?};
+**=EXE:EXE{java,-cp /home/I/BIN?_IV?/purejavacomm.jar:/home/I/BIN?_IV?/jna.jar:/home/I/BIN?_IV?/?JAR?:/home/I/BIN?_IV?/IJAVA.jar imenu_l JA 30/600/trace ?_IV?UNINSTALL.TXT SYSTEM=?SYSTEM?};
+=EXE:EXE{java,-cp "/home/I/BIN?_IV?/*" imenu_l JA 30/600/trace ?_IV?UNINSTALL.TXT SYSTEM=?SYSTEM?};
 =EXIT{_END};
 FORM=        REAL= @@@@@@@@ REAL_ETC= @@@@@@@@
 FORM=        TEST= @@@@@@@@ TEST_ETC= @@@@@@@@ BACKUP= @@@@@@@@  
@@ -106,7 +107,7 @@ DATA=YES{4}{YES,NO}
 ****************************************( 2 )***************************************************************
 =SET{W0.MSG=0};
 =WRITE_OPEN{1,?_TMP??WC.FILE?.TMP,OT,/};WRITE_CLOSE{1};
-U+=COMMAND{chmod 777 ?_TMP??WC.FILE?.TMP};
+U+=IF_ERROR_COMMAND{chmod 777 ?_TMP??WC.FILE?.TMP}NOP{};
 =WRITE_OPEN{1,?_TMP??WC.FILE?.BAT,OT,/};
 I+|O+|P+=WRITE_OPEN{2,?_TMP??WC.FILE?.TXT,OT,/};
 ***( L,M データベース削除　)******************
@@ -226,10 +227,10 @@ D+|I+|O+|P+REPEAT=
 O+=WRITE{2,'EXIT'};
 D+|I+|O+=IF{W0.C<W0.PERMISSION}COMPUTE{W0.C+=1}BACK{LOOP};
 =WRITE_CLOSE{1};
-U+=COMMAND{chmod 777 ?_TMP??WC.FILE?.BAT};
+U+=IF_ERROR_COMMAND{chmod 777 ?_TMP??WC.FILE?.BAT}NOP{};
 I+|O+|P+=WRITE_CLOSE{2};
-U+=COMMAND{chmod 777 ?_TMP??WC.FILE?.TXT};
-=COMMAND{?_TMP??WC.FILE?.BAT};
+U+=IF_ERROR_COMMAND{chmod 777 ?_TMP??WC.FILE?.TXT}NOP{};
+=IF_ERROR_COMMAND{?_TMP??WC.FILE?.BAT}NOP{};
 =ERASE_FILE{?WC.FILE?.BAT};
 ******(クライアントインストール)**********************************
 NAME=MSG_CHK
@@ -279,8 +280,8 @@ W+=WRITE{1,WC.WRITE};
 W+=SET{WC.WRITE=WC.ERASE+' '+_OS_DRIVE+_P+'Users'+_P+'Public'+_P+'Desktop'+_P+SYSTEM_NAME+'.LNK >>'+_TMP+WC.FILE+'.TMP 2>&1'};
 W+=WRITE{1,WC.WRITE};
 =WRITE_CLOSE{1};
-U+=COMMAND{chmod 777 ?_TMP??WC.FILE?.BAT};
-=COMMAND{?_TMP??WC.FILE?.BAT};
+U+=IF_ERROR_COMMAND{chmod 777 ?_TMP??WC.FILE?.BAT}NOP{};
+=IF_ERROR_COMMAND{?_TMP??WC.FILE?.BAT}NOP{};
 =ERASE_FILE{?WC.FILE?.BAT};
 ****************************************************
 COPY=MSG_CHK 

@@ -1,6 +1,8 @@
 @echo on
 if "%1"=="" CALL C_SOURCE.BAT
-CALL C_COMPILE_D.BAT IPAPER 
+SET I_NO_SELF=
+IF "%1"=="" SET I_NO_SELF=NO_SELF
+CALL C_COMPILE_D.BAT IPAPER %I_NO_SELF%
 @echo on
 SET src=..\%I_VER%_WORK\ipaper_l.java ..\%I_VER%_WORK\ii_z_l.java ..\%I_VER%_WORK\ii_zz_l.java ..\%I_VER%_WORK\ii_write_l.java ..\%I_VER%_WORK\ii_read_l.java  ..\%I_VER%_WORK\ii_version_l.java
 %I_JAVAC% -encoding utf-8 -Xlint:unchecked -d %I_TMP% %src% 2>%I_TMP%\IPAPER0.TXT

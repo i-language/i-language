@@ -82,7 +82,7 @@ REPEAT=2
 $1+DATA={O,,,N}VER$$##{11}
 $2+DATA={O,,,B}VER$$##{11}
 =SET{VER$$##=};
-=COMMAND{DOTNET ?WC.ARG##? > ?_TMP??_WORK?.TXT};
+=IF_ERROR_COMMAND{DOTNET ?WC.ARG##? > ?_TMP??_WORK?.TXT}NOP{};
 =IF_ERROR_READ_OPEN{1,?_WORK?.TXT}ERROR{?_WORK?.TXT not found};
 =READ_NEXT1:READ_NEXT{1,WN}JUMP{READ_END1};
 1+=SET{WN.SPLIT2=WN};
@@ -172,7 +172,7 @@ DATA={O}DIR_NAME{35}
 FORM=(★注意★新しい.NETのバージョンをII_VERSION.SRCと_BEGIN_VER2.BATに書きます)
 FORM= @ {[Enter]で必要ファイルに新しバージョンを書き替えコンパイルを開始します} 　
 DATA=COMPILE{1}
-%NO_VERSIONUP-=COMMAND{SET_RENAME_MKDIR_UP.BAT                     ?_IV?_BIN           ?_IV?_BIN_?_TODAY_CLIENT?};
+%NO_VERSIONUP-=IF_ERROR_COMMAND{SET_RENAME_MKDIR_UP.BAT                     ?_IV?_BIN           ?_IV?_BIN_?_TODAY_CLIENT?}NOP{};
 %NO_VERSIONUP-=IF{#OBFUSCATE='YES'}COMMAND{SET_RENAME_MKDIR_UP.BAT ?_IV?_BIN_OBFUSCATE ?_IV?_BIN_OBFUSCATE_?_TODAY_CLIENT?};
 %NO_VERSIONUP-FORM= @ ( ここで..?_P??_IV?_BINが?_IV?_?_TODAY_CLIENT?にリネームされ、且つ
 %NO_VERSIONUP-FORM=     ..?_P??_IV?_BINが作られた事を確認し、Enterでコンパイルします ) 
@@ -206,7 +206,7 @@ COPY=FUNC_READ_WRITE
 *=WRITE{1,'</Project>'};
 *=WRITE_CLOSE{1};
 ******************************************************************************
-=COMMAND{90_ALL_COMPILE.BAT CONT};
+=IF_ERROR_COMMAND{90_ALL_COMPILE.BAT CONT}NOP{};
 %NO_VERSIONUP+FORM=　このマシンでインストールをする場合は終了しないとプログラムが入れ替わらない
 %NO_VERSIONUP+FORM=　ので必ず終了してから、別マシンでインストールする場合はそのマシンに
 %NO_VERSIONUP+FORM=　インストールファイルを全てコピーし、再度SETUP_JA.BATを実行して下さい。
@@ -235,6 +235,7 @@ W-=SET{WC.DRVL='L'};
 ***=SET{WC.DB=',',_LANG_SYSTEM=_LANG};
 =SET{WC.DB=','};
 =IF{#DB!=''}SET{%D='-',%F='-',%H='-',%I='-',%L='-',%M='-',%O='-',%P='-',%?#DB?='+',WC.DB=''};
+U+JA+FORM=I言語サーバーをインストールします。
 JA+FORM=I VER?_IV[2]? 【インストールプログラム自身もI言語で動いています】
 JA+FORM=★注意★インストール中は画面上でクリックをしないでください。
 JA+FORM=【クリックした場所に入力位置が移動したり,先頭行では前の画面に戻ってしまいます】
@@ -247,7 +248,7 @@ JA-FORM=  〇 do not use the folder excellent "I"
 JA-FORM=       following of all drives by other software.
 W+JA+FORM=  〇サービス名"?_IV?SRVCW?_FRAMEWORK?"を他のソフトで使用していない。
 W+JA-FORM=  〇 do not use service name "?_IV?SRVCW?_FRAMEWORK?" by other software.
-U+JA+FORM=  〇サービス名"i?_IV[2]?srvcx_?$WC.JAVA_MONO?"を他のソフトで使用していない。
+U+JA+FORM=  〇サービス名"isrvcxxx"を他のソフトで使用していない。
 U+JA-FORM=  〇 do not use service name "?_IV?srvcx" by other software.
 U+JA+FORM=  〇グループ名i_groupを他で使用していない。
 W+JA+FORM=  〇時間起動処理のためのTask Schedulerサービスが開始されても良い。
@@ -260,11 +261,11 @@ JA+FORM=  〇共有名の"I_SHARE"と"I.システム名"を他のソフトで使
 JA-FORM=  〇 A share name does not use "I_SHARE","I.(system name)" by other software.
 JA+FORM=◎次のどれかのデータベースがインストールされている。
 JA-FORM=◎A database of next one is installed.
-W+FORM=  〇Microsoft SQL Server(Express Edtion含む)(推奨)
+FORM=  〇Microsoft SQL Server(Express Edtion含む)(推奨)
 FORM=  〇PostgreSQL 
 FORM=  〇MariaDB
-FORM=  〇IBM DB2(Express-C含む）
-FORM=  〇Oracle(Express Edtion含む)
+FORM=  〇IBM DB2(Comminty,Express-C含む）
+FORM=  〇Oracle(Free,Express Edtion含む)
 ***** FORM=  〇FireBird dll(?$WC.DLL_D1?/?$WC.DLL_VER_D1?)
 ***** FORM= 〇HiRDB8        dll(pdcltm32.dll,pddndp20x.dll,pddndpcore20x.dll)
 ***** FORM=  (HiRDB8はエラーが頻発するので、本番運用したい場合は動作確認を十分して下さい)
@@ -379,7 +380,8 @@ MESSAGE=該当セットアップ名のインストールファイルが無いの
 ******( インストールファイル作成 )*****
 =SET{WC.PASSWORD='NAGANO'};
 W+=EXE_WAIT{?_BIN??_P?ISETUP?_OS??_FRAMEWORK?.EXE,?WC.PASSWORD? ?SETUP? ?_COMPUTER_NAME?}; 
-U+=IF{_FRAMEWORK='J'}EXE_WAIT{java,-cp /home/I/BIN?_IV?/purejavacomm.jar:/home/I/BIN?_IV?/jna.jar:/home/I/BIN?_IV?/IJAVA.jar isetup_l ?WC.PASSWORD? ?SETUP? ?_COMPUTER_NAME?}; 
+**U+=IF{_FRAMEWORK='J'}EXE_WAIT{java,-cp /home/I/BIN?_IV?/purejavacomm.jar:/home/I/BIN?_IV?/jna.jar:/home/I/BIN?_IV?/IJAVA.jar isetup_l ?WC.PASSWORD? ?SETUP? ?_COMPUTER_NAME?}; 
+U+=IF{_FRAMEWORK='J'}EXE_WAIT{java,-cp /home/I/BIN?_IV?/* isetup_l ?WC.PASSWORD? ?SETUP? ?_COMPUTER_NAME?}; 
 U+=IF{_FRAMEWORK='D'}EXE_WAIT{mono,/home/I/BIN?_IV?/ISETUP?_OS??_FRAMEWORK?.EXE ?WC.PASSWORD? ?SETUP? ?_COMPUTER_NAME?}; 
 U+=IF{_FRAMEWORK='C'}EXE_WAIT{/home/I/BIN?_IV?/ISETUP?_OS??_FRAMEWORK? ?WC.PASSWORD? ?SETUP? ?_COMPUTER_NAME?}; 
 =SET{INSTALL_FILE='NO'};
@@ -402,7 +404,8 @@ U+=IF{_FRAMEWORK='C'}EXE_WAIT{/home/I/BIN?_IV?/ISETUP?_OS??_FRAMEWORK? ?WC.PASSW
 *%L+=IF{SYSTEM@LENGTH<6}SET{WC.CHECK='?WC.DB?MRDB116,MariaDB11.6.x{L},MRDB115,MariaDB11.5.x{L},MRDB114,MariaDB11.4.x{L}'};
 *%L+=IF{SYSTEM@LENGTH<6}SET{WC.CHECK='?WC.DB?MRDB118,MariaDB11.8.x{L},MRDB116,MariaDB11.6.x{L},MRDB115,MariaDB11.5.x{L}'};
 %L+=IF{SYSTEM@LENGTH<6}SET{WC.CHECK='?WC.DB?MRDB122,MariaDB12.2.x{L},MRDB118,MariaDB11.8.x{L},MRDB116,MariaDB11.6.x{L}'};
-%I+=IF{SYSTEM@LENGTH<3}SET{WC.CHECK+='?WC.DB?I11,IBM DB2 V11.x{I},I10,IBM DB2 V10.x{I},I9,IBM DB2 V9.x{I}'};
+#%I+=IF{SYSTEM@LENGTH<3}SET{WC.CHECK+='?WC.DB?I11,IBM DB2 V11.x{I},I10,IBM DB2 V10.x{I},I9,IBM DB2 V9.x{I}'};
+%I+=IF{SYSTEM@LENGTH<3}SET{WC.CHECK+='?WC.DB?I12,IBM DB2 V12.x{I},I11,IBM DB2 V11.x{I},I10,IBM DB2 V10.x{I}'};
 *****%F+=IF{SYSTEM@LENGTH=1}SET{WC.CHECK+='?WC.DB?SYMF,Symfoware{F}'};
 *****%H+=IF{SYSTEM@LENGTH=1}SET{WC.CHECK+='?WC.DB?HIRDB,HiRDB{H}'};
 *****=IF{SYSTEM@LENGTH=1}SET{WC.CHECK+=',HIRDB,HiRDB{H}'};
@@ -474,6 +477,7 @@ CHECK2=?WC.CHECK?
 =SET{%ZZ_?_DATA?='+'};
 W+=IF{WC.EXIST_I_FILE_O!='O'}IF{DB_SOFT/'M'}IF{DB_SOFT%'EX'}SET{WC.INSTANCE='SQLEXPRESS'};
 =IF{WC.EXIST_I_FILE_O!='O'}IF{DB_SOFT/'I'}SET{WC.INSTANCE='50000'};
+=IF{WC.EXIST_I_FILE_O!='O'}IF{DB_SOFT='I12'}SET{WC.INSTANCE='25000'};
 =IF_NOT{DB_SOFT/'O'}JUMP{NOT_O};
 =IF{WC.EXIST_I_FILE_O!='O'}SET{WC.INSTANCE='ORCL'};
 =IF{WC.EXIST_I_FILE_O!='O'}IF{DB_SOFT='O121'}SET{WC.INSTANCE='PDBORCL'};
@@ -593,8 +597,8 @@ W+=   ,WC.PROGRAM_FIRE2=_OS_DRIVE+_P+'I'+_P+'BIN'+_IV+_P+'IMENU'+_OS+_FRAMEWORK+
 W+=SET{WC.SCQC_SW=0};
 W+NAME=SCQC
 W+=SET{WC.SCQC=};
-W+I+=IF_ERROR_COMMAND{sc qc ?WC.NAME?>?_TMP?SCQC.TMP}SET{WC.NAME=WC.NAME+'-0'}
-W+=COMMAND{sc qc ?WC.NAME?>?_TMP?SCQC.TMP};
+W+I+=IF_ERROR_COMMAND{sc qc ?WC.NAME?>?_TMP?SCQC.TMP}SET{WC.NAME=WC.NAME+'-0'};
+W+=IF_ERROR_COMMAND{sc qc ?WC.NAME?>?_TMP?SCQC.TMP}NOP{};
 W+=READ_OPEN{1,?_TMP?SCQC.TMP,SHIFT_JIS};
 W+=READ_NEXT1:READ_NEXT{1,WC.DATA}JUMP{READ_END1};
 W+=SPLIT_CHAR{WC.SPLIT}{WC.DATA}{};
@@ -795,10 +799,12 @@ U+D+      =IF_FILE_NOT{?WC.PROGRAM?}ERROR{?WC.PROGRAM? FILE not found};
 U+L+=SET{WC.CONF_PATH='/etc'};
 =SET{WC.DATABASE_PATH=WC.CONF_PATH};
 P+=SET{WC.FILE_NAME='postgresql',WC.EXTENSION='conf'};
-L+W+=SET{WC.FILE_NAME='my',WC.EXTENSION='ini'};
-L+U+=SET{WC.FILE_NAME='my',WC.EXTENSION='cnf'};
+W+L+=SET{WC.FILE_NAME='my',WC.EXTENSION='ini'};
+U+L+=SET{WC.FILE_NAME='my',WC.EXTENSION='cnf'};
+=BACK:
 P+|L+=SET{WC.FILE=WC.CONF_PATH+_P+WC.FILE_NAME};
 P+|L+=IF_FILE{?WC.FILE?.?WC.EXTENSION?}JUMP{OK};
+U+L+=IF{WC.CONF_PATH='/etc'}SET{WC.CONF_PATH='/etc/mysql'}BACK{BACK};
 P+=IF{_OS='W'}JUMP{WINDOWS};
 ************( PostgreSQL,Unix )*******************************
 *P+=SET{WC.DATABASE_PATH='/var/lib/postgresql/?WC._DB_SOFT[2;1]?.?_DB_SOFT[3;1]?/main'};
@@ -848,7 +854,7 @@ U+D+=READ_CLOSE{1};
 U+D+=EXIT{PASSWORD_ADMIN};
 U+D+=SYSDBA_SKIP:READ_CLOSE{1};
 U+D+FORM=★SYSDBA.passwordファイルが有る場合は、管理者パスワードが自動で設定されます。
-JA+L+U+FORM= MySQLは管理者（I_ROOT)パスワードを新たに設定します。
+JA+U+L+FORM= MySQLは管理者（I_ROOT)パスワードを新たに設定します。
 M+JA+FORM=SQL Serve認証が有効でない時は,有効に変更し管理者(SA)のパスワードを設定します。
 M+JA+FORM=(既に有効になっている場合は管理者（SA)パスワードを入力して下さい。)
 JA+FORM=管理者パスワード(２回入力,正しくないと、しばらく動いてからエラーとなります）
@@ -1038,8 +1044,8 @@ DATA=I_CHK_SKIP{4}{?WC.I_CHK_SKIP?}
 %NO_ALTER_PASSWORD-=EXIT{RUN};
 *==========================================(COMMENT2_BEGIN )==================
 %NO_ALTER_PASSWORD-=COMMENT2_BEGIN
-=IF{WN.MSG1!=}IF{WN.MSG1!=}IF{WN.MSG1!=}
-=  SET{WN.MSG='全てパスワードが違います,難読化等で正しい場合は'YES'で続行出来ます。'}　
+=IF{WN.MSG1!=}IF{WN.MSG2!=}IF{WN.MSG3!=}
+=  SET{WN.MSG='全てパスワードが違います,難読化等で正しい場合はYESで続行出来ます。'}　
 =  SET{WC.I_CHK_SKIP='YES,NO'};
 %NO_ALTER_PASSWORD-=COMMENT2_END
 *==========================================(COMMENT2_END )==================
@@ -1091,7 +1097,8 @@ FORM=NEXT @@@@@ (クライアントのインストールも行われ、コマン
 FORM=　　　　　　指示に従って操作し、続行して下さい）	
 *****( RUN )***************************************************************
 DATA=RUN{4,1}{YES,SKIP}
-%NO_ALTER_PASSWORD-=IF{_DATA='SKIP'}EXIT{INIT};
+**%NO_ALTER_PASSWORD-=IF{_DATA='SKIP'}EXIT{INIT};
+=IF{_DATA='SKIP'}EXIT{INIT};
 ************************( ALTER PASSWORD MAIN LOGIC )**********************************
 *==========================================(COMMENT2_BEGIN )==================
 %NO_ALTER_PASSWORD+COMMENT2_BEGIN
@@ -1136,7 +1143,7 @@ O+=       "?WC.PASSWORD?"
 REPEAT0=
 I+=WRITE{1,'PASUE'};
 I+=WRITE_CLOSE{1};
-I+=COMMAND{?_BIN?IROOTWD.EXE ?_TMP??_WORK?.BAT};
+I+=IF_ERROR_COMMAND{?_BIN?IROOTWD.EXE ?_TMP??_WORK?.BAT}NOP{};
 I+=ERASE_FILE{?_WORK?.BAT};
 I+=READ_OPEN{1,?_WORK?.TXT,/};
 I+=READ1_NEXT:READ_NEXT{1}JUMP{READ1_END};
@@ -1176,7 +1183,7 @@ P+W+=SET{WC.ARCHIVE_PATH=DRIVE2+':'+_P+_P+'I'+_P+_P+'BACKUP_LOG_'};
 **********( PostgreSQL,Windows )*******************************
 ***( IPv6 判定 )****
 *W+=SET{W0.IP46=4};
-*W+=COMMAND{ipconfig >ipconfig.txt};
+*W+=IF_ERROR_COMMAND{ipconfig >ipconfig.txt}NOP{};
 *W+=IF_ERROR_READ_OPEN{1,ipconfig.txt,SHIFT_JIS}READ_CLOSE{1}ERROR{};
 *W+=READ_NEXT1:READ_NEXT{1}JUMP{READ_END1};
 *W+=SPLIT_CHAR{WC.CONFIG}{_READ_DATA}{':'};
@@ -1189,11 +1196,11 @@ P+REPEAT=2
 =IF_FILE{?WC.OLD?}JUMP{SKIP};  既にOLDが有る場合は処理せず*
 =SET{WC.CHG_SW=1};
 =IF_ERROR_COPY_FILE{?WC.OLD?,?WC.NEW?}ERROR{};
-L+U+=COMMAND{chmod 660      ?WC.OLD?}; 
-L+U+=COMMAND{chgrp mysql    ?WC.OLD?};
-P+U+=COMMAND{chmod 660      ?WC.OLD?}; 
-P+U+=COMMAND{chgrp postgres ?WC.OLD?};
-P+U+=COMMAND{chown postgres ?WC.OLD?};
+U+L+=IF_ERROR_COMMAND{chmod 660      ?WC.OLD?}NOP{}; 
+U+L+=IF_ERROR_COMMAND{chgrp mysql    ?WC.OLD?}NOP{};
+P+U+=IF_ERROR_COMMAND{chmod 660      ?WC.OLD?}NOP{}; 
+P+U+=IF_ERROR_COMMAND{chgrp postgres ?WC.OLD?}NOP{};
+P+U+=IF_ERROR_COMMAND{chown postgres ?WC.OLD?}NOP{};
 =IF_ERROR_READ_OPEN{1,?WC.OLD?,SHIFT_JIS}READ_CLOSE{1}ERROR{};
 =WRITE_OPEN{1,?WC.NEW?,OT,SHIFT_JIS};
 L+=SET{WN.CLIENT_SW=0,WN.MYSQL_SW=0,WN.MYSQLDUMP_SW=0,WN.MYSQLD_SW=0};
@@ -1246,11 +1253,23 @@ L+=   WRITE{1,'[client]'}
 L+=   WRITE{1,'default-character-set=utf8mb4'};
 =WRITE_CLOSE{1};READ_CLOSE{1};
 =SKIP:
-L+U+=COMMAND{chmod 660   ?WC.NEW?}; 
-L+U+=COMMAND{chgrp mysql ?WC.NEW?}; 
+U+L+=IF_ERROR_COMMAND{chmod 660   ?WC.NEW?}NOP{}; 
+U+L+=IF_ERROR_COMMAND{chgrp mysql ?WC.NEW?}NOP{}; 
 P+=SET{WC.FILE=$WC.CONF_PATH+_P+'pg_hba'};
 P+=SET{WC.OLD=WC.FILE+'.i',WC.NEW=WC.FILE+'.'+$WC.EXTENSION};
 P+REPEAT=
+U+L+=SET{WC.FILE='/etc/mysql/mariadb.conf.d/50-server'};
+U+L+=IF_FILE{?WC.FILE?.i}JUMP{J};
+U+L+=IF_FILE_NOT{?WC.FILE?.cnf}JUMP{J};
+U+L+=COPY_FILE{?WC.FILE?.i,?WC.FILE?.cnf};
+U+L+=READ_OPEN{1,?WC.FILE?.i};
+U+L+=WRITE_OPEN{1,?WC.FILE?.cnf,ot};
+U+L+=READ_NEXT:READ_NEXT{1,WN}JUMP{READ_END};
+U+L+=IF{WN/'bind-address '}SET{WN='#(I) '+WN};
+U+L+=WRITE{1,WN};
+U+L+=BACK{READ_NEXT};
+U+L+=READ_END:WRITE_CLOSE{1};READ_CLOSE{1};
+U+L+=J:
 =SKIP_ALL:
 =IF{_DB!='M',_OS!='W'}JUMP{SKIP_MW_ALL};
 ************( Microsoft SQL Server )******************************* 
@@ -1279,7 +1298,7 @@ M+=IF_ERROR_COMMAND{SC START SQLBrowser}NOP{};
 *********( saの有効化及びパスワード設定 )********************
 =IF{WC.SA_SW=0}JUMP{SKIP};
 =SET{WC.INST=};IF{INSTANCE!=}SET{WC.INST=_P+INSTANCE};
-=EXE_WAIT{SQLCMD.EXE,-E -S?_SERVER_NAME??WC.INST? -dmaster -Q"ALTER LOGIN sa ENABLE;ALTER LOGIN sa WITH PASSWORD='?$PASSWORD_ADMIN?';"};
+=EXE_WAIT{SQLCMD.EXE,-E -S?_SERVER_NAME??WC.INST? -C -dmaster -Q"ALTER LOGIN sa ENABLE;ALTER LOGIN sa WITH PASSWORD='?$PASSWORD_ADMIN?';"};
 =SKIP:
 =SKIP_MW_ALL:
 *******( MYSQL )********************************************
@@ -1293,16 +1312,16 @@ L+=SET{WN.SQL='GRANT ALL PRIVILEGES ON *.* TO I_ROOT?WC.HOST##? WITH GRANT OPTIO
 L+=SET{WN.SQL+=';'};WRITE{1,WN.SQL};
 L+REPEAT=
 L+=WRITE_CLOSE{1};
-L+W+=COMMAND{"?$WC.PROGRAM?" -uroot -p?$PASSWORD_ADMIN? < ?_TMP?SETUP_DB_L.SQL 1> ?_TMP?SETUP_DB_L.LOG 2>&1};
-L+U+=WRITE_OPEN{1,?_TMP?SETUP_DB_L,OT};
-L+U+=SET{WN.SH='mysql -uroot < ?_TMP?SETUP_DB_L.SQL 1> ?_TMP?SETUP_DB_L.LOG 2>&1'};
-L+U+=WRITE{1,WN.SH};WRITE_CLOSE{1};IF_ERROR_COMMAND{sh ?_TMP?SETUP_DB_L}NOP{}; 
+W+L+=IF_ERROR_COMMAND{"?$WC.PROGRAM?" -uroot -p?$PASSWORD_ADMIN? < ?_TMP?SETUP_DB_L.SQL 1> ?_TMP?SETUP_DB_L.LOG 2>&1}NOP{};
+U+L+=WRITE_OPEN{1,?_TMP?SETUP_DB_L,OT};
+U+L+=SET{WN.SH='mysql -uroot < ?_TMP?SETUP_DB_L.SQL 1> ?_TMP?SETUP_DB_L.LOG 2>&1'};
+U+L+=WRITE{1,WN.SH};WRITE_CLOSE{1};IF_ERROR_COMMAND{sh ?_TMP?SETUP_DB_L}NOP{}; 
 L+=ERASE_FILE{SETUP_DB_L.SQL}; 
 L+=SET{WC.CHG_SW=1};
 *********( サービス 再起動 )********************
 =SET{INIT='RUN'};EXIT3{INIT};
 ****( INIT )********************************************************
-DATA=INIT{3,1}{RUN,SKIP}
+DATA=INIT{4,1}{RUN,SKIP}
 =IF{_DATA='SKIP'}EXIT{ADMIN};
 U+=SET{WC.RDBMS_USER=};
 U+D+=SET{WC.RDBMS_USER='firebird'};
@@ -1311,7 +1330,7 @@ U+L+=SET{WC.RDBMS_USER='mysql'};
 U+M+=SET{WC.RDBMS_USER='mssql'};
 U+O+=SET{WC.RDBMS_USER='oracle'};
 U+P+=SET{WC.RDBMS_USER='postgres'};
-U+=IF{WC.RDBMS_USER<>''}COMMAND{usermod -a -G i_group ?WC.RDBMS_USER?};
+U+=IF{WC.RDBMS_USER<>}COMMAND{usermod -a -G i_group ?WC.RDBMS_USER?};
 W+=SET{WC.WOS_LOGIN=OS_LOGIN,WC.WSECRET=SECRET,WC.WGUEST=GUEST};
 U+=SET{WC.WOS_LOGIN=,WC.WSECRET=,WC.WGUEST=};
 =IF{$WC.EXIST_I_FILE_O!=}JUMP{SKIP};
@@ -1320,7 +1339,7 @@ U+=SET{WC.WOS_LOGIN=,WC.WSECRET=,WC.WGUEST=};
 W+=SET{WC='ICACLS ?_OS_DRIVE??_P?I?_P?I.?_SYSTEM? /grant:r SYSTEM:(OI)(CI)(F) /grant:r ADMINISTRATORS:(OI)(CI)(F) /grant:r ?_USER?:(OI)(CI)(F)'};
 U+=SET{WC='chmod 775     ?_OS_DRIVE??_P?I?_P?I.?_SYSTEM?'};
 =IF_ERROR_COMMAND{?WC?}NOP{};  
-U+=COMMAND{chgrp i_group ?_OS_DRIVE??_P?I?_P?I.?_SYSTEM?};
+U+=IF_ERROR_COMMAND{chgrp i_group ?_OS_DRIVE??_P?I?_P?I.?_SYSTEM?}NOP{};
 =MAKE_DIR{?_OS_DRIVE??_P?I?_P?I.?_SYSTEM??_P?BAT};
 ***=WRITE_OPEN{1,?_OS_DRIVE??_P?I?_P?I.?_SYSTEM??_P?BAT?_P?Z_SETUP.CFG,OT,UTF-8,W};
 ***=WRITE{1,DRIVE1,WC.WDRIVE2,DRIVE3,WC.WDRIVE4,DRIVE5,WC.WOS_LOGIN,WC.WSECRET,WC.WGUEST,$ARCHIVE,_IV,$WC.JAVA_MONO,$JDBC,$INSTALL_PATH,$WC.DATABASE_PATH};
@@ -1393,14 +1412,14 @@ W+=SET{WC='ICACLS ?WC.DR_TOP??_P?I /grant:r SYSTEM:(OI)(CI)(F) /grant:r ADMINIST
 W+=      +' /grant:r ?_USER?:(OI)(CI)(F) ?WC.SERVICE_ICACLS_SET? /grant:r EVERYONE:(OI)(CI)(R)'};
 U+=SET{WC='chmod 775     ?WC.DR_TOP??_P?I'};
 =IF_ERROR_COMMAND{?WC?}NOP{};  
-U+=COMMAND{chgrp i_group ?WC.DR_TOP??_P?I};
+U+=IF_ERROR_COMMAND{chgrp i_group ?WC.DR_TOP??_P?I}NOP{};
 =       MAKE_DIR{?WC.PATH_$$##?};
 W+=SET{WC='ICACLS ?WC.PATH_$$##? /grant:r SYSTEM:(OI)(CI)(F) /grant:r ADMINISTRATORS:(OI)(CI)(F)'
 W+=       +' /grant:r ?_USER?:(OI)(CI)(F) ?WC.SERVICE_ICACLS_SET?'};
 U+=       SET{WC='chmod 770 ?WC.PATH_$$##?'};
 U+I+1+|2+=SET{WC='chmod 775 ?WC.PATH_$$##?'};
 =IF_ERROR_COMMAND{?WC?}NOP{};
-U+=COMMAND{chgrp i_group ?WC.PATH_$$##?};
+U+=IF_ERROR_COMMAND{chgrp i_group ?WC.PATH_$$##?}NOP{};
 U+=IF{WC.RDBMS_USER<>''}COMMAND{chown ?WC.RDBMS_USER? ?WC.PATH_$$##?};  
 *(PERMISSION_BEGIN)*
 =SKIP:
@@ -1443,13 +1462,14 @@ COMMENT2_END   *JUMP ERROR SKIP*
 *(PERMISSION_END)*
 =IF{WC.CHG_SW=0}JUMP{SKIP_CMD};
 =IF_NAME_NOT{$WC.NET_STOP_START}JUMP{SKIP_CMD};
-U+=IF_ERROR_COMMAND{service ?$WC.NET_STOP_START? restart}COMMAND{/etc/init.d/?$WC.NET_STOP_START? restart};
-W+=COMMAND{NET STOP  ?$WC.NET_STOP_START?};
-W+=COMMAND{NET START ?$WC.NET_STOP_START?};
+**U+=IF_ERROR_COMMAND{service ?$WC.NET_STOP_START? restart}COMMAND{/etc/init.d/?$WC.NET_STOP_START? restart}NOP{};
+U+=IF_ERROR_COMMAND{systemctl restart ?$WC.NET_STOP_START?}NOP{};
+W+=IF_ERROR_COMMAND{NET STOP  ?$WC.NET_STOP_START?}NOP{};
+W+=IF_ERROR_COMMAND{NET START ?$WC.NET_STOP_START?}NOP{};
 =SLEEP{5};
 =SKIP_CMD:
 W+=IF{OS_LOGIN='YES'}LOGIN_SQL{EXEC SP_DENYLOGIN 'BUILTIN\ADMINISTRATORS'};
 =SET{ADMIN='RUN'};EXIT3{ADMIN};
-DATA=ADMIN{3,1}{RUN,SKIP}
+DATA=ADMIN{4,1}{RUN,SKIP}
 =IF{_DATA='SKIP'}EXIT{TABLE};
 =MESSAGE{ADMIN};

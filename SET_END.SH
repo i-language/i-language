@@ -60,7 +60,7 @@ cp *ZTIME   $I_HOME/I.$2/BAT
 cp IXXCLIENT.SH                  $I_HOME/SHARE/LINUX/CLIENT/${I_VER}CLIENT.SH 
 cp CONVERT.TX?                   $I_HOME/SHARE/LINUX/CLIENT 
 cp $I_HOME/TMP/$6*               $I_HOME/SHARE/LINUX/CLIENT 
-cp I_MENU.IC?                    $I_HOME/SHARE/LINUX/BIN${I_VER} 
+cp I_MENU.*                      $I_HOME/SHARE/LINUX/BIN${I_VER} 
 cp I_LANG_??_U.TXT               $I_HOME/SHARE/LINUX/BIN${I_VER} 
 #cp ../${I_VER}_BIN/CLIENT_UD/*.* $I_HOME/SHARE/LINUX/BIN${I_VER}D 
 cp ../${I_VER}_BIN/JAVA/*.*      $I_HOME/SHARE/LINUX/BIN${I_VER}J 
@@ -71,7 +71,7 @@ cp IXXCLIENT.BAT                 $I_HOME/SHARE/WINDOWS/CLIENT/${I_VER}CLIENT.BAT
 cp IXXCLIENT.JS                  $I_HOME/SHARE/WINDOWS/CLIENT/${I_VER}CLIENT.JS 
 cp CONVERT.TX?                   $I_HOME/SHARE/WINDOWS/CLIENT 
 cp $I_HOME/TMP/$6*               $I_HOME/SHARE/WINDOWS/CLIENT 
-cp I_MENU.IC?                    $I_HOME/SHARE/WINDOWS/BIN${I_VER} 
+cp I_MENU.*                      $I_HOME/SHARE/WINDOWS/BIN${I_VER} 
 cp I_LANG_??_W.TXT               $I_HOME/SHARE/WINDOWS/BIN${I_VER} 
 cp ../${I_VER}_BIN/CLIENT_WD/*.* $I_HOME/SHARE/WINDOWS/BIN${I_VER}D 
 cp ../${I_VER}_BIN/JAVA/*.*      $I_HOME/SHARE/WINDOWS/BIN${I_VER}J 
@@ -101,10 +101,15 @@ for i in LINUX WINDOWS
    chmod 775 $I_HOME/SHARE/$i/CLIENT/*.I
    done
 ###( at install )###
-apt install -y at
-systemctl enable --now atd
+apt_dnf=dnf
+if   test -f /bin/apt   ;then apt_dnf=apt
+elif test -f /bin/zypper;then apt_dnf=zypper
+fi
+$apt_dnf install -y at
+systemctl enable atd
+systemctl start  atd
 ###( amba install )###
-sudo apt install -y samba
+$apt_dnf install -y samba
 smb=/etc/samba/smb.conf
 if test -f $smb;then 
    grep '^[[]I_SHARE[]]$' $smb 2>/dev/null
@@ -123,8 +128,10 @@ if test -f $smb;then
        echo guest ok = Yes >> $smb
     fi
 fi
-sudo systemctl enable --now smbd
-sudo systemctl enable --now nmbd
+systemctl enable smbd nmbd
+systemctl start  smbd nmbd
+systemctl enable smb  nmb 
+systemctl start  smb  nmb
 ###( my Service )###
 i_sc=/etc/systemd/system/isrvcxxx.service
 echo [Unit] >$i_sc
@@ -137,7 +144,8 @@ echo Restart=on-failure >>$i_sc
 echo WorkingDirectory=/home/I/TMP >>$i_sc
 echo [Install] >>$i_sc
 echo WantedBy=multi-user.target >>$i_sc
-systemctl enable --now isrvcxxx
+systemctl enable isrvcxxx
+systemctl start  isrvcxxx
 ls -d /home/I/I.* | grep -c '^/home/I/I.' > $I_HOME/TMP/SET_END_$2.TMP
 chmod 777                                   $I_HOME/TMP/SET_END_$2.TMP
 ############( SHIFT/1)####################################
@@ -167,7 +175,9 @@ for i in `ls /root/.config /home/*/.config -d 2>/dev/null`
       chmod 777 $fl
       done
    done
-if test "$7"  != "/";then 
-  echo export PASSWORD=$7 > $I_SYSTEM_DIR/ZZZZZZPASSWORD
-  chmod 770 $I_SYSTEM_DIR/ZZZZZZPASSWORD
+if test "$7"  != "/";then
+  mkdir $I_SYSTEM_DIR/PASSWORD 
+  chmod 770 $I_SYSTEM_DIR/PASSWORD
+  echo export PASSWORD=$7 > $I_SYSTEM_DIR/PASSWORD/ZZZZZZPASSWORD
+  chmod 770 $I_SYSTEM_DIR/PASSWORD/ZZZZZZPASSWORD
 fi

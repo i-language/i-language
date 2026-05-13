@@ -6,15 +6,9 @@ SET I_VER=I38
 REM ===( IŒ¾Œê VER2 )===
 CALL _BEGIN_VER2.BAT 
 REM ===( Java )===
-rem SET I_VER_J=23
-rem SET I_VER_J=21.0.2
-rem SET I_VER_J=21.0.8
-SET I_VER_J=25
+rem SET I_VER_J=25
+SET I_VER_J=25.0.2
 REM ===( Qt(C++) )===
-rem SET I_VER_C=6.6.3
-rem SET I_VER_C=6.7.3
-rem SET I_VER_C=6.8.1
-rem SET I_VER_C=6.9.0
 rem SET I_VER_C=6.10.0
 SET I_VER_C=6.10.2
 REM ===( dir )===

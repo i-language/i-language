@@ -2801,9 +2801,10 @@ for(;NEXT_1>=sw;)//NEXT_1以下のみ実行
 //SS #else //W
 //SS                       z_p./*get_*/bin_path_s/*()*/+z_p.substring3_s(name_s,1,6)+z_p.to_c_s(z_p.os_c)+z_p.to_c_s(z_p.FRAMEWORK_C)+".EXE"; //VER33
 //SS #endif //W
-//JJ "-cp "+z_p./*get_*/bin_path_s/*()*/+z_p.iv_s+"purejavacomm.jar"+('W'==z_p.os_c?";":":") //VER33
-//JJ       +z_p./*get_*/bin_path_s/*()*/+z_p.iv_s+"jna.jar"+('W'==z_p.os_c?";":":") //VER33
-//JJ       +z_p./*get_*/bin_path_s/*()+z_p.iv_s*/+"IJAVA.jar "+(z_p.lower_s(z_p.substring3_s(name_s,1,6))+"_l"); //VER33 //VER36.6.0.3
+////JJ "-cp "+z_p./*get_*/bin_path_s/*()*/+z_p.iv_s+"purejavacomm.jar"+('W'==z_p.os_c?";":":") //VER33 //VER38
+////JJ       +z_p./*get_*/bin_path_s/*()*/+z_p.iv_s+"jna.jar"+('W'==z_p.os_c?";":":") //VER33  //VER38
+////JJ       +z_p./*get_*/bin_path_s/*()+z_p.iv_s*/+"IJAVA.jar "+(z_p.lower_s(z_p.substring3_s(name_s,1,6))+"_l"); //VER33 //VER36.6.0.3 //VER38
+//JJ    "-cp "+z_p.bin_path_s+"* IJAVA.jar "+(z_p.lower_s(z_p.substring3_s(name_s,1,6))+"_l"); //VER38 
          sw=SET_NULL_6;break;
         }
       if(z_p.e2s_b(s,"_INP_OUT")){w_s=z_p.inp_out_s;sw=SET_NULL_6;break;}

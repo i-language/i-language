@@ -12,9 +12,9 @@ else
   if test ! -d /home/I/TMP  ;then mkdir /home/I/TMP;fi
   if test ! -d /home/I/BIN$1;then mkdir /home/I/BIN$1;fi
 fi
-cp -r BIN$1/*.*   /home/I/BIN$1
-cp -r BIN$1$8/*.* /home/I/BIN$1
-cp -r CLIENT/$5   /home/I/BIN$1
+cp -r -u BIN$1/*.*   /home/I/BIN$1
+cp -r    BIN$1$8/*.* /home/I/BIN$1
+cp -r    CLIENT/$5   /home/I/BIN$1
 chmod 777 /home/I/TMP
 chmod 777 /home/I/BIN$1
 chmod 777 /home/I/BIN$1/*.*

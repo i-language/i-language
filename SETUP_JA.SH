@@ -7,4 +7,6 @@ if test ! -f SETUP.SH ;then
    fi
    cd i-language  
 fi
+echo ubuntuの場合は事前に[sudo passwd root]で
+echo rootのパスワードを設定しておく必要があります。
 sh SETUP.SH JA JAVA

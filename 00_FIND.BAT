@@ -1,3 +1,3 @@
 @echo off
-find  "os" *.* > __FIND.TMP 
+find  "Exit Code" *.* > __FIND.TMP 
 start notepad __FIND.TMP

@@ -35,5 +35,6 @@
 #include <tchar.h>
 #include <windows.h>
 #endif
+#include <cstdlib>
 #include <math.h>
 #endif // II_INCLUDE_H

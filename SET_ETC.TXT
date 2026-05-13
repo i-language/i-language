@@ -7,7 +7,7 @@ ZZZZZZ_@	ZZZZZZ_PERMISSION_NO2	ZZZY	ZZZY
 ZZZZZZ_@	ZZZZZZ_VERSION_CHART	2	VERSION(2) ICHART
 ZZZZZZ_@	ZZZZZZ_VERSION_PRINT	14	VERSION(14) IPRINT
 ZZZZZZ_@	ZZZZZZ_VERSION1	38	VERSION1(38) IMENU,ITIME
-ZZZZZZ_@	ZZZZZZ_VERSION2	001000007	VERSION2(001000007) IMENU,ITIME
+ZZZZZZ_@	ZZZZZZ_VERSION2	001000008	VERSION2(001000008) IMENU,ITIME
 ZZZZZZ_COPY	ZZZZZZ_SQL               00100	%ZZZZZZ_SQL_SELECT+REPEAT=_SELECT_COUNT	
 ZZZZZZ_COPY	ZZZZZZ_SQL               00200	%ZZZZZZ_SQL_SELECT+SQL=?_SELECT##?	
 ZZZZZZ_COPY	ZZZZZZ_SQL               00300	%ZZZZZZ_SQL_SELECT+REPEAT=	
@@ -1844,10 +1844,10 @@ ZZZZZZ_SYSTEM	ZZZZZZ_REGISTRY_PROXY	SYSTEM\CURRENTCONTROLSET\SERVICES\NLASVC\PAR
 ZZZZZZ_SYSTEM	ZZZZZZ_TIME_LIMIT	17:30	SYSTEM TIME LIMIT (HH:MM)[17:30]
 ZZZZZZ_SYSTEM	ZZZZZZ_TIME_START	08:30	SYSTEM START TIME (HH:MM)[08:30]
 ZZZZZZ_SYSTEM	ZZZZZZ_Z_CANCEL_DELETE	50	Z_CANCEL DELETE -(DAY)[50]
-ZZZZZZ_URL_VERSION	#D	https://dotnet.microsoft.com/download/dotnet/10.0/	,/10.0/,10.0.6
+ZZZZZZ_URL_VERSION	#D	https://dotnet.microsoft.com/download/dotnet/10.0/	,/10.0/,10.0.7
 ZZZZZZ_URL_VERSION	#G	https://www.nuget.org/packages/gtksharp/	,GtkSharp ,3.24.24.95
-ZZZZZZ_URL_VERSION	#J	https://jdk.java.net/archive/	,GA/jdk,25
-ZZZZZZ_URL_VERSION	#J--	24	23,22
+ZZZZZZ_URL_VERSION	#J	https://jdk.java.net/archive/	,GA/jdk,25.0.2
+ZZZZZZ_URL_VERSION	#J--	26	
 ZZZZZZ_URL_VERSION	#J*	*ttp://jdk.java.net/	,">JDK ,21
 ZZZZZZ_URL_VERSION	#J2*	*ttp://jdk.java.net/21/	,>JDK ,21.0.2
 ZZZZZZ_URL_VERSION	#M	https://www.mono-project.com/download/stable/	,installer/mono-,6.12.0.206
@@ -1870,11 +1870,12 @@ ZZZZZZ_URL_VERSION	LN	https://www.nuget.org/packages/MySqlConnector/	,content="M
 ZZZZZZ_URL_VERSION	MJ	https://docs.microsoft.com	
 ZZZZZZ_URL_VERSION	MJ*	*ttps://www.microsoft.com/ja-jp/download/details.a	spx?id=11774,JDBC Driver ,6.0
 ZZZZZZ_URL_VERSION	MJ++	/ja-jp/sql/connect/jdbc/download-microsoft-jdbc-dr	iver-for-sql-server,<p>バージョン ,13.4
-ZZZZZZ_URL_VERSION	MN	https://www.nuget.org/packages/Microsoft.Data.SqlC	lient,content="Microsoft.Data.SqlClient ,7.0.0
+ZZZZZZ_URL_VERSION	MN	https://www.nuget.org/packages/Microsoft.Data.SqlC	lient,content="Microsoft.Data.SqlClient ,7.0.1
 ZZZZZZ_URL_VERSION	OJ	https://www.oracle.com/jp/database/technologies/ap	pdev/jdbc-downloads.html,219/ojdbc,11
 ZZZZZZ_URL_VERSION	ON	https://www.nuget.org/packages/Oracle.ManagedDataA	ccess.Core,Oracle.ManagedDataAccess.Core ,
 ZZZZZZ_URL_VERSION	ON++	23.26.200	
 ZZZZZZ_URL_VERSION	P#	https://www.postgresql.org/	,><strong>,18.3
-ZZZZZZ_URL_VERSION	PJ	http://www.postgresql.org/applications-v2.xml	,>edb_pgjdbc<,<version>,42.7.2-
+ZZZZZZ_URL_VERSION	PJ	https://jdbc.postgresql.org/download/	,="card__subtitle">,42.7.11
+ZZZZZZ_URL_VERSION	PJ**	*http://www.postgresql.org/applications-v2.xml	,>edb_pgjdbc<,<version>,42.7.2-
 ZZZZZZ_URL_VERSION	PN	https://www.nuget.org/packages/Npgsql	,content="Npgsql ,10.0.2
 ZZZZZZ_URL_VERSION	PN*	*http://www.postgresql.org/applications-v2.xml	,>edb_npgsql<,<version>,3.2.6-

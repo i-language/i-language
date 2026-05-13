@@ -20,7 +20,7 @@ static ii_z_l z_n;static ii_z_l z_p;
 static String s,cmd_s="$",cmd2_s,cmd2_org_s,value_s,code_s,old_s,com_s;
 static List<String> s_enum_a=new List<String>(); 
 //HP int main(int argc_i, char ** argv_cci)
-//SJ public static int Main(String[] arg_sxi)//プログラムがここから開始
+//SJ public static void Main(String[] arg_sxi)//プログラムがここから開始
 {
 //String path_s="d:\\HARASAWA\\I\\I33_SRC\\";
 String path_s="";

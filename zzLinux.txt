@@ -81,3 +81,7 @@ sudo権限が無い時 (rootユーザーで入れる事が前提)
 (1)wsl -d ubuntu -u root (rootユーザーで入る)
 (2)usermod -aG sudo [ユーザー名]
 =======================================
+MariaDB root のパスワード変更(パスワード設定必要）
+suでrootへ
+maridb -u root
+alter user root@localhost identified by 'パスワード';

@@ -1451,7 +1451,7 @@ public int command2(String s_si,String s2_si)//passwd処理の場合s2_siにパ�
 //JJ int i=0;
 if('W'==os_c)rc_rc=process("cmd","/c "+s_si,s2_si,true);  //ver18.1
 else {
-//SJ  rc_rc=process("sh","-c \"\""+s_si+"\"\"",s2_si,true);  //SS   //ver18.1 //VER36.6.0.3　//VER37.8.0.12
+//SJ  rc_rc=process("sh","-c \"\""+s_si+"\"\"",s2_si,true);  //SS   //ver18.1 //VER36.6.0.3　//VER37.8.0.12 
 ////JJ  try{
 ////JJ     Process process_n=Runtime.getRuntime().exec(s_si);
 ////JJ     is_n=process_n.getInputStream(); 
@@ -1945,12 +1945,15 @@ s2_si=replace_rn_s(s2_si,' ');
 //JJ  int begin,end,l1=0,l2=0;
 //JJ  String s=s1_si+" "+s2_si;
 //JJ  for(begin=0,end=0;end<s.length();end++)
-//JJ     {if('\''==s.charAt(end)){if(0==l1)l1=1;else l1=0;continue;}
-//JJ      if('"' ==s.charAt(end)){if(0==l2)l2=1;else l2=0;continue;}
+//JJ     {if('\''==s.charAt(end))l1=(0==l1?1:0); //VER38
+//JJ      if('"' ==s.charAt(end))
+//JJ        {if((end+1)<s.length()&&'"' ==s.charAt(end+1))end++;  //VER38
+//JJ         l2=(0==l2?1:0);
+//JJ        } //VER38
 //JJ      if(1==l1||1==l2||' '!=s.charAt(end))continue;
 //JJ      cmd_a.add(substring3_s(s,begin,end-begin));
 //JJ      for(;end<s.length();end++)if(' '!=s.charAt(end))break;
-//JJ      begin=end;
+//JJ      begin=end--;   //VER38
 //JJ     } 
 //JJ  if(begin<s.length())cmd_a.add(substring2_s(s,begin));
 //JJ  ProcessBuilder ProcessBuilder_n=new ProcessBuilder(cmd_a);

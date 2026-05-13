@@ -1,2 +1,11 @@
 H=root/root
 D=SYSDBA/masterkey(又は、/opt/firebird/SYSDBA.password の内容)
+★MariaDB(Linux)の rootのパスワード設定方法。(初期値はパスワード無し）I言語のインストールでは無しでないとインストール出来ない。
+
+mysql -u root
+use mysql;
+alter user root@localhost identified by 'パスワード';
+exit
+確認方法。
+mysql -u root -p
+===========================
