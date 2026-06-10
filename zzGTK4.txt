@@ -1,0 +1,5 @@
+WindowはMSYS2で「 pacman -S mingw-w64-ucrt-x86_64-gtk4」でインストール。
+Linuxは「sudo apt install -y libgtk-4-dev]でインストール。
+「dotnet add package GtkSharp」を実行。
+「dotnet add package GirCore.Gtk-4.0」
+

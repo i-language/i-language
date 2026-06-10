@@ -11,7 +11,7 @@ class ISOURCE
 //static String dll2_s="_DOWNLOAD\\"; 
 //static String dll_s="..\\IXX_DOWNLOAD\\"; 
 static String define_s=";M;I;L;O;P;D;F;H";
-
+static String qt_s="";
 static String[] file_sx,name_sx;
 static String dir_in_s="",dir_out_s="",obfuscate_s="",in_s="",out_s="";
 static int i,sjhp,k,kk,sw,SS=0,JJ=1,HH=2,PP=3,sw_java=1;
@@ -34,6 +34,7 @@ static List<String> w1_sa=new List<String>(),w2_sa=new List<String>(),u1_sa=new 
 public static int Main(string[] arg_sxi)
 {
 iver_s=arg_sxi[0];net_s=arg_sxi[1];if(arg_sxi.Length>2)define_s=arg_sxi[2];
+if(arg_sxi.Length>3)qt_s=arg_sxi[3];
 //net_s=iver_s.Substring(2);
 //dir_in_s="..\\"+iver_s+"_SRC";
 //dir_in_s="..\\i-language";
@@ -417,7 +418,7 @@ catch(Exception e_t){Console.WriteLine(e_t.Message);return(9);}
 }
 static void pro2_v(String s_si)
 {for(sjhp=0;sjhp<name_sx.Length;sjhp++)
-   {if(name_sx[sjhp].StartsWith("II_"))write_v("    "+name_sx[sjhp].ToLower()+"."+s_si+" \\");
+   {if(name_sx[sjhp].StartsWith("II_"))write_v("    "+name_sx[sjhp].ToLower()+"."+s_si);
   }
 }
 static String wu_s="";
@@ -430,50 +431,79 @@ for(i=0;i<name_sx.Length;i++)
 //    if(name_sx[i].StartsWith("IX")){def_s=name_sx[i].Substring(2);prog_s=iver_s+def_s;}
 //    else                           {def_s=name_sx[i].Substring(1);prog_s=name_sx[i];}
       def_s=name_sx[i];prog_s=name_sx[i]; //VER36.6.0.3
-     FileStream_n=File.Open(dir_out_s+"\\"+prog_s+wu_si+cd_si+("C"==cd_si?".pro":".csproj")
+     FileStream_n=File.Open(dir_out_s+"\\"+prog_s+wu_si+cd_si+("C"==cd_si?".txt":".csproj")
          ,FileMode.Create,FileAccess.Write,FileShare.Read);
      StreamWriter_n=new StreamWriter(FileStream_n);
      if("C"==cd_si) //C++(.pro)
-       {
-        write_v("QT       += core \\");
+       {write_v("cmake_minimum_required(VERSION 3.21)");
+        write_v("project("+prog_s+wu_si+cd_si+" LANGUAGES CXX)");
+        write_v("set(CMAKE_CXX_STANDARD 11)");
+        write_v("set(CMAKE_AUTOMOC ON)");
+        write_v("set(CMAKE_AUTORCC ON)");
+        write_v("set(CMAKE_AUTOUIC ON)");
+        if("W"==wu_si&&(def_s.StartsWith("IME")||def_s.StartsWith("IPR")||def_s.StartsWith("ICH")))
+          {write_v("set(CMAKE_EXE_LINKER_FLAGS \"${CMAKE_EXE_LINKER_FLAGS} -Wl,-subsystem,windows\")");}
+        write_v("find_package(Qt6 "+qt_s+" REQUIRED COMPONENTS");
+        write_v("    Core");
         if(def_s.StartsWith("IME")||def_s.StartsWith("IPR")||def_s.StartsWith("ICH"))
-          {write_v("            widgets \\");}
-        write_v("            network \\");
-        write_v("            printsupport \\");
+          {write_v("    Widgets");}
+        write_v("    Network");
+        write_v("    PrintSupport");
 //        write_v("            serialport \\"); //VER36.1
 //        write_v("            texttospeech \\"); //VER37.8.0.13
-        write_v("            sql");
-        write_v("TARGET = "+prog_s+wu_si+"C");
-        write_v("TEMPLATE = app");
-        write_v("DEFINES += \\");
-        write_v("    CP \\");
-        if("W"==wu_si)write_v("    "+wu_si+" \\");
-        write_v("    "+def_s);
-        if(def_s.StartsWith("IME")||def_s.StartsWith("IPR")||def_s.StartsWith("ICH"))
-          {write_v("CONFIG += c++11");}
-        else
-          {write_v("CONFIG += c++11 \\");
-           write_v("          console");
-          }
-        write_v("SOURCES += \\");
+        write_v("    Sql");
+        write_v(")");
+        write_v("qt_add_executable("+prog_s+wu_si+"C");
+//        write_v("TEMPLATE = app");
+//        write_v("DEFINES += \\");
+ //       write_v("    CP \\");
+//        if("W"==wu_si)write_v("    "+wu_si+" \\");
+//        write_v("    "+def_s);
+//        if(def_s.StartsWith("IME")||def_s.StartsWith("IPR")||def_s.StartsWith("ICH"))
+//          {write_v("CONFIG += c++11");}
+//        else
+//          {write_v("CONFIG += c++11 \\");
+//           write_v("          console");
+//          }
+//        write_v("SOURCES += \\");
         pro2_v("cpp");
         write_v("    "+name_sx[i].ToLower()+".cpp");
-        write_v("HEADERS += \\");
+//      write_v("HEADERS += \\");
         pro2_v("h");
-        write_v("    ii_include.h \\");
-        write_v("    ii_include2.h \\");
-        write_v("    ii_include_hh.h \\");
-        write_v("    ii_include_pp.h  \\");
+        write_v("    ii_include.h");
+        write_v("    ii_include2.h");
+        write_v("    ii_include_hh.h");
+        write_v("    ii_include_pp.h");
         write_v("    "+name_sx[i].ToLower()+".h");
-
- 　     write_v("qnx: target.path = /tmp/$${TARGET}/bin");
-        write_v("else: unix:!android: target.path = /opt/$${TARGET}/bin");
-        write_v("!isEmpty(target.path): INSTALLS += target");
-        if("IMENU"==def_s)
-          {write_v("DISTFILES += \\");
-           write_v("    I_MENU.ICO");
-           write_v("RC_ICONS = I_MENU.ICO");
-          }
+        if("IMENU"==def_s)write_v("    I_MENU.ICO");
+        write_v(")");
+        write_v("target_compile_definitions("+prog_s+wu_si+"C PRIVATE");
+        write_v("    CP ");
+        if("W"==wu_si)write_v("    "+wu_si);
+        write_v("    "+def_s);
+        write_v(")");
+        write_v("target_link_libraries("+prog_s+wu_si+"C PRIVATE");
+        write_v("    Qt6::Core");
+        if(def_s.StartsWith("IME")||def_s.StartsWith("IPR")||def_s.StartsWith("ICH"))
+          {write_v("    Qt6::Widgets");}
+        write_v("    Qt6::Network");
+        write_v("   Qt6::PrintSupport");
+//        write_v("            serialport \\"); //VER36.1
+//        write_v("            texttospeech \\"); //VER37.8.0.13
+        write_v("    Qt6::Sql");
+        write_v(")");
+        if("IMENU"==def_s){write_v("set_source_files_properties(I_MENU.ICO PROPERTIES");
+                           write_v("    WIN32_EXECUTABLE TRUE");
+                           write_v(")");
+                          }
+// 　     write_v("qnx: target.path = /tmp/$${TARGET}/bin");
+//        write_v("else: unix:!android: target.path = /opt/$${TARGET}/bin");
+//        write_v("!isEmpty(target.path): INSTALLS += target");
+//        if("IMENU"==def_s)
+//          {write_v("DISTFILES += \\");
+//           write_v("    I_MENU.ICO");
+//           write_v("RC_ICONS = I_MENU.ICO");
+//          }
        }
       else //C#(.cproj)
        {

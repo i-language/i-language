@@ -1,4 +1,4 @@
-* SET_BEGIN.TXT HARASAWA
+*SET_BEGIN.TXT HARASAWA
 *=====================================================================================
 ************************( 0/9 )*******************************************************
 *==========================================(COMMENT_BEGIN )==================
@@ -586,6 +586,8 @@ W+F+=SET{WC.NAME='SymfoWARE RDB FRDB'};
 W+D+=SET{WC.NAME='FirebirdServerDefaultInstance'};
 W+=IBM:
 W+=SET{WC.NET_STOP_START=WC.NAME};
+W+M+=SET{WC.NET_STOP_START2='MSSQLLaunchpad'};
+W+M+=IF{INSTANCE!=}SET{WC.NET_STOP_START2+='$'+INSTANCE};
 U+L+=SET{WC.NET_STOP_START='mysql'};
 U+P+=SET{WC.NET_STOP_START='postgresql'};
 U+P+=IF{_DB_SOFT/'P9',='P10'}SET{WC.NET_STOP_START='postgresql-'+WC.P_PATH};
@@ -1093,8 +1095,7 @@ W+JA-MESSAGE=You come to be usable even from any PC without the OS certification
 %NO_ALTER_PASSWORD+W+JA+FORM= (RUN以降全ての環境を構築するので、かなりの時間が掛かります）
 %NO_ALTER_PASSWORD-W+JA+FORM=
 FORM=RUN @@@@ INIT @@@@ ADMIN @@@@@ TABLE @@@@@ SECURITY @@@@@ ETC @@@@@
-FORM=NEXT @@@@@ (クライアントのインストールも行われ、コマンドプロンプトで一時停止するので、
-FORM=　　　　　　指示に従って操作し、続行して下さい）	
+FORM=NEXT @@@@@ (クライアントインストールで一時停止するので、指示に従って操作して下さい）	
 *****( RUN )***************************************************************
 DATA=RUN{4,1}{YES,SKIP}
 **%NO_ALTER_PASSWORD-=IF{_DATA='SKIP'}EXIT{INIT};
@@ -1464,8 +1465,10 @@ COMMENT2_END   *JUMP ERROR SKIP*
 =IF_NAME_NOT{$WC.NET_STOP_START}JUMP{SKIP_CMD};
 **U+=IF_ERROR_COMMAND{service ?$WC.NET_STOP_START? restart}COMMAND{/etc/init.d/?$WC.NET_STOP_START? restart}NOP{};
 U+=IF_ERROR_COMMAND{systemctl restart ?$WC.NET_STOP_START?}NOP{};
-W+=IF_ERROR_COMMAND{NET STOP  ?$WC.NET_STOP_START?}NOP{};
-W+=IF_ERROR_COMMAND{NET START ?$WC.NET_STOP_START?}NOP{};
+W+M+=IF_ERROR_COMMAND{NET STOP  ?$WC.NET_STOP_START2?}NOP{};
+W+  =IF_ERROR_COMMAND{NET STOP  ?$WC.NET_STOP_START?}NOP{};
+W+  =IF_ERROR_COMMAND{NET START ?$WC.NET_STOP_START?}NOP{};
+W+M+=IF_ERROR_COMMAND{NET START ?$WC.NET_STOP_START2?}NOP{};
 =SLEEP{5};
 =SKIP_CMD:
 W+=IF{OS_LOGIN='YES'}LOGIN_SQL{EXEC SP_DENYLOGIN 'BUILTIN\ADMINISTRATORS'};

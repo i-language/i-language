@@ -3200,7 +3200,8 @@ for(;NEXT_1>=sw;)//NEXT_1以下のみ実行
                }   
 //===============( _XML...,_JSON... end )====================================================================
              if(func_cnt<func_cnt_min){z_p.err_s="under (parameter count) ("+z_p.to_i_s(func_cnt)+"<"+z_p.to_i_s(func_cnt_min)+")("+name_s+")";z_p.t_v(z_p.PR,"get_data_b)13");return false;}
-             String[]  find_sx=new String[func_cnt];
+//SJ          String[]  find_sx=new String[func_cnt];
+//HP          QVector<QString> find_sx(func_cnt);
              for(int ii=0;ii<func_cnt;ii++)
                {sx[ii]=z_p.trim_s(sx[ii]);
                 if((z_p.starts_with_b(sx[ii],"(") &&z_p.ends_with_b(sx[ii],")")) //両端「()」は「()」を取って変換。  

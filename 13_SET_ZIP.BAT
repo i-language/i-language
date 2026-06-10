@@ -12,7 +12,8 @@ ECHO ●3/5**(Desktop.Appの最新が[ %I_VER2RUN% ]で有る事 )**( I_VER2RUN,_BEGIN_VE
 DOTNET --list-runtimes | find "Desktop"
 ECHO ●4/5**( 1か所が[ %I_VER2RUN:~0,4% ]で有る事 )**( I_VER2RUN,_BEGIN_VER2.BAT )**
 ECHO                   %I_VER2NET%              ( I_VER2NET,_BEGIN_VER2.BAT ) 
-ECHO ●5/5**( 4か所が[ 000%I_VER2RUN:~0,1%0%I_VER2RUN:~2,1%0%I_VER2RUN:~-2% ](.は0と見なす）で有る事 )**
+rem ECHO ●5/5**( 4か所が[ 00%I_VER2RUN:~0,2%%I_VER2RUN:~2,1%0%I_VER2RUN:~-2% ](.は0と見なす）で有る事 )**
+ECHO ●5/5**( 4か所が[ %I_VER2% ]で有る事 )**
 FIND "ZZZZZZ_VERSION2" SET_ETC.TXT
 FIND "public readonly String VERSION2_S=" II_VERSION.ORG
 ECHO                                    %I_VER2%     ( I_VER2,_BEGIN_VER2.BAT )
@@ -49,10 +50,10 @@ REM IF NOT EXIST %I_JAVAC% ECHO I_JAVAC% NOT FOUND&PAUSE&GOTO B1
 IF "%I_VER_C%"=="" GOTO SKIP-C
 rem [C++当面中止]
 IF "%I_VER_C%"=="" ECHO I_VER_C is NULL ???? &PAUSE&GOTO B1
-IF NOT EXIST %I_QMAKE_W% ECHO %I_QMAKE_W% NOT FOUND&PAUSE&GOTO B1
-WSL if test -f %I_QMAKE_U% ;then echo OK;fi > %I_TMP%\I_EXE.TMP
-FIND "OK" %I_TMP%\I_EXE.TMP >NUL
-IF ERRORLEVEL 1 ECHO %I_QMAKE_U% FILE NOT FOUND&PAUSE&GOTO B1 
+REM IF NOT EXIST %I_QMAKE_W% ECHO %I_QMAKE_W% NOT FOUND&PAUSE&GOTO B1
+REM WSL if test -f %I_QMAKE_U% ;then echo OK;fi > %I_TMP%\I_EXE.TMP
+REM FIND "OK" %I_TMP%\I_EXE.TMP >NUL
+REM IF ERRORLEVEL 1 ECHO %I_QMAKE_U% FILE NOT FOUND&PAUSE&GOTO B1 
 :SKIP-C
 REM ********( ISOURCE コンパイル )**************************
 CALL ISOURCE.BAT SET_ZIP

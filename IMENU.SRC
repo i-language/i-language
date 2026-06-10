@@ -255,8 +255,8 @@ ii_z_l z_p;
 //SS Timer_n.AutoReset=false;
 //SS Timer_udp_n.AutoReset=false;
 z_p=z_ni;
-//HP QPainter gui_nn(this);
-//HP z_p.GUI_p=&gui_nn;
+////HP QPainter gui_nn(this); //VER38
+////HP z_p.GUI_p=&gui_nn;   //VER38
 //JJ setFocusTraversalKeysEnabled(false);//Tabキー取得可能化。
 //SS imenu_p=imenu_ni;//画面を引き継ぐ。
 //JP imenu_p=this;//画面を引き継ぐ。
@@ -1204,16 +1204,16 @@ if(0==z_mt_n.sw_keyboard)key_press_v();//入力処理。
 //---------------------------------------------------------------------
 //=****(  印刷 )************************
 //HP private slots:
-#if AUI||CP
+#if GTK||AUI||CP
 //SP void print_v()
-#else
+#else //GTK||AUI||CP 
 //SS void print_v(Object o_ni,System.Drawing.Printing.PrintPageEventArgs e_ni)
-#endif //AUI
+#endif //GTK||AUI||CP
 //JJ public int print(Graphics gui_nni,java.awt.print.PageFormat pf_ni,int pageIndex_ii) 
 //JJ   throws java.awt.print.PrinterException  
 {
-#if AUI
-#else //AUI
+#if GTK||AUI
+#else //GTK||AUI
 //HP QPrinter Printer_nn(QPrinter::ScreenResolution);//プリンター描画のためのペイントデバイス
 //HP QPrintDialog printDialog(&Printer_nn,this);//印刷するかどうかのダイアログ表示
 //HP if(printDialog.exec()!=QDialog::Accepted)return;//ＯＫなら印刷
@@ -1263,7 +1263,7 @@ if( null != z_mt_n.program_p)z_mt_n.program_p.paint_list_n.on_paint_v(1,(int )fo
 z_mt_n.draw_string_geta_v(z_mt_n.text_s,font_n,"X",z_p.brush_nx[z_p.BACKCOLOR],print_x_left_f,print_y_top_f);//タイトル印刷。
 z_p.sw_printer=0;//プリンタ印刷終了。
 //JJ return java.awt.print.Printable.PAGE_EXISTS;
-#endif //AUI 
+#endif //GTK||AUI 
 }
 //HH public:
 //#####( void mouse_wheel_v(o_i,e_i) )#####
@@ -1821,8 +1821,8 @@ caret_set_v();//入力位置反転表示。
 //---------------------------------------------------------------------
 //###( 各種イベント処理 )###########################################
 //---------------------------------------------------------------------
-#if AUI
-#else //AUI
+#if GTK||AUI
+#else //GTK||AUI
 //#####( 印刷 )#####
 //SJ void print_v()
 //SJ {
@@ -1852,7 +1852,7 @@ caret_set_v();//入力位置反転表示。
 //SJ       }
 //SJ }
 //################################################
-#endif //AUI
+#endif //GTK||AUI
 //---------------------------------------------------------------------
 //=**( タイマー開始 処理 )***
 //HH private slots:

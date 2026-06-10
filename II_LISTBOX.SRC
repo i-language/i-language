@@ -76,7 +76,8 @@ ii_listbox2_l listbox2_n;//linux対応でフォーカス強制設定のためLis
 #endif //AUI
 //JJ ScrollPane ScrollPane_n;//javaスクロールバー。
 //----------------------------------------------
-#if !AUI
+#if GTK||AUI
+#else //GTK||AUI
 //SS protected override bool ShowWithoutActivation=>true; //VER38// フォーカスを設定しない。
 ////SS protected override CreateParams CreateParams //VER38// マウスでクリックした時もフォーカスを設定しない
 ////SS {get{CreateParams cp_n=base.CreateParams;cp_n.ExStyle|=0x08000000|0X00000080;return cp_n;}} //VER38  // WS_EX_NOACTIVATE (0x08000000) TOOLWINDOW(0X00000080)を追加
@@ -84,7 +85,7 @@ ii_listbox2_l listbox2_n;//linux対応でフォーカス強制設定のためLis
 ////SS {if(m_n.Msg==0X0021){m_n.Result=(IntPtr)3;return;} //VER38 WM_MOUSEACTIVATE=0X0021,MA_NOACTIVATE(3)　でアクティブにしない、
 ////SS  base.WndProc(ref m_n);
 ////SS }
-#endif //!AUI
+#endif //GTK||AUI
 public ii_listbox_l(ii_z_l z_ni,ii_z_mt_l z_mt_ni)
 {
 //JJ super(z_mt_ni.imenu_p);//子画面化。（常に親画面の上に表示）

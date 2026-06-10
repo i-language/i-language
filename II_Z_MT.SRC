@@ -112,7 +112,11 @@ public ii_format_l format_n;
 #endif //AUI||GTK
 //---------------------------------------------------------------------
 //=****( 基本情報設定 )*****
+#if GTK
+//SS public ii_z_mt_l(imenu_l menu_ni,imenu_l imenu_ni,ii_z_l z_pi)
+#else //GTK
 public ii_z_mt_l(ii_menu_l menu_ni,imenu_l imenu_ni,ii_z_l z_pi)
+#endif //GTK
 {set_v(z_pi);
 #if AUI||GTK
 #else //AUI||GTK

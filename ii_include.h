@@ -31,6 +31,7 @@
 #include <QtGui>
 #include <QtSql>
 #include <QUdpSocket> //VER37_8.0.4
+#include <QVector> //VER38
 #if W
 #include <tchar.h>
 #include <windows.h>
