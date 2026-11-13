@@ -9,9 +9,8 @@ REM ===( Java )===
 rem SET I_VER_J=25
 SET I_VER_J=25.0.2
 REM ===( Qt(C++) )===
-rem SET I_VER_C=6.10.2
-rem SET I_VER_C=6.10.3
-SET I_VER_C=6.11.1
+REM SET I_VER_C=6.11.1
+SET I_VER_C=6.12.0
 REM ===( dir )===
 SET I_DIR_J=%SystemDrive%
 rem SET I_DIR_WC=%SystemDrive%
@@ -22,7 +21,8 @@ rem SET I_DIR_WC1=msvc2022_64
 SET I_DIR_WC1=%I_VER_C%\llvm-mingw_64
 rem SET I_DIR_WC2=mingw1120_64
 rem SET I_DIR_WC2=mingw1310_64
-SET I_DIR_WC2=tools\llvm-mingw1706_64
+rem SET I_DIR_WC2=tools\llvm-mingw1706_64
+SET I_DIR_WC2=tools\llvm-mingw2217_64
 rem SET I_DIR_UD=/opt
 SET I_DIR_UD=/home/ubuntu/Qt%I_VER_C%
 rem SET I_DIR_UC=/opt

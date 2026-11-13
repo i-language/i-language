@@ -1,0 +1,4 @@
+◎GUI slintのインストール。
+cargo install slint-viewer
+(linxの場合GTKが必要）
+sudo apt install libgtk-3-dev

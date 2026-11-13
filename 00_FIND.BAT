@@ -1,3 +1,3 @@
 @echo off
-find  "I_MAKE_W" *.bat > __FIND.TMP 
+find  "x64" *.* > __FIND.TMP 
 start notepad __FIND.TMP
